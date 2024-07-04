@@ -1,6 +1,8 @@
 package Entities;
 
-public class Tag {
+
+public class Tag implements TagInterface {
+
     private String tagSkill;
 
     // Constructor

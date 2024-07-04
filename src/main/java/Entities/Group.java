@@ -2,7 +2,7 @@ package Entities;
 
 import java.util.HashSet;
 
-public class Group {
+public class Group implements GroupInterface {
     private HashSet<User> users;
     private String groupName;
     private Project project;
