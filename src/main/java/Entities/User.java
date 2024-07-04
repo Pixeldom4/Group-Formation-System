@@ -2,7 +2,7 @@ package Entities;
 
 import java.util.ArrayList;
 
-public class User {
+public class User implements UserInterface {
     private int userId;
     private String userName;
     private String userEmail;

@@ -2,7 +2,7 @@ package Entities;
 
 import java.util.HashSet;
 
-public class Project {
+public class Project implements ProjectInterface {
     private int projectId;
     private String projectTitle;
     private double projectBudget;
