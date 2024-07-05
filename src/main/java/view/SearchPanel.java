@@ -1,19 +1,23 @@
 package view;
 
+import view_model.SearchPanelViewModel;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class HomeScreen {
+public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public static void main(String[] args) {
-        // Create the main frame
-        JFrame frame = new JFrame("Home Screen");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+    private final SearchPanelViewModel searchPanelModel;
 
-        // Create a panel to hold the components
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+    public SearchPanel(SearchPanelViewModel searchPanelModel) {
+        this.searchPanelModel = searchPanelModel;
+        searchPanelModel.addPropertyChangeListener(this);
+
+        this.setLayout(new BorderLayout());
 
         // Create a search bar
         JTextField searchBar = new JTextField();
@@ -31,12 +35,16 @@ public class HomeScreen {
         searchPanel.add(searchButton, BorderLayout.EAST);
 
         // Add the search panel to the top of the main panel
-        panel.add(searchPanel, BorderLayout.NORTH);
+        this.add(searchPanel, BorderLayout.NORTH);
+    }
 
-        // Add the main panel to the frame
-        frame.add(panel);
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
-        // Make the frame visible
-        frame.setVisible(true);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }
