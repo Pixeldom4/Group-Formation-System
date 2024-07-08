@@ -1,5 +1,7 @@
 package view;
 
+import Entities.Project;
+import Presenters.SearchProjectsPresenter;
 import view_model.SearchPanelViewModel;
 
 import javax.swing.*;
@@ -8,8 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
-public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
+public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener, SearchProjectsView {
 
     private final SearchPanelViewModel searchPanelModel;
 
@@ -46,5 +49,8 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
+    }
+
+    public void displayProjects(List<Project> projects) {
     }
 }
