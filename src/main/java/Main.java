@@ -12,6 +12,10 @@ import view_model.SearchPanelViewModel;
 import view_model.SwitchViewButtonPanelViewModel;
 import view_model.ViewManagerModel;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -31,7 +35,26 @@ class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
-        SearchPanelViewModel searchPanelModel = new SearchPanelViewModel();
+        // For the SearchProjects Use Case
+        ProjectDAO projectDAO = new InMemoryProjectDAO();
+
+        SearchProjectsPresenter presenter = new SearchProjectsPresenter(null);
+        SearchProjectsInteractor interactor = new SearchProjectsInteractor(projectDAO, presenter);
+        SearchPanelViewModel searchPanelModel = new SearchPanelViewModel(interactor);
+        SearchPanel searchpanel = new SearchPanel(searchPanelModel);
+        presenter = new SearchProjectsPresenter(searchpanel);
+
+        // Adding some dummy projects for testing
+        HashSet<String> hashset1 = new HashSet<>(Arrays.asList("Java", "Programming"));
+        HashSet<String> hashset2 = new HashSet<>(Arrays.asList("Python", "Programming"));
+
+        Project project1 = new Project(1, "Java Project", 1000.0, "A project about Java", hashset1);
+        Project project2 = new Project(2, "Python Project", 2000.0, "A project about Python", hashset2);
+        ((InMemoryProjectDAO) projectDAO).addProject(project1);
+        ((InMemoryProjectDAO) projectDAO).addProject(project2);
+
+        //
+
         SearchPanel searchPanel = new SearchPanel(searchPanelModel);
 
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
@@ -52,20 +75,5 @@ class Main {
         application.pack();
         application.setVisible(true);
 
-
-        // For the SearchProjects Use Case
-        ProjectDAO projectDAO = new InMemoryProjectDAO();
-
-        SearchProjectsPresenter presenter = new SearchProjectsPresenter(null);
-        SearchProjectsInteractor interactor = new SearchProjectsInteractor(projectDAO, presenter);
-
-        SearchPanel searchpanel = new SearchPanel(interactor);
-        presenter = new SearchProjectsPresenter(searchPanel);
-
-        // Adding some dummy projects for testing
-        Project project1 = new Project(1, "Java Project", 1000.0, "A project about Java", Set.of("Java", "Programming"));
-        Project project2 = new Project(2, "Python Project", 2000.0, "A project about Python", Set.of("Python", "Development"));
-        ((InMemoryProjectDAO) projectDAO).addProject(project1);
-        ((InMemoryProjectDAO) projectDAO).addProject(project2);
     }
 }
