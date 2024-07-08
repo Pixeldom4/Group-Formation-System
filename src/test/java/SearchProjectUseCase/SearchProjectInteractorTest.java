@@ -11,9 +11,6 @@ import use_case.SearchingForProjects.SearchProjectsPresenter;
 import view_model.SearchPanelViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,7 +1,4 @@
-import Entities.Project;
 import use_case.SearchingForProjects.SearchProjectUseCaseFactory;
-import use_case.SearchingForProjects.SearchProjectsPresenter;
-import use_case.SearchingForProjects.SearchProjectsInteractor;
 import view.AddProjectPanel;
 import view.SearchPanel;
 import view.SwitchViewButtonPanel;
@@ -10,10 +7,6 @@ import view_model.AddProjectPanelViewModel;
 import view_model.SearchPanelViewModel;
 import view_model.SwitchViewButtonPanelViewModel;
 import view_model.ViewManagerModel;
-
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
 
 import javax.swing.*;
 import java.awt.*;

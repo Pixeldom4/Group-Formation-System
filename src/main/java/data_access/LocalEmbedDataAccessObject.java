@@ -4,7 +4,6 @@ import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 import com.spotify.voyager.jni.Index;
 import java.io.File;
-import java.io.IOException;
 
 public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
 
@@ -17,7 +16,6 @@ public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
         if (f.exists() && !f.isDirectory()) {
             data_index = Index.load(FILE_PATH);
         }
-
 
     }
     @Override

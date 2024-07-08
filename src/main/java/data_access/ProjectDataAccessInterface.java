@@ -2,8 +2,6 @@ package data_access;
 
 import Entities.ProjectInterface;
 
-import java.util.List;
-
 public interface ProjectDataAccessInterface {
     void saveProject(ProjectInterface project);
     ProjectInterface getProject(int projectId);

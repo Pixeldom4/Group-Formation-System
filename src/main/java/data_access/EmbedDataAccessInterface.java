@@ -1,6 +1,5 @@
 package data_access;
 
-import java.util.ArrayList;
 
 public interface EmbedDataAccessInterface {
 

@@ -1,7 +1,6 @@
 package view_model;
 
 import Entities.ProjectInterface;
-import use_case.SearchingForProjects.SearchProjectsInteractor;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

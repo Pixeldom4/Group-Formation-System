@@ -5,7 +5,6 @@ import Entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import com.spotify.voyager.jni.Index;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,10 +15,10 @@ import java.util.stream.Collectors;
 
 public class LocalProjectDataAccessObject implements ProjectDataAccessInterface {
 
+    private final EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
     private final String FILE_PATH = "local_data/projects/projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
-    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
-    private EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
+    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();;
 
     public LocalProjectDataAccessObject() {
         File f = new File(FILE_PATH);
