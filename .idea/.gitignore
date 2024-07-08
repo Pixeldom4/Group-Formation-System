@@ -6,3 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# target folder so we don't accidentally commit and cause troubles
+../target/
