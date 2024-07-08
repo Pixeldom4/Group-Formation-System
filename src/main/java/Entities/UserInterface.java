@@ -1,18 +1,20 @@
 package Entities;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public interface UserInterface {
 
     public int getUserId();
-    public String getUserName();
+    public String getFirstName();
+    public String getLastName();
     public String getUserEmail();
-    public ArrayList<String> getSkills();
+    public HashSet<String> getTags();
     public double getDesiredCompensation();
 
     public void setUserId(int userId);
-    public void setUserName(String userName);
+    public void setFirstName(String firstName);
+    public void setLastName(String lastName);
     public void setUserEmail(String userEmail);
-    public void setSkills(ArrayList<String> skills);
+    public void setTags(HashSet<String> tags);
     public void setDesiredCompensation(double desiredCompensation);
 }
