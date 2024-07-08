@@ -1,7 +1,8 @@
 package use_case.manage_project;
 
 import Entities.Project;
-import data_access.CsvDataAccessObject;
+import data_access.DAOImplementationConfig;
+import data_access.ProjectDataAccessInterface;
 
 public class CreateCommonProject implements CreateProjectInterface {
     private String[] record = new String[5];
@@ -14,7 +15,7 @@ public class CreateCommonProject implements CreateProjectInterface {
         this.record[3] = project.getProjectDescription();
         this.record[4] = String.join(";", project.getProjectTags());
 
-        CsvDataAccessObject csvDataAccessObject = new CsvDataAccessObject();
+        ProjectDataAccessInterface csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
         csvDataAccessObject.add(this.record);
     }
 }

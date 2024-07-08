@@ -23,7 +23,7 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
         JSONObject requestBody = new JSONObject();
         requestBody.put("input", text);
         requestBody.put("model", API_MODEL);
-        RequestBody body = RequestBody.create(mediaType, requestBody.toString());
+        RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         Request request = new Request.Builder()
                 .url(API_URL)
                 .method("POST", body)

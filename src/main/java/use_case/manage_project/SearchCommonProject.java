@@ -1,7 +1,8 @@
 package use_case.manage_project;
 
 import Entities.Project;
-import data_access.CsvDataAccessObject;
+import data_access.DAOImplementationConfig;
+import data_access.ProjectDataAccessInterface;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,7 +10,7 @@ import java.util.HashSet;
 public class SearchCommonProject implements SearchProjectInterface {
     @Override
     public Project searchProject(int projectId) {
-        CsvDataAccessObject csvDataAccessObject = new CsvDataAccessObject();
+        ProjectDataAccessInterface csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
         String[] record = csvDataAccessObject.search(projectId);
         String projectTitle = record[1];
         double projectBudget = Double.valueOf(record[2]);

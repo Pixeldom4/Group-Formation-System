@@ -60,7 +60,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
             infoArea.setLayout(new GridLayout(projectRankingList.size(), 3));
             for (ProjectInterface project : projectRankingList) {
                 infoArea.add(new JLabel(project.getProjectTitle()));
-                infoArea.add(new JTextArea(cutString(project.getProjectDescription(), 50)));
+                infoArea.add(new JLabel(cutString(project.getProjectDescription(), 50)));
                 JButton viewDetailsButton = new JButton("View Details");
                 viewDetailsButton.addActionListener(e -> {
                     // TODO: Implement view details functionality

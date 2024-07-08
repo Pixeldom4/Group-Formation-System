@@ -13,7 +13,9 @@ public class SearchProjectsPresenter implements SearchProjectOutputBoundary {
     }
 
     public void presentProjects(ArrayList<ProjectInterface> projects) {
+
         searchPanelViewModel.setProjects(projects);
+        searchPanelViewModel.firePropertyChanged();
     }
 }
 

@@ -5,13 +5,12 @@ import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
-    private final EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
+    private final EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private final ProjectDataAccessInterface projectDataAccess = new LocalProjectDataAccessObject();
+    private final ProjectDataAccessInterface projectDataAccess = DAOImplementationConfig.getProjectDataAccess();
 
     public LocalProjectSearchObject() {
 

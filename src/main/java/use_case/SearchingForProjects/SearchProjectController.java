@@ -2,9 +2,9 @@ package use_case.SearchingForProjects;
 
 public class SearchProjectController {
 
-    private final SearchProjectsInteractor interactor;
+    private final SearchProjectInputBoundary interactor;
 
-    public SearchProjectController(SearchProjectsInteractor interactor) {
+    public SearchProjectController(SearchProjectInputBoundary interactor) {
         this.interactor = interactor;
     }
 

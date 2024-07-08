@@ -4,18 +4,20 @@ import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 import com.spotify.voyager.jni.Index;
 import java.io.File;
+import java.io.IOException;
 
 public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
 
-    private final String FILE_PATH = "local_data/projects/embeds.voy";
+    private final String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "embeds.voy";
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
     private Index data_index = new Index(Index.SpaceType.Cosine, 1536);
 
     public LocalEmbedDataAccessObject() {
         File f = new File(FILE_PATH);
-        if(f.exists() && !f.isDirectory()) {
+        if (f.exists() && !f.isDirectory()) {
             data_index = Index.load(FILE_PATH);
         }
+
 
     }
     @Override
@@ -26,6 +28,12 @@ public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
 
     public void saveEmbedData(String data, int id) {
         data_index.addItem(embeddingAPI.getEmbedData(data), id);
+        data_index.saveIndex(FILE_PATH);
+    }
+
+    @Override
+    public void removeEmbedData(int id) {
+        data_index.markDeleted(id);
         data_index.saveIndex(FILE_PATH);
     }
 

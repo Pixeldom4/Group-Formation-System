@@ -4,17 +4,15 @@ import Entities.Project;
 import Entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
 import com.spotify.voyager.jni.Index;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.HashSet;
 
 public class LocalProjectDataAccessObject implements ProjectDataAccessInterface {
 
@@ -48,12 +46,7 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
 
         writer.writeNext(header);
         for (ProjectInterface project : projects.values()) {
-            String[] row = new String[5];
-            row[0] = String.valueOf(project.getProjectId());
-            row[1] = project.getProjectTitle();
-            row[2] = String.valueOf(project.getProjectBudget());
-            row[3] = project.getProjectDescription();
-            row[4] = project.getProjectTags().toString();
+            String[] row = projectToString(project);
             writer.writeNext(row);
         }
 
@@ -75,6 +68,7 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
 
         String[] line;
         try {
+            reader.readNext();
             while ((line = reader.readNext()) != null) {
                 int projectId = Integer.parseInt(line[0]);
                 String projectTitle = line[1];
@@ -84,7 +78,7 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
                 ProjectInterface project = new Project(projectId, projectTitle, projectBudget, projectDescription, projectTags);
                 projects.put(projectId, project);
             }
-        } catch (IOException e) {
+        } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
         }
 
@@ -101,5 +95,53 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
             return projects.get(projectId);
         }
         return null;
+    }
+
+    @Override
+    public void add(String[] record) {
+        ProjectInterface newProject = new Project(Integer.parseInt(record[0]), record[1], Double.parseDouble(record[2]), record[3], new HashSet<>(Arrays.asList(record[4].split(";"))));
+        projects.put(Integer.parseInt(record[0]), newProject);
+        saveProject(newProject);
+    }
+
+    @Override
+    public void delete(int projectId) {
+        projects.remove(projectId);
+        embedDataAccess.removeEmbedData(projectId);
+        saveToCSV();
+    }
+
+    @Override
+    public void update(String[] record) {
+        ProjectInterface editProject = getProject(Integer.parseInt(record[0]));
+        editProject.setProjectTitle(record[1]);
+        editProject.setProjectBudget(Double.parseDouble(record[2]));
+        editProject.setProjectDescription(record[3]);
+        editProject.setProjectTags(new HashSet<>(Arrays.asList(record[4].split(";"))));
+        embedDataAccess.saveEmbedData(editProject.getProjectDescription(), editProject.getProjectId());
+        saveToCSV();
+    }
+
+
+    @Override
+    public String[] search(int projectId) {
+        ProjectInterface searchProject = getProject(projectId);
+        projectToString(searchProject);
+        return projectToString(searchProject);
+    }
+
+    @Override
+    public int numberOfProjects() {
+        return projects.size();
+    }
+
+    private String[] projectToString(ProjectInterface project) {
+        String[] record = new String[5];
+        record[0] = String.valueOf(project.getProjectId());
+        record[1] = project.getProjectTitle();
+        record[2] = String.valueOf(project.getProjectBudget());
+        record[3] = project.getProjectDescription();
+        record[4] = project.getProjectTags().toString();
+        return record;
     }
 }
