@@ -15,5 +15,4 @@ public interface ProjectInterface {
     void setProjectDescription(String projectDescription);
     HashSet<String> getProjectTags();
     void setProjectTags(HashSet<String> projectTags);
-
 }
