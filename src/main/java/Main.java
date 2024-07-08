@@ -1,3 +1,8 @@
+import Entities.Project;
+import Presenters.SearchProjectsPresenter;
+import data_access.InMemoryProjectDAO;
+import data_access.ProjectDAO;
+import use_case.SearchingForProjects.SearchProjectsInteractor;
 import view.AddProjectPanel;
 import view.SearchPanel;
 import view.SwitchViewButtonPanel;
@@ -47,5 +52,20 @@ class Main {
         application.pack();
         application.setVisible(true);
 
+
+        // For the SearchProjects Use Case
+        ProjectDAO projectDAO = new InMemoryProjectDAO();
+
+        SearchProjectsPresenter presenter = new SearchProjectsPresenter(null);
+        SearchProjectsInteractor interactor = new SearchProjectsInteractor(projectDAO, presenter);
+
+        SearchPanel searchpanel = new SearchPanel(interactor);
+        presenter = new SearchProjectsPresenter(searchPanel);
+
+        // Adding some dummy projects for testing
+        Project project1 = new Project(1, "Java Project", 1000.0, "A project about Java", Set.of("Java", "Programming"));
+        Project project2 = new Project(2, "Python Project", 2000.0, "A project about Python", Set.of("Python", "Development"));
+        ((InMemoryProjectDAO) projectDAO).addProject(project1);
+        ((InMemoryProjectDAO) projectDAO).addProject(project2);
     }
 }

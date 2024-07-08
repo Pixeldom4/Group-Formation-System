@@ -1,5 +1,7 @@
 package use_case.SearchingForProjects;
-
+import java.util.List;
+import Entities.Project;
+import Presenters.SearchProjectsPresenter;
 import data_access.ProjectDAO;
 
 public class SearchProjectsInteractor {
