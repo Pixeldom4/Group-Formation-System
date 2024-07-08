@@ -1,6 +1,7 @@
 package view;
 
 import Entities.ProjectInterface;
+import use_case.SearchingForProjects.SearchProjectController;
 import view_model.SearchPanelViewModel;
 
 import javax.swing.*;
@@ -9,17 +10,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SearchPanelViewModel searchPanelModel;
+    private final SearchProjectController searchProjectController;
+
     private final JTextField searchBar = new JTextField();
     private final JButton searchButton = new JButton();
     private final JPanel searchPanel = new JPanel();
     private final JPanel infoArea = new JPanel();
     private final JScrollPane infoPanel = new JScrollPane(infoArea);
 
-    public SearchPanel(SearchPanelViewModel searchPanelModel) {
+    public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectController searchProjectController) {
+        this.searchProjectController = searchProjectController;
         this.searchPanelModel = searchPanelModel;
         searchPanelModel.addPropertyChangeListener(this);
 
@@ -29,6 +34,9 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
 
         searchButton.setPreferredSize(new Dimension(40, 40));
         searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
+        searchButton.addActionListener(e -> {
+            searchProjectController.searchProjects(searchBar.getText());
+        });
 
         searchPanel.setLayout(new BorderLayout());
         searchPanel.add(searchBar, BorderLayout.CENTER);
@@ -48,8 +56,8 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("rankProjects")) {
             infoArea.removeAll();
-            ProjectInterface[] projectRankingList = (ProjectInterface[]) evt.getNewValue();
-            infoArea.setLayout(new GridLayout(projectRankingList.length, 3));
+            ArrayList<ProjectInterface> projectRankingList = (ArrayList<ProjectInterface>) evt.getNewValue();
+            infoArea.setLayout(new GridLayout(projectRankingList.size(), 3));
             for (ProjectInterface project : projectRankingList) {
                 infoArea.add(new JLabel(project.getProjectTitle()));
                 infoArea.add(new JTextArea(cutString(project.getProjectDescription(), 50)));

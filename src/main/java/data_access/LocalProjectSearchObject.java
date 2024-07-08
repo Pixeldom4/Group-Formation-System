@@ -18,9 +18,9 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
     }
 
     @Override
-    public List<ProjectInterface> searchProjects(String query, int amount) {
+    public ArrayList<ProjectInterface> searchProjects(String query, int amount) {
         int[] projectIds = embedDataAccess.getClosestProjects(embeddingAPI.getEmbedData(query), amount);
-        List<ProjectInterface> projects = new ArrayList<>();
+        ArrayList<ProjectInterface> projects = new ArrayList<>();
         for(int id : projectIds) {
             projects.add(projectDataAccess.getProject(id));
         }

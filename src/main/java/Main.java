@@ -1,5 +1,5 @@
 import Entities.Project;
-import Presenters.SearchProjectsPresenter;
+import use_case.SearchingForProjects.SearchProjectsPresenter;
 import data_access.InMemoryProjectDAO;
 import data_access.ProjectDAO;
 import use_case.SearchingForProjects.SearchProjectsInteractor;
