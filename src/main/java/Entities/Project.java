@@ -8,6 +8,7 @@ public class Project implements ProjectInterface {
     private double projectBudget;
     private String projectDescription;
     private HashSet<String> projectTags;
+    private float[] embedding;
 
     // Constructor
     public Project(int projectId, String projectTitle, double projectBudget, String projectDescription, HashSet<String> projectTags) {
@@ -58,4 +59,5 @@ public class Project implements ProjectInterface {
     public void setProjectTags(HashSet<String> projectTags) {
         this.projectTags = projectTags;
     }
+
 }

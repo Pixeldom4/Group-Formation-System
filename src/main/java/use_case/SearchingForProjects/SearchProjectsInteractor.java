@@ -1,20 +1,34 @@
 package use_case.SearchingForProjects;
-import java.util.List;
-import Entities.Project;
-import Presenters.SearchProjectsPresenter;
-import data_access.ProjectDAO;
+import java.util.ArrayList;
 
-public class SearchProjectsInteractor {
-    private ProjectDAO projectDAO;
-    private SearchProjectsPresenter presenter;
+import Entities.ProjectInterface;
+import data_access.DAOImplementationConfig;
+import data_access.LocalProjectSearchObject;
+import data_access.ProjectDataAccessInterface;
+import data_access.ProjectSearchInterface;
 
-    public SearchProjectsInteractor(ProjectDAO projectDAO, SearchProjectsPresenter presenter) {
-        this.projectDAO = projectDAO;
+public class SearchProjectsInteractor implements SearchProjectInputBoundary {
+    private final ProjectSearchInterface projectDAO = new LocalProjectSearchObject();
+    private final ProjectDataAccessInterface projectDataAccess = DAOImplementationConfig.getProjectDataAccess();
+    private SearchProjectOutputBoundary presenter;
+
+    public SearchProjectsInteractor(SearchProjectOutputBoundary presenter) {
         this.presenter = presenter;
     }
 
     public void searchProjects(String keywords) {
-        List<Project> projects = projectDAO.MatchedProjects(keywords);
+        int projectNum = projectDataAccess.numberOfProjects();
+        if (projectNum < 10) {
+            searchProjects(keywords, projectNum);
+        }
+        else {
+            searchProjects(keywords, 10);
+        }
+    }
+
+    @Override
+    public void searchProjects(String keywords, int limit) {
+        ArrayList<ProjectInterface> projects = projectDAO.searchProjects(keywords, limit);
         presenter.presentProjects(projects);
     }
 }
