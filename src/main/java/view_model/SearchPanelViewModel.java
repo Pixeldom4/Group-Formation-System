@@ -12,15 +12,17 @@ public class SearchPanelViewModel extends ViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private SearchProjectsInteractor interactor;
     private List<Project> projects;
-    public SearchPanelViewModel() {
+    public SearchPanelViewModel(SearchProjectsInteractor interactor) {
         super("SearchPanelView");
+        this.interactor = interactor;
     }
 
     @Override
     public void firePropertyChanged() {
 
     }
-    public List<Project> getProject{
+
+    public List<Project> getProject(){
         return projects;
     }
     @Override
