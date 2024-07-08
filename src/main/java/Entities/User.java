@@ -1,20 +1,22 @@
 package Entities;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class User implements UserInterface {
     private int userId;
-    private String userName;
+    private String firstName;
+    private String lastName;
     private String userEmail;
-    private ArrayList<String> skills;
+    private HashSet<String> tags;
     private double desiredCompensation;
 
     // Constructor
-    public User(int userId, String userName, String userEmail, ArrayList<String> skills, double desiredCompensation) {
+    public User(int userId, String firstName, String lastName, String userEmail, HashSet<String> tags, double desiredCompensation) {
         this.userId = userId;
-        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.userEmail = userEmail;
-        this.skills = skills;
+        this.tags = tags;
         this.desiredCompensation = desiredCompensation;
     }
 
@@ -27,12 +29,20 @@ public class User implements UserInterface {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFirstName() {
+        return this.firstName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUserEmail() {
@@ -43,12 +53,12 @@ public class User implements UserInterface {
         this.userEmail = userEmail;
     }
 
-    public ArrayList<String> getSkills() {
-        return skills;
+    public HashSet<String> getTags() {
+        return tags;
     }
 
-    public void setSkills(ArrayList<String> skills) {
-        this.skills = skills;
+    public void setTags(HashSet<String> tags) {
+        this.tags = tags;
     }
 
     public double getDesiredCompensation() {
