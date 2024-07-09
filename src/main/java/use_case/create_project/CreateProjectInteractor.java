@@ -3,8 +3,6 @@ package use_case.create_project;
 import Entities.Project;
 import data_access.IProjectRepository;
 
-import java.util.HashSet;
-
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     private final IProjectRepository projectRepository;
     private final CreateProjectOutputBoundary projectPresenter;
