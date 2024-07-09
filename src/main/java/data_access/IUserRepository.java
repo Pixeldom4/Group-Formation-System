@@ -18,5 +18,5 @@ public interface IUserRepository {
     void addTags(int userId, HashSet<String> tags);
     void removeTags(int userId, HashSet<String> tags);
 
-    List<Project> getProjectsForUser(int userId);
+    HashSet<Project> getProjectsForUser(int userId);
 }

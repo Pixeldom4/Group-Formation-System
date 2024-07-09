@@ -290,7 +290,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @return the list of projects the user is associated with.
      */
     @Override
-    public List<Project> getProjectsForUser(int userId) {
+    public HashSet<Project> getProjectsForUser(int userId) {
         return null;
     }
 }
