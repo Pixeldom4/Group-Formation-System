@@ -19,13 +19,7 @@ public class UserProjectsRepository extends SQLDatabaseManager {
     @Override
     public void initialize() {
         String sql = "CREATE TABLE IF NOT EXISTS UserProjects (UserId INTEGER NOT NULL, ProjectId INTEGER NOT NULL, PRIMARY KEY(UserId, ProjectId), FOREIGN KEY(UserId) REFERENCES Users(Id), FOREIGN KEY(ProjectId) REFERENCES Projects(Id));";
-        Connection connection = super.getConnection();
-
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        super.initializeTables(sql);
     }
 
     /**
@@ -61,6 +55,31 @@ public class UserProjectsRepository extends SQLDatabaseManager {
         String sql = "DELETE FROM UserProjects WHERE UserId = ? AND ProjectId = ?";
         executeUpdate(userId, projectId, sql);
     }
+
+    public void removeUserFromAllProjects(int userId) {
+        String sql = "DELETE FROM UserProjects WHERE UserId = ?";
+        Connection connection = super.getConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void removeProjectFromAllUsers(int projectId) {
+        String sql = "DELETE FROM UserProjects WHERE ProjectId = ?";
+        Connection connection = super.getConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, projectId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 
     /**
      * Retrieves all projects for a specific user.

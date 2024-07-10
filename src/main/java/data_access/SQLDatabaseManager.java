@@ -3,6 +3,7 @@ package data_access;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class SQLDatabaseManager implements Database {
     private final String DATABASE_NAME;
@@ -57,4 +58,42 @@ public abstract class SQLDatabaseManager implements Database {
      */
     @Override
     public abstract void initialize();
+
+    /**
+     * Initializes the database with the provided SQL statements.
+     * <p>
+     * This method executes each SQL statement in the provided array of SQL statements
+     * to set up the necessary database tables. If any error occurs during the execution,
+     * the transaction is rolled back to maintain database integrity.
+     * </p>
+     *
+     * @param sqlStatements An array of SQL statements to execute for initializing the database tables.
+     */
+    protected void initializeTables(String... sqlStatements) {
+        Connection connection = getConnection();
+        try {
+            connection.setAutoCommit(false);
+
+            try (Statement statement = connection.createStatement()) {
+                for (String sql : sqlStatements) {
+                    statement.executeUpdate(sql);
+                }
+            }
+
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                System.err.println(rollbackException.getMessage());
+            }
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
 }

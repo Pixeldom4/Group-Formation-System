@@ -6,14 +6,16 @@ import java.sql.*;
 import java.util.HashSet;
 
 public class ProjectRepository extends SQLDatabaseManager implements IProjectRepository {
+    private UserProjectsRepository userProjectsRepository;
 
     /**
      * Constructs a ProjectRepository object.
      *
      * @param databaseName The name of the database to manage. Note that this must include a '.db' file extension.
      */
-    public ProjectRepository(String databaseName) {
+    public ProjectRepository(String databaseName, UserProjectsRepository userProjectsRepository) {
         super(databaseName);
+        this.userProjectsRepository = userProjectsRepository;
     }
 
     /**
@@ -23,31 +25,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
     public void initialize() {
         String projectSql = "CREATE TABLE IF NOT EXISTS Projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT NOT NULL, Budget DOUBLE, Description TEXT NOT NULL)";
         String projectTagsSql = "CREATE TABLE IF NOT EXISTS ProjectTags (ProjectId INTEGER NOT NULL, Tag TEXT NOT NULL, PRIMARY KEY(ProjectId, Tag), FOREIGN KEY(ProjectId) REFERENCES Projects(Id))";
-        Connection connection = super.getConnection();
-
-        try {
-            connection.setAutoCommit(false);
-
-            try (Statement transaction = connection.createStatement()) {
-                transaction.executeUpdate(projectSql);
-                transaction.executeUpdate(projectTagsSql);
-            }
-
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch(SQLException rollbackException) {
-                System.err.println(rollbackException.getMessage());
-            }
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch(SQLException e) {
-                System.err.println(e.getMessage());
-            }
-        }
+        super.initializeTables(projectSql, projectTagsSql);
     }
 
     /**
@@ -173,6 +151,9 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
 
         try {
             connection.setAutoCommit(false); // begin transaction
+
+            // Remove project from UserProjects table
+            userProjectsRepository.removeProjectFromAllUsers(projectId);
 
             try (PreparedStatement deleteProjectStatement = connection.prepareStatement(deleteProjectSql);
                  PreparedStatement deleteProjectTagsStatement = connection.prepareStatement(deleteProjectTagSql)) {

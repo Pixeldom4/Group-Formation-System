@@ -13,13 +13,15 @@ import java.util.List;
  * A class representing the User Repository. In particular, this class manages the User table.
  */
 public class UserRepository extends SQLDatabaseManager implements IUserRepository {
+    private final UserProjectsRepository userProjectsRepository;
     /**
      * Constructs a UserRepository object.
      *
      * @param databaseName The name of the database to manage. Note that this must include a '.db' file extension.
      */
-    public UserRepository(String databaseName) {
+    public UserRepository(String databaseName, UserProjectsRepository userProjectsRepository) {
         super(databaseName);
+        this.userProjectsRepository = userProjectsRepository;
     }
 
     /**
@@ -29,31 +31,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public void initialize() {
         String userSql = "CREATE TABLE IF NOT EXISTS Users (Id INTEGER PRIMARY KEY AUTOINCREMENT, FirstName TEXT NOT NULL, LastName TEXT NOT NULL, Email TEXT UNIQUE NOT NULL, DesiredCompensation DOUBLE, Password TEXT NOT NULL);";
         String userTagsSql = "CREATE TABLE IF NOT EXISTS UserTags (UserId INTEGER NOT NULL, Tag TEXT NOT NULL, PRIMARY KEY(UserId, Tag), FOREIGN KEY(UserId) REFERENCES Users(Id))";
-
-        Connection connection = super.getConnection();
-        try {
-            connection.setAutoCommit(false);
-
-            try (Statement transaction = connection.createStatement()) {
-                transaction.executeUpdate(userSql);
-                transaction.executeUpdate(userTagsSql);
-            }
-
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch(SQLException rollbackException) {
-                System.err.println(rollbackException.getMessage());
-            }
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch(SQLException e) {
-                System.err.println(e.getMessage());
-            }
-        }
+        super.initializeTables(userSql, userTagsSql);
     }
 
     /**
@@ -260,14 +238,36 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public void deleteUser(int userId) {
         String sql = "DELETE FROM Users WHERE Id = ?";
 
-        try (Connection connection = super.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
+        Connection connection = super.getConnection();
+
+        try {
+            connection.setAutoCommit(false); // begin transaction
+
+            // Remove user from UserProjects table
+            userProjectsRepository.removeUserFromAllProjects(userId);
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setInt(1, userId);
+                preparedStatement.executeUpdate();
+            }
+
+            connection.commit(); // end transaction
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                System.err.println(rollbackException.getMessage());
+            }
             System.err.println(e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
         }
     }
+
 
     /**
      * Unknown what to be updating currently.
