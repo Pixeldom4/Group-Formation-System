@@ -1,8 +1,8 @@
 package usecase.manageproject;
 
 import entities.Project;
-import data_access.DAOImplementationConfig;
-import data_access.IProjectRepository;
+import dataaccess.DAOImplementationConfig;
+import dataaccess.IProjectRepository;
 
 public class SearchCommonProject implements SearchProjectInterface {
     @Override

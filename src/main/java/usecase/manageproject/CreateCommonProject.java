@@ -3,8 +3,8 @@ package usecase.manageproject;
 import entities.Project;
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
-import data_access.DAOImplementationConfig;
-import data_access.IProjectRepository;
+import dataaccess.DAOImplementationConfig;
+import dataaccess.IProjectRepository;
 
 import java.util.Arrays;
 import java.util.HashSet;

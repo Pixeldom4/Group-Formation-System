@@ -1,7 +1,7 @@
 package usecase.createproject;
 
 import entities.Project;
-import data_access.IProjectRepository;
+import dataaccess.IProjectRepository;
 
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     private final IProjectRepository projectRepository;

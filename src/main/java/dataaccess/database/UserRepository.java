@@ -1,7 +1,7 @@
-package data_access.database;
+package dataaccess.database;
 
 import entities.User;
-import data_access.IUserRepository;
+import dataaccess.IUserRepository;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.sql.*;

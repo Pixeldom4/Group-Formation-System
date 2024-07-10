@@ -1,8 +1,8 @@
-package data_access;
+package dataaccess;
 
-import data_access.local.EmbedDataAccessInterface;
-import data_access.local.LocalEmbedDataAccessObject;
-import data_access.local.LocalProjectDataAccessObject;
+import dataaccess.local.EmbedDataAccessInterface;
+import dataaccess.local.LocalEmbedDataAccessObject;
+import dataaccess.local.LocalProjectDataAccessObject;
 
 public class DAOImplementationConfig {
 

@@ -1,4 +1,4 @@
-package data_access;
+package dataaccess;
 
 /**
  * The Database interface provides methods for establishing and managing connections

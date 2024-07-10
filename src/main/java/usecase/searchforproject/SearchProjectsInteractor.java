@@ -2,7 +2,7 @@ package usecase.searchforproject;
 import java.util.ArrayList;
 
 import entities.ProjectInterface;
-import data_access.IProjectRepository;
+import dataaccess.IProjectRepository;
 
 public class SearchProjectsInteractor implements SearchProjectInputBoundary {
     private ProjectSearchInterface projectDAO = new LocalProjectSearchObject();

@@ -1,6 +1,6 @@
-package data_access.database;
+package dataaccess.database;
 
-import data_access.Database;
+import dataaccess.Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

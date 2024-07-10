@@ -1,7 +1,7 @@
 package usecase.manageproject;
 
-import data_access.DAOImplementationConfig;
-import data_access.IProjectRepository;
+import dataaccess.DAOImplementationConfig;
+import dataaccess.IProjectRepository;
 
 public class DeleteCommonProject implements DeleteProjectInterface {
     @Override

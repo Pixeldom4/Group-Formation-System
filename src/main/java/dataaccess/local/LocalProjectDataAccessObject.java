@@ -1,12 +1,12 @@
-package data_access.local;
+package dataaccess.local;
 
+import dataaccess.DAOImplementationConfig;
+import dataaccess.IProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import data_access.DAOImplementationConfig;
-import data_access.IProjectRepository;
 
 import java.io.File;
 import java.io.FileReader;

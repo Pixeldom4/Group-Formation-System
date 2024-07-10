@@ -1,7 +1,7 @@
 package usecase.editproject;
 
 import entities.Project;
-import data_access.IProjectRepository;
+import dataaccess.IProjectRepository;
 
 import java.util.HashSet;
 
