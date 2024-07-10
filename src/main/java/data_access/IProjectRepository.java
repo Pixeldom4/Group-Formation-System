@@ -5,7 +5,7 @@ import Entities.Project;
 import java.util.HashSet;
 
 public interface IProjectRepository {
-    Project createProject(String title, double budget, String description, HashSet<String> tags);
+    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings);
 
     void deleteProject(int projectId);
 
