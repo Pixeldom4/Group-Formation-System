@@ -1,6 +1,6 @@
 package data_access.database;
 
-import Entities.Project;
+import entities.Project;
 import data_access.IProjectRepository;
 
 import java.sql.*;

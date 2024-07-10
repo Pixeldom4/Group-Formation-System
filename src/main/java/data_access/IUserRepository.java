@@ -1,10 +1,8 @@
 package data_access;
 
-import Entities.Project;
-import Entities.User;
+import entities.User;
 
 import java.util.HashSet;
-import java.util.List;
 
 public interface IUserRepository {
 

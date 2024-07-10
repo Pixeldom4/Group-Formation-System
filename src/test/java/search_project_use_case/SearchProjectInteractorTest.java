@@ -1,16 +1,16 @@
 package search_project_use_case;
 
-import Entities.ProjectInterface;
+import entities.ProjectInterface;
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 import data_access.IProjectRepository;
 import data_access.local.LocalProjectDataAccessObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import use_case.SearchingForProjects.SearchProjectOutputBoundary;
-import use_case.SearchingForProjects.SearchProjectsInteractor;
-import use_case.SearchingForProjects.SearchProjectsPresenter;
-import view_model.SearchPanelViewModel;
+import usecase.searchforproject.SearchProjectOutputBoundary;
+import usecase.searchforproject.SearchProjectsInteractor;
+import usecase.searchforproject.SearchProjectsPresenter;
+import viewmodel.SearchPanelViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

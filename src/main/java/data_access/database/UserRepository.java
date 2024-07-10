@@ -1,7 +1,6 @@
 package data_access.database;
 
-import Entities.Project;
-import Entities.User;
+import entities.User;
 import data_access.IUserRepository;
 import org.apache.commons.lang3.NotImplementedException;
 

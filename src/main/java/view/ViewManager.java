@@ -1,6 +1,6 @@
 package view;
 
-import view_model.ViewManagerModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;

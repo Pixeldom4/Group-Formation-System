@@ -1,8 +1,8 @@
 package view;
 
-import Entities.ProjectInterface;
-import use_case.SearchingForProjects.SearchProjectController;
-import view_model.SearchPanelViewModel;
+import entities.ProjectInterface;
+import usecase.searchforproject.SearchProjectController;
+import viewmodel.SearchPanelViewModel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,7 @@
 package data_access.local;
 
-import Entities.Project;
-import Entities.ProjectInterface;
+import entities.Project;
+import entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;

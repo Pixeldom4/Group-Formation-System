@@ -1,7 +1,7 @@
 package view;
 
-import view_model.SwitchViewButtonPanelViewModel;
-import view_model.ViewManagerModel;
+import viewmodel.SwitchViewButtonPanelViewModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

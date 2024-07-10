@@ -1,12 +1,12 @@
-import use_case.SearchingForProjects.SearchProjectUseCaseFactory;
+import usecase.searchforproject.SearchProjectUseCaseFactory;
 import view.AddProjectPanel;
 import view.SearchPanel;
 import view.SwitchViewButtonPanel;
 import view.ViewManager;
-import view_model.AddProjectPanelViewModel;
-import view_model.SearchPanelViewModel;
-import view_model.SwitchViewButtonPanelViewModel;
-import view_model.ViewManagerModel;
+import viewmodel.AddProjectPanelViewModel;
+import viewmodel.SearchPanelViewModel;
+import viewmodel.SwitchViewButtonPanelViewModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;

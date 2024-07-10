@@ -1,6 +1,6 @@
 package data_access;
 
-import Entities.Project;
+import entities.Project;
 
 import java.util.HashMap;
 import java.util.HashSet;
