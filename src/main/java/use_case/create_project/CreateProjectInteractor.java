@@ -19,7 +19,8 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
      */
     @Override
     public void createProject(CreateProjectInputData inputData) {
-        Project project = projectRepository.createProject(inputData.getTitle(), inputData.getBudget(), inputData.getDescription(), inputData.getTags());
+        float[] embeddings = {}; // need to implement generate embeddings.
+        Project project = projectRepository.createProject(inputData.getTitle(), inputData.getBudget(), inputData.getDescription(), inputData.getTags(), embeddings);
 
         CreateProjectOutputData outputData;
         if (project != null) {
