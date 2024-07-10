@@ -1,6 +1,7 @@
-package data_access;
+package data_access.database;
 
 import Entities.Project;
+import data_access.IProjectRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,10 +1,9 @@
-package data_access;
+package data_access.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashSet;
 
 public class UserProjectsRepository extends SQLDatabaseManager {

@@ -7,6 +7,11 @@ public class SearchProjectUseCaseFactory {
 
     private SearchProjectUseCaseFactory(){}
 
+    /**
+     * Creates a search panel for search project use case.
+     * @param searchPanelViewModel the view model of the search panel
+     * @return the search panel
+     */
     public static SearchPanel createSearchProjectPanel(SearchPanelViewModel searchPanelViewModel){
         SearchProjectController searchProjectController = createSearchProjectController(searchPanelViewModel);
         return new SearchPanel(searchPanelViewModel, searchProjectController);

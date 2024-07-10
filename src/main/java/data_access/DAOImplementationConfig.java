@@ -1,16 +1,19 @@
 package data_access;
 
+import data_access.local.EmbedDataAccessInterface;
+import data_access.local.LocalEmbedDataAccessObject;
+import data_access.local.LocalProjectDataAccessObject;
+
 public class DAOImplementationConfig {
 
     private final static EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
-    private final static ProjectDataAccessInterface projectDataAccess = new LocalProjectDataAccessObject();
+    private final static IProjectRepository projectDataAccess = new LocalProjectDataAccessObject();
 
-    public static ProjectDataAccessInterface getProjectDataAccess() {
+    public static IProjectRepository getProjectDataAccess() {
         return projectDataAccess;
     }
 
     public static EmbedDataAccessInterface getEmbedDataAccess() {
-
         return embedDataAccess;
     }
 
@@ -18,7 +21,4 @@ public class DAOImplementationConfig {
         return "local_data/projects/";
     }
 
-    public static ProjectSearchInterface newProjectSearchObject() {
-        return new LocalProjectSearchObject();
-    }
 }

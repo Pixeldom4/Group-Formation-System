@@ -1,12 +1,12 @@
 package use_case.manage_project;
 
 import data_access.DAOImplementationConfig;
-import data_access.ProjectDataAccessInterface;
+import data_access.IProjectRepository;
 
 public class DeleteCommonProject implements DeleteProjectInterface {
     @Override
     public void deleteProject(int projectId) {
-        ProjectDataAccessInterface csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
-        csvDataAccessObject.delete(projectId);
+        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
+        csvDataAccessObject.deleteProject(projectId);
     }
 }
