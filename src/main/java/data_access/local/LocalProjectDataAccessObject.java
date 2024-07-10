@@ -1,10 +1,12 @@
-package data_access;
+package data_access.local;
 
 import Entities.Project;
 import Entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import data_access.DAOImplementationConfig;
+import data_access.IProjectRepository;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LocalProjectDataAccessObject implements ProjectDataAccessInterface {
+public class LocalProjectDataAccessObject implements IProjectRepository {
 
     private final EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
     private final String FILE_PATH = "local_data/projects/projects.csv";
@@ -25,13 +27,6 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
         if(f.exists() && !f.isDirectory()) {
             readFromCSV();
         }
-    }
-
-    @Override
-    public void saveProject(ProjectInterface project) {
-        projects.put(project.getProjectId(), project);
-        embedDataAccess.saveEmbedData(project.getProjectDescription(), project.getProjectId());
-        saveToCSV();
     }
 
     private void saveToCSV() {
@@ -88,48 +83,6 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
         }
     }
 
-    @Override
-    public ProjectInterface getProject(int projectId) {
-        if (projects.containsKey(projectId)) {
-            return projects.get(projectId);
-        }
-        return null;
-    }
-
-    @Override
-    public void add(String[] record) {
-        ProjectInterface newProject = new Project(Integer.parseInt(record[0]), record[1], Double.parseDouble(record[2]), record[3], new HashSet<>(Arrays.asList(record[4].split(";"))));
-        projects.put(Integer.parseInt(record[0]), newProject);
-        saveProject(newProject);
-    }
-
-    @Override
-    public void delete(int projectId) {
-        projects.remove(projectId);
-        embedDataAccess.removeEmbedData(projectId);
-        saveToCSV();
-    }
-
-    @Override
-    public void update(String[] record) {
-        ProjectInterface editProject = getProject(Integer.parseInt(record[0]));
-        editProject.setProjectTitle(record[1]);
-        editProject.setProjectBudget(Double.parseDouble(record[2]));
-        editProject.setProjectDescription(record[3]);
-        editProject.setProjectTags(new HashSet<>(Arrays.asList(record[4].split(";"))));
-        embedDataAccess.saveEmbedData(editProject.getProjectDescription(), editProject.getProjectId());
-        saveToCSV();
-    }
-
-
-    @Override
-    public String[] search(int projectId) {
-        ProjectInterface searchProject = getProject(projectId);
-        projectToString(searchProject);
-        return projectToString(searchProject);
-    }
-
-    @Override
     public int numberOfProjects() {
         return projects.size();
     }
@@ -142,5 +95,64 @@ public class LocalProjectDataAccessObject implements ProjectDataAccessInterface 
         record[3] = project.getProjectDescription();
         record[4] = project.getProjectTags().toString();
         return record;
+    }
+
+    @Override
+    public Project createProject(String title, double budget, String description, HashSet<String> tags) {
+        int projectId = numberOfProjects() + 1;
+        Project project = new Project(projectId, title, budget, description, tags);
+        projects.put(projectId, project);
+        embedDataAccess.saveEmbedData(project.getProjectDescription(), projectId);
+        saveToCSV();
+        return project;
+    }
+
+
+    @Override
+    public void deleteProject(int projectId) {
+        projects.remove(projectId);
+        embedDataAccess.removeEmbedData(projectId);
+        saveToCSV();
+    }
+
+    @Override
+    public Project getProjectById(int projectId) {
+        if (projects.containsKey(projectId)) {
+            return (Project) projects.get(projectId);
+        }
+        return null;
+    }
+
+    @Override
+    public void addTags(int projectId, HashSet<String> tags) {
+        HashSet<String> currentTags = getProjectById(projectId).getProjectTags();
+        currentTags.addAll(tags);
+        update(projectId, getProjectById(projectId).getProjectTitle(), getProjectById(projectId).getProjectDescription(), getProjectById(projectId).getProjectBudget(), currentTags);
+    }
+
+    @Override
+    public void removeTags(int projectId, HashSet<String> tags) {
+
+    }
+
+    @Override
+    public HashSet<Project> getProjectsByKeyword(String keyword) {
+        return null;
+    }
+
+    @Override
+    public void update(int projectId, String title, String description, double budget, HashSet<String> tags) {
+        ProjectInterface editProject = getProjectById(projectId);
+        editProject.setProjectTitle(title);
+        editProject.setProjectBudget(budget);
+        editProject.setProjectDescription(description);
+        editProject.setProjectTags(tags);
+        embedDataAccess.saveEmbedData(editProject.getProjectDescription(), editProject.getProjectId());
+        saveToCSV();
+    }
+
+    @Override
+    public HashMap<Integer, float[]> getAllEmbeddings() {
+        return embedDataAccess.getAllEmbeddings();
     }
 }

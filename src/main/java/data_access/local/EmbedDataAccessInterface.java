@@ -1,10 +1,12 @@
-package data_access;
+package data_access.local;
 
+
+import java.util.HashMap;
 
 public interface EmbedDataAccessInterface {
 
     void saveEmbedData(float[] embedding, int id);
     void saveEmbedData(String data, int id);
     void removeEmbedData(int id);
-    int[] getClosestProjects(float[] input, int amount);
+    HashMap<Integer, float[]> getAllEmbeddings();
 }

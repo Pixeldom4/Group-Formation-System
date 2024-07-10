@@ -2,7 +2,7 @@ package SearchProjectUseCase;
 
 import Entities.ProjectInterface;
 import data_access.DAOImplementationConfig;
-import data_access.ProjectDataAccessInterface;
+import data_access.IProjectRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import use_case.SearchingForProjects.SearchProjectOutputBoundary;
@@ -11,6 +11,8 @@ import use_case.SearchingForProjects.SearchProjectsPresenter;
 import view_model.SearchPanelViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +21,7 @@ public class SearchProjectInteractorTest {
     public final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     public final static SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
     public final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(presenter);
-    public final static ProjectDataAccessInterface projectDAO = DAOImplementationConfig.getProjectDataAccess();
+    public final static IProjectRepository projectDAO = DAOImplementationConfig.getProjectDataAccess();
 
     private static String[][] dummyprojects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
@@ -36,7 +38,7 @@ public class SearchProjectInteractorTest {
 
     private static void addDummyProjects(){
         for (String[] project : dummyprojects) {
-            projectDAO.add(project);
+            projectDAO.createProject(project[1], Double.parseDouble(project[2]), project[3], new HashSet<String>(Arrays.asList(project[4].split(";"))));
         }
     }
 

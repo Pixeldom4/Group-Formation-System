@@ -2,6 +2,7 @@ package data_access;
 
 import Entities.Project;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public interface IProjectRepository {
@@ -15,4 +16,8 @@ public interface IProjectRepository {
     void removeTags(int projectId, HashSet<String> tags);
 
     HashSet<Project> getProjectsByKeyword(String keyword);
+
+    void update(int projectId, String title, String description, double budget, HashSet<String> tags);
+
+    HashMap<Integer, float[]> getAllEmbeddings();
 }
