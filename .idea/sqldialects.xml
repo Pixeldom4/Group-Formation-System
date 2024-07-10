@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/java/data_access/ProjectRepository.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/data_access/UserProjectsRepository.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/data_access/UserRepository.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/data_access/database/ProjectRepository.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/data_access/database/UserProjectsRepository.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/data_access/database/UserRepository.java" dialect="GenericSQL" />
   </component>
 </project>

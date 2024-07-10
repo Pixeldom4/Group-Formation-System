@@ -12,6 +12,12 @@ public class ViewManager implements PropertyChangeListener {
     private final JPanel views;
     private final ViewManagerModel viewManagerModel;
 
+    /**
+     * Creates a new view manager.
+     * @param views the panels that the view manager will manage
+     * @param layout the layout where the panels will be displayed
+     * @param viewManagerModel the view manager model that controls the view
+     */
     public ViewManager(JPanel views, CardLayout layout, ViewManagerModel viewManagerModel) {
         this.views = views;
         this.cardLayout = layout;

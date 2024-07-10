@@ -9,6 +9,7 @@ import java.util.Set;
  * data related to editing a project.
  */
 public class EditProjectInputData {
+    private final int projectId;
     private final String title;
     private final double budget;
     private final String description;
@@ -17,16 +18,27 @@ public class EditProjectInputData {
     /**
      * Constructs an EditProjectInputData object with the specified details.
      *
+     * @param projectId   the ID of the project.
      * @param title       the title of the project.
      * @param budget      the budget allocated for the project.
      * @param description a brief description of the project.
      * @param tags        a set of tags associated with the project.
      */
-    public EditProjectInputData(String title, double budget, String description, Set<String> tags) {
+    public EditProjectInputData(int projectId, String title, double budget, String description, Set<String> tags) {
+        this.projectId = projectId;
         this.title = title;
         this.budget = budget;
         this.description = description;
         this.tags = Collections.unmodifiableSet(new HashSet<>(tags));
+    }
+
+    /**
+     * Returns the ID of the project.
+     *
+     * @return the project ID.
+     */
+    public int getProjectId() {
+        return projectId;
     }
 
     /**

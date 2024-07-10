@@ -1,13 +1,12 @@
-package data_access;
+package data_access.database;
 
 import Entities.Project;
 import Entities.User;
+import data_access.IUserRepository;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * A class representing the User Repository. In particular, this class manages the User table.

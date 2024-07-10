@@ -12,18 +12,47 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
 
-    private final String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "embeds.csv";
+    private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "embeds.csv";
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private Index data_index = new Index(Index.SpaceType.Cosine, 1536);
     private HashMap<Integer, float[]> embeddings = new HashMap<Integer, float[]>();
     private String[] header = {"projectId", "embedding"};
 
+    /**
+     * Creates a new LocalEmbedDataAccessObject.
+     * Reads the embeddings from a CSV file if it exists.
+     */
     public LocalEmbedDataAccessObject() {
         File f = new File(FILE_PATH);
+        try {
+            Files.createDirectories(f.getParentFile().toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (f.exists() && !f.isDirectory()) {
+            readFromCSV();
+        }
+    }
+
+    /**
+     * Creates a new LocalEmbedDataAccessObject with the given path as the save location.
+     * Reads the embeddings from the CSV file if it exists.
+     * @param path the path to the CSV file
+     */
+    public LocalEmbedDataAccessObject(String path) {
+        FILE_PATH = path;
+        File f = new File(path);
+        File parent = f.getParentFile();
+        try {
+            Files.createDirectories(parent.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         if (f.exists() && !f.isDirectory()) {
             readFromCSV();
         }
@@ -35,6 +64,7 @@ public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
         saveToCSV();
     }
 
+    @Override
     public void saveEmbedData(String data, int id) {
         embeddings.put(id ,embeddingAPI.getEmbedData(data));
         saveToCSV();
@@ -47,10 +77,18 @@ public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
     }
 
     @Override
+    public float[] getEmbedData(int id) {
+        return embeddings.get(id);
+    }
+
+    @Override
     public HashMap<Integer, float[]> getAllEmbeddings() {
         return embeddings;
     }
 
+    /**
+     * Saves the embeddings to a CSV file.
+     */
     private void saveToCSV() {
         CSVWriter writer;
 
@@ -73,6 +111,9 @@ public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
         }
     }
 
+    /**
+     * Loads the embeddings from a CSV file.
+     */
     private void readFromCSV() {
         CSVReader reader;
 

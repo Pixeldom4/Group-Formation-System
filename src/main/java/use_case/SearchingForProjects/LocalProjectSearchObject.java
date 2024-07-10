@@ -6,16 +6,26 @@ import api.OpenAPIDataEmbed;
 import data_access.DAOImplementationConfig;
 import data_access.local.EmbedDataAccessInterface;
 import data_access.IProjectRepository;
+import data_access.local.LocalProjectDataAccessObject;
 
 import java.util.*;
 
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private final IProjectRepository projectDataAccess = DAOImplementationConfig.getProjectDataAccess();
+    private IProjectRepository projectDataAccess = DAOImplementationConfig.getProjectDataAccess();
 
     public LocalProjectSearchObject() {
 
+    }
+
+    /**
+     * Creates a new LocalProjectSearchObject using the given project repository.
+     * Used for testing where files are not stored in the project folder.
+     * @param projectRepository the project repository to use
+     */
+    public LocalProjectSearchObject(IProjectRepository projectRepository){
+        projectDataAccess = projectRepository;
     }
 
     @Override
