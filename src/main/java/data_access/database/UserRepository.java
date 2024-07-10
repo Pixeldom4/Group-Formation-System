@@ -278,18 +278,4 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public void updateUser(User user) {
         throw new NotImplementedException();
     }
-
-    /**
-     * I'm still not sure whether to keep this one here or have another Repository for this.
-     * Will update this after I get feedback from the TA. I think this doesn't actually go in this
-     * and would instead go in the service class. The repository that would be delegated this task would
-     * be the UserProjects repository, that manages the UserProjects table.
-     *
-     * @param userId the user whose projects we would like to fetch.
-     * @return the list of projects the user is associated with.
-     */
-    @Override
-    public HashSet<Project> getProjectsForUser(int userId) {
-        return null;
-    }
 }
