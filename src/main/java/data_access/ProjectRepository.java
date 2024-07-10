@@ -268,6 +268,89 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
     }
 
     /**
+     * Updates an existing project in the database with new details, tags, and embeddings.
+     * The method updates the project's title, budget, and description, deletes the old tags and embeddings,
+     * and inserts the new tags and embeddings.
+     *
+     * @param projectId   The ID of the project to update.
+     * @param title       The new title of the project.
+     * @param budget      The new budget of the project.
+     * @param description The new description of the project.
+     * @param tags        The new set of tags associated with the project.
+     * @param embeddings  The new array of embeddings associated with the project.
+     */
+    @Override
+    public void update(int projectId, String title, double budget, String description, HashSet<String> tags, float[] embeddings) {
+        String updateProjectSql = "UPDATE Projects SET Title = ?, Budget = ?, Description = ? WHERE Id = ?";
+        String deleteTagsSql = "DELETE FROM ProjectTags WHERE ProjectId = ?";
+        String deleteEmbeddingsSql = "DELETE FROM ProjectEmbeddings WHERE ProjectId = ?";
+        String insertTagSql = "INSERT INTO ProjectTags (ProjectId, Tag) VALUES (?, ?)";
+        String insertEmbeddingSql = "INSERT INTO ProjectEmbeddings (ProjectId, EmbeddingIndex, EmbeddingValue) VALUES (?, ?, ?)";
+
+        Connection connection = super.getConnection();
+
+        try {
+            connection.setAutoCommit(false); // begin transaction
+
+            try (PreparedStatement updateProjectStatement = connection.prepareStatement(updateProjectSql);
+                 PreparedStatement deleteTagsStatement = connection.prepareStatement(deleteTagsSql);
+                 PreparedStatement deleteEmbeddingsStatement = connection.prepareStatement(deleteEmbeddingsSql);
+                 PreparedStatement insertTagStatement = connection.prepareStatement(insertTagSql);
+                 PreparedStatement insertEmbeddingStatement = connection.prepareStatement(insertEmbeddingSql)) {
+
+                // Update project details
+                updateProjectStatement.setString(1, title);
+                updateProjectStatement.setDouble(2, budget);
+                updateProjectStatement.setString(3, description);
+                updateProjectStatement.setInt(4, projectId);
+                updateProjectStatement.executeUpdate();
+
+                // Delete old tags
+                deleteTagsStatement.setInt(1, projectId);
+                deleteTagsStatement.executeUpdate();
+
+                // Insert new tags
+                for (String tag : tags) {
+                    insertTagStatement.setInt(1, projectId);
+                    insertTagStatement.setString(2, tag);
+                    insertTagStatement.addBatch();
+                }
+                insertTagStatement.executeBatch();
+
+                // Delete old embeddings
+                deleteEmbeddingsStatement.setInt(1, projectId);
+                deleteEmbeddingsStatement.executeUpdate();
+
+                // Insert new embeddings
+                for (int i = 0; i < embeddings.length; i++) {
+                    insertEmbeddingStatement.setInt(1, projectId);
+                    insertEmbeddingStatement.setInt(2, i);
+                    insertEmbeddingStatement.setFloat(3, embeddings[i]);
+                    insertEmbeddingStatement.addBatch();
+                }
+                insertEmbeddingStatement.executeBatch();
+
+                connection.commit(); // end transaction
+            }
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                System.err.println(rollbackException.getMessage());
+            }
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
+
+    /**
      * Retrieves a set of tags associated with a given project ID.
      *
      * @param projectId The ID of the project to retrieve tags for.
@@ -349,5 +432,4 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
             embeddingsMap.put(currentProjectId, embeddingArray);
         }
     }
-
 }

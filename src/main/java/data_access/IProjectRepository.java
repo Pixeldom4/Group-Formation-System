@@ -15,4 +15,6 @@ public interface IProjectRepository {
     void removeTags(int projectId, HashSet<String> tags);
 
     HashSet<Project> getProjectsByKeyword(String keyword);
+
+    void update(int id, String title, double budget, String description, HashSet<String> tags, float[] embeddings);
 }
