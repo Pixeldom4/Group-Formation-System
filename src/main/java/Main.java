@@ -1,12 +1,6 @@
 import usecase.searchforproject.SearchProjectUseCaseFactory;
-import view.AddProjectPanel;
-import view.SearchPanel;
-import view.SwitchViewButtonPanel;
-import view.ViewManager;
-import viewmodel.AddProjectPanelViewModel;
-import viewmodel.SearchPanelViewModel;
-import viewmodel.SwitchViewButtonPanelViewModel;
-import viewmodel.ViewManagerModel;
+import view.*;
+import viewmodel.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,8 +27,12 @@ class Main {
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
         AddProjectPanel addProjectPanel = new AddProjectPanel(addProjectPanelModel);
 
+        MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
+        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel);
+
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
+        views.add(myProjectsPanel, myProjectsViewModel.getViewName());
 
         viewManagerModel.setActiveView(searchPanelViewModel.getViewName());
         viewManagerModel.firePropertyChanged();

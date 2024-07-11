@@ -18,7 +18,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final SearchProjectController searchProjectController;
 
     private final JTextField searchBar = new JTextField();
-    private final JButton searchButton = new JButton();
+    private final JButton searchButton = new JButton("Search");
     private final JPanel searchPanel = new JPanel();
     private final JPanel infoArea = new JPanel();
     private final JScrollPane infoPanel = new JScrollPane(infoArea);
@@ -36,6 +36,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
         searchButton.addActionListener(e -> {
             searchProjectController.searchProjects(searchBar.getText());
+            System.out.println(searchBar.getText());
         });
 
         searchPanel.setLayout(new BorderLayout());
