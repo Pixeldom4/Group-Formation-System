@@ -9,7 +9,7 @@ public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
 
     @Override
     public void prepareDeleteSuccess() {
-
+        System.out.println("delete success");
     }
 
     @Override

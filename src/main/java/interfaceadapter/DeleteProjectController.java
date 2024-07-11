@@ -12,6 +12,7 @@ public class DeleteProjectController implements DeleteProjectInputBoundary {
 
     @Override
     public void execute(int projectId) {
+        System.out.println("deleting");
         this.projectData.deleteProject(projectId);
     }
 }
