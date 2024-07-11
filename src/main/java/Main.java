@@ -1,20 +1,12 @@
-import use_case.SearchingForProjects.SearchProjectUseCaseFactory;
-import view.AddProjectPanel;
-import view.SearchPanel;
-import view.SwitchViewButtonPanel;
-import view.ViewManager;
-import view_model.AddProjectPanelViewModel;
-import view_model.SearchPanelViewModel;
-import view_model.SwitchViewButtonPanelViewModel;
-import view_model.ViewManagerModel;
+import usecase.searchforproject.SearchProjectUseCaseFactory;
+import view.*;
+import viewmodel.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 class Main {
     public static void main(String[] args) {
-
-        System.out.println("Hi this is Justin");
 
         JFrame application = new JFrame("A Screen");
         application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,8 +25,12 @@ class Main {
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
         AddProjectPanel addProjectPanel = new AddProjectPanel(addProjectPanelModel);
 
+        MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
+        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel);
+
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
+        views.add(myProjectsPanel, myProjectsViewModel.getViewName());
 
         viewManagerModel.setActiveView(searchPanelViewModel.getViewName());
         viewManagerModel.firePropertyChanged();

@@ -1,7 +1,7 @@
 package view;
 
-import view_model.SwitchViewButtonPanelViewModel;
-import view_model.ViewManagerModel;
+import viewmodel.SwitchViewButtonPanelViewModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +15,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
     private final JButton addProjectButton = new JButton("Add Project");
     private final JButton searchProjectButton = new JButton("Search Project");
+    private final JButton getProjectsButton = new JButton("My Projects");
 
     public SwitchViewButtonPanel(ViewManagerModel viewManagerModel, SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel) {
         this.switchViewButtonPanelViewModel = switchViewButtonPanelViewModel;
@@ -30,8 +31,14 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             viewManagerModel.firePropertyChanged();
         });
 
+        getProjectsButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("GetProjectsView");
+            viewManagerModel.firePropertyChanged();
+        });
+
         this.add(addProjectButton);
         this.add(searchProjectButton);
+        this.add(getProjectsButton);
     }
 
     @Override
