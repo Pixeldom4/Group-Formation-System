@@ -10,7 +10,7 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
 
     private static final String API_URL = "https://api.openai.com/v1/embeddings";
     private static final String API_MODEL = "text-embedding-3-small";
-    private static final String API_TOKEN = System.getenv("API_KEY");
+    private static final String API_TOKEN = "sk-project-general-LZZJLKpAXNO7ft1lMYIsT3BlbkFJ0EURr0xssgk5a5yG8HpA";//System.getenv("API_KEY");
 
     public OpenAPIDataEmbed() {
     }
