@@ -220,7 +220,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                     String title = rs.getString("Title");
                     double budget = rs.getDouble("Budget");
                     String description = rs.getString("Description");
-                    return new Project(projectId, title, budget, description, new HashSet<>());
+                    HashSet<String> tags = this.getTagsForProject(projectId);
+                    return new Project(projectId, title, budget, description, tags);
                 }
             }
         } catch(SQLException e) {
