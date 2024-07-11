@@ -72,8 +72,10 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                 buttonActions.add(new ButtonAction() {
                     @Override
                     public void onClick() {
-                        System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectTitle());
-                        // TODO: Implement view details functionality
+                        System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectId());
+                        // TODO: Implement view details functionality: call DisplayIndividualProjectView and display the information of the project with title tag and description
+                        DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI));
+                        projectView.setVisible(true);
                     }
                 });
             }
