@@ -1,8 +1,6 @@
 package view;
 
-import view_model.AddProjectPanelViewModel;
-import view_model.SwitchViewButtonPanelViewModel;
-import view_model.ViewManagerModel;
+import viewmodel.AddProjectPanelViewModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
