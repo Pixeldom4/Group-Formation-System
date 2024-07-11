@@ -1,5 +1,6 @@
 package dataaccess.database;
 
+import dataaccess.IUserProjectsRepository;
 import entities.User;
 import dataaccess.IUserRepository;
 import org.apache.commons.lang3.NotImplementedException;
@@ -11,13 +12,13 @@ import java.util.HashSet;
  * A class representing the User Repository. In particular, this class manages the User table.
  */
 public class UserRepository extends SQLDatabaseManager implements IUserRepository {
-    private final UserProjectsRepository userProjectsRepository;
+    private final IUserProjectsRepository userProjectsRepository;
     /**
      * Constructs a UserRepository object.
      *
      * @param databaseName The name of the database to manage. Note that this must include a '.db' file extension.
      */
-    public UserRepository(String databaseName, UserProjectsRepository userProjectsRepository) {
+    public UserRepository(String databaseName, IUserProjectsRepository userProjectsRepository) {
         super(databaseName);
         this.userProjectsRepository = userProjectsRepository;
     }

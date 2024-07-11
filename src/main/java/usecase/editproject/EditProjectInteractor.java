@@ -1,5 +1,7 @@
 package usecase.editproject;
 
+import api.EmbeddingAPIInterface;
+import api.OpenAPIDataEmbed;
 import entities.Project;
 import dataaccess.IProjectRepository;
 
@@ -8,10 +10,13 @@ import java.util.HashSet;
 public class EditProjectInteractor implements EditProjectInputBoundary {
     private final IProjectRepository projectRepository;
     private final EditProjectOutputBoundary projectPresenter;
+    private final EmbeddingAPIInterface embeddingAPI;
+
 
     public EditProjectInteractor(IProjectRepository projectRepository, EditProjectOutputBoundary projectPresenter) {
         this.projectRepository = projectRepository;
         this.projectPresenter = projectPresenter;
+        this.embeddingAPI = new OpenAPIDataEmbed();
     }
 
     /**
@@ -21,7 +26,7 @@ public class EditProjectInteractor implements EditProjectInputBoundary {
      */
     @Override
     public void editProject(EditProjectInputData inputData) {
-        float[] embedding = projectRepository.getAllEmbeddings().get(inputData.getProjectId());
+        float[] embedding = embeddingAPI.getEmbedData(inputData.getDescription());
         EditProjectOutputData outputData;
         try {
             projectRepository.update(inputData.getProjectId(),
