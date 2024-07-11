@@ -9,7 +9,7 @@ public class DAOImplementationConfig {
     private final static EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
     private final static IProjectRepository projectDataAccess = new LocalProjectDataAccessObject();
 
-    public static IProjectRepository getProjectDataAccess() {
+    public static IProjectRepository getProjectRepository() {
         return projectDataAccess;
     }
 

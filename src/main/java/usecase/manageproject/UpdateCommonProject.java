@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class UpdateCommonProject implements UpdateProjectInterface {
     private String[] record = new String[5];
-    private IProjectRepository projectDAO = DAOImplementationConfig.getProjectDataAccess();
+    private IProjectRepository projectDAO = DAOImplementationConfig.getProjectRepository();
 
     @Override
     public void updateProject(Project project) {
@@ -20,7 +20,7 @@ public class UpdateCommonProject implements UpdateProjectInterface {
         this.record[4] = String.join(";", project.getProjectTags());
         float[] embeddings = projectDAO.getAllEmbeddings().get(project.getProjectId());
 
-        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
+        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectRepository();
         csvDataAccessObject.update(Integer.parseInt(record[0]),
                                    record[1],
                                    Double.parseDouble(record[2]),
