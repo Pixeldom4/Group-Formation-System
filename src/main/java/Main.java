@@ -8,8 +8,6 @@ import java.awt.*;
 class Main {
     public static void main(String[] args) {
 
-        System.out.println("Hi this is Justin");
-
         JFrame application = new JFrame("A Screen");
         application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         application.setSize(1200, 1200);
