@@ -47,10 +47,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
-
-        TableColumn column = null;
+        
         for(int i = 0; i < 3; i++){
-            column = table.getColumnModel().getColumn(i);
+            TableColumn column = table.getColumnModel().getColumn(i);
             if(i == 0){
                 column.setPreferredWidth(100);
             }else{
