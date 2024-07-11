@@ -1,5 +1,6 @@
 package view;
 
+import usecase.createproject.CreateProjectController;
 import viewmodel.AddProjectPanelViewModel;
 
 import javax.swing.*;
@@ -11,10 +12,12 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AddProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final AddProjectPanelViewModel addProjectPanelViewModel;
+    private final CreateProjectController createProjectController;
 
     private final JPanel projectInfoPanel = new JPanel();
     private final JPanel projectDataPanel = new JPanel();
@@ -35,11 +38,12 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     private final JButton addProjectButton = new JButton("Create project");
 
-    private final ArrayList<String> tags = new ArrayList<>();
+    private final HashSet<String> tags = new HashSet<>();
 
-    public AddProjectPanel(AddProjectPanelViewModel addProjectPanelViewModel) {
+    public AddProjectPanel(AddProjectPanelViewModel addProjectPanelViewModel, CreateProjectController createProjectController) {
         this.addProjectPanelViewModel = addProjectPanelViewModel;
         addProjectPanelViewModel.addPropertyChangeListener(this);
+        this.createProjectController = createProjectController;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         projectInfoPanel.setLayout(new BoxLayout(projectInfoPanel, BoxLayout.Y_AXIS));
@@ -47,8 +51,8 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
         addTagButton.addActionListener(e -> {
             String tagText = projectTagsField.getText();
             if (!tagText.isEmpty()) {
-                tags.add(tagText);
                 addTagToPanel(tagText);
+                tags.add(tagText);
                 projectTagsField.setText("");
             }
         });
@@ -74,11 +78,28 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
         projectInfoPanel.add(tagPanel);
 
         this.add(projectInfoPanel);
+
+        addProjectButton.addActionListener(e -> {
+            String title = projectNameField.getText();
+            double budget = Double.parseDouble(projectBudgetField.getText());
+            String description = projectDescriptionField.getText();
+            createProjectController.createProject(title, budget, description, tags);
+        });
+
         this.add(addProjectButton);
 
     }
 
     private void addTagToPanel(String text) {
+
+        if (text.isEmpty()) {
+            return;
+        }
+
+        if (tags.contains(text)) {
+            return;
+        }
+
         JLabel label = new JLabel(text);
         label.setOpaque(true);
         label.setBackground(Color.LIGHT_GRAY);
@@ -120,7 +141,15 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        if (evt.getPropertyName().equals("success")) {
+            boolean success = (boolean) evt.getNewValue();
+            if (success){
+                JOptionPane.showMessageDialog(null, "Project created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, addProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
 
