@@ -32,7 +32,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
 
         searchBar.setPreferredSize(new Dimension(600, 40));
 
-        searchButton.setPreferredSize(new Dimension(40, 40));
+        searchButton.setPreferredSize(new Dimension(100, 40));
         searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
         searchButton.addActionListener(e -> {
             searchProjectController.searchProjects(searchBar.getText());
