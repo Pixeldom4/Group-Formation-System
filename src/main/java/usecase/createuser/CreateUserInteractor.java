@@ -19,7 +19,7 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      */
     @Override
     public void createUser(CreateUserInputData inputData) {
-        User user = userRepository.createUser(inputData.getFirstName(), inputData.getLastName(), inputData.getEmail(), inputData.getDesiredCompensation(), inputData.getTags();
+        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), ;
 
         CreateUserOutputData outputData;
         if (user != null) {
