@@ -1,5 +1,4 @@
 # Default ignored files
-/.idea/shelf/
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
@@ -9,3 +8,6 @@
 
 # target folder so we don't accidentally commit and cause troubles
 /target/
+
+# Ignore .idea
+/.idea/
