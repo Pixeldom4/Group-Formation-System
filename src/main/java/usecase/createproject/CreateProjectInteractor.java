@@ -1,11 +1,14 @@
 package usecase.createproject;
 
+import api.EmbeddingAPIInterface;
+import api.OpenAPIDataEmbed;
 import entities.Project;
 import dataaccess.IProjectRepository;
 
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     private final IProjectRepository projectRepository;
     private final CreateProjectOutputBoundary projectPresenter;
+    private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
 
     public CreateProjectInteractor(IProjectRepository projectRepository, CreateProjectOutputBoundary projectPresenter) {
         this.projectRepository = projectRepository;
@@ -19,10 +22,12 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
      */
     @Override
     public void createProject(CreateProjectInputData inputData) {
-        float[] embeddings = {}; // need to implement generate embeddings.
+        String stringToEmbed = inputData.getDescription();
+        float[] embeddings = embeddingAPI.getEmbedData(stringToEmbed);
         Project project = projectRepository.createProject(inputData.getTitle(), inputData.getBudget(), inputData.getDescription(), inputData.getTags(), embeddings);
 
         CreateProjectOutputData outputData;
+
         if (project != null) {
             outputData = new CreateProjectOutputData(project.getProjectId(), project.getProjectTitle(), project.getProjectBudget(), project.getProjectDescription(), project.getProjectTags(), true);
             projectPresenter.prepareSuccessView(outputData);

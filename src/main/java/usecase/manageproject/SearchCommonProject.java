@@ -7,7 +7,7 @@ import dataaccess.IProjectRepository;
 public class SearchCommonProject implements SearchProjectInterface {
     @Override
     public Project searchProject(int projectId) {
-        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
+        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectRepository();
 
         return csvDataAccessObject.getProjectById(projectId);
     }

@@ -1,3 +1,5 @@
+import usecase.createproject.CreateProjectController;
+import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
 import view.*;
 import viewmodel.*;
@@ -23,7 +25,8 @@ class Main {
         SearchPanel searchPanel = SearchProjectUseCaseFactory.createSearchProjectPanel(searchPanelViewModel);
 
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
-        AddProjectPanel addProjectPanel = new AddProjectPanel(addProjectPanelModel);
+        CreateProjectController createProjectController = CreateProjectUseCaseFactory.createController(addProjectPanelModel);
+        AddProjectPanel addProjectPanel = new AddProjectPanel(addProjectPanelModel, createProjectController);
 
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel);

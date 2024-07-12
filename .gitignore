@@ -1,5 +1,4 @@
 # Default ignored files
-/shelf/
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
@@ -8,4 +7,7 @@
 /dataSources.local.xml
 
 # target folder so we don't accidentally commit and cause troubles
-../target/
+/target/
+
+# Ignore .idea
+/.idea/
