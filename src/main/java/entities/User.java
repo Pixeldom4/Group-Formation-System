@@ -9,17 +9,15 @@ public class User implements UserInterface {
     private String userEmail;
     private HashSet<String> tags;
     private double desiredCompensation;
-    private String password;
 
     // Constructor
-    public User(int userId, String firstName, String lastName, String userEmail, HashSet<String> tags, double desiredCompensation, String password) {
+    public User(int userId, String firstName, String lastName, String userEmail, HashSet<String> tags, double desiredCompensation) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userEmail = userEmail;
         this.tags = tags;
         this.desiredCompensation = desiredCompensation;
-        this.password = password;
     }
 
     // Getters and Setters
@@ -70,8 +68,4 @@ public class User implements UserInterface {
     public void setDesiredCompensation(double desiredCompensation) {
         this.desiredCompensation = desiredCompensation;
     }
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
 }

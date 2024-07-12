@@ -121,7 +121,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                             this.addTags(userId, tags);
 
                             connection.commit(); // end transaction
-                            return new User(userId, firstName, lastName, email, tags, desiredCompensation, password);
+                            return new User(userId, firstName, lastName, email, tags, desiredCompensation);
                         }
                     }
                 }
@@ -153,7 +153,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      */
     @Override
     public User getUserByEmail(String email) {
-        String sql = "SELECT Id, FirstName, LastName, DesiredCompensation, Password FROM Users WHERE Email = ?";
+        String sql = "SELECT Id, FirstName, LastName, DesiredCompensation FROM Users WHERE Email = ?";
 
         try (Connection connection = super.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -164,9 +164,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                     String firstName = rs.getString("FirstName");
                     String lastName = rs.getString("LastName");
                     double desiredCompensation = rs.getDouble("DesiredCompensation");
-                    String password = rs.getString("Password");
 
-                    return new User(userId, firstName, lastName, email, this.getTagsForUser(userId), desiredCompensation, password);
+                    return new User(userId, firstName, lastName, email, this.getTagsForUser(userId), desiredCompensation);
                 }
             }
         } catch (SQLException e) {
@@ -208,7 +207,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      */
     @Override
     public User getUserById(int userId) {
-        String sql = "SELECT FirstName, LastName, Email, DesiredCompensation, Password FROM Users WHERE Id = ?";
+        String sql = "SELECT FirstName, LastName, Email, DesiredCompensation FROM Users WHERE Id = ?";
 
         try (Connection connection = super.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -219,9 +218,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                     String lastName = rs.getString("LastName");
                     String email = rs.getString("Email");
                     double desiredCompensation = rs.getDouble("DesiredCompensation");
-                    String password = rs.getString("Password");
 
-                    return new User(userId, firstName, lastName, email, this.getTagsForUser(userId), desiredCompensation, password);
+                    return new User(userId, firstName, lastName, email, this.getTagsForUser(userId), desiredCompensation);
                 }
             }
         } catch (SQLException e) {
