@@ -4,12 +4,18 @@ import entities.ProjectInterface;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class DisplayIndividualProjectView extends JFrame {
+public class DisplayIndividualProjectView extends JFrame implements ActionListener, PropertyChangeListener {
 
     private JTextField projectTitleField;
     private JTextField tagsField;
     private JTextArea projectDescriptionArea;
+
+
 
     public DisplayIndividualProjectView(ProjectInterface project) {
         setTitle("Project Details");
@@ -45,7 +51,21 @@ public class DisplayIndividualProjectView extends JFrame {
         add(detailsPanel, BorderLayout.CENTER);
 
         add(detailsPanel, BorderLayout.CENTER);
+
+        this.setVisible(true);
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt.getPropertyName().equals("displayDetailProject")){
+            ProjectInterface project = (ProjectInterface) evt.getNewValue();
+            projectTitleField.setText(project.getProjectTitle());
+        }
+    }
 }
