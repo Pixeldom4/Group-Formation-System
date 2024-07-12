@@ -1,6 +1,7 @@
 package dataaccess.database;
 
 import dataaccess.IProjectRepository;
+import dataaccess.IUserProjectsRepository;
 import entities.Project;
 
 import java.sql.*;
@@ -9,14 +10,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class ProjectRepository extends SQLDatabaseManager implements IProjectRepository {
-    private final UserProjectsRepository userProjectsRepository;
+    private final IUserProjectsRepository userProjectsRepository;
 
     /**
      * Constructs a ProjectRepository object.
      *
      * @param databaseName The name of the database to manage. Note that this must include a '.db' file extension.
      */
-    public ProjectRepository(String databaseName, UserProjectsRepository userProjectsRepository) {
+    public ProjectRepository(String databaseName, IUserProjectsRepository userProjectsRepository) {
         super(databaseName);
         this.userProjectsRepository = userProjectsRepository;
     }

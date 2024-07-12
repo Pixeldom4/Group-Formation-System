@@ -1,12 +1,14 @@
 package dataaccess.database;
 
+import dataaccess.IUserProjectsRepository;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 
-public class UserProjectsRepository extends SQLDatabaseManager {
+public class UserProjectsRepository extends SQLDatabaseManager implements IUserProjectsRepository {
 
     public UserProjectsRepository(String databaseName) {
         super(databaseName);
