@@ -23,7 +23,7 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
 
         CreateUserOutputData outputData;
         if (user != null) {
-            outputData = new CreateUserOutputData(user.getUserId(), user.getFirstName(), user.getLastName(), user.getUserEmail(), user.getDesiredCompensation(), true);
+            outputData = new CreateUserOutputData(user.getUserId(), user.getFirstName(), user.getLastName(), user.getUserEmail(), user.getDesiredCompensation(), user.getTags(), user.getPassword(), true);
             userPresenter.prepareSuccessView(outputData);
         } else {
             userPresenter.prepareFailView("Failed to create user.");
