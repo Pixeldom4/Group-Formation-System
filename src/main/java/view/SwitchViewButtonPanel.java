@@ -4,6 +4,7 @@ import viewmodel.SwitchViewButtonPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -20,6 +21,8 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
     public SwitchViewButtonPanel(ViewManagerModel viewManagerModel, SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel) {
         this.switchViewButtonPanelViewModel = switchViewButtonPanelViewModel;
         switchViewButtonPanelViewModel.addPropertyChangeListener(this);
+
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         addProjectButton.addActionListener(e -> {
             viewManagerModel.setActiveView("AddProjectView");

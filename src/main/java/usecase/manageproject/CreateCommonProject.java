@@ -21,7 +21,7 @@ public class CreateCommonProject implements CreateProjectInterface {
         this.record[4] = String.join(";", project.getProjectTags());
         float[] embedding = apiInteface.getEmbedData(project.getProjectDescription());
 
-        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectDataAccess();
+        IProjectRepository csvDataAccessObject = DAOImplementationConfig.getProjectRepository();
         csvDataAccessObject.createProject(record[1], Double.parseDouble(record[2]), record[3], new HashSet<>(Arrays.asList(record[4].split(";"))), embedding);
     }
 }
