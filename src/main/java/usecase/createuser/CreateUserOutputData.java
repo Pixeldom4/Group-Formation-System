@@ -13,7 +13,6 @@ public class CreateUserOutputData {
     private final String userEmail;
     private final double desiredCompensation;
     private final HashSet<String> tags;
-    private final String password;
     private final boolean success;
 
     /**
@@ -24,17 +23,15 @@ public class CreateUserOutputData {
      * @param lastName            the last name of the user.
      * @param userEmail           the email of the user.
      * @param desiredCompensation the desired compensation of the user.
-     * @param password            the password of the user.
      * @param success             whether the user creation was successful.
      */
-    public CreateUserOutputData(int userId, String firstName, String lastName, String userEmail, double desiredCompensation, HashSet<String> tags, String password, boolean success) {
+    public CreateUserOutputData(int userId, String firstName, String lastName, String userEmail, double desiredCompensation, HashSet<String> tags, boolean success) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userEmail = userEmail;
         this.desiredCompensation = desiredCompensation;
         this.tags = tags;
-        this.password = password;
         this.success = success;
     }
 
@@ -89,13 +86,6 @@ public class CreateUserOutputData {
      * @return the set of tags.
      */
     public HashSet<String> getTags() { return tags; }
-
-    /**
-     * Returns the password of the user.
-     *
-     * @return the user's password.
-     */
-    public String getPassword() { return password; }
 
     /**
      * Returns whether the user creation was successful.
