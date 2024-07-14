@@ -1,5 +1,7 @@
 package viewmodel;
 
+import entities.Project;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -29,6 +31,14 @@ public class AddProjectPanelViewModel extends ViewModel {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 
     @Override

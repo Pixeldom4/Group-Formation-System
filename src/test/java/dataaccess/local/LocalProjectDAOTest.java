@@ -1,7 +1,6 @@
-package data_access;
+package dataaccess.local;
 
 import dataaccess.IProjectRepository;
-import dataaccess.local.LocalProjectDataAccessObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

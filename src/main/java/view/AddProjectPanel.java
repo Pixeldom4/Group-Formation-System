@@ -143,8 +143,9 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("success")) {
             boolean success = (boolean) evt.getNewValue();
+            String projectName = addProjectPanelViewModel.getProjectName();
             if (success){
-                JOptionPane.showMessageDialog(null, "Project created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Project " + projectName + " created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             else {
                 JOptionPane.showMessageDialog(null, addProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);

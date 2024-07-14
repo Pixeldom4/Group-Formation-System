@@ -18,6 +18,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final SearchPanelViewModel searchPanelModel;
     private final SearchProjectController searchProjectController;
 
+    private final JLabel panelLabel = new JLabel("Search for projects here: ");
     private final JTextField searchBar = new JTextField();
     private final JButton searchButton = new JButton("Search");
     private final JPanel searchPanel = new JPanel();
@@ -42,6 +43,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         });
 
         searchPanel.setLayout(new BorderLayout());
+        searchPanel.add(panelLabel, BorderLayout.NORTH);
         searchPanel.add(searchBar, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
 

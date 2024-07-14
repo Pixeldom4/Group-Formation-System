@@ -4,7 +4,7 @@ import entities.User;
 
 import java.util.HashSet;
 
-public interface IUserRepository extends Database {
+public interface IUserRepository {
 
     /**
      * Creates/Registers a user in the database. Note that all validation should be done

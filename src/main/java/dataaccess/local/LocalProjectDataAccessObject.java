@@ -7,6 +7,7 @@ import entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import entities.UserInterface;
 
 import java.io.File;
 import java.io.FileReader;

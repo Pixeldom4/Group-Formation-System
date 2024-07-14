@@ -3,11 +3,10 @@ package interfaceadapter;
 import dataaccess.database.ProjectRepository;
 import dataaccess.database.UserProjectsRepository;
 import entities.Project;
-import usecase.getprojects.GetProjectsOutputBoundary;
 
 import java.util.HashSet;
 
-public class GetProjectsPresenter implements GetProjectsOutputBoundary {
+public class GetProjectsPresenter {
 
     private final UserProjectsRepository userProjectsRepository;
     private final ProjectRepository projectRepository;
@@ -17,7 +16,6 @@ public class GetProjectsPresenter implements GetProjectsOutputBoundary {
         projectRepository = new ProjectRepository("database.db", userProjectsRepository);
     }
 
-    @Override
     public String[][] getProjects(int userId){
         HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(userId);
         String[][] projectData = new String[projectIds.size()][3];
