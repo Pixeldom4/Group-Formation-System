@@ -5,8 +5,6 @@ import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import dataaccess.DAOImplementationConfig;
 import dataaccess.IUserRepository;
-import entities.Project;
-import entities.ProjectInterface;
 import entities.User;
 import entities.UserInterface;
 
@@ -18,7 +16,6 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 public class LocalUserRepository implements IUserRepository {
     private final String FILE_PATH;

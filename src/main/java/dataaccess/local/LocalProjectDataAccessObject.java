@@ -7,7 +7,6 @@ import entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import entities.UserInterface;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,7 +21,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
     private EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
     private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
-    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();;
+    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
 
     public LocalProjectDataAccessObject() {
         File f = new File(FILE_PATH);
@@ -197,7 +196,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
 
     @Override
     public HashSet<Project> getProjectsByKeyword(String keyword) {
-        HashSet<Project> results = new HashSet<Project>();
+        HashSet<Project> results = new HashSet<>();
         for (ProjectInterface project : projects.values()) {
             if (projectHasKeyword(project, keyword)) {
                 results.add((Project) project);

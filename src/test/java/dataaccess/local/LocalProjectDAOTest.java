@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,13 +30,13 @@ public class LocalProjectDAOTest {
 
     @Test
     public void testAddTags(){
-        projectRepository.addTags(1, new HashSet<>(Arrays.asList("New Tag")));
+        projectRepository.addTags(1, new HashSet<>(List.of("New Tag")));
         assertEquals(projectRepository.getProjectById(1).getProjectTags(), new HashSet<>(Arrays.asList("Java", "Programming", "New Tag")));
     }
 
     @Test
     public void testRemoveTags(){
-        projectRepository.removeTags(1, new HashSet<>(Arrays.asList("Java")));
+        projectRepository.removeTags(1, new HashSet<>(List.of("Java")));
         assertEquals(new HashSet<>(Arrays.asList("Programming")), projectRepository.getProjectById(1).getProjectTags());
     }
 

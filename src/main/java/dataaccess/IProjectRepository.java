@@ -1,7 +1,6 @@
 package dataaccess;
 
 import entities.Project;
-import entities.UserInterface;
 
 import java.util.HashMap;
 import java.util.HashSet;

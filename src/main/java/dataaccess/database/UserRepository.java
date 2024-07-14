@@ -1,6 +1,5 @@
 package dataaccess.database;
 
-import dataaccess.Database;
 import dataaccess.IUserProjectsRepository;
 import entities.User;
 import dataaccess.IUserRepository;

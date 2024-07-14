@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.stream.Collectors;
@@ -20,8 +19,8 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
 
     private final String FILE_PATH;
     private final String[] header = {"userID", "projectID"};
-    private final HashMap<Integer, HashSet<Integer>> userProjects = new HashMap<Integer, HashSet<Integer>>();
-    private final HashMap<Integer, HashSet<Integer>> projectUsers = new HashMap<Integer, HashSet<Integer>>();
+    private final HashMap<Integer, HashSet<Integer>> userProjects = new HashMap<>();
+    private final HashMap<Integer, HashSet<Integer>> projectUsers = new HashMap<>();
 
     public LocalUserProjectsRepository() {
         this(DAOImplementationConfig.getProjectCSVPath());
