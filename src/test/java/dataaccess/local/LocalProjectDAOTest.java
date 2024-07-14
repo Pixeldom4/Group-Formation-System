@@ -4,6 +4,9 @@ import dataaccess.IProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -12,11 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LocalProjectDAOTest {
     private final static String SAVE_LOCATION = "local_data/test/data_access/local_dao/";
-    private final static IProjectRepository projectRepository = new LocalProjectDataAccessObject(SAVE_LOCATION);
+    private static IProjectRepository projectRepository;
+    private final static File saveFile = new File(SAVE_LOCATION + "projects.csv");
 
     @BeforeEach
-    public void setUpEach() {
-        projectRepository.deleteProject(1);
+    public void setUpEach() throws IOException {
+        Files.deleteIfExists(saveFile.toPath());
+        projectRepository = new LocalProjectDataAccessObject(SAVE_LOCATION);
         projectRepository.createProject("Test Project",
                                         1000.0, "This is a test project.",
                                         new HashSet<>(Arrays.asList("Java", "Programming")),
@@ -37,7 +42,7 @@ public class LocalProjectDAOTest {
     @Test
     public void testRemoveTags(){
         projectRepository.removeTags(1, new HashSet<>(List.of("Java")));
-        assertEquals(new HashSet<>(Arrays.asList("Programming")), projectRepository.getProjectById(1).getProjectTags());
+        assertEquals(new HashSet<>(List.of("Programming")), projectRepository.getProjectById(1).getProjectTags());
     }
 
     @Test

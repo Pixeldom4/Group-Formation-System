@@ -22,6 +22,7 @@ public class LocalUserRepository implements IUserRepository {
     private final String[] header = {"userID", "userEmail", "userFirstName", "userLastName", "userTags", "userDesiredCompensation", "userPassword"};
     private final HashMap<Integer, UserInterface> users = new HashMap<Integer, UserInterface>();
     private final HashMap<Integer, String> userPasswords = new HashMap<Integer, String>();
+    private int maxId = 0;
 
     public LocalUserRepository() {
         this(DAOImplementationConfig.getProjectCSVPath());
@@ -42,10 +43,11 @@ public class LocalUserRepository implements IUserRepository {
 
     @Override
     public User createUser(String email, String firstName, String lastName, HashSet<String> tags, double desiredCompensation, String password) {
-        UserInterface user = new User(users.size() + 1, email, firstName, lastName, tags, desiredCompensation);
+        UserInterface user = new User(maxId + 1, firstName, lastName, email, tags, desiredCompensation);
         users.put(user.getUserId(), user);
         userPasswords.put(user.getUserId(), password);
         saveToCSV();
+        maxId++;
         return (User) user;
     }
 
@@ -156,9 +158,10 @@ public class LocalUserRepository implements IUserRepository {
                 HashSet<String> tags = new HashSet<>(Arrays.asList(line[4].replace("[", "").replace("]", "").split(",")));
                 double desiredCompensation = Double.parseDouble(line[5]);
                 String password = line[6];
-                UserInterface user = new User(userId, userEmail, firstName, lastName, tags, desiredCompensation);
+                UserInterface user = new User(userId, firstName, userEmail, lastName, tags, desiredCompensation);
                 users.put(userId, user);
                 userPasswords.put(userId, password);
+                maxId = Math.max(maxId, userId);
             }
         } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
