@@ -2,6 +2,7 @@ package view;
 
 import entities.ProjectInterface;
 import usecase.searchforproject.SearchProjectController;
+import usecase.searchprojectbyid.SearchProjectByIdController;
 import viewmodel.SearchPanelViewModel;
 
 import javax.swing.*;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SearchPanelViewModel searchPanelModel;
-    private final SearchProjectController searchProjectController;
+    private SearchProjectController searchProjectController = null;
+    private SearchProjectByIdController searchProjectByIdController = null;
 
     private final JLabel panelLabel = new JLabel("Search for projects here: ");
     private final JTextField searchBar = new JTextField();
@@ -44,6 +46,31 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
 
         searchPanel.setLayout(new BorderLayout());
         searchPanel.add(panelLabel, BorderLayout.NORTH);
+        searchPanel.add(searchBar, BorderLayout.CENTER);
+        searchPanel.add(searchButton, BorderLayout.EAST);
+
+        // Add the search panel to the top of the main panel
+        this.add(searchPanel, BorderLayout.NORTH);
+
+        this.add(infoPanel, BorderLayout.CENTER);
+    }
+
+    public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectByIdController searchProjectByIdController) {
+        this.searchProjectByIdController = searchProjectByIdController;
+        this.searchPanelModel = searchPanelModel;
+        searchPanelModel.addPropertyChangeListener(this);
+
+        this.setLayout(new BorderLayout());
+
+        searchBar.setPreferredSize(new Dimension(600, 40));
+
+        searchButton.setPreferredSize(new Dimension(100, 40));
+        searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
+        searchButton.addActionListener(e -> {
+            searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText()));
+        });
+
+        searchPanel.setLayout(new BorderLayout());
         searchPanel.add(searchBar, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
 
