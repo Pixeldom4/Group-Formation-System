@@ -1,6 +1,6 @@
 package view;
 
-import interfaceadapter.GetProjectsPresenter;
+//import interfaceadapter.GetProjectsPresenter;
 import viewmodel.MyProjectsPanelViewModel;
 import dataaccess.database.UserProjectsRepository;
 
@@ -18,7 +18,7 @@ import java.util.HashSet;
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
-    private final GetProjectsPresenter getProjectsPresenter = new GetProjectsPresenter();
+    //private final GetProjectsPresenter getProjectsPresenter = new GetProjectsPresenter();
 
 //    private final JLabel title = new JLabel("My Projects");
 
