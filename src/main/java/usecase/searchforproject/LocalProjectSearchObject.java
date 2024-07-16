@@ -11,7 +11,7 @@ import java.util.*;
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private IProjectRepository projectDataAccess = DAOImplementationConfig.getProjectDataAccess();
+    private IProjectRepository projectDataAccess = DAOImplementationConfig.getProjectRepository();
 
     public LocalProjectSearchObject() {
 

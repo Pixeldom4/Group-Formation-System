@@ -21,7 +21,8 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
     private EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
     private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
-    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();;
+    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
+    private int maxId = 0;
 
     public LocalProjectDataAccessObject() {
         File f = new File(FILE_PATH);
@@ -103,6 +104,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
                 HashSet<String> projectTags = Arrays.stream(line[4].replace("[", "").replace("]", "").split(",")).collect(Collectors.toCollection(HashSet::new));
                 ProjectInterface project = new Project(projectId, projectTitle, projectBudget, projectDescription, projectTags);
                 projects.put(projectId, project);
+                maxId = Math.max(maxId, projectId);
             }
         } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
@@ -113,14 +115,6 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Returns the number of projects in the repository.
-     * @return the number of projects
-     */
-    private int numberOfProjects() {
-        return projects.size();
     }
 
     /**
@@ -144,11 +138,12 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
                                  String description,
                                  HashSet<String> tags,
                                  float[] embeddings) {
-        int projectId = numberOfProjects() + 1;
+        int projectId = maxId + 1;
         Project project = new Project(projectId, title, budget, description, tags);
         projects.put(projectId, project);
         embedDataAccess.saveEmbedData(embeddings, projectId);
         saveToCSV();
+        maxId++;
         return project;
     }
 
@@ -196,7 +191,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
 
     @Override
     public HashSet<Project> getProjectsByKeyword(String keyword) {
-        HashSet<Project> results = new HashSet<Project>();
+        HashSet<Project> results = new HashSet<>();
         for (ProjectInterface project : projects.values()) {
             if (projectHasKeyword(project, keyword)) {
                 results.add((Project) project);
