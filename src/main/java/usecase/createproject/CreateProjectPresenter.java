@@ -12,6 +12,7 @@ public class CreateProjectPresenter implements CreateProjectOutputBoundary {
     @Override
     public void prepareSuccessView(CreateProjectOutputData outputData) {
         addProjectPanelViewModel.setSuccess(true);
+        addProjectPanelViewModel.setProjectName(outputData.getTitle());
         addProjectPanelViewModel.firePropertyChanged();
     }
 

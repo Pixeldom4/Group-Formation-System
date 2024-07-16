@@ -2,7 +2,7 @@ package dataaccess;
 
 import java.util.HashSet;
 
-public interface IUserProjectsRepository extends Database {
+public interface IUserProjectsRepository {
     void addUserToProject(int userId, int projectId);
 
     /**

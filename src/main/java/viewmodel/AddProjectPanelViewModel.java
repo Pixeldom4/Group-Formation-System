@@ -31,6 +31,14 @@ public class AddProjectPanelViewModel extends ViewModel {
         return errorMessage;
     }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
     @Override
     public void firePropertyChanged() {
         support.firePropertyChange("success", null, success);

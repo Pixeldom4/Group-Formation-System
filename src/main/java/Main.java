@@ -1,6 +1,9 @@
+import dataaccess.DAOImplementationConfig;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
+import usecase.createuser.CreateUserController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
+import usecase.createuser.CreateUserUseCaseFactory;
 import view.*;
 import viewmodel.*;
 
@@ -18,8 +21,19 @@ class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
+        DAOImplementationConfig.initializeDatabase();
+
         ViewManagerModel viewManagerModel = new ViewManagerModel();
+        viewManagerModel.setLogin(false);
+        viewManagerModel.setUserId(0);
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
+
+        CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
+        CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
+        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, createUserController);
+
+        LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
+        LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel);
 
         SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
         SearchPanel searchPanel = SearchProjectUseCaseFactory.createSearchProjectPanel(searchPanelViewModel);
@@ -31,15 +45,17 @@ class Main {
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel);
 
+        views.add(createUserPanel, createUserPanelViewModel.getViewName());
+        views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
 
-        viewManagerModel.setActiveView(searchPanelViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
-
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         JPanel switchButtons = new SwitchViewButtonPanel(viewManagerModel, switchViewButtonPanelViewModel);
+
+        viewManagerModel.setActiveView(createUserPanelViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
 
         application.getContentPane().add(views, BorderLayout.CENTER);
         application.getContentPane().add(switchButtons, BorderLayout.SOUTH);

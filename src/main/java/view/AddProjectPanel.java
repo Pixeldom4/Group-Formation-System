@@ -1,6 +1,7 @@
 package view;
 
 import usecase.createproject.CreateProjectController;
+import view.components.NumericTextField;
 import viewmodel.AddProjectPanelViewModel;
 
 import javax.swing.*;
@@ -11,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class AddProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
@@ -143,36 +143,14 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("success")) {
             boolean success = (boolean) evt.getNewValue();
+            String projectName = addProjectPanelViewModel.getProjectName();
             if (success){
-                JOptionPane.showMessageDialog(null, "Project created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Project " + projectName + " created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             else {
                 JOptionPane.showMessageDialog(null, addProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-
-    private class NumericTextField extends JTextField {
-        public NumericTextField() {
-            super(10);
-            ((AbstractDocument) this.getDocument()).setDocumentFilter(new DocumentFilter() {
-                @Override
-                public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-                    if (string.matches("\\d+")) {
-                        super.insertString(fb, offset, string, attr);
-                    }
-                }
-
-                @Override
-                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-                    if (text.matches("\\d+")) {
-                        super.replace(fb, offset, length, text, attrs);
-                    }
-                }
-            });
-        }
-
     }
 
 }

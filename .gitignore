@@ -11,3 +11,7 @@
 
 # Ignore .idea
 /.idea/
+
+# Ignore save files
+database.db
+/local_data/
