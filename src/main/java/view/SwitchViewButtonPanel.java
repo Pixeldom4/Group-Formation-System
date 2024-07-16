@@ -18,6 +18,9 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
     private final JButton addProjectButton = new JButton("Add Project");
     private final JButton searchProjectButton = new JButton("Search Project");
     private final JButton getProjectsButton = new JButton("My Projects");
+    //TODO Implement for getUserView
+    private final JButton getUserProfileButton = new JButton("My Profile");
+
 
     private final JButton createUserButton = new JButton("Create User");
     private final JButton loginUserButton = new JButton("Login User");
@@ -48,6 +51,11 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             viewManagerModel.firePropertyChanged();
         });
 
+        getProjectsButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("GetMyProfile");
+            viewManagerModel.firePropertyChanged();
+        });
+
         createUserButton.addActionListener(e -> {
             viewManagerModel.setActiveView("CreateUserView");
             viewManagerModel.firePropertyChanged();
@@ -67,6 +75,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
         this.add(createUserButton);
         this.add(loginUserButton);
+        this.add(getUserProfileButton);
 
         this.add(addProjectButton);
         this.add(searchProjectButton);
