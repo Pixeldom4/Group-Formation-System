@@ -1,12 +1,22 @@
 package usecase.createuser;
 
+import dataaccess.DAOImplementationConfig;
 import entities.User;
 import dataaccess.IUserRepository;
 
 public class CreateUserInteractor implements CreateUserInputBoundary {
-    private final IUserRepository userRepository;
+    private IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
     private final CreateUserOutputBoundary userPresenter;
 
+    public CreateUserInteractor(CreateUserOutputBoundary userPresenter) {
+        this.userPresenter = userPresenter;
+    }
+
+    /**
+     * Used for testing when save file is in another folder
+     * @param userRepository the user repository
+     * @param userPresenter the user presenter
+     */
     public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter) {
         this.userRepository = userRepository;
         this.userPresenter = userPresenter;

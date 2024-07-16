@@ -3,6 +3,8 @@ package view;
 import entities.ProjectInterface;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchprojectbyid.SearchProjectByIdController;
+import view.components.ButtonAction;
+import view.components.ButtonColumn;
 import viewmodel.SearchPanelViewModel;
 
 import javax.swing.*;
@@ -26,37 +28,30 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final JPanel searchPanel = new JPanel();
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100};
-    private final String[] columnNames = {"Project Title", "Description", "View Details"};
+    private final String[] columnNames = {"Project Title", "Description", "View Details", "Request joining"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectController searchProjectController) {
+        this(searchPanelModel);
         this.searchProjectController = searchProjectController;
-        this.searchPanelModel = searchPanelModel;
-        searchPanelModel.addPropertyChangeListener(this);
-
-        this.setLayout(new BorderLayout());
-
-        searchBar.setPreferredSize(new Dimension(600, 40));
-
-        searchButton.setPreferredSize(new Dimension(100, 40));
-        searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
         searchButton.addActionListener(e -> {
             searchProjectController.searchProjects(searchBar.getText());
         });
-
-        searchPanel.setLayout(new BorderLayout());
-        searchPanel.add(panelLabel, BorderLayout.NORTH);
-        searchPanel.add(searchBar, BorderLayout.CENTER);
-        searchPanel.add(searchButton, BorderLayout.EAST);
-
-        // Add the search panel to the top of the main panel
-        this.add(searchPanel, BorderLayout.NORTH);
-
-        this.add(infoPanel, BorderLayout.CENTER);
     }
 
     public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectByIdController searchProjectByIdController) {
+        this(searchPanelModel);
         this.searchProjectByIdController = searchProjectByIdController;
+        searchButton.addActionListener(e -> {
+            searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText()));
+        });
+    }
+
+    /**
+     * Used to initialize common components
+     * @param searchPanelModel the search panel model
+     */
+    private SearchPanel(SearchPanelViewModel searchPanelModel) {
         this.searchPanelModel = searchPanelModel;
         searchPanelModel.addPropertyChangeListener(this);
 
@@ -66,9 +61,6 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
 
         searchButton.setPreferredSize(new Dimension(100, 40));
         searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
-        searchButton.addActionListener(e -> {
-            searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText()));
-        });
 
         searchPanel.setLayout(new BorderLayout());
         searchPanel.add(searchBar, BorderLayout.CENTER);
@@ -90,19 +82,28 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         if (evt.getPropertyName().equals("rankProjects")) {
 
             ArrayList<ProjectInterface> projectRankingList = (ArrayList<ProjectInterface>) evt.getNewValue();
-            ArrayList<ButtonAction> buttonActions = new ArrayList<>();
+            ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
+            ArrayList<ButtonAction> requestToJoinButtonActions = new ArrayList<>();
 
             Object[][] info = new Object[projectRankingList.size()][columnNames.length];
             for (int i = 0; i < projectRankingList.size(); i++) {
                 info[i][0] = projectRankingList.get(i).getProjectTitle();
                 info[i][1] = cutString(projectRankingList.get(i).getProjectDescription());
                 info[i][2] = "View Details";
+                info[i][3] = "Request to join";
                 int finalI = i;
-                buttonActions.add(new ButtonAction() {
+                detailButtonActions.add(new ButtonAction() {
                     @Override
                     public void onClick() {
                         System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectId());
                         DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
+                    }
+                });
+                requestToJoinButtonActions.add(new ButtonAction() {
+                    @Override
+                    public void onClick() {
+                        System.out.println("Requesting to join project: " + projectRankingList.get(finalI).getProjectId());
+                        // TODO: Implement request to join
                     }
                 });
             }
@@ -110,14 +111,16 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     // Make only the button column editable
-                    return column == 2;
+                    return column == 2 || column == 3;
                 }
             };
             infoTable.setModel(infoTableModel);
-            ButtonColumn buttonColumn = new ButtonColumn(infoTable, 2);
-            buttonColumn.setActions(buttonActions);
-            TableColumnModel columnModel = infoTable.getColumnModel();
+            ButtonColumn detailColumn = new ButtonColumn(infoTable, 2);
+            detailColumn.setActions(detailButtonActions);
+            ButtonColumn requestToJoinColumn = new ButtonColumn(infoTable, 3);
+            requestToJoinColumn.setActions(requestToJoinButtonActions);
 
+            TableColumnModel columnModel = infoTable.getColumnModel();
             for (int i = 0; i < columnWidths.length; i++) {
                 columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
             }
@@ -133,73 +136,5 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         return str.substring(0, maxLength) + "...";
     }
 
-    /**
-     * Interface for button actions.
-     */
-    private interface ButtonAction {
-        void onClick();
-    }
 
-    /**
-     * Class for rendering and editing buttons in the table.
-     */
-    private class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
-        private final JTable table;
-        private final JButton renderButton;
-        private final JButton editButton;
-        private String text;
-        private ArrayList<ButtonAction> actions = new ArrayList<>();
-
-        public ButtonColumn(JTable table, int column) {
-            super();
-            this.table = table;
-            renderButton = new JButton();
-            editButton = new JButton();
-            editButton.setFocusPainted(false);
-            editButton.addActionListener(this);
-
-            TableColumnModel columnModel = table.getColumnModel();
-            columnModel.getColumn(column).setCellRenderer(this);
-            columnModel.getColumn(column).setCellEditor(this);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            if (hasFocus) {
-                renderButton.setForeground(table.getForeground());
-                renderButton.setBackground(UIManager.getColor("Button.background"));
-            } else if (isSelected) {
-                renderButton.setForeground(table.getSelectionForeground());
-                renderButton.setBackground(table.getSelectionBackground());
-            } else {
-                renderButton.setForeground(table.getForeground());
-                renderButton.setBackground(UIManager.getColor("Button.background"));
-            }
-            renderButton.setText((value == null) ? "" : value.toString());
-            return renderButton;
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            text = (value == null) ? "" : value.toString();
-            editButton.setText(text);
-            return editButton;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return text;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            fireEditingStopped();
-            actions.get(table.getSelectedRow()).onClick();
-        }
-
-        public void setActions(ArrayList<ButtonAction> actions) {
-            this.actions = actions;
-        }
-    }
 }

@@ -1,7 +1,9 @@
 import dataaccess.DAOImplementationConfig;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
+import usecase.createuser.CreateUserController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
+import usecase.createuser.CreateUserUseCaseFactory;
 import view.*;
 import viewmodel.*;
 
@@ -27,7 +29,8 @@ class Main {
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
-        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel);
+        CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
+        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, createUserController);
 
         LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
         LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel);
