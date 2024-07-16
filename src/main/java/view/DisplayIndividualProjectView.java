@@ -14,6 +14,7 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
     private JTextField projectTitleField;
     private JTextField tagsField;
     private JTextArea projectDescriptionArea;
+    private JTextField projectID;
 
 
 
@@ -28,12 +29,17 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
 
         projectTitleField = new JTextField(project.getProjectTitle());
         projectTitleField.setEditable(false);
+        projectID = new JTextField(project.getProjectId());
+        projectID.setEditable(false);
         tagsField = new JTextField(project.getProjectTags().toString());
         tagsField.setEditable(false);
         projectDescriptionArea = new JTextArea(project.getProjectDescription());
         projectDescriptionArea.setEditable(false);
         // Project Title
         detailsPanel.add(new JLabel("Project Title:" + project.getProjectTitle() ));
+
+        // Project ID
+        detailsPanel.add(new JLabel("Project ID:"+ project.getProjectId()));
 
         // Project Tags
         detailsPanel.add(new JLabel("Tags:" + project.getProjectTags() ));
