@@ -62,6 +62,30 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     }
 
     /**
+     * Returns the hashed password of the user associated with the inputted email.
+     *
+     * @param email the email of the user whose password to retrieve.
+     * @return the hashed password of the user associated with the email.
+     */
+    @Override
+    public String getPasswordByEmail(String email) {
+        String sql = "SELECT Password FROM Users WHERE Email = ?";
+        Connection connection = super.getConnection();
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try(ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Password");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return "";
+    }
+
+    /**
      * Executes a batch of SQL statements for tag updates.
      *
      * @param userId the id of the user.

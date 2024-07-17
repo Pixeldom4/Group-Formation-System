@@ -1,0 +1,2 @@
+The software allows project initiators to propose and recruit members for a small project while allowing project supporters to join posted projects that they are interested in.
+It is similar to LinkedIn but except it is for projects.

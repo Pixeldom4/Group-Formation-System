@@ -28,7 +28,7 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
 
     public LocalUserProjectsRepository(String path) {
         FILE_PATH = path + "userProjects.csv";
-        File f = new File(path);
+        File f = new File(FILE_PATH);
         try {
             Files.createDirectories(f.getParentFile().toPath());
         } catch (IOException e) {

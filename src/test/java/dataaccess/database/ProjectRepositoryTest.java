@@ -137,31 +137,21 @@ class ProjectRepositoryTest {
 
         assertNotNull(updatedProject);
 
-        System.out.println(updatedProject.getProjectTitle());
         assertEquals("Updated Title", updatedProject.getProjectTitle());
 
-        System.out.println(updatedProject.getProjectBudget());
         assertEquals(1500.0, updatedProject.getProjectBudget(), 0);
 
-        System.out.println( updatedProject.getProjectDescription());
         assertEquals("Updated Description", updatedProject.getProjectDescription());
 
-        System.out.println(updatedProject.getProjectTags().contains("UpdatedTag"));
         assertTrue(updatedProject.getProjectTags().contains("UpdatedTag"));
 
-        System.out.println(updatedProject.getProjectTags().contains("Java"));
         assertFalse(updatedProject.getProjectTags().contains("Java"));
 
-        System.out.println(updatedProject.getProjectTags().contains("SQL"));
         assertFalse(updatedProject.getProjectTags().contains("SQL"));
-
-//        System.out.println(testProjectId);
-//        System.out.println(updatedProject.getProjectId());
 
         // Validate embeddings
         HashMap<Integer, float[]> embeddingsMap = projectRepository.getAllEmbeddings();
-        System.out.println(embeddingsMap.isEmpty());
-        System.out.println(embeddingsMap.containsKey(testProjectId));
+
         assertTrue(embeddingsMap.containsKey(testProjectId));
         float[] retrievedEmbeddings = embeddingsMap.get(testProjectId);
         assertArrayEquals(newEmbeddings, retrievedEmbeddings);

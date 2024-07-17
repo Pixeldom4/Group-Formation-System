@@ -10,9 +10,11 @@ import javax.swing.text.DocumentFilter;
  * A text field that only accepts numeric input
  */
 public class NumericTextField extends JTextField {
+    private DocumentFilter filter;
+
     public NumericTextField() {
         super(10);
-        ((AbstractDocument) this.getDocument()).setDocumentFilter(new DocumentFilter() {
+        filter = new DocumentFilter() {
             @Override
             public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
                 if (string.matches("\\d+")) {
@@ -26,7 +28,14 @@ public class NumericTextField extends JTextField {
                     super.replace(fb, offset, length, text, attrs);
                 }
             }
-        });
+        };
+        ((AbstractDocument) this.getDocument()).setDocumentFilter(filter);
     }
 
+    public void clear() {
+        AbstractDocument doc = (AbstractDocument) this.getDocument();
+        doc.setDocumentFilter(null);
+        this.setText("");
+        doc.setDocumentFilter(filter);
+    }
 }

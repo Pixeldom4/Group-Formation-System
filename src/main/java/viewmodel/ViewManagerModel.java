@@ -1,13 +1,13 @@
 package viewmodel;
 
+import entities.User;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class ViewManagerModel {
 
     private String activeViewName;
-    private boolean login;
-    private int userId;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
@@ -27,26 +27,16 @@ public class ViewManagerModel {
         this.activeViewName = activeView;
     }
 
-    public void setLogin(boolean login) {
-        this.login = login;
+    public void login(){
+        support.firePropertyChange("login", null, true);
     }
 
-    public boolean isLogin() {
-        return login;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getUserId() {
-        return userId;
+    public void logout(){
+        support.firePropertyChange("login", null, false);
     }
 
     public void firePropertyChanged() {
         support.firePropertyChange("view", null, this.activeViewName);
-        support.firePropertyChange("login", null, this.login);
-        support.firePropertyChange("userId", null, this.userId);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
