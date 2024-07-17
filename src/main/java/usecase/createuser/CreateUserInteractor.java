@@ -9,9 +9,11 @@ import usecase.IPasswordHasher;
 public class CreateUserInteractor implements CreateUserInputBoundary {
     private IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
     private final CreateUserOutputBoundary userPresenter;
+    private final IPasswordHasher passwordHasher;
 
-    public CreateUserInteractor(CreateUserOutputBoundary userPresenter) {
+    public CreateUserInteractor(CreateUserOutputBoundary userPresenter, IPasswordHasher passwordHasher) {
         this.userPresenter = userPresenter;
+        this.passwordHasher = passwordHasher;
     }
 
     /**
@@ -19,9 +21,10 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      * @param userRepository the user repository
      * @param userPresenter the user presenter
      */
-    public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter) {
+    public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter, IPasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.userPresenter = userPresenter;
+        this.passwordHasher = passwordHasher;
     }
 
     /**
@@ -31,8 +34,7 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      */
     @Override
     public void createUser(CreateUserInputData inputData) {
-        IPasswordHasher passwordHasher = new BCryptPasswordHasher();
-        String hashedPassword = passwordHasher.hashPassword(inputData.getPassword());
+        String hashedPassword = this.passwordHasher.hashPassword(inputData.getPassword());
         User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword) ;
 
         CreateUserOutputData outputData;
