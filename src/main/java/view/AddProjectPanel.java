@@ -101,7 +101,7 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
                 JOptionPane.showMessageDialog(null, "You must be logged in to create a project.");
                 return;
             }
-            createProjectController.createProject(title, budget, description, tags);
+            createProjectController.createProject(title, budget, description, tags, loggedInUser.getUserId());
         });
 
         this.add(addProjectButton);

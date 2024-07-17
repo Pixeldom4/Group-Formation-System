@@ -3,6 +3,11 @@ package dataaccess;
 import java.util.HashSet;
 
 public interface IUserProjectsRepository {
+    /**
+     * Adds a User-Project association.
+     * @param userId The ID of the user.
+     * @param projectId The ID of the project.
+     */
     void addUserToProject(int userId, int projectId);
 
     /**

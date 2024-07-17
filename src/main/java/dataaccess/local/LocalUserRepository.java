@@ -168,7 +168,7 @@ public class LocalUserRepository implements IUserRepository {
                 HashSet<String> tags = new HashSet<>(Arrays.asList(line[4].replace("[", "").replace("]", "").split(",")));
                 double desiredCompensation = Double.parseDouble(line[5]);
                 String password = line[6];
-                UserInterface user = new User(userId, firstName, userEmail, lastName, tags, desiredCompensation);
+                UserInterface user = new User(userId, firstName, lastName, userEmail, tags, desiredCompensation);
                 users.put(userId, user);
                 userPasswords.put(userId, password);
                 maxId = Math.max(maxId, userId);

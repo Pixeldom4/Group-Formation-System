@@ -63,6 +63,7 @@ class Main {
 
         viewManagerModel.setActiveView(createUserPanelViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+        viewManagerModel.logout();
 
         application.getContentPane().add(views, BorderLayout.CENTER);
         application.getContentPane().add(switchButtons, BorderLayout.SOUTH);
