@@ -3,6 +3,8 @@ package usecase.createuser;
 import dataaccess.DAOImplementationConfig;
 import entities.User;
 import dataaccess.IUserRepository;
+import usecase.BCryptPasswordHasher;
+import usecase.IPasswordHasher;
 
 public class CreateUserInteractor implements CreateUserInputBoundary {
     private IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
@@ -29,7 +31,9 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      */
     @Override
     public void createUser(CreateUserInputData inputData) {
-        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), inputData.getPassword()) ;
+        IPasswordHasher passwordHasher = new BCryptPasswordHasher();
+        String hashedPassword = passwordHasher.hashPassword(inputData.getPassword());
+        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword) ;
 
         CreateUserOutputData outputData;
         if (user != null) {
