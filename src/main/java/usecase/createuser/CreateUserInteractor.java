@@ -3,13 +3,16 @@ package usecase.createuser;
 import dataaccess.DAOImplementationConfig;
 import entities.User;
 import dataaccess.IUserRepository;
+import usecase.PasswordHasher;
 
 public class CreateUserInteractor implements CreateUserInputBoundary {
     private IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
     private final CreateUserOutputBoundary userPresenter;
+    private final PasswordHasher passwordHasher;
 
-    public CreateUserInteractor(CreateUserOutputBoundary userPresenter) {
+    public CreateUserInteractor(CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
         this.userPresenter = userPresenter;
+        this.passwordHasher = passwordHasher;
     }
 
     /**
@@ -17,9 +20,10 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      * @param userRepository the user repository
      * @param userPresenter the user presenter
      */
-    public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter) {
+    public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.userPresenter = userPresenter;
+        this.passwordHasher = passwordHasher;
     }
 
     /**
@@ -29,7 +33,8 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      */
     @Override
     public void createUser(CreateUserInputData inputData) {
-        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), inputData.getPassword()) ;
+        String hashedPassword = this.passwordHasher.hashPassword(inputData.getPassword());
+        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword) ;
 
         CreateUserOutputData outputData;
         if (user != null) {

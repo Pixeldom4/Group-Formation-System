@@ -51,7 +51,16 @@ public abstract class SQLDatabaseManager implements Database {
         }
     }
 
+    /**
+     * Getter method for the database connection. If there is no current connection,
+     * it connects to the database and returns the connection.
+     *
+     * @return the connection for this database.
+     */
     protected Connection getConnection() {
+        if (this.connection == null) {
+            this.connect();
+        }
         return this.connection;
     }
 

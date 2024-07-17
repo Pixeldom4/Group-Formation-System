@@ -1,8 +1,10 @@
 package dataaccess;
 
+import dataaccess.database.ApplicationRepository;
 import dataaccess.database.ProjectRepository;
 import dataaccess.database.UserProjectsRepository;
 import dataaccess.database.UserRepository;
+import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
 public class DAOImplementationConfig {
@@ -11,11 +13,15 @@ public class DAOImplementationConfig {
     private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
     private static final IUserRepository userRepository = new UserRepository(databaseName, userProjectsRepository);
     private static final IProjectRepository projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
+    private static final IApplicationRepository applicationRepository = new ApplicationRepository(databaseName);
 
     private final static EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
     private final static IProjectRepository projectDataAccess = new LocalProjectDataAccessObject();
     private final static IUserRepository userDataAccess = new LocalUserRepository();
     private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository();
+    private final static IApplicationRepository applicationDataAccess = new LocalApplicationRepository();
+
+    private final static ILoginUserDetails loginUserDetails = new LoginUserDetails();
 
     // This class should not be instantiated
     private DAOImplementationConfig() { }
@@ -28,14 +34,17 @@ public class DAOImplementationConfig {
         UserProjectsRepository init_upr = (UserProjectsRepository) userProjectsRepository;
         UserRepository init_ur = (UserRepository) userRepository;
         ProjectRepository init_pr = (ProjectRepository) projectRepository;
+        ApplicationRepository init_ar = (ApplicationRepository) applicationRepository;
 
         init_upr.connect();
         init_ur.connect();
         init_pr.connect();
+        init_ar.connect();
 
         init_upr.initialize();
         init_ur.initialize();
         init_pr.initialize();
+        init_ar.initialize();
     }
 
     /**
@@ -64,6 +73,22 @@ public class DAOImplementationConfig {
      */
     public static IUserProjectsRepository getUserProjectsRepository() {
         return userProjectsDataAccess;
+    }
+
+    /**
+     * Returns the ApplicationRepository that would be used in the application
+     * @return the ApplicationRepository
+     */
+    public static IApplicationRepository getApplicationRepository() {
+        return applicationDataAccess;
+    }
+
+    /**
+     * Returns the LoginUserDetails that would be used in the application
+     * @return the LoginUserDetails
+     */
+    public static ILoginUserDetails getLoginUserDetails() {
+        return loginUserDetails;
     }
 
     /**

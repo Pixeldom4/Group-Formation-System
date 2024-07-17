@@ -69,4 +69,12 @@ public interface IUserRepository {
      * @param tags a set of tags associated with the project.
      */
     void removeTags(int userId, HashSet<String> tags);
+
+    /**
+     * Returns the hashed password of the user associated with the inputted email.
+     *
+     * @param email the email of the user whose password to retrieve.
+     * @return the hashed password of the user associated with the email.
+     */
+    String getPasswordByEmail(String email);
 }

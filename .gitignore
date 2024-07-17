@@ -13,5 +13,5 @@
 /.idea/
 
 # Ignore save files
-database.db
+*.db
 /local_data/
