@@ -212,8 +212,9 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
     public Project getProjectById(int projectId) {
         String sql = "SELECT Title, Budget, Description FROM Projects WHERE Id = ?";
 
-        try (Connection connection = super.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        Connection connection = super.getConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, projectId);
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
@@ -387,8 +388,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
         String sql = "SELECT ProjectId, EmbeddingIndex, EmbeddingValue FROM ProjectEmbeddings ORDER BY ProjectId, EmbeddingIndex";
         HashMap<Integer, float[]> embeddingsMap = new HashMap<>();
 
-        try (Connection connection = super.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        Connection connection = super.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet rs = preparedStatement.executeQuery()) {
 
             int currentProjectId = -1;
