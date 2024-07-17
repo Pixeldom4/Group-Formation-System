@@ -6,6 +6,13 @@ public class Application implements ApplicationInterface {
     private String text;
     private byte[] pdfBytes;
 
+    public Application(int senderUserId, int projectId, String text, byte[] pdfBytes) {
+        this.senderUserId = senderUserId;
+        this.projectId = projectId;
+        this.text = text;
+        this.pdfBytes = pdfBytes;
+    }
+
     /**
      * Gets the sender's user ID.
      *
