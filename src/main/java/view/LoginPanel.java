@@ -58,7 +58,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         if (evt.getPropertyName().equals("loginUser")) {
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
-                login(loginPanelViewModel.getLoginUser(), loginPanelViewModel.getLoginName());
+                login();
                 JOptionPane.showMessageDialog(null, "Login successful as " + loginPanelViewModel.getLoginName());
                 emailField.setText("");
                 passwordField.setText("");
@@ -70,11 +70,9 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         }
     }
 
-    private void login(int userId, String name){
-        viewManagerModel.setLogin(true);
-        viewManagerModel.setUserId(userId);
-        viewManagerModel.setUserName(name);
+    private void login(){
         viewManagerModel.setActiveView("SearchPanelView");
+        viewManagerModel.login();
         viewManagerModel.firePropertyChanged();
     }
 }

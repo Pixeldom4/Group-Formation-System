@@ -11,6 +11,14 @@ public class SwitchViewButtonPanelViewModel extends ViewModel {
         super("SwitchButtonView");
     }
 
+    public void logout() {
+        support.firePropertyChange("logout", null, true);
+    }
+
+    public void logoutFail() {
+        support.firePropertyChange("logout", null, false);
+    }
+
     @Override
     public void firePropertyChanged() {
 

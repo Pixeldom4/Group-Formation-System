@@ -1,5 +1,6 @@
 package view;
 
+import usecase.logout.LogoutController;
 import viewmodel.SwitchViewButtonPanelViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -14,6 +15,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
     private final SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final LogoutController logoutController;
 
     private final JButton addProjectButton = new JButton("Add Project");
     private final JButton searchProjectButton = new JButton("Search Project");
@@ -27,7 +29,10 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
     private final JButton logoutButton = new JButton("Logout");
 
-    public SwitchViewButtonPanel(ViewManagerModel viewManagerModel, SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel) {
+    public SwitchViewButtonPanel(ViewManagerModel viewManagerModel,
+                                 SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel,
+                                 LogoutController logoutController) {
+        this.logoutController = logoutController;
         this.switchViewButtonPanelViewModel = switchViewButtonPanelViewModel;
         switchViewButtonPanelViewModel.addPropertyChangeListener(this);
 
@@ -67,11 +72,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
         });
 
         logoutButton.addActionListener(e -> {
-            viewManagerModel.setActiveView("LoginView");
-            viewManagerModel.setLogin(false);
-            viewManagerModel.setUserId(0);
-            viewManagerModel.setUserName("");
-            viewManagerModel.firePropertyChanged();
+            logoutController.logout();
         });
 
         this.add(createUserButton);
@@ -111,6 +112,19 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
                 getProjectsButton.setVisible(false);
                 getUserProfileButton.setVisible(false);
                 logoutButton.setVisible(false);
+            }
+        }
+
+        if (evt.getPropertyName().equals("logout")) {
+            boolean logout = (boolean) evt.getNewValue();
+            if (logout) {
+                viewManagerModel.logout();
+                JOptionPane.showMessageDialog(null, "Logged out successfully");
+                viewManagerModel.setActiveView("LoginView");
+                viewManagerModel.firePropertyChanged();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Failed to logout");
             }
         }
     }

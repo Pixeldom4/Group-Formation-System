@@ -1,5 +1,7 @@
 package usecase.loginuser;
 
+import dataaccess.DAOImplementationConfig;
+import dataaccess.ILoginUserDetails;
 import dataaccess.IUserRepository;
 import entities.User;
 
@@ -11,6 +13,7 @@ public class LoginUserInteractor implements LoginUserInputBoundary {
     private final IUserRepository userRepository;
     private final LoginUserOutputBoundary loginUserPresenter;
     private final LoginAuthenticator loginAuthenticator;
+    private final ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
 
     /**
      * Constructs a LoginUserInteractor with the specified repository, presenter, and authenticator.
@@ -43,6 +46,12 @@ public class LoginUserInteractor implements LoginUserInputBoundary {
                     user.getTags(),
                     true
             );
+            loginUserDetails.login(user.getUserId(),
+                                   user.getUserEmail(),
+                                   user.getFirstName(),
+                                   user.getLastName(),
+                                   user.getDesiredCompensation(),
+                                   user.getTags());
             loginUserPresenter.prepareSuccessView(outputData);
         } else {
             loginUserPresenter.prepareFailView("Invalid email or password.");

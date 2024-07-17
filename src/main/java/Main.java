@@ -2,8 +2,12 @@ import dataaccess.DAOImplementationConfig;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
+import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
+import usecase.logout.LogoutController;
+import usecase.logout.LogoutUseCaseFactory;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
 import usecase.createuser.CreateUserUseCaseFactory;
 import view.*;
@@ -26,8 +30,6 @@ class Main {
         DAOImplementationConfig.initializeDatabase();
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
-        viewManagerModel.setLogin(false);
-        viewManagerModel.setUserId(0);
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
@@ -43,7 +45,8 @@ class Main {
 
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
         CreateProjectController createProjectController = CreateProjectUseCaseFactory.createController(addProjectPanelModel);
-        AddProjectPanel addProjectPanel = new AddProjectPanel(addProjectPanelModel, createProjectController);
+        GetLoggedInUserController addProjectGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(addProjectPanelModel);
+        AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, createProjectController, addProjectGetLoggedInUserController);
 
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel);
@@ -55,7 +58,8 @@ class Main {
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
 
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
-        JPanel switchButtons = new SwitchViewButtonPanel(viewManagerModel, switchViewButtonPanelViewModel);
+        LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);
+        JPanel switchButtons = new SwitchViewButtonPanel(viewManagerModel, switchViewButtonPanelViewModel, logoutController);
 
         viewManagerModel.setActiveView(createUserPanelViewModel.getViewName());
         viewManagerModel.firePropertyChanged();

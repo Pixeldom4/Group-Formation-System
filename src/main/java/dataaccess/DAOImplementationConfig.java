@@ -4,6 +4,7 @@ import dataaccess.database.ApplicationRepository;
 import dataaccess.database.ProjectRepository;
 import dataaccess.database.UserProjectsRepository;
 import dataaccess.database.UserRepository;
+import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
 public class DAOImplementationConfig {
@@ -19,6 +20,8 @@ public class DAOImplementationConfig {
     private final static IUserRepository userDataAccess = new LocalUserRepository();
     private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository();
     private final static IApplicationRepository applicationDataAccess = new LocalApplicationRepository();
+
+    private final static ILoginUserDetails loginUserDetails = new LoginUserDetails();
 
     // This class should not be instantiated
     private DAOImplementationConfig() { }
@@ -78,6 +81,14 @@ public class DAOImplementationConfig {
      */
     public static IApplicationRepository getApplicationRepository() {
         return applicationDataAccess;
+    }
+
+    /**
+     * Returns the LoginUserDetails that would be used in the application
+     * @return the LoginUserDetails
+     */
+    public static ILoginUserDetails getLoginUserDetails() {
+        return loginUserDetails;
     }
 
     /**
