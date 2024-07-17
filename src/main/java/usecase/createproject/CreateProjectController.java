@@ -17,8 +17,8 @@ public class CreateProjectController {
      * @param description The description of the project.
      * @param tags The tags of the project.
      */
-    public void createProject(String title, double budget, String description, HashSet<String> tags) {
-        CreateProjectInputData inputData = new CreateProjectInputData(title, budget, description, tags);
+    public void createProject(String title, double budget, String description, HashSet<String> tags, int creatorUserId) {
+        CreateProjectInputData inputData = new CreateProjectInputData(title, budget, description, tags, creatorUserId);
         createProjectInteractor.createProject(inputData);
     }
 }

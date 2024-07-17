@@ -11,6 +11,7 @@ public class CreateProjectInputData {
     private final double budget;
     private final String description;
     private final HashSet<String> tags;
+    private final int creatorUserId;
 
     /**
      * Constructs a CreateProjectInputData object with the specified details.
@@ -20,11 +21,12 @@ public class CreateProjectInputData {
      * @param description a brief description of the project.
      * @param tags        a set of tags associated with the project.
      */
-    public CreateProjectInputData(String title, double budget, String description, HashSet<String> tags) {
+    public CreateProjectInputData(String title, double budget, String description, HashSet<String> tags, int creatorUserId) {
         this.title = title;
         this.budget = budget;
         this.description = description;
         this.tags = tags;
+        this.creatorUserId = creatorUserId;
     }
 
     /**
@@ -61,5 +63,14 @@ public class CreateProjectInputData {
      */
     public HashSet<String> getTags() {
         return tags;
+    }
+
+    /**
+     * Returns the ID of the user who created the project.
+     *
+     * @return the user ID.
+     */
+    public int getCreatorUserId() {
+        return creatorUserId;
     }
 }

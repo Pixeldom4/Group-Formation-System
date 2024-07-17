@@ -1,8 +1,12 @@
 package view;
 
+import entities.User;
 import usecase.createproject.CreateProjectController;
+import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import view.components.NumericTextField;
 import viewmodel.AddProjectPanelViewModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,6 +22,8 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     private final AddProjectPanelViewModel addProjectPanelViewModel;
     private final CreateProjectController createProjectController;
+    private final GetLoggedInUserController getLoggedInUserController;
+    private final ViewManagerModel viewManagerModel;
 
     private final JPanel projectInfoPanel = new JPanel();
     private final JPanel projectDataPanel = new JPanel();
@@ -40,7 +46,14 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     private final HashSet<String> tags = new HashSet<>();
 
-    public AddProjectPanel(AddProjectPanelViewModel addProjectPanelViewModel, CreateProjectController createProjectController) {
+    public AddProjectPanel(ViewManagerModel viewManagerModel,
+                           AddProjectPanelViewModel addProjectPanelViewModel,
+                           CreateProjectController createProjectController,
+                           GetLoggedInUserController getLoggedInUserController) {
+        this.viewManagerModel = viewManagerModel;
+        viewManagerModel.addPropertyChangeListener(this);
+
+        this.getLoggedInUserController = getLoggedInUserController;
         this.addProjectPanelViewModel = addProjectPanelViewModel;
         addProjectPanelViewModel.addPropertyChangeListener(this);
         this.createProjectController = createProjectController;
@@ -83,7 +96,12 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
             String title = projectNameField.getText();
             double budget = Double.parseDouble(projectBudgetField.getText());
             String description = projectDescriptionField.getText();
-            createProjectController.createProject(title, budget, description, tags);
+            User loggedInUser = addProjectPanelViewModel.getLoggedInUser();
+            if (loggedInUser == null) {
+                JOptionPane.showMessageDialog(null, "You must be logged in to create a project.");
+                return;
+            }
+            createProjectController.createProject(title, budget, description, tags, loggedInUser.getUserId());
         });
 
         this.add(addProjectButton);
@@ -150,6 +168,10 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
             else {
                 JOptionPane.showMessageDialog(null, addProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+
+        if (evt.getPropertyName().equals("login")) {
+            getLoggedInUserController.getLoggedInUser();
         }
     }
 

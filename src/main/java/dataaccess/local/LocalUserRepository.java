@@ -30,7 +30,7 @@ public class LocalUserRepository implements IUserRepository {
 
     public LocalUserRepository(String path) {
         FILE_PATH = path + "users.csv";
-        File f = new File(path);
+        File f = new File(FILE_PATH);
         try {
             Files.createDirectories(f.getParentFile().toPath());
         } catch (IOException e) {
@@ -38,6 +38,7 @@ public class LocalUserRepository implements IUserRepository {
         }
         if(f.exists() && !f.isDirectory()) {
             readFromCSV();
+            System.out.println("Read " + users.size() + " users from CSV");
         }
     }
 
@@ -96,6 +97,15 @@ public class LocalUserRepository implements IUserRepository {
         currentTags.removeAll(tags);
         user.setTags(currentTags);
         saveToCSV();
+    }
+
+    @Override
+    public String getPasswordByEmail(String email) {
+        User user = getUserByEmail(email);
+        if (user == null) {
+            return null;
+        }
+        return userPasswords.get(user.getUserId());
     }
 
     private String[] userToString(UserInterface user) {
@@ -158,7 +168,7 @@ public class LocalUserRepository implements IUserRepository {
                 HashSet<String> tags = new HashSet<>(Arrays.asList(line[4].replace("[", "").replace("]", "").split(",")));
                 double desiredCompensation = Double.parseDouble(line[5]);
                 String password = line[6];
-                UserInterface user = new User(userId, firstName, userEmail, lastName, tags, desiredCompensation);
+                UserInterface user = new User(userId, firstName, lastName, userEmail, tags, desiredCompensation);
                 users.put(userId, user);
                 userPasswords.put(userId, password);
                 maxId = Math.max(maxId, userId);

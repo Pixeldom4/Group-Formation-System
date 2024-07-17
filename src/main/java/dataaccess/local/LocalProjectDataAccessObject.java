@@ -33,6 +33,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
         }
         if(f.exists() && !f.isDirectory()) {
             readFromCSV();
+            System.out.println("Loaded projects from " + FILE_PATH);
         }
     }
 

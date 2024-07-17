@@ -2,10 +2,12 @@ package usecase.createproject;
 
 import dataaccess.DAOImplementationConfig;
 import dataaccess.IProjectRepository;
+import dataaccess.IUserProjectsRepository;
 import viewmodel.AddProjectPanelViewModel;
 
 public class CreateProjectUseCaseFactory {
     private static final IProjectRepository projectRepository = DAOImplementationConfig.getProjectRepository();
+    private static final IUserProjectsRepository userProjectsRepository = DAOImplementationConfig.getUserProjectsRepository();
 
     private CreateProjectUseCaseFactory(){}
 
@@ -17,7 +19,7 @@ public class CreateProjectUseCaseFactory {
      */
     public static CreateProjectController createController(AddProjectPanelViewModel addProjectPanelViewModel) {
         CreateProjectOutputBoundary outputBoundary = new CreateProjectPresenter(addProjectPanelViewModel);
-        CreateProjectInputBoundary inputBoundary = new CreateProjectInteractor(projectRepository, outputBoundary);
+        CreateProjectInputBoundary inputBoundary = new CreateProjectInteractor(projectRepository, userProjectsRepository, outputBoundary);
         return new CreateProjectController(inputBoundary);
     }
 }
