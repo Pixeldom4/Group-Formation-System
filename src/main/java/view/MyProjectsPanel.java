@@ -8,6 +8,7 @@ import viewmodel.MyProjectsPanelViewModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -66,8 +67,10 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             }
         };
         infoTable.setModel(infoTableModel);
-        ButtonColumn detailColumn = new ButtonColumn(infoTable, 2);
-        detailColumn.setActions(detailButtonActions);
+
+        TableColumn actionColumn = infoTable.getColumnModel().getColumn(2);
+        actionColumn.setCellRenderer(new ButtonEditorRenderer());
+        actionColumn.setCellEditor(new ButtonEditorRenderer());
 
         TableColumnModel columnModel = infoTable.getColumnModel();
         for (int i = 0; i < columnWidths.length; i++) {
