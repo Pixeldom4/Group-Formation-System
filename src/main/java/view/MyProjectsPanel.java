@@ -1,86 +1,78 @@
 package view;
 
-//import interfaceadapter.GetProjectsPresenter;
+import interfaceadapter.GetProjectsPresenter;
+import view.components.ButtonAction;
+import view.components.ButtonColumn;
 import viewmodel.MyProjectsPanelViewModel;
-import dataaccess.database.UserProjectsRepository;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumn;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
-    //private final GetProjectsPresenter getProjectsPresenter = new GetProjectsPresenter();
+    private final GetProjectsPresenter getProjectsPresenter;
 
-//    private final JLabel title = new JLabel("My Projects");
+    private final JTable infoTable = new JTable();
+    private final int[] columnWidths = {200, 400, 100};
+    private final String[] columnNames = {"Project Title", "Description", "View Details"};
+    private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel) {
+        System.out.println("enabled2");
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
+        this.getProjectsPresenter = new GetProjectsPresenter();
         myProjectsPanelViewModel.addPropertyChangeListener(this);
 
-        String[] columnTitles = {"Project", "Owner", "Users", "Actions"};
-
-        HashSet<Integer> testProjects = new HashSet<Integer>();
-        testProjects.add(1);
-        testProjects.add(6);
-        testProjects.add(3);
-
-//        for (Object projectID : getProjectsPresenter.getProjectIdsForUser(1234)){
-//
-//        }
-        for (Object projectID : testProjects){
-            System.out.println(projectID);
-        }
+        this.setLayout(new GridLayout(0, 1));
 
         Object[][] data = {
-                {"project1", "test", "bob, john, tim", "test2"},
-                {"project2", "test", "bob, john, tim", "test2"},
-                {"project3", "test", "bob, john, tim", "test2"},
-
+                {"project1", "test"},
+                {"project2", "test"},
+                {"project3", "test"},
         };
 
-        JTable table = new JTable(data, columnTitles);
+        ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
 
-        table.setCellSelectionEnabled(true);
-        ListSelectionModel select = table.getSelectionModel();
-        select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        select.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String data = null;
-
-                for (int row : table.getSelectedRows()){
-                    for (int column : table.getSelectedColumns()){
-                        data = (String)table.getValueAt(row, column);
-                    }
+        Object[][] info = new Object[data.length][3];
+        for (int i = 0; i < data.length; i++) {
+            info[i][0] = data[i][0];
+            info[i][1] = data[i][1];
+            info[i][2] = "View Details";
+            detailButtonActions.add(new ButtonAction() {
+                @Override
+                public void onClick() {
+                    System.out.println("viewing details for project");
+//                    System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectId());
+//                    DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
                 }
-
-                System.out.println(data);
-            }
-        });
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setFillsViewportHeight(true);
-
-        //Set size of column
-        for(int i = 0; i < 3; i++){
-            TableColumn column = table.getColumnModel().getColumn(i);
-            if(i == 0){
-                column.setPreferredWidth(100);
-            }else{
-                column.setPreferredWidth(50);
-            }
+            });
         }
 
-        this.add(scrollPane);
+        DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Make only the button column editable
+                return column == 2 || column == 3;
+            }
+        };
+        infoTable.setModel(infoTableModel);
+        ButtonColumn detailColumn = new ButtonColumn(infoTable, 2);
+        detailColumn.setActions(detailButtonActions);
+
+        TableColumnModel columnModel = infoTable.getColumnModel();
+        for (int i = 0; i < columnWidths.length; i++) {
+            columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
+        }
+
+        this.add(infoPanel);
     }
 
     @Override
@@ -90,6 +82,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        System.out.println("enabled");
     }
 }
