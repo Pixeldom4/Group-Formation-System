@@ -13,7 +13,7 @@ public class EditProjectInteractor implements EditProjectInputBoundary {
     private final EmbeddingAPIInterface embeddingAPI;
 
 
-    public EditProjectInteractor(IProjectRepository projectRepository, EditProjectOutputBoundary projectPresenter) {
+    public EditProjectInteractor(IProjectRepository projectRepository, EditProjectOutputBoundary projectPresenter, EmbeddingAPIInterface apiInterface) {
         this.projectRepository = projectRepository;
         this.projectPresenter = projectPresenter;
         this.embeddingAPI = new OpenAPIDataEmbed();
