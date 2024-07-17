@@ -70,13 +70,14 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             viewManagerModel.setActiveView("LoginView");
             viewManagerModel.setLogin(false);
             viewManagerModel.setUserId(0);
+            viewManagerModel.setUserName("");
             viewManagerModel.firePropertyChanged();
         });
 
         this.add(createUserButton);
         this.add(loginUserButton);
-        this.add(getUserProfileButton);
 
+        this.add(getUserProfileButton);
         this.add(addProjectButton);
         this.add(searchProjectButton);
         this.add(getProjectsButton);
@@ -99,6 +100,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
                 addProjectButton.setVisible(true);
                 searchProjectButton.setVisible(true);
                 getProjectsButton.setVisible(true);
+                getUserProfileButton.setVisible(true);
                 logoutButton.setVisible(true);
             }
             else {
@@ -107,6 +109,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
                 addProjectButton.setVisible(false);
                 searchProjectButton.setVisible(false);
                 getProjectsButton.setVisible(false);
+                getUserProfileButton.setVisible(false);
                 logoutButton.setVisible(false);
             }
         }

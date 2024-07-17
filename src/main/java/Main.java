@@ -2,6 +2,8 @@ import dataaccess.DAOImplementationConfig;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
+import usecase.loginuser.LoginUserController;
+import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
 import usecase.createuser.CreateUserUseCaseFactory;
 import view.*;
@@ -33,7 +35,8 @@ class Main {
         CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, createUserController);
 
         LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
-        LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel);
+        LoginUserController loginUserController = LoginUserUseCaseFactory.create(loginPanelViewModel);
+        LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel, loginUserController);
 
         SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
         SearchPanel searchPanel = SearchProjectUseCaseFactory.createSearchProjectPanel(searchPanelViewModel);

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Repository class for managing Application entities in the database.
  */
-public class ApplicationRepository extends SQLDatabaseManager {
+public class ApplicationRepository extends SQLDatabaseManager implements IApplicationRepository {
 
     /**
      * Constructs an ApplicationRepository with the specified database name.

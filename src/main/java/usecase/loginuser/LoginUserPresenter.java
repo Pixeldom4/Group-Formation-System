@@ -1,12 +1,15 @@
 package usecase.loginuser;
 
 import org.apache.commons.lang3.NotImplementedException;
+import viewmodel.LoginPanelViewModel;
 
 public class LoginUserPresenter implements LoginUserOutputBoundary {
+    private final LoginPanelViewModel loginPanelViewModel;
 
-    public LoginUserPresenter() {
-        throw new NotImplementedException();
+    public LoginUserPresenter(LoginPanelViewModel loginPanelViewModel) {
+        this.loginPanelViewModel = loginPanelViewModel;
     }
+
     /**
      * Prepares the success view with the provided output data.
      *
@@ -14,7 +17,10 @@ public class LoginUserPresenter implements LoginUserOutputBoundary {
      */
     @Override
     public void prepareSuccessView(LoginUserOutputData outputData) {
-        throw new NotImplementedException();
+        loginPanelViewModel.setLoginUser(outputData.getUserId());
+        loginPanelViewModel.setLoginName(outputData.getFirstName() + " " + outputData.getLastName());
+        loginPanelViewModel.setSuccess(true);
+        loginPanelViewModel.firePropertyChanged();
     }
 
     /**
@@ -24,6 +30,8 @@ public class LoginUserPresenter implements LoginUserOutputBoundary {
      */
     @Override
     public void prepareFailView(String errorMessage) {
-        throw new NotImplementedException();
+        loginPanelViewModel.setErrorMessage(errorMessage);
+        loginPanelViewModel.setSuccess(false);
+        loginPanelViewModel.firePropertyChanged();
     }
 }

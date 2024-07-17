@@ -1,5 +1,7 @@
 package viewmodel;
 
+import entities.User;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -8,6 +10,7 @@ public class ViewManagerModel {
     private String activeViewName;
     private boolean login;
     private int userId;
+    private String userName;
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
@@ -41,6 +44,14 @@ public class ViewManagerModel {
 
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public void firePropertyChanged() {

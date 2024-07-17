@@ -25,7 +25,7 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
     private final JTextField firstNameField = new JTextField();
     private final JTextField lastNameField = new JTextField();
     private final JTextField emailField = new JTextField();
-    private final JTextField passwordField = new JTextField();
+    private final JPasswordField passwordField = new JPasswordField();
     private final NumericTextField compensationField = new NumericTextField();
     private final JButton createUserButton = new JButton("Create User");
 
@@ -51,7 +51,7 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();
-            String password = passwordField.getText();
+            String password = new String(passwordField.getPassword());
             double compensation = Double.parseDouble(compensationField.getText());
             createUserController.createUser(firstName, lastName, email, compensation, new HashSet<>(), password);
         });
@@ -79,7 +79,7 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
                 lastNameField.setText("");
                 emailField.setText("");
                 passwordField.setText("");
-                compensationField.setText("");
+                compensationField.clear();
                 JOptionPane.showMessageDialog(null, message);
             }
             else {
