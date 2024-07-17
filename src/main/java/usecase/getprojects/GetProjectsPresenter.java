@@ -1,34 +1,16 @@
 package usecase.getprojects;
 
-import dataaccess.database.ProjectRepository;
-import dataaccess.database.UserProjectsRepository;
-import entities.Project;
-
-import java.util.HashSet;
+import view.MyProjectsPanel;
 
 public class GetProjectsPresenter implements GetProjectsOutputBoundary{
-
-    private final UserProjectsRepository userProjectsRepository;
-    private final ProjectRepository projectRepository;
+    private final GetProjectsInteractor getProjectsInteractor;
 
     public GetProjectsPresenter(){
-        userProjectsRepository = new UserProjectsRepository("database.db");
-        projectRepository = new ProjectRepository("database.db", userProjectsRepository);
+        getProjectsInteractor = new GetProjectsInteractor();
     }
 
     @Override
-    public String[][] getProjects(int userId){
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(userId);
-        String[][] projectData = new String[projectIds.size()][3];
-
-        int count = 0;
-        for (int projectId:  projectIds){
-            Project project = projectRepository.getProjectById(projectId);
-
-            projectData[count][0] = project.getProjectTitle();
-            projectData[count][0] = project.getProjectDescription();
-            count++;
-        }
-        return projectData;
+    public String[][] returnProjects(String[][] projects){
+        return projects;
     }
 }

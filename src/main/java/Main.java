@@ -3,6 +3,7 @@ import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
@@ -48,8 +49,9 @@ class Main {
         GetLoggedInUserController addProjectGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(addProjectPanelModel);
         AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, createProjectController, addProjectGetLoggedInUserController);
 
+        GetLoggedInUserPresenter getLoggedInUserPresenter = new GetLoggedInUserPresenter();
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
-        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel);
+        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, addProjectGetLoggedInUserController);
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());

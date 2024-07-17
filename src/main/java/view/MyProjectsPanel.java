@@ -1,5 +1,8 @@
 package view;
 
+import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.getprojects.GetProjectsController;
+import usecase.getprojects.GetProjectsInputData;
 import usecase.getprojects.GetProjectsPresenter;
 import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import view.components.ButtonAction;
@@ -20,18 +23,22 @@ import java.util.ArrayList;
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
+    private final GetProjectsController getProjectsController;
     private final GetProjectsPresenter getProjectsPresenter;
-//    private final GetLoggedInUserPresenter getLoggedInUserPresenter;
 
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100};
     private final String[] columnNames = {"Project Title", "Description", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
-    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel) {
+    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, GetLoggedInUserController getLoggedInUserController) {
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
+        this.getProjectsController = new GetProjectsController();
         this.getProjectsPresenter = new GetProjectsPresenter();
-//        this.getLoggedInUserPresenter = new GetLoggedInUserPresenter();
+
+        int tempUserId = 123;
+        getProjectsController.getProjects(new GetProjectsInputData(tempUserId));
+
         myProjectsPanelViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new GridLayout(0, 1));
