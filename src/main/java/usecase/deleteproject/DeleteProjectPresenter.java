@@ -1,6 +1,4 @@
-package interfaceadapter;
-
-import usecase.deleteproject.DeleteProjectOutputBoundary;
+package usecase.deleteproject;
 
 public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     public DeleteProjectPresenter() {

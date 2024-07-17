@@ -1,6 +1,5 @@
-package interfaceadapter;
+package usecase.deleteproject;
 
-import usecase.deleteproject.DeleteProjectInputBoundary;
 import dataaccess.database.ProjectRepository;
 
 public class DeleteProjectController implements DeleteProjectInputBoundary {
@@ -11,7 +10,7 @@ public class DeleteProjectController implements DeleteProjectInputBoundary {
     }
 
     @Override
-    public void execute(int projectId) {
+    public void deleteProject(int projectId) {
         System.out.println("deleting");
         this.projectData.deleteProject(projectId);
     }
