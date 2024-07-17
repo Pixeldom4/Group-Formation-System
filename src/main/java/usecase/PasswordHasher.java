@@ -1,6 +1,6 @@
 package usecase;
 
-public interface IPasswordHasher {
+public interface PasswordHasher {
     String hashPassword(String password);
     boolean checkPassword(String password, String hashed);
 }

@@ -3,15 +3,14 @@ package usecase.createuser;
 import dataaccess.DAOImplementationConfig;
 import entities.User;
 import dataaccess.IUserRepository;
-import usecase.BCryptPasswordHasher;
-import usecase.IPasswordHasher;
+import usecase.PasswordHasher;
 
 public class CreateUserInteractor implements CreateUserInputBoundary {
     private IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
     private final CreateUserOutputBoundary userPresenter;
-    private final IPasswordHasher passwordHasher;
+    private final PasswordHasher passwordHasher;
 
-    public CreateUserInteractor(CreateUserOutputBoundary userPresenter, IPasswordHasher passwordHasher) {
+    public CreateUserInteractor(CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
         this.userPresenter = userPresenter;
         this.passwordHasher = passwordHasher;
     }
@@ -21,7 +20,7 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      * @param userRepository the user repository
      * @param userPresenter the user presenter
      */
-    public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter, IPasswordHasher passwordHasher) {
+    public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.userPresenter = userPresenter;
         this.passwordHasher = passwordHasher;

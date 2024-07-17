@@ -2,7 +2,7 @@ package usecase;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class BCryptPasswordHasher implements IPasswordHasher {
+public class BCryptPasswordHasher implements PasswordHasher {
 
     private final BCryptPasswordEncoder passwordEncoder;
 

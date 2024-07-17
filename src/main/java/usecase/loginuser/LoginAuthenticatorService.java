@@ -1,14 +1,14 @@
 package usecase.loginuser;
 
 import dataaccess.IUserRepository;
-import usecase.IPasswordHasher;
+import usecase.PasswordHasher;
 
 /**
  * Service class for authenticating a user during the login process.
  */
 public class LoginAuthenticatorService implements LoginAuthenticator {
     private final IUserRepository userRepository;
-    private final IPasswordHasher passwordHasher;
+    private final PasswordHasher passwordHasher;
 
     /**
      * Constructs a LoginAuthenticatorService with the specified repository and password hasher.
@@ -16,7 +16,7 @@ public class LoginAuthenticatorService implements LoginAuthenticator {
      * @param userRepository the repository to interact with the data store.
      * @param passwordHasher the password hasher to verify passwords.
      */
-    public LoginAuthenticatorService(IUserRepository userRepository, IPasswordHasher passwordHasher) {
+    public LoginAuthenticatorService(IUserRepository userRepository, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
     }
