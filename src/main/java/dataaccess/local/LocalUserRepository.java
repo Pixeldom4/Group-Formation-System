@@ -71,8 +71,8 @@ public class LocalUserRepository implements IUserRepository {
     }
 
     @Override
-    public void updateUser(User user) {
-
+    public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
+        return false;
     }
 
     @Override

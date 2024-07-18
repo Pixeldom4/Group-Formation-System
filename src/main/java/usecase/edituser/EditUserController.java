@@ -1,7 +1,7 @@
 package usecase.edituser;
 
 
-import usecase.editproject.EditProjectInputData;
+import java.util.HashSet;
 
 public class EditUserController {
     private final EditUserInputBoundary EditUserInteractor;
@@ -11,14 +11,16 @@ public class EditUserController {
     }
 
     /**
-     * Calls the interactor to edit the user profile.
+     * Updates the user.
      *
-     * @param FirstName the first name of the user.
-     * @param LastName the last name of the user.
-     * @param DesiredCompensation the desired compensation of the user.
+     * @param userId the ID of the yser.
+     * @param firstName the first name of the user.
+     * @param lastName the last name of the user.
+     * @param desiredCompensation the desired compensation of the user.
+     * @param tags the tags for the user.
      */
-     public editUser(String firstname, String lastname, double desiredCompensation){
-         EditUserInputData inputData = new EditUserInputData(firstname, lastname, desiredCompensation);
+     public void editUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags){
+         EditUserInputData inputData = new EditUserInputData(userId, firstName, lastName, desiredCompensation, tags);
          EditUserInteractor.editUser(inputData);
      }
 }

@@ -41,9 +41,8 @@ public interface IUserRepository {
      * Unknown what to be updating currently.
      * Current ideas: changePassword, authenticateUser, changeEmail.
      *
-     * @param user the user to update.
      */
-    void updateUser(User user);
+    boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags);
 
     /**
      * Deletes the user associated with userId from the database.

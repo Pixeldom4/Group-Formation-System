@@ -12,6 +12,6 @@ public interface EditUserInputBoundary {
      *
      * @param inputData the input data required to create a project.
      */
-    void editUser(EditUserInputBoundary inputData);
+    void editUser(EditUserInputData inputData);
 
 }

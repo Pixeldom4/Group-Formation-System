@@ -301,10 +301,60 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * Unknown what to be updating currently.
      * Current ideas: changePassword, authenticateUser, changeEmail.
      *
-     * @param user the user to update.
      */
     @Override
-    public void updateUser(User user) {
-        throw new NotImplementedException();
+    public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
+        String updateUserSql = "UPDATE Users SET FirstName = ?, LastName = ?, DesiredCompensation = ? WHERE ID = ?";
+        String deleteTagsSql = "DELETE FROM UserTags WHERE ID = ?";
+        String insertTagSql = "INSERT INTO UserTags (UserId, Tag) VALUES (?, ?)";
+
+        Connection connection = super.getConnection();
+
+        try {
+            connection.setAutoCommit(false); // begin transaction
+
+            try (PreparedStatement updateUserStatement = connection.prepareStatement(updateUserSql);
+                 PreparedStatement deleteTagsStatement = connection.prepareStatement(deleteTagsSql);
+                 PreparedStatement insertTagStatement = connection.prepareStatement(insertTagSql)) {
+
+                // Update project details
+                updateUserStatement.setString(1, firstName);
+                updateUserStatement.setString(2, lastName);
+                updateUserStatement.setDouble(3, desiredCompensation);
+                updateUserStatement.setInt(4, userId);
+                updateUserStatement.executeUpdate();
+
+                // Delete old tags
+                deleteTagsStatement.setInt(1, userId);
+                deleteTagsStatement.executeUpdate();
+
+                // Insert new tags
+                for (String tag : tags) {
+                    insertTagStatement.setInt(1, userId);
+                    insertTagStatement.setString(2, tag);
+                    insertTagStatement.addBatch();
+                }
+                insertTagStatement.executeBatch();
+
+                connection.commit(); // end transaction
+                return true;
+            }
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                System.err.println(rollbackException.getMessage());
+            }
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return false;
     }
 }
