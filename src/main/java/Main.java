@@ -52,11 +52,16 @@ class Main {
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel);
 
+        MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
+        GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
+        MyProfileViewPanel myProfileViewPanel = new MyProfileViewPanel();
+
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
+        //views.add(MyProfileViewPanel, MyProfileViewPanel.getViewName());
 
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);

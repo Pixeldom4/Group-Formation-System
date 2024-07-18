@@ -2,10 +2,10 @@ package view;
 
 import entities.User;
 import usecase.edituser.EditUserController;
+import usecase.getloggedinuser.GetLoggedInUserController;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class MyProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
-
+    private final GetLoggedInUserController getLoggedInUserController;
     private final ViewManagerModel viewManagerModel;
     private final EditUserController editUserController;
 
@@ -32,10 +32,11 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
 
     private final JButton saveButton = new JButton("Save");
 
-    public MyProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController) {
+    public MyProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController) {
         this.viewManagerModel = viewManagerModel;
         this.viewManagerModel.addPropertyChangeListener(this);
         this.editUserController = editUserController;
+        this.getLoggedInUserController = getLoggedInUserController;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
@@ -65,6 +66,8 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
         this.add(saveButton);
     }
 
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // Implement any additional action events if needed
@@ -72,11 +75,14 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("loggedInUser")) {
+        if (evt.getPropertyName().equals("login")) {
             User user = (User) evt.getNewValue();
             firstNameField.setText(user.getFirstName());
             lastNameField.setText(user.getLastName());
             desiredCompensationField.setText(String.valueOf(user.getDesiredCompensation()));
+        }
+        if (evt.getPropertyName().equals("login")) {
+            getLoggedInUserController.getLoggedInUser();
         }
     }
 
