@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.HashSet;
 
 public class GetLoggedInUserInteractor implements GetLoggedInUserInputBoundary {
-    private GetLoggedInUserOutputBoundary getLoggedInUserPresenter;
-    private ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
+    private final GetLoggedInUserOutputBoundary getLoggedInUserPresenter;
+    private final ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
 
     public GetLoggedInUserInteractor(GetLoggedInUserOutputBoundary getLoggedInUserPresenter) {
         this.getLoggedInUserPresenter = getLoggedInUserPresenter;

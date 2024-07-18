@@ -121,6 +121,11 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      */
     @Override
     public User createUser(String email, String firstName, String lastName, HashSet<String> tags, double desiredCompensation, String password) {
+        // Check if email already exists
+        if (getUserByEmail(email) != null) {
+            System.err.println("Error: Email already exists.");
+            return null;
+        }
         String sql = "INSERT INTO Users (FirstName, LastName, Email, DesiredCompensation, Password) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = super.getConnection();
