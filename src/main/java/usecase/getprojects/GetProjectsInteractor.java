@@ -1,5 +1,7 @@
 package usecase.getprojects;
 
+import dataaccess.DAOImplementationConfig;
+import dataaccess.ILoginUserDetails;
 import dataaccess.database.ProjectRepository;
 import dataaccess.database.UserProjectsRepository;
 import entities.Project;
@@ -10,16 +12,18 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary{
     private final UserProjectsRepository userProjectsRepository;
     private final ProjectRepository projectRepository;
     private final GetProjectsPresenter getProjectsPresenter;
+    private final ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
 
-    public GetProjectsInteractor(){
+    public GetProjectsInteractor(GetProjectsPresenter getProjectsPresenter){
         userProjectsRepository = new UserProjectsRepository("database.db");
         projectRepository = new ProjectRepository("database.db", userProjectsRepository);
-        getProjectsPresenter = new GetProjectsPresenter();
+        this.getProjectsPresenter = getProjectsPresenter;
     }
 
     @Override
     public void getProjects(GetProjectsInputData inputData) {
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(inputData.getUserId());
+
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserDetails.getUserId());
         String[][] projectData = new String[projectIds.size()][3];
 
         int count = 0;
@@ -30,6 +34,7 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary{
             projectData[count][0] = project.getProjectDescription();
             count++;
         }
-        getProjectsPresenter.returnProjects(projectData);
+        System.out.println(projectData.length);
+        getProjectsPresenter.prepareSuccessView(new GetProjectsOutputData(projectData));
     }
 }

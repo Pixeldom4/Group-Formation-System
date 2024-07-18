@@ -3,8 +3,8 @@ package usecase.getprojects;
 public class GetProjectsController implements GetProjectsInputBoundary {
     private final GetProjectsInteractor getProjectsInteractor;
 
-    public GetProjectsController(){
-        getProjectsInteractor = new GetProjectsInteractor();
+    public GetProjectsController(GetProjectsInteractor getProjectsInteractor){
+        this.getProjectsInteractor = getProjectsInteractor;
     }
 
     @Override

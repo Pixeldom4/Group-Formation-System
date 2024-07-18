@@ -6,4 +6,8 @@ public class GetProjectsOutputData {
     public GetProjectsOutputData(String[][] projects){
         this.projects = projects;
     }
+
+    public String[][] getData(){
+        return this.projects;
+    }
 }
