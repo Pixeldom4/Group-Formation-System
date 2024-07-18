@@ -24,7 +24,7 @@ public interface IProjectRepository {
      *
      * @param projectId the id of the project to be deleted
      */
-    void deleteProject(int projectId);
+    boolean deleteProject(int projectId);
 
     /**
      * Gets a project by its id.
@@ -40,7 +40,7 @@ public interface IProjectRepository {
      * @param projectId the id of the project to add the tags to.
      * @param tags a set of tags associated with the project.
      */
-    void addTags(int projectId, HashSet<String> tags);
+    boolean addTags(int projectId, HashSet<String> tags);
 
     /**
      * Removes a set of tags to a project.
@@ -48,7 +48,7 @@ public interface IProjectRepository {
      * @param projectId the id of the project to add the tags to.
      * @param tags a set of tags to be removed.
      */
-    void removeTags(int projectId, HashSet<String> tags);
+    boolean removeTags(int projectId, HashSet<String> tags);
 
     /**
      * Retrieves a set of projects that match the given keyword in their title, description, or tags.
@@ -68,7 +68,7 @@ public interface IProjectRepository {
      * @param tags the tags associated with the project
      * @param embeddings the embeddings associated with the project
      */
-    void update(int id, String title, double budget, String description, HashSet<String> tags, float[] embeddings);
+    boolean update(int id, String title, double budget, String description, HashSet<String> tags, float[] embeddings);
 
     /**
      * Retrieves all project embeddings from the database and returns them as a HashMap.
