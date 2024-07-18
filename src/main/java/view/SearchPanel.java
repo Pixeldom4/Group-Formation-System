@@ -2,6 +2,7 @@ package view;
 
 import entities.ProjectInterface;
 import usecase.searchforproject.SearchProjectController;
+import usecase.searchforuser.SearchUserController;
 import usecase.searchprojectbyid.SearchProjectByIdController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SearchPanelViewModel searchPanelModel;
+    private SearchUserController searchUserController;
     private SearchProjectController searchProjectController = null;
     private SearchProjectByIdController searchProjectByIdController = null;
 
@@ -30,6 +32,14 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final int[] columnWidths = {200, 400, 100};
     private final String[] columnNames = {"Project Title", "Description", "View Details", "Request joining"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
+
+    public SearchPanel(SearchPanelViewModel searchPanelModel, SearchUserController searchUserController) {
+        this(searchPanelModel);
+        this.searchUserController = searchUserController;
+        searchButton.addActionListener(e -> {
+            searchUserController.searchUserByEmail(searchBar.getText());
+        });
+    }
 
     public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectController searchProjectController) {
         this(searchPanelModel);
