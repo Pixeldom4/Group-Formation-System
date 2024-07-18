@@ -1,12 +1,12 @@
 package usecase.searchprojectbyid;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
 
 public class LocalProjectSearchByIdObject implements SearchProjectByIdInterface {
-    private IProjectRepository projectDataAccess = DAOImplementationConfig.getProjectRepository();
+    private IProjectRepository projectDataAccess = DataAccessConfig.getProjectRepository();
 
     /**
      * Creates a new LocalProjectSearchByIdObject.

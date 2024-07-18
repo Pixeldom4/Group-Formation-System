@@ -1,6 +1,6 @@
 package usecase.getapplications;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import entities.Application;
 
@@ -12,7 +12,7 @@ public class GetApplicationsInteractor implements GetApplicationsInputBoundary {
 
     public GetApplicationsInteractor(GetApplicationsPresenter getApplicationsPresenter){
        this.getApplicationsPresenter = getApplicationsPresenter;
-       this.applicationRepository = DAOImplementationConfig.getApplicationRepository();
+       this.applicationRepository = DataAccessConfig.getApplicationRepository();
     }
 
     @Override

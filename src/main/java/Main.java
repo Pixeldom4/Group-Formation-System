@@ -1,9 +1,8 @@
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
@@ -28,7 +27,7 @@ class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-        DAOImplementationConfig.initializeDatabase();
+        DataAccessConfig.initializeDatabase();
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);

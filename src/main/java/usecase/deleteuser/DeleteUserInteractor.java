@@ -1,8 +1,7 @@
 package usecase.deleteuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserProjectsRepository;
-import dataaccess.database.UserProjectsRepository;
 
 public class DeleteUserInteractor implements DeleteUserInputBoundary {
     private final IUserProjectsRepository userProjectsRepository;
@@ -10,7 +9,7 @@ public class DeleteUserInteractor implements DeleteUserInputBoundary {
 
     public DeleteUserInteractor(DeleteUserPresenter deleteUserPresenter) {
         this.deleteUserPresenter = deleteUserPresenter;
-        this.userProjectsRepository = DAOImplementationConfig.getUserProjectsRepository();
+        this.userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
     };
 
     @Override

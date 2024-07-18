@@ -1,6 +1,6 @@
 package usecase.loginuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IUserRepository;
 import entities.User;
@@ -13,7 +13,7 @@ public class LoginUserInteractor implements LoginUserInputBoundary {
     private final IUserRepository userRepository;
     private final LoginUserOutputBoundary loginUserPresenter;
     private final LoginAuthenticator loginAuthenticator;
-    private final ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
+    private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     /**
      * Constructs a LoginUserInteractor with the specified repository, presenter, and authenticator.

@@ -1,13 +1,13 @@
 package usecase.loginuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserRepository;
 import usecase.BCryptPasswordHasher;
 import usecase.PasswordHasher;
 import viewmodel.LoginPanelViewModel;
 
 public class LoginUserUseCaseFactory {
-    private static final IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
+    private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
     private static final PasswordHasher passwordHasher = new BCryptPasswordHasher();
 
     private LoginUserUseCaseFactory() {

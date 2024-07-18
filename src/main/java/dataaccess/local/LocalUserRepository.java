@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserRepository;
 import entities.User;
 import entities.UserInterface;
@@ -25,7 +25,7 @@ public class LocalUserRepository implements IUserRepository {
     private int maxId = 0;
 
     public LocalUserRepository() {
-        this(DAOImplementationConfig.getProjectCSVPath());
+        this(DataAccessConfig.getProjectCSVPath());
     }
 
     public LocalUserRepository(String path) {

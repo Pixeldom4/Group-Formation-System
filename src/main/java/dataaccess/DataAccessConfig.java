@@ -7,7 +7,7 @@ import dataaccess.database.UserRepository;
 import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
-public class DAOImplementationConfig {
+public class DataAccessConfig {
 
     private static final String databaseName = "database.db";
     private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
@@ -24,7 +24,7 @@ public class DAOImplementationConfig {
     private final static ILoginUserDetails loginUserDetails = new LoginUserDetails();
 
     // This class should not be instantiated
-    private DAOImplementationConfig() { }
+    private DataAccessConfig() { }
 
     /**
      * Initializes the database

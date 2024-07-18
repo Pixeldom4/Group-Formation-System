@@ -1,6 +1,6 @@
 package dataaccess.local;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 
 public class LocalProjectDataAccessObject implements IProjectRepository {
 
-    private EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
-    private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "projects.csv";
+    private EmbedDataAccessInterface embedDataAccess = DataAccessConfig.getEmbedDataAccess();
+    private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
     private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
     private int maxId = 0;
