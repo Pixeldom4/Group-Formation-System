@@ -33,6 +33,10 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      */
     @Override
     public void createUser(CreateUserInputData inputData) {
+        if (userRepository.getUserByEmail(inputData.getEmail()) != null) {
+            userPresenter.prepareFailView("Email is already in use.");
+            return;
+        }
         String hashedPassword = this.passwordHasher.hashPassword(inputData.getPassword());
         User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword) ;
 
