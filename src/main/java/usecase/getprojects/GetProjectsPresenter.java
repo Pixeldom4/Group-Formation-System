@@ -1,16 +1,22 @@
 package usecase.getprojects;
 
+import usecase.loginuser.LoginUserOutputData;
 import view.MyProjectsPanel;
 
 public class GetProjectsPresenter implements GetProjectsOutputBoundary{
-    private final GetProjectsInteractor getProjectsInteractor;
+    private final MyProjectsPanel myProjectsPanel;
 
-    public GetProjectsPresenter(){
-        getProjectsInteractor = new GetProjectsInteractor();
+    public GetProjectsPresenter(MyProjectsPanel myProjectsPanel){
+        this.myProjectsPanel = myProjectsPanel;
     }
 
     @Override
-    public String[][] returnProjects(String[][] projects){
-        return projects;
+    public void prepareSuccessView(GetProjectsOutputData outputData) {
+        myProjectsPanel.addProjects(outputData.getData());
+    }
+
+    @Override
+    public void prepareFailView(String errorMessage) {
+
     }
 }

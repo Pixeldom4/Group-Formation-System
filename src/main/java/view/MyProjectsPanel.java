@@ -3,6 +3,7 @@ package view;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.GetProjectsInputData;
+import usecase.getprojects.GetProjectsInteractor;
 import usecase.getprojects.GetProjectsPresenter;
 import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import view.components.ButtonAction;
@@ -33,22 +34,22 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, GetLoggedInUserController getLoggedInUserController) {
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
-        this.getProjectsController = new GetProjectsController();
-        this.getProjectsPresenter = new GetProjectsPresenter();
+        this.getProjectsPresenter = new GetProjectsPresenter(this);
+        this.getProjectsController = new GetProjectsController(new GetProjectsInteractor(this.getProjectsPresenter));
 
-        int tempUserId = 123;
-        getProjectsController.getProjects(new GetProjectsInputData(tempUserId));
+//        myProjectsPanelViewModel.addPropertyChangeListener(this);
 
-        myProjectsPanelViewModel.addPropertyChangeListener(this);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        this.setLayout(new GridLayout(0, 1));
+        JButton refreshButton = new JButton("Refresh");
+        this.add(refreshButton);
 
-        Object[][] data = {
-                {"project1", "test"},
-                {"project2", "test"},
-                {"project3", "test"},
-        };
+        refreshButton.addActionListener(e -> {
+            getProjectsController.getProjects(new GetProjectsInputData());
+        });
+    }
 
+    public void addProjects(String[][] data){
         ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
 
         Object[][] info = new Object[data.length][3];
@@ -94,6 +95,8 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        System.out.println("property start");
+        System.out.println(evt);
+        System.out.println("proprty end");
     }
 }

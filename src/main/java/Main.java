@@ -49,7 +49,6 @@ class Main {
         GetLoggedInUserController addProjectGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(addProjectPanelModel);
         AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, createProjectController, addProjectGetLoggedInUserController);
 
-        GetLoggedInUserPresenter getLoggedInUserPresenter = new GetLoggedInUserPresenter();
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, addProjectGetLoggedInUserController);
 

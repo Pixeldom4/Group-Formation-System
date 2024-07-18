@@ -13,7 +13,6 @@ public class MyProjectsPanelViewModel extends ViewModel {
 
     @Override
     public void firePropertyChanged() {
-        System.out.println("my projects");
     }
 
     @Override

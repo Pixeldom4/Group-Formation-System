@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class SwitchViewButtonPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -52,6 +53,10 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
         });
 
         getProjectsButton.addActionListener(e -> {
+            System.out.println("getprojects");
+            PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+            propertyChangeSupport.firePropertyChange("view",null,"GetProjectsView");
+
             viewManagerModel.setActiveView("GetProjectsView");
             viewManagerModel.firePropertyChanged();
         });
