@@ -76,27 +76,33 @@ public class LocalUserRepository implements IUserRepository {
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public boolean deleteUser(int userId) {
         users.remove(userId);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void addTags(int userId, HashSet<String> tags) {
+    public boolean addTags(int userId, HashSet<String> tags) {
         UserInterface user = users.get(userId);
         HashSet<String> currentTags = user.getTags();
         currentTags.addAll(tags);
         user.setTags(currentTags);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void removeTags(int userId, HashSet<String> tags) {
+    public boolean removeTags(int userId, HashSet<String> tags) {
         UserInterface user = users.get(userId);
         HashSet<String> currentTags = user.getTags();
         currentTags.removeAll(tags);
         user.setTags(currentTags);
         saveToCSV();
+
+        return true;
     }
 
     @Override
