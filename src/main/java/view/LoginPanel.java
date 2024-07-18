@@ -59,12 +59,12 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 login();
-                JOptionPane.showMessageDialog(null, "Login successful as " + loginPanelViewModel.getLoginName());
+                JOptionPane.showMessageDialog(this, "Login successful as " + loginPanelViewModel.getLoginName());
                 emailField.setText("");
                 passwordField.setText("");
             }
             else {
-                JOptionPane.showMessageDialog(null, loginPanelViewModel.getErrorMessage());
+                JOptionPane.showMessageDialog(this, loginPanelViewModel.getErrorMessage());
                 passwordField.setText("");
             }
         }

@@ -9,6 +9,7 @@ import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.MyProjectsPanelViewModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,20 +27,25 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final GetProjectsController getProjectsController;
     private final GetProjectsPresenter getProjectsPresenter;
+    private final ViewManagerModel viewManagerModel;
 
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100};
     private final String[] columnNames = {"Project Title", "Description", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
-    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, GetLoggedInUserController getLoggedInUserController) {
+    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
-        this.getProjectsPresenter = new GetProjectsPresenter(this);
+        this.getProjectsPresenter = new GetProjectsPresenter(myProjectsPanelViewModel);
         this.getProjectsController = new GetProjectsController(new GetProjectsInteractor(this.getProjectsPresenter));
 
-//        myProjectsPanelViewModel.addPropertyChangeListener(this);
+        myProjectsPanelViewModel.addPropertyChangeListener(this);
+        viewManagerModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(infoPanel);
 
         JButton refreshButton = new JButton("Refresh");
         this.add(refreshButton);
@@ -49,18 +55,19 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         });
     }
 
-    public void addProjects(String[][] data){
-        ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
+    private void addProjects(String[][] data){
+        ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
 
         Object[][] info = new Object[data.length][3];
         for (int i = 0; i < data.length; i++) {
             info[i][0] = data[i][0];
             info[i][1] = data[i][1];
             info[i][2] = "Edit";
-            detailButtonActions.add(new ButtonAction() {
+            int finalI = i;
+            editButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on edit for ");
+                    System.out.println("clicked on edit for " + data[finalI][0]);
 //                    System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectId());
 //                    DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
                 }
@@ -71,21 +78,19 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Make only the button column editable
-                return column == 2 || column == 3;
+                return column == 2;
             }
         };
         infoTable.setModel(infoTableModel);
 
-        TableColumn actionColumn = infoTable.getColumnModel().getColumn(2);
-        actionColumn.setCellRenderer(new ButtonEditorRenderer());
-        actionColumn.setCellEditor(new ButtonEditorRenderer());
+        ButtonColumn editColumn = new ButtonColumn(infoTable, 2);
+        editColumn.setActions(editButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
         for (int i = 0; i < columnWidths.length; i++) {
             columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
         }
 
-        this.add(infoPanel);
     }
 
     @Override
@@ -95,8 +100,19 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("property start");
-        System.out.println(evt);
-        System.out.println("proprty end");
+        if (evt.getPropertyName().equals("dataUpdate")){
+            String[][] data = (String[][]) evt.getNewValue();
+            addProjects(data);
+        }
+        if (evt.getPropertyName().equals("login")) {
+            boolean login = (boolean) evt.getNewValue();
+            if (login) {
+                getProjectsController.getProjects(new GetProjectsInputData());
+            }
+        }
+        if (evt.getPropertyName().equals("error")) {
+            String errorMessage = (String) evt.getNewValue();
+            JOptionPane.showMessageDialog(this, errorMessage);
+        }
     }
 }

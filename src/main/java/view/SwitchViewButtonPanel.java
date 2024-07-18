@@ -53,10 +53,6 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
         });
 
         getProjectsButton.addActionListener(e -> {
-            System.out.println("getprojects");
-            PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-            propertyChangeSupport.firePropertyChange("view",null,"GetProjectsView");
-
             viewManagerModel.setActiveView("GetProjectsView");
             viewManagerModel.firePropertyChanged();
         });
@@ -124,12 +120,12 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             boolean logout = (boolean) evt.getNewValue();
             if (logout) {
                 viewManagerModel.logout();
-                JOptionPane.showMessageDialog(null, "Logged out successfully");
                 viewManagerModel.setActiveView("LoginView");
                 viewManagerModel.firePropertyChanged();
+                JOptionPane.showMessageDialog(this, "Logged out successfully");
             }
             else {
-                JOptionPane.showMessageDialog(null, "Failed to logout");
+                JOptionPane.showMessageDialog(this, "Failed to logout");
             }
         }
     }

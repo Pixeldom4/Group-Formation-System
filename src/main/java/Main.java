@@ -50,7 +50,7 @@ class Main {
         AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, createProjectController, addProjectGetLoggedInUserController);
 
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
-        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, addProjectGetLoggedInUserController);
+        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel);
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
