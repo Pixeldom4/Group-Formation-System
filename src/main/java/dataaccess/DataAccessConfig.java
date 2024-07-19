@@ -8,6 +8,7 @@ import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
 public class DataAccessConfig {
+    private static final int USE_LOCAL = 1; // Set this to 1 to use local, 0 to use database
 
     private static final String databaseName = "database.db";
     private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
@@ -52,7 +53,7 @@ public class DataAccessConfig {
      * @return the ProjectRepository
      */
     public static IProjectRepository getProjectRepository() {
-        return projectDataAccess;
+        return USE_LOCAL == 1 ? projectDataAccess : projectRepository;
     }
 
     public static EmbedDataAccessInterface getEmbedDataAccess() {
@@ -64,7 +65,7 @@ public class DataAccessConfig {
      * @return the UserRepository
      */
     public static IUserRepository getUserRepository() {
-        return userDataAccess;
+        return USE_LOCAL == 1 ? userDataAccess : userRepository;
     }
 
     /**
@@ -72,7 +73,7 @@ public class DataAccessConfig {
      * @return the UserProjectsRepository
      */
     public static IUserProjectsRepository getUserProjectsRepository() {
-        return userProjectsDataAccess;
+        return USE_LOCAL == 1 ? userProjectsDataAccess : userProjectsRepository;
     }
 
     /**
@@ -80,7 +81,7 @@ public class DataAccessConfig {
      * @return the ApplicationRepository
      */
     public static IApplicationRepository getApplicationRepository() {
-        return applicationDataAccess;
+        return USE_LOCAL == 1 ? applicationDataAccess : applicationRepository;
     }
 
     /**
