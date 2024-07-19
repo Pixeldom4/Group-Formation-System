@@ -17,7 +17,7 @@ public class DataAccessConfig {
     private static final IApplicationRepository applicationRepository = new ApplicationRepository(databaseName);
 
     private final static EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
-    private final static IProjectRepository projectDataAccess = new LocalProjectDataAccessObject();
+    private final static IProjectRepository projectDataAccess = new LocalProjectRepository();
     private final static IUserRepository userDataAccess = new LocalUserRepository();
     private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository();
     private final static IApplicationRepository applicationDataAccess = new LocalApplicationRepository();
@@ -32,10 +32,10 @@ public class DataAccessConfig {
      */
     public static void initializeDatabase(){
         // Casting so that database can be initialized with parent class methods
-        UserProjectsRepository init_upr = (UserProjectsRepository) userProjectsRepository;
-        UserRepository init_ur = (UserRepository) userRepository;
-        ProjectRepository init_pr = (ProjectRepository) projectRepository;
-        ApplicationRepository init_ar = (ApplicationRepository) applicationRepository;
+        Database init_upr = (Database) userProjectsRepository;
+        Database init_ur = (Database) userRepository;
+        Database init_pr = (Database) projectRepository;
+        Database init_ar = (Database) applicationRepository;
 
         init_upr.connect();
         init_ur.connect();
