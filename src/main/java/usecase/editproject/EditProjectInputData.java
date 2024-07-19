@@ -14,7 +14,7 @@ public class EditProjectInputData {
     private final String title;
     private final double budget;
     private final String description;
-    private final Set<String> tags;
+    private final HashSet<String> tags;
 
     /**
      * Constructs an EditProjectInputData object with the specified details.
@@ -25,12 +25,12 @@ public class EditProjectInputData {
      * @param description a brief description of the project.
      * @param tags        a set of tags associated with the project.
      */
-    public EditProjectInputData(int projectId, String title, double budget, String description, Set<String> tags) {
+    public EditProjectInputData(int projectId, String title, double budget, String description, HashSet<String> tags) {
         this.projectId = projectId;
         this.title = title;
         this.budget = budget;
         this.description = description;
-        this.tags = Collections.unmodifiableSet(new HashSet<>(tags));
+        this.tags = tags;
     }
 
     /**
@@ -74,7 +74,7 @@ public class EditProjectInputData {
      *
      * @return the project tags.
      */
-    public Set<String> getTags() {
+    public HashSet<String> getTags() {
         return tags;
     }
 }

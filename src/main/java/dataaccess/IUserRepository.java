@@ -41,16 +41,15 @@ public interface IUserRepository {
      * Unknown what to be updating currently.
      * Current ideas: changePassword, authenticateUser, changeEmail.
      *
-     * @param user the user to update.
      */
-    void updateUser(User user);
+    boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags);
 
     /**
      * Deletes the user associated with userId from the database.
      *
      * @param userId the user id of the user to delete.
      */
-    void deleteUser(int userId);
+    boolean deleteUser(int userId);
 
     /**
      * Adds a set of tags to the database. More specifically, the tags are added to the
@@ -59,7 +58,7 @@ public interface IUserRepository {
      * @param userId the id of the project to add the tags to.
      * @param tags a set of tags associated with the project.
      */
-    void addTags(int userId, HashSet<String> tags);
+    boolean addTags(int userId, HashSet<String> tags);
 
     /**
      * Removes a set of tags to the database. More specifically, the tags are removed from the
@@ -68,7 +67,7 @@ public interface IUserRepository {
      * @param userId the id of the project to add the tags to.
      * @param tags a set of tags associated with the project.
      */
-    void removeTags(int userId, HashSet<String> tags);
+    boolean removeTags(int userId, HashSet<String> tags);
 
     /**
      * Returns the hashed password of the user associated with the inputted email.

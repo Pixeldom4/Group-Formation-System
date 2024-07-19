@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserProjectsRepository;
 
 import java.io.File;
@@ -23,7 +23,7 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
     private final HashMap<Integer, HashSet<Integer>> projectUsers = new HashMap<>();
 
     public LocalUserProjectsRepository() {
-        this(DAOImplementationConfig.getProjectCSVPath());
+        this(DataAccessConfig.getProjectCSVPath());
     }
 
     public LocalUserProjectsRepository(String path) {

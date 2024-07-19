@@ -41,10 +41,10 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param tags a set of tags associated with the project.
      */
     @Override
-    public void addTags(int userId, HashSet<String> tags) {
+    public boolean addTags(int userId, HashSet<String> tags) {
         String sql = "INSERT INTO UserTags (UserId, Tag) VALUES (?, ?)";
 
-        executeTagUpdates(userId, tags, sql);
+        return executeTagUpdates(userId, tags, sql);
     }
 
     /**
@@ -55,10 +55,10 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param tags a set of tags associated with the project.
      */
     @Override
-    public void removeTags(int userId, HashSet<String> tags) {
+    public boolean removeTags(int userId, HashSet<String> tags) {
         String sql = "DELETE FROM UserTags WHERE UserId = ? AND Tag = ?";
 
-        executeTagUpdates(userId, tags, sql);
+        return executeTagUpdates(userId, tags, sql);
     }
 
     /**
@@ -92,7 +92,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param tags a set of tags associated with the project.
      * @param sql the SQL statement to execute in batch.
      */
-    private void executeTagUpdates(int userId, HashSet<String> tags, String sql) {
+    private boolean executeTagUpdates(int userId, HashSet<String> tags, String sql) {
         Connection connection = super.getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -102,9 +102,13 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
+
+            return true;
         } catch(SQLException e) {
             System.err.println(e.getMessage());
         }
+
+        return false;
     }
 
 
@@ -121,6 +125,11 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      */
     @Override
     public User createUser(String email, String firstName, String lastName, HashSet<String> tags, double desiredCompensation, String password) {
+        // Check if email already exists
+        if (getUserByEmail(email) != null) {
+            System.err.println("Error: Email already exists.");
+            return null;
+        }
         String sql = "INSERT INTO Users (FirstName, LastName, Email, DesiredCompensation, Password) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = super.getConnection();
@@ -258,7 +267,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param userId the user id of the user to delete.
      */
     @Override
-    public void deleteUser(int userId) {
+    public boolean deleteUser(int userId) {
         String sql = "DELETE FROM Users WHERE Id = ?";
 
         Connection connection = super.getConnection();
@@ -275,6 +284,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
             }
 
             connection.commit(); // end transaction
+
+            return true;
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -289,6 +300,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                 System.err.println(e.getMessage());
             }
         }
+
+        return false;
     }
 
 
@@ -296,10 +309,60 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * Unknown what to be updating currently.
      * Current ideas: changePassword, authenticateUser, changeEmail.
      *
-     * @param user the user to update.
      */
     @Override
-    public void updateUser(User user) {
-        throw new NotImplementedException();
+    public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
+        String updateUserSql = "UPDATE Users SET FirstName = ?, LastName = ?, DesiredCompensation = ? WHERE ID = ?";
+        String deleteTagsSql = "DELETE FROM UserTags WHERE ID = ?";
+        String insertTagSql = "INSERT INTO UserTags (UserId, Tag) VALUES (?, ?)";
+
+        Connection connection = super.getConnection();
+
+        try {
+            connection.setAutoCommit(false); // begin transaction
+
+            try (PreparedStatement updateUserStatement = connection.prepareStatement(updateUserSql);
+                 PreparedStatement deleteTagsStatement = connection.prepareStatement(deleteTagsSql);
+                 PreparedStatement insertTagStatement = connection.prepareStatement(insertTagSql)) {
+
+                // Update project details
+                updateUserStatement.setString(1, firstName);
+                updateUserStatement.setString(2, lastName);
+                updateUserStatement.setDouble(3, desiredCompensation);
+                updateUserStatement.setInt(4, userId);
+                updateUserStatement.executeUpdate();
+
+                // Delete old tags
+                deleteTagsStatement.setInt(1, userId);
+                deleteTagsStatement.executeUpdate();
+
+                // Insert new tags
+                for (String tag : tags) {
+                    insertTagStatement.setInt(1, userId);
+                    insertTagStatement.setString(2, tag);
+                    insertTagStatement.addBatch();
+                }
+                insertTagStatement.executeBatch();
+
+                connection.commit(); // end transaction
+                return true;
+            }
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                System.err.println(rollbackException.getMessage());
+            }
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return false;
     }
 }

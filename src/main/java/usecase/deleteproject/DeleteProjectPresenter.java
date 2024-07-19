@@ -6,12 +6,12 @@ public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     }
 
     @Override
-    public void prepareDeleteSuccess() {
-        System.out.println("delete success");
+    public void prepareSuccessView(DeleteProjectOutputData outputData) {
+
     }
 
     @Override
-    public void prepareDeleteFailure(String error) {
+    public void prepareFailView(String error) {
 
     }
 }

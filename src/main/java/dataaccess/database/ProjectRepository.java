@@ -41,10 +41,10 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @param tags a set of tags associated with the project.
      */
     @Override
-    public void addTags(int projectId, HashSet<String> tags) {
+    public boolean addTags(int projectId, HashSet<String> tags) {
         String sql = "INSERT INTO ProjectTags (ProjectId, Tag) VALUES (?, ?)";
 
-        executeTagUpdates(projectId, tags, sql);
+        return executeTagUpdates(projectId, tags, sql);
     }
 
     /**
@@ -55,10 +55,10 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @param tags a set of tags associated with the project.
      */
     @Override
-    public void removeTags(int projectId, HashSet<String> tags) {
+    public boolean removeTags(int projectId, HashSet<String> tags) {
         String sql = "DELETE FROM ProjectTags WHERE ProjectId = ? AND Tag = ?";
 
-        executeTagUpdates(projectId, tags, sql);
+        return executeTagUpdates(projectId, tags, sql);
     }
 
     /**
@@ -68,7 +68,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @param tags a set of tags associated with the project.
      * @param sql the SQL statement to execute in batch.
      */
-    private void executeTagUpdates(int projectId, HashSet<String> tags, String sql) {
+    private boolean executeTagUpdates(int projectId, HashSet<String> tags, String sql) {
         Connection connection = super.getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -78,9 +78,12 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
+
+            return true;
         } catch(SQLException e) {
             System.err.println(e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -159,7 +162,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @param projectId The ID of the project to delete.
      */
     @Override
-    public void deleteProject(int projectId) {
+    public boolean deleteProject(int projectId) {
         String deleteProjectSql = "DELETE FROM Projects WHERE Id = ?";
         String deleteProjectTagSql  = "DELETE FROM ProjectTags WHERE ProjectId = ?";
         String deleteProjectEmbeddingSql = "DELETE FROM ProjectEmbeddings WHERE ProjectId = ?";
@@ -185,6 +188,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 deleteProjectEmbeddingStatement.executeUpdate();
 
                 connection.commit(); // end transaction
+
+                return true;
             }
         } catch(SQLException e) {
             try {
@@ -200,6 +205,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 System.err.println(e.getMessage());
             }
         }
+
+        return false;
     }
 
     /**
@@ -284,7 +291,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @param embeddings  The new array of embeddings associated with the project.
      */
     @Override
-    public void update(int projectId, String title, double budget, String description, HashSet<String> tags, float[] embeddings) {
+    public boolean update(int projectId, String title, double budget, String description, HashSet<String> tags, float[] embeddings) {
         String updateProjectSql = "UPDATE Projects SET Title = ?, Budget = ?, Description = ? WHERE Id = ?";
         String deleteTagsSql = "DELETE FROM ProjectTags WHERE ProjectId = ?";
         String deleteEmbeddingsSql = "DELETE FROM ProjectEmbeddings WHERE ProjectId = ?";
@@ -335,6 +342,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 insertEmbeddingStatement.executeBatch();
 
                 connection.commit(); // end transaction
+
+                return true;
             }
 
         } catch (SQLException e) {
@@ -351,6 +360,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 System.err.println(e.getMessage());
             }
         }
+
+        return false;
     }
 
 

@@ -5,7 +5,7 @@ import api.OpenAPIDataEmbed;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,7 +16,7 @@ import java.util.*;
 
 public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
 
-    private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "embeds.csv";
+    private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "embeds.csv";
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
     private HashMap<Integer, float[]> embeddings = new HashMap<Integer, float[]>();
     private String[] header = {"projectId", "embedding"};

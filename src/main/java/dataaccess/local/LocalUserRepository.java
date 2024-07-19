@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserRepository;
 import entities.User;
 import entities.UserInterface;
@@ -25,7 +25,7 @@ public class LocalUserRepository implements IUserRepository {
     private int maxId = 0;
 
     public LocalUserRepository() {
-        this(DAOImplementationConfig.getProjectCSVPath());
+        this(DataAccessConfig.getProjectCSVPath());
     }
 
     public LocalUserRepository(String path) {
@@ -71,32 +71,38 @@ public class LocalUserRepository implements IUserRepository {
     }
 
     @Override
-    public void updateUser(User user) {
-
+    public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
+        return false;
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public boolean deleteUser(int userId) {
         users.remove(userId);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void addTags(int userId, HashSet<String> tags) {
+    public boolean addTags(int userId, HashSet<String> tags) {
         UserInterface user = users.get(userId);
         HashSet<String> currentTags = user.getTags();
         currentTags.addAll(tags);
         user.setTags(currentTags);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void removeTags(int userId, HashSet<String> tags) {
+    public boolean removeTags(int userId, HashSet<String> tags) {
         UserInterface user = users.get(userId);
         HashSet<String> currentTags = user.getTags();
         currentTags.removeAll(tags);
         user.setTags(currentTags);
         saveToCSV();
+
+        return true;
     }
 
     @Override

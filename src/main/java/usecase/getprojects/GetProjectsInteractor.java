@@ -1,20 +1,18 @@
 package usecase.getprojects;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
-import dataaccess.database.ProjectRepository;
-import dataaccess.database.UserProjectsRepository;
 import entities.Project;
 
 import java.util.HashSet;
 
 public class GetProjectsInteractor implements GetProjectsInputBoundary {
-    private final IUserProjectsRepository userProjectsRepository = DAOImplementationConfig.getUserProjectsRepository();
-    private final IProjectRepository projectRepository = DAOImplementationConfig.getProjectRepository();
+    private final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
+    private final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
     private final GetProjectsPresenter getProjectsPresenter;
-    private final ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
+    private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     public GetProjectsInteractor(GetProjectsPresenter getProjectsPresenter){
         this.getProjectsPresenter = getProjectsPresenter;

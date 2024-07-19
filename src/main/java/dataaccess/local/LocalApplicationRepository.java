@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import entities.Application;
 import entities.ApplicationInterface;
@@ -22,7 +22,7 @@ public class LocalApplicationRepository implements IApplicationRepository {
     private final HashMap<Integer, ArrayList<ApplicationInterface>> applications = new HashMap<>();
 
     public LocalApplicationRepository() {
-        this(DAOImplementationConfig.getProjectCSVPath());
+        this(DataAccessConfig.getProjectCSVPath());
     }
 
     public LocalApplicationRepository(String path) {

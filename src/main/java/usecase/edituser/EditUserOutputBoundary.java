@@ -1,14 +1,14 @@
-package usecase.deleteproject;
+package usecase.edituser;
 
-import usecase.deleteuser.DeleteUserOutputData;
+import usecase.editproject.EditProjectOutputData;
 
-public interface DeleteProjectOutputBoundary {
+public interface EditUserOutputBoundary {
     /**
      * Prepares the success view with the provided output data.
      *
      * @param outputData the output data to present in case of success.
      */
-    void prepareSuccessView(DeleteProjectOutputData outputData);
+    void prepareSuccessView(EditUserOutputData outputData);
 
     /**
      * Prepares the failure view with the provided error message.

@@ -1,9 +1,8 @@
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
@@ -28,7 +27,7 @@ class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-        DAOImplementationConfig.initializeDatabase();
+        DataAccessConfig.initializeDatabase();
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
@@ -52,11 +51,16 @@ class Main {
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel);
 
+        MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
+        GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
+        MyProfileViewPanel myProfileViewPanel = new MyProfileViewPanel();
+
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
+        //views.add(MyProfileViewPanel, MyProfileViewPanel.getViewName());
 
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);

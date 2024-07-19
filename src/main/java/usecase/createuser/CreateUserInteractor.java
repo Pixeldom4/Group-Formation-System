@@ -1,12 +1,12 @@
 package usecase.createuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import entities.User;
 import dataaccess.IUserRepository;
 import usecase.PasswordHasher;
 
 public class CreateUserInteractor implements CreateUserInputBoundary {
-    private IUserRepository userRepository = DAOImplementationConfig.getUserRepository();
+    private IUserRepository userRepository = DataAccessConfig.getUserRepository();
     private final CreateUserOutputBoundary userPresenter;
     private final PasswordHasher passwordHasher;
 
