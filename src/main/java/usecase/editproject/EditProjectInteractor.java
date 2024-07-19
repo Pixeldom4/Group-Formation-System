@@ -32,8 +32,11 @@ public class EditProjectInteractor implements EditProjectInputBoundary {
         double budget = inputData.getBudget();
         String description = inputData.getDescription();
         HashSet<String> tags = inputData.getTags();
+        int editorId = inputData.getEditorId();
 
-        if (projectRepository.update(projectId, title, budget, description, tags, embedding)) {
+        if (projectRepository.getOwnerId(projectId) != editorId) {
+            projectPresenter.prepareFailView("Insufficient Permissions.");
+        } else if (projectRepository.update(projectId, title, budget, description, tags, embedding)) {
             EditProjectOutputData outputData = new EditProjectOutputData(projectId, title, budget, description, tags, true);
             projectPresenter.prepareSuccessView(outputData);
         } else {

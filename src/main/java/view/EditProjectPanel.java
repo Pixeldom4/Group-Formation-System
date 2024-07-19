@@ -1,6 +1,6 @@
 package view;
 
-import interfaceadapter.EditProjectController;
+import usecase.editproject.EditProjectController;
 import view.components.NumericTextField;
 import viewmodel.EditProjectPanelViewModel;
 

@@ -1,5 +1,6 @@
 package usecase.removeuserfromproject;
 
+import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 
 /**
@@ -8,6 +9,7 @@ import dataaccess.IUserProjectsRepository;
  */
 public class RemoveUserFromProjectInteractor implements RemoveUserFromProjectInputBoundary {
     private final IUserProjectsRepository userProjectsRepository;
+    private final IProjectRepository projectRepository;
     private final RemoveUserFromProjectPresenter removeUserFromProjectPresenter;
 
     /**
@@ -16,9 +18,10 @@ public class RemoveUserFromProjectInteractor implements RemoveUserFromProjectInp
      * @param removeUserFromProjectPresenter the repository to interact with the database.
      * @param userProjectsRepository the presenter to handle the output presentation.
      */
-    public RemoveUserFromProjectInteractor(IUserProjectsRepository userProjectsRepository, RemoveUserFromProjectPresenter removeUserFromProjectPresenter) {
+    public RemoveUserFromProjectInteractor(IUserProjectsRepository userProjectsRepository, IProjectRepository projectRepository, RemoveUserFromProjectPresenter removeUserFromProjectPresenter) {
         this.removeUserFromProjectPresenter = removeUserFromProjectPresenter;
         this.userProjectsRepository = userProjectsRepository;
+        this.projectRepository = projectRepository;
     };
 
     /**
@@ -30,8 +33,11 @@ public class RemoveUserFromProjectInteractor implements RemoveUserFromProjectInp
     public void removeUserFromProject(RemoveUserFromProjectInputData inputData) {
         int userId = inputData.getUserId();
         int projectId = inputData.getProjectId();
+        int editorId = inputData.getEditorId();
 
-        if (userProjectsRepository.removeUserFromProject(userId, projectId)) {
+        if (projectRepository.getOwnerId(projectId) != editorId) {
+            removeUserFromProjectPresenter.prepareFailView("Insufficient Permissions.");
+        } else if (userProjectsRepository.removeUserFromProject(userId, projectId)) {
             RemoveUserFromProjectOutputData outputData = new RemoveUserFromProjectOutputData(projectId, userId);
             removeUserFromProjectPresenter.prepareSuccessView(outputData);
         } else {
