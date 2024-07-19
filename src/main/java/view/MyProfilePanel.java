@@ -60,7 +60,7 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
             double desiredCompensation = Double.parseDouble(desiredCompensationField.getText());
 
             // Call the EditUserController to save the user information
-            editUserController.editUser(firstName, lastName, desiredCompensation);
+//            editUserController.editUser(firstName, lastName, desiredCompensation);
         });
 
         this.add(saveButton);

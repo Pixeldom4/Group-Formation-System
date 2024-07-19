@@ -27,7 +27,7 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
         }
 
         HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
-        String[][] projectData = new String[projectIds.size()][3];
+        Object[][] projectData = new Object[projectIds.size()][3];
 
         int count = 0;
         for (int projectId:  projectIds){
@@ -35,6 +35,7 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
 
             projectData[count][0] = project.getProjectTitle();
             projectData[count][1] = project.getProjectDescription();
+            projectData[count][2] = projectId;
             count++;
         }
 
