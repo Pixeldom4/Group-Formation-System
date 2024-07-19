@@ -1,4 +1,4 @@
-package search_project_use_case;
+package usecase.searchproject;
 
 import entities.ProjectInterface;
 import api.EmbeddingAPIInterface;

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LocalApplicationDAOTest {
     private final static String SAVE_LOCATION = "local_data/test/data_access/local_dao/";
     private static IApplicationRepository applicationRepository;
-    private final static File saveFile = new File(SAVE_LOCATION + "users.csv");
+    private final static File saveFile = new File(SAVE_LOCATION + "applications.csv");
 
     @BeforeAll
     public static void setUp() throws IOException {
