@@ -1,14 +1,24 @@
 package usecase.deleteuser;
 
-public class DeleteUserController implements DeleteUserInputBoundary{
-    private final DeleteUserInteractor deleteUserInteractor;
+public class DeleteUserController {
+    private final DeleteUserInputBoundary deleteUserInteractor;
 
-    public DeleteUserController(DeleteUserInteractor deleteUserInteractor){
+    /**
+     * Constructs a DeleteUserController object with the provided interactor.
+     *
+     * @param deleteUserInteractor the delete user interactor.
+     */
+    public DeleteUserController(DeleteUserInputBoundary deleteUserInteractor){
         this.deleteUserInteractor = deleteUserInteractor;
     }
 
-    @Override
-    public void deleteUser(DeleteUserInputData deleteUserData) {
-        deleteUserInteractor.deleteUser(deleteUserData);
+    /**
+     * Deletes the user with the specific user ID.
+     *
+     * @param userId the ID of the user.
+     */
+    public void deleteUser(int userId) {
+        DeleteUserInputData inputData = new DeleteUserInputData(userId);
+        deleteUserInteractor.deleteUser(inputData);
     }
 }

@@ -1,12 +1,12 @@
-package usecase.removeuser;
+package usecase.removeuserfromproject;
 
-public interface RemoveUserOutputBoundary {
+public interface RemoveUserFromProjectOutputBoundary {
     /**
      * Prepares the success view with the provided output data.
      *
      * @param outputData the output data to present in case of success.
      */
-    void prepareSuccessView(RemoveUserOutputData outputData);
+    void prepareSuccessView(RemoveUserFromProjectOutputData outputData);
 
     /**
      * Prepares the failure view with the provided error message.
