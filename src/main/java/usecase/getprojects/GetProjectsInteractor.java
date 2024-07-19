@@ -27,15 +27,17 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
         }
 
         HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
-        Object[][] projectData = new Object[projectIds.size()][3];
+        Object[][] projectData = new Object[projectIds.size()][5];
 
         int count = 0;
         for (int projectId:  projectIds){
             Project project = projectRepository.getProjectById(projectId);
 
-            projectData[count][0] = project.getProjectTitle();
-            projectData[count][1] = project.getProjectDescription();
-            projectData[count][2] = projectId;
+            projectData[count][0] = projectId;
+            projectData[count][1] = project.getProjectTitle();
+            projectData[count][2] = project.getProjectDescription();
+            projectData[count][3] = project.getProjectBudget();
+            projectData[count][4] = project.getProjectTags();
             count++;
         }
 

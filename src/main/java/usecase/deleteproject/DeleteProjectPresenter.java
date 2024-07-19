@@ -1,5 +1,7 @@
 package usecase.deleteproject;
 
+import javax.swing.*;
+
 public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     public DeleteProjectPresenter() {
 
@@ -7,7 +9,7 @@ public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
 
     @Override
     public void prepareSuccessView(DeleteProjectOutputData outputData) {
-
+        JOptionPane.showMessageDialog(null, "Sucessfully deleted");
     }
 
     @Override

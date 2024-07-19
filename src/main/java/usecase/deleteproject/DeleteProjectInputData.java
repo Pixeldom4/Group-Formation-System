@@ -1,12 +1,12 @@
 package usecase.deleteproject;
 
 public class DeleteProjectInputData {
-    private final int userId;
-    public DeleteProjectInputData(int userId){
-        this.userId = userId;
+    private final int projectId;
+    public DeleteProjectInputData(int projectId){
+        this.projectId = projectId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getProjectId() {
+        return projectId;
     }
 }
