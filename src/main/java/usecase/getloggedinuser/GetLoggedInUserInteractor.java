@@ -1,6 +1,6 @@
 package usecase.getloggedinuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class GetLoggedInUserInteractor implements GetLoggedInUserInputBoundary {
     private final GetLoggedInUserOutputBoundary getLoggedInUserPresenter;
-    private ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
+    private ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     public GetLoggedInUserInteractor(GetLoggedInUserOutputBoundary getLoggedInUserPresenter, ILoginUserDetails loginUserDetails) {
         this.getLoggedInUserPresenter = getLoggedInUserPresenter;

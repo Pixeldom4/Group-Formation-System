@@ -74,7 +74,11 @@ public class LocalApplicationRepository implements IApplicationRepository {
     @Override
     public HashSet<Application> getApplicationsForProject(int projectId) {
         HashSet<Application> projectApplications = new HashSet<>();
-        for (ApplicationInterface application : applications.get(projectId)) {
+        ArrayList<ApplicationInterface> projectApplicationsList = applications.get(projectId);
+        if (projectApplicationsList == null) {
+            return null;
+        }
+        for (ApplicationInterface application : projectApplicationsList) {
             projectApplications.add((Application) application);
         }
         return projectApplications;

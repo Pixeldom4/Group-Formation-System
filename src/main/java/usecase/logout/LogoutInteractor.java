@@ -1,10 +1,10 @@
 package usecase.logout;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 
 public class LogoutInteractor implements LogoutInputBoundary {
-    private ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
+    private ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
     private final LogoutOutputBoundary logoutPresenter;
 
     public LogoutInteractor(LogoutOutputBoundary logoutPresenter) {
