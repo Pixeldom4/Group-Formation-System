@@ -29,21 +29,23 @@ public class UserProjectsRepository extends SQLDatabaseManager implements IUserP
      * @param userId The ID of the user.
      * @param projectId The ID of the project.
      */
-    public void addUserToProject(int userId, int projectId) {
+    public boolean addUserToProject(int userId, int projectId) {
         String sql = "INSERT INTO UserProjects (UserId, ProjectId) VALUES (?, ?)";
-        executeUpdate(userId, projectId, sql);
+        return executeUpdate(userId, projectId, sql);
     }
 
-    private void executeUpdate(int userId, int projectId, String sql) {
+    private boolean executeUpdate(int userId, int projectId, String sql) {
         Connection connection = super.getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, projectId);
             preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -52,9 +54,9 @@ public class UserProjectsRepository extends SQLDatabaseManager implements IUserP
      * @param userId The ID of the user.
      * @param projectId The ID of the project.
      */
-    public void removeUserFromProject(int userId, int projectId) {
+    public boolean removeUserFromProject(int userId, int projectId) {
         String sql = "DELETE FROM UserProjects WHERE UserId = ? AND ProjectId = ?";
-        executeUpdate(userId, projectId, sql);
+        return executeUpdate(userId, projectId, sql);
     }
 
 
@@ -64,16 +66,20 @@ public class UserProjectsRepository extends SQLDatabaseManager implements IUserP
      *
      * @param userId The ID of the user whose project associations are to be removed.
      */
-    public void removeUserFromAllProjects(int userId) {
+    public boolean removeUserFromAllProjects(int userId) {
         String sql = "DELETE FROM UserProjects WHERE UserId = ?";
         Connection connection = super.getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
+
+            return true;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+
+        return false;
     }
 
     /**
@@ -82,16 +88,20 @@ public class UserProjectsRepository extends SQLDatabaseManager implements IUserP
      *
      * @param projectId The ID of the project whose user associations are to be removed.
      */
-    public void removeProjectFromAllUsers(int projectId) {
+    public boolean removeProjectFromAllUsers(int projectId) {
         String sql = "DELETE FROM UserProjects WHERE ProjectId = ?";
         Connection connection = super.getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, projectId);
             preparedStatement.executeUpdate();
+
+            return true;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+
+        return false;
     }
 
 
