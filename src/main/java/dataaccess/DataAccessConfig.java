@@ -8,7 +8,7 @@ import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
 public class DataAccessConfig {
-    private static final int USE_LOCAL = 1; // Set this to 1 to use local, 0 to use database
+    public static int USE_LOCAL = 0; // Set this to 1 to use local, 0 to use database
 
     private static final String databaseName = "database.db";
     private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);

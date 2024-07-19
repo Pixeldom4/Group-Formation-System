@@ -111,7 +111,9 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                 requestToJoinButtonActions.add(new ButtonAction() {
                     @Override
                     public void onClick() {
-                        System.out.println("Requesting to join project: " + projectRankingList.get(finalI).getProjectId());
+                        int projectId = projectRankingList.get(finalI).getProjectId();
+                        System.out.println("Requesting to join project: " + projectId);
+                        DisplayCreateApplicationView displayView = new DisplayCreateApplicationView(projectId);
                         // TODO: Implement request to join
                     }
                 });
