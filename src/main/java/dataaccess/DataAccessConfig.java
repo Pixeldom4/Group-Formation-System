@@ -8,6 +8,7 @@ import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
 public class DataAccessConfig {
+    private static final int USE_LOCAL = 1; // Set this to 1 to use local, 0 to use database
 
     private static final String databaseName = "database.db";
     private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
@@ -15,8 +16,8 @@ public class DataAccessConfig {
     private static final IProjectRepository projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
     private static final IApplicationRepository applicationRepository = new ApplicationRepository(databaseName);
 
-    private final static EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
-    private final static IProjectRepository projectDataAccess = new LocalProjectDataAccessObject();
+    private final static ILocalEmbedRepository embedDataAccess = new LocalEmbedRepository();
+    private final static IProjectRepository projectDataAccess = new LocalProjectRepository();
     private final static IUserRepository userDataAccess = new LocalUserRepository();
     private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository();
     private final static IApplicationRepository applicationDataAccess = new LocalApplicationRepository();
@@ -31,10 +32,10 @@ public class DataAccessConfig {
      */
     public static void initializeDatabase(){
         // Casting so that database can be initialized with parent class methods
-        UserProjectsRepository init_upr = (UserProjectsRepository) userProjectsRepository;
-        UserRepository init_ur = (UserRepository) userRepository;
-        ProjectRepository init_pr = (ProjectRepository) projectRepository;
-        ApplicationRepository init_ar = (ApplicationRepository) applicationRepository;
+        Database init_upr = (Database) userProjectsRepository;
+        Database init_ur = (Database) userRepository;
+        Database init_pr = (Database) projectRepository;
+        Database init_ar = (Database) applicationRepository;
 
         init_upr.connect();
         init_ur.connect();
@@ -52,10 +53,10 @@ public class DataAccessConfig {
      * @return the ProjectRepository
      */
     public static IProjectRepository getProjectRepository() {
-        return projectDataAccess;
+        return USE_LOCAL == 1 ? projectDataAccess : projectRepository;
     }
 
-    public static EmbedDataAccessInterface getEmbedDataAccess() {
+    public static ILocalEmbedRepository getEmbedDataAccess() {
         return embedDataAccess;
     }
 
@@ -64,7 +65,7 @@ public class DataAccessConfig {
      * @return the UserRepository
      */
     public static IUserRepository getUserRepository() {
-        return userDataAccess;
+        return USE_LOCAL == 1 ? userDataAccess : userRepository;
     }
 
     /**
@@ -72,7 +73,7 @@ public class DataAccessConfig {
      * @return the UserProjectsRepository
      */
     public static IUserProjectsRepository getUserProjectsRepository() {
-        return userProjectsDataAccess;
+        return USE_LOCAL == 1 ? userProjectsDataAccess : userProjectsRepository;
     }
 
     /**
@@ -80,7 +81,7 @@ public class DataAccessConfig {
      * @return the ApplicationRepository
      */
     public static IApplicationRepository getApplicationRepository() {
-        return applicationDataAccess;
+        return USE_LOCAL == 1 ? applicationDataAccess : applicationRepository;
     }
 
     /**

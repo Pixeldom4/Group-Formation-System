@@ -6,14 +6,14 @@ import java.beans.PropertyChangeSupport;
 
 public class MyProjectsPanelViewModel extends ViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private String[][] data;
+    private Object[][] data;
     private String errorMessage;
 
     public MyProjectsPanelViewModel() {
         super("GetProjectsView");
     }
 
-    public void setData(String[][] data) {
+    public void setData(Object[][] data) {
         this.data = data;
         support.firePropertyChange("dataUpdate", null, data);
     }

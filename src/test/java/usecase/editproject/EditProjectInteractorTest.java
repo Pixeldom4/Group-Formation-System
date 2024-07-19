@@ -3,7 +3,7 @@ package usecase.editproject;
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
-import dataaccess.local.LocalProjectDataAccessObject;
+import dataaccess.local.LocalProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,7 +37,7 @@ public class EditProjectInteractorTest {
     };
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary searchPresenter = new SearchProjectsPresenter(searchPanelViewModel);
-    private final static IProjectRepository projectDAO = new LocalProjectDataAccessObject(SAVE_LOCATION);
+    private final static IProjectRepository projectDAO = new LocalProjectRepository(SAVE_LOCATION);
     private final static EmbeddingAPIInterface apiInterface = new OpenAPIDataEmbed();
     private final static EditProjectInteractor editProjectInteractor = new EditProjectInteractor(projectDAO, editPresenter, apiInterface);
     private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(searchPresenter, projectDAO);

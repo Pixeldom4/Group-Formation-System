@@ -1,5 +1,10 @@
 package view;
 
+import usecase.deleteproject.DeleteProjectController;
+import usecase.deleteproject.DeleteProjectInputData;
+import usecase.deleteproject.DeleteProjectInteractor;
+import usecase.deleteproject.DeleteProjectPresenter;
+import usecase.deleteuser.DeleteUserPresenter;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.GetProjectsInputData;
@@ -30,8 +35,8 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final ViewManagerModel viewManagerModel;
 
     private final JTable infoTable = new JTable();
-    private final int[] columnWidths = {200, 400, 100};
-    private final String[] columnNames = {"Project Title", "Description", "Edit"};
+    private final int[] columnWidths = {200, 400, 100, 100, 100};
+    private final String[] columnNames = {"Project Title", "Description", "Edit", "Applications", "Delete"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, ViewManagerModel viewManagerModel) {
@@ -55,14 +60,18 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         });
     }
 
-    private void addProjects(String[][] data){
+    private void addProjects(Object[][] data){
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
+        ArrayList<ButtonAction> applicationButtonActions = new ArrayList<>();
+        ArrayList<ButtonAction> deleteButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[data.length][3];
+        Object[][] info = new Object[data.length][5];
         for (int i = 0; i < data.length; i++) {
-            info[i][0] = data[i][0];
-            info[i][1] = data[i][1];
+            info[i][0] = data[i][1];
+            info[i][1] = data[i][2];
             info[i][2] = "Edit";
+            info[i][3] = "View Applications";
+            info[i][4] = "Delete";
             int finalI = i;
             editButtonActions.add(new ButtonAction() {
                 @Override
@@ -72,19 +81,46 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 //                    DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
                 }
             });
+            applicationButtonActions.add(new ButtonAction() {
+                @Override
+                public void onClick() {
+                    System.out.println("clicked on application for " + data[finalI][0]);
+                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)data[finalI][2]);
+                }
+            });
+            deleteButtonActions.add(new ButtonAction() {
+                @Override
+                public void onClick() {
+                    System.out.println("clicked on delete for " + data[finalI][0]);
+                    int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you would like to delete " + data[finalI][0] + "?","Warning",JOptionPane.YES_NO_OPTION);
+                    if(dialogResult == JOptionPane.YES_OPTION){
+                        DeleteProjectPresenter deleteProjectPresenter = new DeleteProjectPresenter();
+                        DeleteProjectController deleteProjectController = new DeleteProjectController(new DeleteProjectInteractor(deleteProjectPresenter));
+
+                        deleteProjectController.deleteProject(new DeleteProjectInputData((int) data[finalI][0]));
+//
+                    }
+                }
+            });
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Make only the button column editable
-                return column == 2;
+                return column >= 2;
             }
         };
         infoTable.setModel(infoTableModel);
 
         ButtonColumn editColumn = new ButtonColumn(infoTable, 2);
         editColumn.setActions(editButtonActions);
+
+        ButtonColumn applicationColumn = new ButtonColumn(infoTable, 3);
+        applicationColumn.setActions(applicationButtonActions);
+
+        ButtonColumn deleteColumn = new ButtonColumn(infoTable, 4);
+        deleteColumn.setActions(deleteButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
         for (int i = 0; i < columnWidths.length; i++) {
@@ -101,7 +137,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("dataUpdate")){
-            String[][] data = (String[][]) evt.getNewValue();
+            Object[][] data = (Object[][]) evt.getNewValue();
             addProjects(data);
         }
         if (evt.getPropertyName().equals("login")) {
