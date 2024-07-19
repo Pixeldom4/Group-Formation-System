@@ -82,7 +82,7 @@ public class EditProjectPanel extends JPanel implements ActionListener, Property
             String title = projectNameField.getText();
             double budget = Double.parseDouble(projectBudgetField.getText());
             String description = projectDescriptionField.getText();
-            editProjectController.editProject(projectId, title, budget, description, tags);
+//            editProjectController.editProject(projectId, title, budget, description, tags);
         });
 
         this.add(editProjectButton);

@@ -53,7 +53,7 @@ class Main {
 
         MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
-        MyProfileViewPanel myProfileViewPanel = new MyProfileViewPanel();
+//        MyProfileViewPanel myProfileViewPanel = new MyProfileViewPanel();
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
