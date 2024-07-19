@@ -16,7 +16,7 @@ public class DataAccessConfig {
     private static final IProjectRepository projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
     private static final IApplicationRepository applicationRepository = new ApplicationRepository(databaseName);
 
-    private final static EmbedDataAccessInterface embedDataAccess = new LocalEmbedDataAccessObject();
+    private final static ILocalEmbedRepository embedDataAccess = new LocalEmbedRepository();
     private final static IProjectRepository projectDataAccess = new LocalProjectRepository();
     private final static IUserRepository userDataAccess = new LocalUserRepository();
     private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository();
@@ -56,7 +56,7 @@ public class DataAccessConfig {
         return USE_LOCAL == 1 ? projectDataAccess : projectRepository;
     }
 
-    public static EmbedDataAccessInterface getEmbedDataAccess() {
+    public static ILocalEmbedRepository getEmbedDataAccess() {
         return embedDataAccess;
     }
 

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class LocalProjectRepository implements IProjectRepository {
 
-    private EmbedDataAccessInterface embedDataAccess = DataAccessConfig.getEmbedDataAccess();
+    private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
     private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
@@ -44,7 +44,7 @@ public class LocalProjectRepository implements IProjectRepository {
      */
     public LocalProjectRepository(String path) {
         FILE_PATH = path + "projects.csv";
-        embedDataAccess = new LocalEmbedDataAccessObject(path + "embeds.csv");
+        embedDataAccess = new LocalEmbedRepository(path + "embeds.csv");
         File f = new File(path);
         File parent = f.getParentFile();
         try {
