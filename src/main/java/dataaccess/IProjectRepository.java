@@ -15,9 +15,10 @@ public interface IProjectRepository {
      * @param description the description of the project
      * @param tags the tags associated with the project
      * @param embeddings the embeddings associated with the project
+     * @param creatorId the user ID of the creator of the project.
      * @return the created project
      */
-    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings);
+    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int creatorId);
 
     /**
      * Deletes a project.

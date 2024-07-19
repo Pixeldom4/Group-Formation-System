@@ -27,7 +27,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      */
     @Override
     public void initialize() {
-        String projectSql = "CREATE TABLE IF NOT EXISTS Projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT NOT NULL, Budget DOUBLE, Description TEXT NOT NULL)";
+        String projectSql = "CREATE TABLE IF NOT EXISTS Projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT NOT NULL, Budget DOUBLE, Description TEXT NOT NULL, CreatorId INTEGER NOT NULL, FOREIGN KEY(CreatorId) REFERENCES Users(Id))";
         String projectTagsSql = "CREATE TABLE IF NOT EXISTS ProjectTags (ProjectId INTEGER NOT NULL, Tag TEXT NOT NULL, PRIMARY KEY(ProjectId, Tag), FOREIGN KEY(ProjectId) REFERENCES Projects(Id))";
         String projectEmbeddingSql = "CREATE TABLE IF NOT EXISTS ProjectEmbeddings (ProjectId INTEGER NOT NULL, EmbeddingIndex INTEGER NOT NULL, EmbeddingValue FLOAT NOT NULL, PRIMARY KEY (ProjectId, EmbeddingIndex), FOREIGN KEY(ProjectId) REFERENCES Projects(Id))";
         super.initializeTables(projectSql, projectTagsSql, projectEmbeddingSql);
@@ -98,8 +98,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @return a Project object corresponding to the created project. Otherwise, null.
      */
     @Override
-    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings) {
-        String projectSql = "INSERT INTO Projects (Title, Budget, Description) VALUES (?, ?, ?)";
+    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int creatorId) {
+        String projectSql = "INSERT INTO Projects (Title, Budget, Description, CreatorId) VALUES (?, ?, ?, ?)";
         String embeddingSql = "INSERT INTO ProjectEmbeddings (ProjectId, EmbeddingIndex, EmbeddingValue) VALUES (?, ?, ?)";
 
         Connection connection = super.getConnection();
@@ -112,6 +112,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 projectStatement.setString(1, title);
                 projectStatement.setDouble(2, budget);
                 projectStatement.setString(3, description);
+                projectStatement.setInt(4, creatorId);
 
                 int affectedRows = projectStatement.executeUpdate();
 
