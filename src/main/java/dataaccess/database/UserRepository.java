@@ -188,8 +188,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public User getUserByEmail(String email) {
         String sql = "SELECT Id, FirstName, LastName, DesiredCompensation FROM Users WHERE Email = ?";
 
-        try (Connection connection = super.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        Connection connection = super.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
@@ -242,8 +242,9 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public User getUserById(int userId) {
         String sql = "SELECT FirstName, LastName, Email, DesiredCompensation FROM Users WHERE Id = ?";
 
-        try (Connection connection = super.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        Connection connection = super.getConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
