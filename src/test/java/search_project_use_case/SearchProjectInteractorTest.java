@@ -4,7 +4,7 @@ import entities.ProjectInterface;
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
-import dataaccess.local.LocalProjectDataAccessObject;
+import dataaccess.local.LocalProjectRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import usecase.searchforproject.SearchProjectOutputBoundary;
@@ -23,7 +23,7 @@ public class SearchProjectInteractorTest {
     private final static String SAVE_LOCATION = "local_data/test/search_projects_interactor/";
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
-    private final static IProjectRepository projectDAO = new LocalProjectDataAccessObject(SAVE_LOCATION);
+    private final static IProjectRepository projectDAO = new LocalProjectRepository(SAVE_LOCATION);
     private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(presenter, projectDAO);
     private final static EmbeddingAPIInterface apiInteface = new OpenAPIDataEmbed();
 

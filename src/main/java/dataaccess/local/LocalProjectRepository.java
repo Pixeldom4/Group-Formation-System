@@ -16,7 +16,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LocalProjectDataAccessObject implements IProjectRepository {
+public class LocalProjectRepository implements IProjectRepository {
 
     private EmbedDataAccessInterface embedDataAccess = DataAccessConfig.getEmbedDataAccess();
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
@@ -24,7 +24,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
     private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
     private int maxId = 0;
 
-    public LocalProjectDataAccessObject() {
+    public LocalProjectRepository() {
         File f = new File(FILE_PATH);
         try {
             Files.createDirectories(f.getParentFile().toPath());
@@ -42,7 +42,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
      * Reads the projects from the CSV file if it exists.
      * @param path the path to the folder of the CSV file
      */
-    public LocalProjectDataAccessObject(String path) {
+    public LocalProjectRepository(String path) {
         FILE_PATH = path + "projects.csv";
         embedDataAccess = new LocalEmbedDataAccessObject(path + "embeds.csv");
         File f = new File(path);
