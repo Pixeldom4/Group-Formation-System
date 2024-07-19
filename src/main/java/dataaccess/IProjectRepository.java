@@ -15,10 +15,10 @@ public interface IProjectRepository {
      * @param description the description of the project
      * @param tags the tags associated with the project
      * @param embeddings the embeddings associated with the project
-     * @param creatorId the user ID of the creator of the project.
+     * @param ownerId the user ID of the creator of the project.
      * @return the created project
      */
-    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int creatorId);
+    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int ownerId);
 
     /**
      * Deletes a project.
@@ -76,4 +76,12 @@ public interface IProjectRepository {
      * @return a hashmap where the keys are the project ids and the values are the embeddings
      */
     HashMap<Integer, float[]> getAllEmbeddings();
+
+    /**
+     * Retrieves the owner ID of a project from the database by its project ID.
+     *
+     * @param projectId The ID of the project whose owner ID is to be retrieved.
+     * @return The ID of the user who owns the project, or -1 if the project is not found.
+     */
+    int getOwnerId(int projectId);
 }
