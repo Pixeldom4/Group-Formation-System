@@ -3,9 +3,9 @@ package usecase.deleteproject;
 import dataaccess.database.ProjectRepository;
 
 public class DeleteProjectController {
-    private final DeleteProjectInteractor deleteProjectInteractor;
+    private final DeleteProjectInputBoundary deleteProjectInteractor;
 
-    public DeleteProjectController(DeleteProjectInteractor deleteProjectInteractor){
+    public DeleteProjectController(DeleteProjectInputBoundary deleteProjectInteractor){
         this.deleteProjectInteractor = deleteProjectInteractor;
     }
 

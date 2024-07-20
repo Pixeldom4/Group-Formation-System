@@ -1,9 +1,9 @@
 package usecase.acceptapplication;
 
 public class AcceptApplicationController {
-    private final AcceptApplicationInteractor acceptApplicationsInteractor;
+    private final AcceptApplicationInputBoundary acceptApplicationsInteractor;
 
-    public AcceptApplicationController(AcceptApplicationInteractor acceptApplicationInteractor){
+    public AcceptApplicationController(AcceptApplicationInputBoundary acceptApplicationInteractor){
         this.acceptApplicationsInteractor = acceptApplicationInteractor;
     }
 

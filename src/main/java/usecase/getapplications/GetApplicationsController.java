@@ -1,17 +1,15 @@
 package usecase.getapplications;
 
 public class GetApplicationsController {
-    private final GetApplicationsInteractor manageApplicationsInteractor;
+    private final GetApplicationsInputBoundary manageApplicationsInteractor;
 
-    public GetApplicationsController(GetApplicationsInteractor manageApplicationsInteractor){
+    public GetApplicationsController(GetApplicationsInputBoundary manageApplicationsInteractor){
         this.manageApplicationsInteractor = manageApplicationsInteractor;
     }
 
-    public void getApplicationsForProject(GetApplicationsInputData inputData) {
+    public void getApplicationsForProject(int projectId) {
+        GetApplicationsInputData inputData = new GetApplicationsInputData(projectId);
         manageApplicationsInteractor.getApplicationsForProject(inputData);
     }
 
-    public void getApplicationsForSelf(GetApplicationsInputData inputData) {
-        manageApplicationsInteractor.getApplicationsForSelf(inputData);
-    }
 }
