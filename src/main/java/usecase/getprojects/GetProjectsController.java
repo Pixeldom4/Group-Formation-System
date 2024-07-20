@@ -1,9 +1,9 @@
 package usecase.getprojects;
 
 public class GetProjectsController {
-    private final GetProjectsInteractor getProjectsInteractor;
+    private final GetProjectsInputBoundary getProjectsInteractor;
 
-    public GetProjectsController(GetProjectsInteractor getProjectsInteractor){
+    public GetProjectsController(GetProjectsInputBoundary getProjectsInteractor){
         this.getProjectsInteractor = getProjectsInteractor;
     }
 
