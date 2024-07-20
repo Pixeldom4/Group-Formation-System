@@ -1,143 +1,95 @@
 package view;
 
 import usecase.editproject.EditProjectController;
-import view.components.NumericTextField;
+import usecase.editproject.EditProjectInputData;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.HashSet;
-import java.util.Set;
 
-public class EditProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
+public class EditProjectPanel extends JPanel {
 
-    private final EditProjectPanelViewModel editProjectPanelViewModel;
+    private final EditProjectPanelViewModel editProjectViewModel;
     private final EditProjectController editProjectController;
+    private JTextField titleField;
+    private JTextField budgetField;
+    private JTextArea descriptionField;
+    private JTextField tagsField;
+    private JButton saveButton;
+    private JButton refreshButton;
+    private int projectId;
+    private int editorId;
 
-    private final JPanel projectInfoPanel = new JPanel();
-    private final JPanel projectDataPanel = new JPanel();
-    private final GridLayout projectDataGridLayout = new GridLayout(0, 2);
-    private final JLabel projectNameLabel = new JLabel("Project Name");
-    private final JLabel projectBudgetLabel = new JLabel("Project Budget");
-    private final JLabel projectDescriptionLabel = new JLabel("Project Description");
-    private final JLabel projectTagsLabel = new JLabel("Project Tags");
-    private final JTextField projectNameField = new JTextField();
-    private final JTextField projectBudgetField = new NumericTextField();
-    private final JTextField projectDescriptionField = new JTextField();
-    private final JTextField projectTagsField = new JTextField();
-    private final JButton addTagButton = new JButton("Add Tag");
-    private final GridLayout tagPanelLayout = new GridLayout(0, 1);
-    private final JPanel tagPanel = new JPanel();
-    private final JLabel tagPanelLabel = new JLabel("Project tags: ");
-    private final JButton editProjectButton = new JButton("Edit project");
-
-    private final Set<String> tags = new HashSet<>();
-
-    public EditProjectPanel(EditProjectPanelViewModel editProjectPanelViewModel, EditProjectController editProjectController) {
-        this.editProjectPanelViewModel = editProjectPanelViewModel;
-        editProjectPanelViewModel.addPropertyChangeListener(this);
+    public EditProjectPanel(EditProjectPanelViewModel editProjectViewModel, EditProjectController editProjectController) {
+        this.editProjectViewModel = editProjectViewModel;
         this.editProjectController = editProjectController;
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        projectInfoPanel.setLayout(new BoxLayout(projectInfoPanel, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        addTagButton.addActionListener(e -> {
-            String tagText = projectTagsField.getText();
-            if (!tagText.isEmpty() && !tags.contains(tagText)) {
-                addTagToPanel(tagText);
-                tags.add(tagText);
-                projectTagsField.setText("");
+        titleField = new JTextField();
+        budgetField = new JTextField();
+        descriptionField = new JTextArea();
+        tagsField = new JTextField();
+        saveButton = new JButton("Save");
+        refreshButton = new JButton("Refresh");
+
+        add(new JLabel("Project Title:"));
+        add(titleField);
+        add(new JLabel("Budget:"));
+        add(budgetField);
+        add(new JLabel("Description:"));
+        add(new JScrollPane(descriptionField));
+        add(new JLabel("Tags (comma separated):"));
+        add(tagsField);
+        add(saveButton);
+        add(refreshButton);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveProject();
             }
         });
 
-        projectDataPanel.setLayout(projectDataGridLayout);
-
-        projectDataPanel.add(projectNameLabel);
-        projectDataPanel.add(projectNameField);
-        projectDataPanel.add(projectBudgetLabel);
-        projectDataPanel.add(projectBudgetField);
-        projectDataPanel.add(projectDescriptionLabel);
-        projectDataPanel.add(projectDescriptionField);
-        projectDataPanel.add(projectTagsLabel);
-        projectDataPanel.add(projectTagsField);
-        projectDataPanel.add(addTagButton);
-
-        projectInfoPanel.add(projectDataPanel);
-
-        tagPanel.add(tagPanelLabel);
-        tagPanel.setLayout(tagPanelLayout);
-        tagPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        projectInfoPanel.add(tagPanel);
-
-        this.add(projectInfoPanel);
-
-        editProjectButton.addActionListener(e -> {
-            int projectId = editProjectPanelViewModel.getProjectId();
-            String title = projectNameField.getText();
-            double budget = Double.parseDouble(projectBudgetField.getText());
-            String description = projectDescriptionField.getText();
-//            editProjectController.editProject(projectId, title, budget, description, tags);
-        });
-
-        this.add(editProjectButton);
-    }
-
-    private void addTagToPanel(String text) {
-        JLabel label = new JLabel(text);
-        label.setOpaque(true);
-        label.setBackground(Color.LIGHT_GRAY);
-        label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        JButton removeButton = new JButton("x");
-
-        JPanel tag = new JPanel();
-        tag.setBorder(new EmptyBorder(0, 10, 0, 10));
-        tag.setLayout(new GridBagLayout());
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridy = 0;
-
-        constraints.gridx = 0;
-        constraints.weightx = 0.8;
-        tag.add(label, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 0.2;
-        tag.add(removeButton, constraints);
-
-        removeButton.addActionListener(e -> {
-            tags.remove(text);
-            tagPanel.remove(tag);
-            tagPanel.revalidate();
-            tagPanel.repaint();
-        });
-
-        tagPanel.add(tag);
-        tagPanel.revalidate();
-        tagPanel.repaint();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // Handle actions if needed
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("success")) {
-            boolean success = (boolean) evt.getNewValue();
-            String projectName = editProjectPanelViewModel.getProjectName();
-            if (success) {
-                JOptionPane.showMessageDialog(null, "Project " + projectName + " edited successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, editProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshProject();
             }
+        });
+
+        // Initialize the fields
+        refreshProject();
+    }
+
+    public void setProjectDetails(int projectId, int editorId, String title, double budget, String description, HashSet<String> tags) {
+        this.projectId = projectId;
+        this.editorId = editorId;
+        titleField.setText(title);
+        budgetField.setText(String.valueOf(budget));
+        descriptionField.setText(description);
+        tagsField.setText(String.join(", ", tags));
+    }
+
+    private void saveProject() {
+        String newTitle = titleField.getText();
+        double newBudget = Double.parseDouble(budgetField.getText());
+        String newDescription = descriptionField.getText();
+        HashSet<String> newTags = new HashSet<>();
+        for (String tag : tagsField.getText().split(",")) {
+            newTags.add(tag.trim());
         }
+        editProjectController.editProject(new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags, editorId));
+    }
+
+    private void refreshProject() {
+        // Assume the view model already has the current project details
+        titleField.setText(editProjectViewModel.getTitle());
+        budgetField.setText(String.valueOf(editProjectViewModel.getBudget()));
+        descriptionField.setText(editProjectViewModel.getDescription());
+        tagsField.setText(String.join(", ", editProjectViewModel.getTags()));
     }
 }
