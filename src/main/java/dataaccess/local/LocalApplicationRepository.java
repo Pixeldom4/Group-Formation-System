@@ -41,6 +41,13 @@ public class LocalApplicationRepository implements IApplicationRepository {
 
     @Override
     public Application createApplication(int senderUserId, int projectId, String text, byte[] pdfBytes) {
+        if (applications.get(projectId) != null) {
+            for (ApplicationInterface application : applications.get(projectId)) {
+                if (application.getSenderUserId() == senderUserId) {
+                    return null;
+                }
+            }
+        }
         Application application = new Application(senderUserId, projectId, text, pdfBytes);
         applications.putIfAbsent(projectId, new ArrayList<ApplicationInterface>());
         applications.get(projectId).add(application);
