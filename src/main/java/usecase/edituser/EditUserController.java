@@ -13,7 +13,7 @@ public class EditUserController {
     /**
      * Updates the user.
      *
-     * @param userId the ID of the yser.
+     * @param userId the ID of the user.
      * @param firstName the first name of the user.
      * @param lastName the last name of the user.
      * @param desiredCompensation the desired compensation of the user.
