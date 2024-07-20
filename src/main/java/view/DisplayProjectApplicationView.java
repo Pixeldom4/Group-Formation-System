@@ -67,7 +67,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        getApplicationsController.getApplicationsForProject(new GetApplicationsInputData(projectId));
+        getApplicationsController.getApplicationsForProject(projectId);
     }
 
     public void displayApplicants(Object[][] applicationsData){
@@ -122,7 +122,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 public void onClick() {
                     JOptionPane.showMessageDialog(null, "Accepted application for: " + applicationsData[finalI][0]);
                     acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                    getApplicationsController.getApplicationsForProject(new GetApplicationsInputData(projectId));
+                    getApplicationsController.getApplicationsForProject(projectId);
                 }
             });
             declineButtonActions.add(new ButtonAction() {
@@ -130,7 +130,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 public void onClick() {
                     JOptionPane.showMessageDialog(null, "Rejected application for: " + applicationsData[finalI][0]);
                     rejectApplicationController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                    getApplicationsController.getApplicationsForProject(new GetApplicationsInputData(projectId));
+                    getApplicationsController.getApplicationsForProject(projectId);
                 }
             });
         }

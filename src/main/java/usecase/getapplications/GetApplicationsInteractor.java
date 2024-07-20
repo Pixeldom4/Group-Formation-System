@@ -36,9 +36,4 @@ public class GetApplicationsInteractor implements GetApplicationsInputBoundary {
         manageApplicationsPresenter.prepareSuccessView(new GetApplicationsOutputData(applicationsData));
     }
 
-    @Override
-    public void getApplicationsForSelf(GetApplicationsInputData inputData) {
-        HashSet<Application> applications = applicationRepository.getApplicationsForUser(inputData.getUserId());
-//        manageApplicationsPresenter.prepareSuccessSelfApplicationView(new ManageApplicationsOutputData(applications));
-    }
 }
