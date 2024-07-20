@@ -1,20 +1,18 @@
 package usecase.getprojects;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
-import dataaccess.database.ProjectRepository;
-import dataaccess.database.UserProjectsRepository;
 import entities.Project;
 
 import java.util.HashSet;
 
 public class GetProjectsInteractor implements GetProjectsInputBoundary {
-    private final IUserProjectsRepository userProjectsRepository = DAOImplementationConfig.getUserProjectsRepository();
-    private final IProjectRepository projectRepository = DAOImplementationConfig.getProjectRepository();
+    private final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
+    private final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
     private final GetProjectsPresenter getProjectsPresenter;
-    private final ILoginUserDetails loginUserDetails = DAOImplementationConfig.getLoginUserDetails();
+    private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     public GetProjectsInteractor(GetProjectsPresenter getProjectsPresenter){
         this.getProjectsPresenter = getProjectsPresenter;
@@ -29,14 +27,17 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
         }
 
         HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
-        String[][] projectData = new String[projectIds.size()][3];
+        Object[][] projectData = new Object[projectIds.size()][5];
 
         int count = 0;
         for (int projectId:  projectIds){
             Project project = projectRepository.getProjectById(projectId);
 
-            projectData[count][0] = project.getProjectTitle();
-            projectData[count][1] = project.getProjectDescription();
+            projectData[count][0] = projectId;
+            projectData[count][1] = project.getProjectTitle();
+            projectData[count][2] = project.getProjectDescription();
+            projectData[count][3] = project.getProjectBudget();
+            projectData[count][4] = project.getProjectTags();
             count++;
         }
 

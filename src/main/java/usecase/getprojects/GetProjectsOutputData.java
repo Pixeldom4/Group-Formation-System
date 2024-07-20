@@ -1,13 +1,13 @@
 package usecase.getprojects;
 
 public class GetProjectsOutputData {
-    private final String[][] projects;
+    private final Object[][] projects;
 
-    public GetProjectsOutputData(String[][] projects){
+    public GetProjectsOutputData(Object[][] projects){
         this.projects = projects;
     }
 
-    public String[][] getData(){
+    public Object[][] getData(){
         return this.projects;
     }
 }

@@ -5,7 +5,7 @@ import api.OpenAPIDataEmbed;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 
 import java.io.File;
 import java.io.FileReader;
@@ -14,18 +14,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
+public class LocalEmbedRepository implements ILocalEmbedRepository {
 
-    private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "embeds.csv";
+    private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "embeds.csv";
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
     private HashMap<Integer, float[]> embeddings = new HashMap<Integer, float[]>();
     private String[] header = {"projectId", "embedding"};
 
     /**
-     * Creates a new LocalEmbedDataAccessObject.
+     * Creates a new LocalEmbedRepository.
      * Reads the embeddings from a CSV file if it exists.
      */
-    public LocalEmbedDataAccessObject() {
+    public LocalEmbedRepository() {
         File f = new File(FILE_PATH);
         try {
             Files.createDirectories(f.getParentFile().toPath());
@@ -38,11 +38,11 @@ public class LocalEmbedDataAccessObject implements EmbedDataAccessInterface {
     }
 
     /**
-     * Creates a new LocalEmbedDataAccessObject with the given path as the save location.
+     * Creates a new LocalEmbedRepository with the given path as the save location.
      * Reads the embeddings from the CSV file if it exists.
      * @param path the path to the CSV file
      */
-    public LocalEmbedDataAccessObject(String path) {
+    public LocalEmbedRepository(String path) {
         FILE_PATH = path;
         File f = new File(path);
         File parent = f.getParentFile();

@@ -1,17 +1,19 @@
 package usecase.deleteproject;
 
+import javax.swing.*;
+
 public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     public DeleteProjectPresenter() {
 
     }
 
     @Override
-    public void prepareDeleteSuccess() {
-        System.out.println("delete success");
+    public void prepareSuccessView(DeleteProjectOutputData outputData) {
+        JOptionPane.showMessageDialog(null, "Sucessfully deleted");
     }
 
     @Override
-    public void prepareDeleteFailure(String error) {
+    public void prepareFailView(String error) {
 
     }
 }

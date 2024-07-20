@@ -1,3 +1,4 @@
+
 import dataaccess.DAOImplementationConfig;
 import interfaceadapter.EditProjectController;
 import usecase.createproject.CreateProjectController;
@@ -6,7 +7,6 @@ import usecase.createuser.CreateUserController;
 import usecase.edituser.EditUserController;
 import usecase.edituser.EditUserUseCaseFactory;
 import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
@@ -31,7 +31,7 @@ class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
-        DAOImplementationConfig.initializeDatabase();
+        DataAccessConfig.initializeDatabase();
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
@@ -58,7 +58,9 @@ class Main {
         MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
         EditUserController editUserController = EditUserUseCaseFactory.create(myProfileViewModel);
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
+
         MyProfilePanel myProfilePanel = new MyProfilePanel(viewManagerModel, editUserController, myProfileGetLoggedInUserController);
+
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());

@@ -39,7 +39,7 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
     public void createProject(CreateProjectInputData inputData) {
         String stringToEmbed = inputData.getDescription();
         float[] embeddings = embeddingAPI.getEmbedData(stringToEmbed);
-        Project project = projectRepository.createProject(inputData.getTitle(), inputData.getBudget(), inputData.getDescription(), inputData.getTags(), embeddings);
+        Project project = projectRepository.createProject(inputData.getTitle(), inputData.getBudget(), inputData.getDescription(), inputData.getTags(), embeddings, inputData.getCreatorUserId());
 
         CreateProjectOutputData outputData;
 

@@ -27,25 +27,20 @@ public class EditProjectInteractor implements EditProjectInputBoundary {
     @Override
     public void editProject(EditProjectInputData inputData) {
         float[] embedding = embeddingAPI.getEmbedData(inputData.getDescription());
-        EditProjectOutputData outputData;
-        try {
-            projectRepository.update(inputData.getProjectId(),
-                                     inputData.getTitle(),
-                                     inputData.getBudget(),
-                                     inputData.getDescription(),
-                                     new HashSet<>(inputData.getTags()),
-                                     embedding);
-        } catch (Exception e) {
+        int projectId = inputData.getProjectId();
+        String title = inputData.getTitle();
+        double budget = inputData.getBudget();
+        String description = inputData.getDescription();
+        HashSet<String> tags = inputData.getTags();
+        int editorId = inputData.getEditorId();
+
+        if (projectRepository.getOwnerId(projectId) != editorId) {
+            projectPresenter.prepareFailView("Insufficient Permissions.");
+        } else if (projectRepository.update(projectId, title, budget, description, tags, embedding)) {
+            EditProjectOutputData outputData = new EditProjectOutputData(projectId, title, budget, description, tags, true);
+            projectPresenter.prepareSuccessView(outputData);
+        } else {
             projectPresenter.prepareFailView("Failed to edit project.");
         }
-
-        Project project = projectRepository.getProjectById(inputData.getProjectId());
-        outputData = new EditProjectOutputData(project.getProjectId(),
-                                               project.getProjectTitle(),
-                                               project.getProjectBudget(),
-                                               project.getProjectDescription(),
-                                               project.getProjectTags(),
-                                               true);
-        projectPresenter.prepareSuccessView(outputData);
     }
 }

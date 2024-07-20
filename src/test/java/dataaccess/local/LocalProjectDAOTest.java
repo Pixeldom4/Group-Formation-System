@@ -21,7 +21,7 @@ public class LocalProjectDAOTest {
     @BeforeEach
     public void setUpEach() throws IOException {
         Files.deleteIfExists(saveFile.toPath());
-        projectRepository = new LocalProjectDataAccessObject(SAVE_LOCATION);
+        projectRepository = new LocalProjectRepository(SAVE_LOCATION);
         projectRepository.createProject("Test Project",
                                         1000.0, "This is a test project.",
                                         new HashSet<>(Arrays.asList("Java", "Programming")),

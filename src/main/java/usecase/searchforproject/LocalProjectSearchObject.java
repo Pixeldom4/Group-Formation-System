@@ -3,7 +3,7 @@ package usecase.searchforproject;
 import entities.ProjectInterface;
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 
 import java.util.*;
@@ -11,7 +11,7 @@ import java.util.*;
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private IProjectRepository projectDataAccess = DAOImplementationConfig.getProjectRepository();
+    private IProjectRepository projectDataAccess = DataAccessConfig.getProjectRepository();
 
     public LocalProjectSearchObject() {
 
