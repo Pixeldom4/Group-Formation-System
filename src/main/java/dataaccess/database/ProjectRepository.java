@@ -27,7 +27,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      */
     @Override
     public void initialize() {
-        String projectSql = "CREATE TABLE IF NOT EXISTS Projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT NOT NULL, Budget DOUBLE, Description TEXT NOT NULL)";
+        String projectSql = "CREATE TABLE IF NOT EXISTS Projects (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT NOT NULL, Budget DOUBLE, Description TEXT NOT NULL, OwnerId INTEGER NOT NULL, FOREIGN KEY(OwnerId) REFERENCES Users(Id))";
         String projectTagsSql = "CREATE TABLE IF NOT EXISTS ProjectTags (ProjectId INTEGER NOT NULL, Tag TEXT NOT NULL, PRIMARY KEY(ProjectId, Tag), FOREIGN KEY(ProjectId) REFERENCES Projects(Id))";
         String projectEmbeddingSql = "CREATE TABLE IF NOT EXISTS ProjectEmbeddings (ProjectId INTEGER NOT NULL, EmbeddingIndex INTEGER NOT NULL, EmbeddingValue FLOAT NOT NULL, PRIMARY KEY (ProjectId, EmbeddingIndex), FOREIGN KEY(ProjectId) REFERENCES Projects(Id))";
         super.initializeTables(projectSql, projectTagsSql, projectEmbeddingSql);
@@ -98,8 +98,8 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
      * @return a Project object corresponding to the created project. Otherwise, null.
      */
     @Override
-    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings) {
-        String projectSql = "INSERT INTO Projects (Title, Budget, Description) VALUES (?, ?, ?)";
+    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int ownerId) {
+        String projectSql = "INSERT INTO Projects (Title, Budget, Description, OwnerId) VALUES (?, ?, ?, ?)";
         String embeddingSql = "INSERT INTO ProjectEmbeddings (ProjectId, EmbeddingIndex, EmbeddingValue) VALUES (?, ?, ?)";
 
         Connection connection = super.getConnection();
@@ -112,6 +112,7 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
                 projectStatement.setString(1, title);
                 projectStatement.setDouble(2, budget);
                 projectStatement.setString(3, description);
+                projectStatement.setInt(4, ownerId);
 
                 int affectedRows = projectStatement.executeUpdate();
 
@@ -446,5 +447,29 @@ public class ProjectRepository extends SQLDatabaseManager implements IProjectRep
             }
             embeddingsMap.put(currentProjectId, embeddingArray);
         }
+    }
+
+    /**
+     * Retrieves the owner ID of a project from the database by its project ID.
+     *
+     * @param projectId The ID of the project whose owner ID is to be retrieved.
+     * @return The ID of the user who owns the project, or -1 if the project is not found.
+     */
+    @Override
+    public int getOwnerId(int projectId) {
+        String sql = "SELECT OwnerId FROM Projects WHERE Id = ?";
+        Connection connection = super.getConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, projectId);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("OwnerId");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return -1; // Return -1 if the project is not found or an error occurs
     }
 }

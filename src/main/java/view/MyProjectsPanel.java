@@ -85,7 +85,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                 @Override
                 public void onClick() {
                     System.out.println("clicked on application for " + data[finalI][0]);
-                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)data[finalI][2]);
+                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)data[finalI][0]);
                 }
             });
             deleteButtonActions.add(new ButtonAction() {

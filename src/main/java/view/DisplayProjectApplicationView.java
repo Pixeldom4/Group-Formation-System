@@ -20,6 +20,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -27,6 +32,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
     private JTextField projectTitleField;
     private JTextArea projectDescriptionArea;
+    private final int projectId;
 
     private final int[] columnWidths = {400, 200, 200, 200};
     private final String[] columnNames = {"Applicant", "View", "Accept", "Decline"};
@@ -35,9 +41,9 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
     private final ManageApplicationsPresenter manageApplicationsPresenter;
     private final ManageApplicationsController manageApplicationsController;
-//    private final ManageApplicationsInteractor manageApplicationsInteractor;
 
     public DisplayProjectApplicationView(int projectId) {
+        this.projectId = projectId;
         this.manageApplicationsPresenter = new ManageApplicationsPresenter(this);
         this.manageApplicationsController = new ManageApplicationsController(new ManageApplicationsInteractor(this.manageApplicationsPresenter));
 
@@ -58,6 +64,11 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
         DisplayProjectApplicationView temp = this;
         for (int i = 0; i < applicationsData.length; i++) {
+            System.out.println(applicationsData[i][0]);
+//            applicationsData[count][0] = user.getFirstName() + " " + user.getLastName();
+//            applicationsData[count][1] = application.getSenderUserId();
+//            applicationsData[count][2] = application.getText();
+//            applicationsData[count][3] = application.getPdfBytes();
             info[i][0] = applicationsData[i][0];
             info[i][1] = "View";
             info[i][2] = "Accept";
@@ -67,19 +78,44 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 @Override
                 public void onClick() {
                     System.out.println("clicked on edit for " );
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+                    Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
+                    File downloadsDirectory = downloadsPath.toFile();
+                    if (downloadsDirectory.exists() && downloadsDirectory.isDirectory()) {
+                        fileChooser.setCurrentDirectory(downloadsDirectory);
+                    }
+
+                    int result = fileChooser.showOpenDialog(temp);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+
+                        File selectedDirectory = fileChooser.getSelectedFile();
+
+                        File outputFile = new File(selectedDirectory, applicationsData[finalI][0]+" application.pdf");
+
+                        try(FileOutputStream fos = new FileOutputStream(outputFile)){
+                            fos.write((byte[])applicationsData[finalI][3]);
+                        } catch (IOException ex){
+                            JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
+                        }
+                    }
                 }
             });
             acceptButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    JOptionPane.showMessageDialog(null, "Accepted application for: ");
+                    JOptionPane.showMessageDialog(null, "Accepted application for: " + applicationsData[finalI][0]);
+                    manageApplicationsController.acceptApplicant(new ManageApplicationsInputData(projectId, (Integer) applicationsData[finalI][1]));
+                    manageApplicationsController.getApplicationsForProject(new ManageApplicationsInputData(projectId));
                 }
             });
             declineButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    JOptionPane.showMessageDialog(null, "Rejected application for: ");
-//                    temp.displayApplicants(applicationsData);
+                    JOptionPane.showMessageDialog(null, "Rejected application for: " + applicationsData[finalI][0]);
+                    manageApplicationsController.acceptApplicant(new ManageApplicationsInputData(projectId, (Integer) applicationsData[finalI][1]));
+                    manageApplicationsController.getApplicationsForProject(new ManageApplicationsInputData(projectId));
                 }
             });
         }

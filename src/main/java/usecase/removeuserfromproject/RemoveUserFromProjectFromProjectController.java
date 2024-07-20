@@ -11,11 +11,12 @@ public class RemoveUserFromProjectFromProjectController {
     /**
      * Calls the interactor to remove a user from a project.
      *
-     * @param projectId The ID of the project.
-     * @param userId The ID of the user.
+     * @param projectId the ID of the project.
+     * @param userId the ID of the user.
+     * @param editorId the ID of the user requesting to remove a user from the project.
      */
-    public void removeUserFromProject(int projectId, int userId) {
-        RemoveUserFromProjectInputData inputData = new RemoveUserFromProjectInputData(projectId, userId);
+    public void removeUserFromProject(int projectId, int userId, int editorId) {
+        RemoveUserFromProjectInputData inputData = new RemoveUserFromProjectInputData(projectId, userId, editorId);
         removeUserInteractor.removeUserFromProject(inputData);
     }
 }

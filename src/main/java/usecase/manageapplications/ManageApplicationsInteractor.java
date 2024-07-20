@@ -22,12 +22,15 @@ public class ManageApplicationsInteractor implements ManageApplicationsInputBoun
     @Override
     public void getApplicationsForProject(ManageApplicationsInputData inputData) {
         HashSet<Application> applications = applicationRepository.getApplicationsForProject(inputData.getProjectId());
-        Object[][] applicationsData = new Object[applications.size()][2];
+        Object[][] applicationsData = new Object[applications.size()][4];
         int count = 0;
         for (Application application : applications){
             User user = userRepository.getUserById(application.getSenderUserId());
-            applicationsData[count][0] = application;
-            applicationsData[count][1] = user.getFirstName() + " " + user.getLastName();
+            applicationsData[count][0] = user.getFirstName() + " " + user.getLastName();
+            applicationsData[count][1] = application.getSenderUserId();
+            applicationsData[count][2] = application.getText();
+            applicationsData[count][3] = application.getPdfBytes();
+            System.out.println(user.getFirstName() + " " + user.getLastName());
             count++;
         }
         manageApplicationsPresenter.prepareSuccessProjectApplicationView(new ManageApplicationsOutputData(applicationsData));
