@@ -1,6 +1,6 @@
 
-import dataaccess.DAOImplementationConfig;
-import interfaceadapter.EditProjectController;
+import dataaccess.DataAccessConfig;
+import usecase.editproject.EditProjectController;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
