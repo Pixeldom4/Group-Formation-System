@@ -22,7 +22,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
     private final JButton searchProjectButton = new JButton("Search Project");
     private final JButton getProjectsButton = new JButton("My Projects");
     //TODO Implement for getUserView
-    private final JButton getUserProfileButton = new JButton("My Profile");
+    private final JButton editUserProfileButton = new JButton("Edit My Profile");
 
 
     private final JButton createUserButton = new JButton("Create User");
@@ -57,8 +57,8 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             viewManagerModel.firePropertyChanged();
         });
 
-        getProjectsButton.addActionListener(e -> {
-            viewManagerModel.setActiveView("GetMyProfile");
+        editUserProfileButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("EditMyProfile");
             viewManagerModel.firePropertyChanged();
         });
 
@@ -79,7 +79,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
         this.add(createUserButton);
         this.add(loginUserButton);
 
-        this.add(getUserProfileButton);
+        this.add(editUserProfileButton);
         this.add(addProjectButton);
         this.add(searchProjectButton);
         this.add(getProjectsButton);
@@ -102,7 +102,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
                 addProjectButton.setVisible(true);
                 searchProjectButton.setVisible(true);
                 getProjectsButton.setVisible(true);
-                getUserProfileButton.setVisible(true);
+                editUserProfileButton.setVisible(true);
                 logoutButton.setVisible(true);
             }
             else {
@@ -111,7 +111,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
                 addProjectButton.setVisible(false);
                 searchProjectButton.setVisible(false);
                 getProjectsButton.setVisible(false);
-                getUserProfileButton.setVisible(false);
+                editUserProfileButton.setVisible(false);
                 logoutButton.setVisible(false);
             }
         }

@@ -20,9 +20,8 @@ public class LocalProjectRepository implements IProjectRepository {
 
     private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
-    private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags", "projectOwner"};
+    private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
     private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
-    private HashMap<Integer, Integer> projectOwners = new HashMap<>();
     private int maxId = 0;
 
     public LocalProjectRepository() {
@@ -105,7 +104,6 @@ public class LocalProjectRepository implements IProjectRepository {
                 String projectDescription = line[3];
                 HashSet<String> projectTags = Arrays.stream(line[4].replace("[", "").replace("]", "").split(",")).collect(Collectors.toCollection(HashSet::new));
                 ProjectInterface project = new Project(projectId, projectTitle, projectBudget, projectDescription, projectTags);
-                projectOwners.put(projectId, Integer.parseInt(line[5]));
                 projects.put(projectId, project);
                 maxId = Math.max(maxId, projectId);
             }
@@ -126,28 +124,25 @@ public class LocalProjectRepository implements IProjectRepository {
      * @return The string array representation
      */
     private String[] projectToString(ProjectInterface project) {
-        String[] record = new String[6];
+        String[] record = new String[5];
         record[0] = String.valueOf(project.getProjectId());
         record[1] = project.getProjectTitle();
         record[2] = String.valueOf(project.getProjectBudget());
         record[3] = project.getProjectDescription();
         record[4] = project.getProjectTags().toString();
-        record[5] = String.valueOf(projectOwners.get(project.getProjectId()));
         return record;
     }
 
-    @Override
+    //@Override
     public Project createProject(String title,
                                  double budget,
                                  String description,
                                  HashSet<String> tags,
-                                 float[] embeddings,
-                                 int ownerId) {
+                                 float[] embeddings) {
         int projectId = maxId + 1;
         Project project = new Project(projectId, title, budget, description, tags);
         projects.put(projectId, project);
         embedDataAccess.saveEmbedData(embeddings, projectId);
-        projectOwners.put(projectId, ownerId);
         saveToCSV();
         maxId++;
         return project;
@@ -155,13 +150,16 @@ public class LocalProjectRepository implements IProjectRepository {
 
 
     @Override
+    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int ownerId) {
+        return null;
+    }
+
+    @Override
     public boolean deleteProject(int projectId) {
-        if (!projects.containsKey(projectId)) {
-            return false;
-        }
         projects.remove(projectId);
         embedDataAccess.removeEmbedData(projectId);
         saveToCSV();
+
         return true;
     }
 
@@ -260,9 +258,7 @@ public class LocalProjectRepository implements IProjectRepository {
 
     @Override
     public int getOwnerId(int projectId) {
-        if (!projectOwners.containsKey(projectId)) {
-            return 0;
-        }
-        return projectOwners.get(projectId);
+        //TODO need implementation
+        return 0;
     }
 }

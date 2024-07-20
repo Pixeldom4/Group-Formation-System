@@ -1,7 +1,11 @@
+
 import dataaccess.DataAccessConfig;
+import usecase.editproject.EditProjectController;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
+import usecase.edituser.EditUserController;
+import usecase.edituser.EditUserUseCaseFactory;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
@@ -54,16 +58,19 @@ class Main {
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel);
 
-        MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
-        GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
-//        MyProfileViewPanel myProfileViewPanel = new MyProfileViewPanel();
+        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
+        EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
+        GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
+
+        EditProfilePanel editProfilePanel = new EditProfilePanel(viewManagerModel, editUserController, myProfileGetLoggedInUserController);
+
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
-        //views.add(MyProfileViewPanel, MyProfileViewPanel.getViewName());
+        views.add(editProfilePanel, editProfileViewModel.getViewName());
 
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);
