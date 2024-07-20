@@ -133,7 +133,7 @@ public class LocalProjectRepository implements IProjectRepository {
         return record;
     }
 
-    @Override
+    //@Override
     public Project createProject(String title,
                                  double budget,
                                  String description,
@@ -148,6 +148,11 @@ public class LocalProjectRepository implements IProjectRepository {
         return project;
     }
 
+
+    @Override
+    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int ownerId) {
+        return null;
+    }
 
     @Override
     public boolean deleteProject(int projectId) {
@@ -249,5 +254,11 @@ public class LocalProjectRepository implements IProjectRepository {
     @Override
     public HashMap<Integer, float[]> getAllEmbeddings() {
         return embedDataAccess.getAllEmbeddings();
+    }
+
+    @Override
+    public int getOwnerId(int projectId) {
+        //TODO need implementation
+        return 0;
     }
 }

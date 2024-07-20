@@ -5,6 +5,7 @@ import java.util.HashSet;
 import entities.User;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
+import viewmodel.LoginPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
@@ -85,7 +86,9 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
 
             // Call the EditUserController to save the user information
             // The userid is just for testing
-            editUserController.editUser(31232, firstName, lastName, desiredCompensation,tags);
+            //LoginPanelViewModel loginPanelViewModel = null;
+            editUserController.editUser(//loginPanelViewModel.getLoginUser()
+                    12323 , firstName, lastName, desiredCompensation,tags);
         });
 
         this.add(saveButton);
