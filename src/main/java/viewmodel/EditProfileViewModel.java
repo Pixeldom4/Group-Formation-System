@@ -7,12 +7,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashSet;
 
-public class MyProfileViewModel extends ViewModel implements LoggedInDataAccessViewModel {
+public class EditProfileViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private User loggedInUser;
 
-    public MyProfileViewModel() {
-        super("GetMyProfile");
+    public EditProfileViewModel() {
+        super("EditMyProfile");
     }
 
     @Override
