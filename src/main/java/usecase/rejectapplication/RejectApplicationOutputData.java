@@ -2,7 +2,14 @@ package usecase.rejectapplication;
 
 public class RejectApplicationOutputData {
 
-    public RejectApplicationOutputData() {
+    private String rejectedName;
+
+    public RejectApplicationOutputData(String acceptedName) {
+        this.rejectedName = acceptedName;
+    }
+
+    public String getRejectedName() {
+        return rejectedName;
     }
 
 }

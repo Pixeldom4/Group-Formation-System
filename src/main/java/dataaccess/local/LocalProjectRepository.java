@@ -20,8 +20,9 @@ public class LocalProjectRepository implements IProjectRepository {
 
     private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
-    private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
+    private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags", "projectOwner"};
     private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
+    private HashMap<Integer, Integer> projectOwners = new HashMap<Integer, Integer>();
     private int maxId = 0;
 
     public LocalProjectRepository() {
@@ -104,6 +105,7 @@ public class LocalProjectRepository implements IProjectRepository {
                 String projectDescription = line[3];
                 HashSet<String> projectTags = Arrays.stream(line[4].replace("[", "").replace("]", "").split(",")).collect(Collectors.toCollection(HashSet::new));
                 ProjectInterface project = new Project(projectId, projectTitle, projectBudget, projectDescription, projectTags);
+                projectOwners.put(projectId, Integer.valueOf(line[5]));
                 projects.put(projectId, project);
                 maxId = Math.max(maxId, projectId);
             }
@@ -124,42 +126,41 @@ public class LocalProjectRepository implements IProjectRepository {
      * @return The string array representation
      */
     private String[] projectToString(ProjectInterface project) {
-        String[] record = new String[5];
+        String[] record = new String[6];
         record[0] = String.valueOf(project.getProjectId());
         record[1] = project.getProjectTitle();
         record[2] = String.valueOf(project.getProjectBudget());
         record[3] = project.getProjectDescription();
         record[4] = project.getProjectTags().toString();
+        record[5] = String.valueOf(projectOwners.get(project.getProjectId()));
         return record;
     }
 
-    //@Override
+    @Override
     public Project createProject(String title,
                                  double budget,
                                  String description,
                                  HashSet<String> tags,
-                                 float[] embeddings) {
+                                 float[] embeddings,
+                                 int ownerId) {
         int projectId = maxId + 1;
         Project project = new Project(projectId, title, budget, description, tags);
         projects.put(projectId, project);
+        projectOwners.put(projectId, ownerId);
         embedDataAccess.saveEmbedData(embeddings, projectId);
         saveToCSV();
         maxId++;
         return project;
     }
 
-
-    @Override
-    public Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int ownerId) {
-        return null;
-    }
-
     @Override
     public boolean deleteProject(int projectId) {
+        if (!projects.containsKey(projectId)) {
+            return false;
+        }
         projects.remove(projectId);
         embedDataAccess.removeEmbedData(projectId);
         saveToCSV();
-
         return true;
     }
 
@@ -174,6 +175,9 @@ public class LocalProjectRepository implements IProjectRepository {
     @Override
     public boolean addTags(int projectId, HashSet<String> tags) {
         ProjectInterface project = getProjectById(projectId);
+        if (project == null) {
+            return false;
+        }
         HashSet<String> currentTags = project.getProjectTags();
         currentTags.addAll(tags);
         update(projectId,
@@ -189,6 +193,9 @@ public class LocalProjectRepository implements IProjectRepository {
     @Override
     public boolean removeTags(int projectId, HashSet<String> tags) {
         ProjectInterface project = getProjectById(projectId);
+        if (project == null) {
+            return false;
+        }
         HashSet<String> currentTags = project.getProjectTags();
         currentTags.removeAll(tags);
         update(projectId,
@@ -258,7 +265,9 @@ public class LocalProjectRepository implements IProjectRepository {
 
     @Override
     public int getOwnerId(int projectId) {
-        //TODO need implementation
+        if (projectOwners.containsKey(projectId)) {
+            return projectOwners.get(projectId);
+        }
         return 0;
     }
 }

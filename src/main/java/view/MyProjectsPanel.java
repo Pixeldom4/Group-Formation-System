@@ -1,18 +1,22 @@
 package view;
 
+import usecase.acceptapplication.AcceptApplicationController;
 import usecase.deleteproject.DeleteProjectController;
 import usecase.deleteproject.DeleteProjectInputData;
 import usecase.deleteproject.DeleteProjectInteractor;
 import usecase.deleteproject.DeleteProjectPresenter;
 import usecase.deleteuser.DeleteUserPresenter;
+import usecase.getapplications.GetApplicationsController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.GetProjectsInputData;
 import usecase.getprojects.GetProjectsInteractor;
 import usecase.getprojects.GetProjectsPresenter;
 import usecase.getloggedinuser.GetLoggedInUserPresenter;
+import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -26,11 +30,17 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final GetProjectsController getProjectsController;
-    private final GetProjectsPresenter getProjectsPresenter;
+    private final DeleteProjectController deleteProjectController;
+
+    private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
+    private final GetApplicationsController getApplicationsController;
+    private final AcceptApplicationController acceptApplicationController;
+    private final RejectApplicationController rejectApplicationController;
 
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -40,11 +50,23 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final String[] columnNames = {"Project Title", "Description", "Edit", "Applications", "Delete"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
-    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, ViewManagerModel viewManagerModel) {
+    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
+                           ViewManagerModel viewManagerModel,
+                           GetProjectsController getProjectsController,
+                           DeleteProjectController deleteProjectController,
+                           DisplayProjectApplicationViewModel displayProjectApplicationViewModel,
+                           GetApplicationsController getApplicationsController,
+                           AcceptApplicationController acceptApplicationController,
+                           RejectApplicationController rejectApplicationController) {
         this.viewManagerModel = viewManagerModel;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
-        this.getProjectsPresenter = new GetProjectsPresenter(myProjectsPanelViewModel);
-        this.getProjectsController = new GetProjectsController(new GetProjectsInteractor(this.getProjectsPresenter));
+        this.getProjectsController = getProjectsController;
+        this.deleteProjectController = deleteProjectController;
+
+        this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
+        this.getApplicationsController = getApplicationsController;
+        this.acceptApplicationController = acceptApplicationController;
+        this.rejectApplicationController = rejectApplicationController;
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
         viewManagerModel.addPropertyChangeListener(this);
@@ -61,15 +83,15 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         });
     }
 
-    private void addProjects(Object[][] data){
+    private void addProjects(Object[][] projectData){
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> applicationButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> deleteButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[data.length][5];
-        for (int i = 0; i < data.length; i++) {
-            info[i][0] = data[i][1];
-            info[i][1] = data[i][2];
+        Object[][] info = new Object[projectData.length][5];
+        for (int i = 0; i < projectData.length; i++) {
+            info[i][0] = projectData[i][1];
+            info[i][1] = projectData[i][2];
             info[i][2] = "Edit";
             info[i][3] = "View Applications";
             info[i][4] = "Delete";
@@ -77,29 +99,36 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             editButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on edit for " + data[finalI][0]);
-//                    System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectId());
-//                    DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
+                    System.out.println("clicked on edit for " + projectData[finalI][0]);
+                    int projectId = (int) projectData[finalI][0];
+                    String projectTitle = (String) projectData[finalI][1];
+                    String projectDescription = (String) projectData[finalI][2];
+                    double projectBudget = (double) projectData[finalI][3];
+                    HashSet<String> projectTags = (HashSet<String>) projectData[finalI][4];
+                    //TODO: Add edit panel
                 }
             });
             applicationButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on application for " + data[finalI][0]);
-                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)data[finalI][0]);
+                    System.out.println("clicked on application for " + projectData[finalI][0]);
+                    new DisplayProjectApplicationView((int)projectData[finalI][0],
+                                                      displayProjectApplicationViewModel,
+                                                      getApplicationsController,
+                                                      acceptApplicationController,
+                                                      rejectApplicationController);
                 }
             });
             deleteButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on delete for " + data[finalI][0]);
-                    int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you would like to delete " + data[finalI][0] + "?","Warning",JOptionPane.YES_NO_OPTION);
+                    System.out.println("clicked on delete for " + projectData[finalI][0]);
+                    int dialogResult = JOptionPane.showConfirmDialog (null,
+                                                                      "Are you sure you would like to delete " + projectData[finalI][0] + "?",
+                                                                      "Warning",
+                                                                      JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION){
-                        DeleteProjectPresenter deleteProjectPresenter = new DeleteProjectPresenter();
-                        DeleteProjectController deleteProjectController = new DeleteProjectController(new DeleteProjectInteractor(deleteProjectPresenter));
-
-                        deleteProjectController.deleteProject((int) data[finalI][0]);
-//
+                        deleteProjectController.deleteProject((int) projectData[finalI][0]);
                     }
                 }
             });
@@ -150,6 +179,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("error")) {
             String errorMessage = (String) evt.getNewValue();
             JOptionPane.showMessageDialog(this, errorMessage);
+        }
+        if (evt.getPropertyName().equals("deleteProject")) {
+            JOptionPane.showMessageDialog(null, "Sucessfully deleted project");
         }
     }
 }

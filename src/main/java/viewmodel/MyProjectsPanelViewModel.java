@@ -23,6 +23,10 @@ public class MyProjectsPanelViewModel extends ViewModel {
         support.firePropertyChange("error", null, errorMessage);
     }
 
+    public void deleteProject() {
+        support.firePropertyChange("deleteProject", null, null);
+    }
+
     @Override
     public void firePropertyChanged() {
     }

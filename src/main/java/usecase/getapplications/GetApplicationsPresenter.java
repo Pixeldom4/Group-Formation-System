@@ -1,21 +1,24 @@
 package usecase.getapplications;
 
 import view.DisplayProjectApplicationView;
+import viewmodel.DisplayProjectApplicationViewModel;
 
 public class GetApplicationsPresenter implements GetApplicationsOutputBoundary {
-    private final DisplayProjectApplicationView applicationView;
+    private final DisplayProjectApplicationViewModel applicationViewModel;
 
-    public GetApplicationsPresenter(DisplayProjectApplicationView applicationView){
-        this.applicationView = applicationView;
+    public GetApplicationsPresenter(DisplayProjectApplicationViewModel applicationViewModel) {
+        this.applicationViewModel = applicationViewModel;
     }
 
     @Override
     public void prepareSuccessView(GetApplicationsOutputData outputData){
-        applicationView.displayApplicants(outputData.getApplications());
+        applicationViewModel.setApplicationData(outputData.getApplications());
+        applicationViewModel.applicationResult(true);
     }
 
     @Override
     public void prepareFailView(String errorMessage) {
-
+        applicationViewModel.setErrorMessage(errorMessage);
+        applicationViewModel.applicationResult(false);
     }
 }

@@ -23,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class DisplayCreateApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
+    private final CreateApplicationController createApplicationController;
+
     private final JPanel loginPanel = new JPanel();
     private final JLabel infoLabel = new JLabel("Info: ");
     private final JTextField infoField = new JTextField();
@@ -31,24 +33,15 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
     private final JButton applicationButton = new JButton("Upload file");
     private final JButton submitButton = new JButton("Submit");
 
-    public DisplayCreateApplicationView(int projectId) {
-//        this.loginUserController = loginUserController;
-//        this.loginPanelViewModel = loginPanelViewModel;
-//        loginPanelViewModel.addPropertyChangeListener(this);
-//        this.viewManagerModel = viewManagerModel;
+    public DisplayCreateApplicationView(int loginUserId, int projectId, CreateApplicationController createApplicationController) {
 
-        IApplicationRepository applicationRepository = DataAccessConfig.getApplicationRepository();
-        ILoginUserDetails userDetails = DataAccessConfig.getLoginUserDetails();
-        CreateApplicationPresenter applicationPresenter = new CreateApplicationPresenter(this);
-        CreateApplicationInteractor createApplicationInteractor = new CreateApplicationInteractor(applicationRepository, applicationPresenter);
-        CreateApplicationController createApplicationController = new CreateApplicationController(createApplicationInteractor);
+        this.createApplicationController = createApplicationController;
 
         setTitle("Create Application");
         setSize(400, 200);
 
         JPanel panel = new JPanel();
 
-//        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         panel.setLayout(new GridLayout(0, 2));
 
         panel.add(infoLabel);
@@ -64,22 +57,19 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
                 applicationLabel.setText(applicationText + selectedFile.getAbsolutePath());
                 System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             }
-//            loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
         });
         panel.add(applicationButton);
 
         submitButton.addActionListener(e -> {
-            int userId = userDetails.getUserId();
             String infoText = infoLabel.getText();
             try {
                 InputStream input = new FileInputStream(applicationLabel.getText().substring(applicationText.length()));
-                createApplicationController.createApplication(userId, projectId, infoText, input);
+                createApplicationController.createApplication(loginUserId, projectId, infoText, input);
             } catch (FileNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
 
             System.out.println();
-//            loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
         });
 
         panel.add(new JLabel());
@@ -96,9 +86,6 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-//        if(evt.getPropertyName().equals("displayDetailProject")){
-//            ProjectInterface project = (ProjectInterface) evt.getNewValue();
-//            projectTitleField.setText(project.getProjectTitle());
-//        }
+
     }
 }

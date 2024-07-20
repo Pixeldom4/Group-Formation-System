@@ -16,6 +16,7 @@ public class SearchPanelViewModel extends ViewModel implements LoggedInDataAcces
     private ArrayList<ProjectInterface> projects;
     private ArrayList<UserInterface> users;
     private User loggedInUser;
+    private String errorApplicationMessage;
 
     public SearchPanelViewModel() {
         super("SearchPanelView");
@@ -72,6 +73,19 @@ public class SearchPanelViewModel extends ViewModel implements LoggedInDataAcces
      */
     public ArrayList<UserInterface> getUsers() {
         return users;
+    }
+
+    public void successApplication() {
+        support.firePropertyChange("application", null, true);
+    }
+
+    public void errorApplication(String errorMessage) {
+        this.errorApplicationMessage = errorMessage;
+        support.firePropertyChange("application", null, false);
+    }
+
+    public String getErrorApplicationMessage() {
+        return errorApplicationMessage;
     }
 
     @Override

@@ -1,21 +1,24 @@
 package usecase.rejectapplication;
 
 import view.DisplayProjectApplicationView;
+import viewmodel.DisplayProjectApplicationViewModel;
 
 public class RejectApplicationPresenter implements RejectApplicationOutputBoundary {
-    private final DisplayProjectApplicationView applicationView;
+    private final DisplayProjectApplicationViewModel applicationViewModel;
 
-    public RejectApplicationPresenter(DisplayProjectApplicationView applicationView){
-        this.applicationView = applicationView;
+    public RejectApplicationPresenter(DisplayProjectApplicationViewModel applicationViewModel){
+        this.applicationViewModel = applicationViewModel;
     }
 
     @Override
     public void prepareSuccessView(RejectApplicationOutputData outputData){
-
+        applicationViewModel.setSenderName(outputData.getRejectedName());
+        applicationViewModel.rejectedResult(true);
     }
 
     @Override
     public void prepareFailView(String errorMessage) {
-
+        applicationViewModel.setErrorMessage(errorMessage);
+        applicationViewModel.rejectedResult(false);
     }
 }

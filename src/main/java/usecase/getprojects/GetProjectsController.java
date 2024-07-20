@@ -1,9 +1,11 @@
 package usecase.getprojects;
 
-public class GetProjectsController {
-    private final GetProjectsInteractor getProjectsInteractor;
+import usecase.getapplications.GetApplicationsInputBoundary;
 
-    public GetProjectsController(GetProjectsInteractor getProjectsInteractor){
+public class GetProjectsController {
+    private final GetProjectsInputBoundary getProjectsInteractor;
+
+    public GetProjectsController(GetProjectsInputBoundary getProjectsInteractor){
         this.getProjectsInteractor = getProjectsInteractor;
     }
 

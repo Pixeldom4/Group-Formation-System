@@ -1,19 +1,25 @@
 package usecase.deleteproject;
 
+import viewmodel.EditProjectPanelViewModel;
+import viewmodel.MyProjectsPanelViewModel;
+
 import javax.swing.*;
 
 public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
-    public DeleteProjectPresenter() {
+    private final MyProjectsPanelViewModel myProjectsPanelViewModel;
+
+    public DeleteProjectPresenter(MyProjectsPanelViewModel myProjectsPanelViewModel) {
+        this.myProjectsPanelViewModel = myProjectsPanelViewModel;
 
     }
 
     @Override
     public void prepareSuccessView(DeleteProjectOutputData outputData) {
-        JOptionPane.showMessageDialog(null, "Sucessfully deleted");
+        myProjectsPanelViewModel.deleteProject();
     }
 
     @Override
     public void prepareFailView(String error) {
-
+        myProjectsPanelViewModel.setErrorMessage(error);
     }
 }
