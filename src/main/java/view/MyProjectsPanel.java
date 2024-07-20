@@ -1,12 +1,24 @@
 package view;
 
+import api.EmbeddingAPIInterface;
+import dataaccess.IProjectRepository;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.deleteproject.DeleteProjectController;
+import usecase.deleteproject.DeleteProjectInputData;
+import usecase.deleteproject.DeleteProjectInteractor;
+import usecase.deleteproject.DeleteProjectPresenter;
+import usecase.editproject.EditProjectController;
+import usecase.editproject.EditProjectInteractor;
+import usecase.editproject.EditProjectPresenter;
 import usecase.getapplications.GetApplicationsController;
 import usecase.getprojects.GetProjectsController;
+import usecase.getprojects.GetProjectsInputData;
+import usecase.getprojects.GetProjectsInteractor;
+import usecase.getprojects.GetProjectsPresenter;
 import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import viewmodel.EditProjectPanelViewModel;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -88,13 +100,23 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             editButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on edit for " + projectData[finalI][0]);
                     int projectId = (int) projectData[finalI][0];
                     String projectTitle = (String) projectData[finalI][1];
                     String projectDescription = (String) projectData[finalI][2];
                     double projectBudget = (double) projectData[finalI][3];
                     HashSet<String> projectTags = (HashSet<String>) projectData[finalI][4];
-                    //TODO: Add edit panel
+                    int editorId = viewManagerModel.getCurrentUserId();
+
+                    EditProjectPanelViewModel viewModel = new EditProjectPanelViewModel(projectId, projectTitle, projectBudget, projectDescription, projectTags);
+                    EditProjectController controller = new EditProjectController(new EditProjectInteractor(projectRepository, new EditProjectPresenter(viewModel), embeddingAPI));
+                    EditProjectPanel editProjectPanel = new EditProjectPanel(viewModel, controller);
+
+                    // Display editProjectPanel in your application window
+                    JFrame editFrame = new JFrame("Edit Project");
+                    editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    editFrame.setSize(400, 300);
+                    editFrame.add(editProjectPanel);
+                    editFrame.setVisible(true);
                 }
             });
             applicationButtonActions.add(new ButtonAction() {
@@ -143,7 +165,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         for (int i = 0; i < columnWidths.length; i++) {
             columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
         }
-
     }
 
     @Override

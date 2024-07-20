@@ -13,7 +13,7 @@ public class EditProjectPresenter implements EditProjectOutputBoundary {
     public void prepareSuccessView(EditProjectOutputData outputData) {
         editProjectPanelViewModel.setSuccess(true);
         editProjectPanelViewModel.setProjectId(outputData.getProjectId());
-        editProjectPanelViewModel.setProjectName(outputData.getTitle());
+        editProjectPanelViewModel.setTitle(outputData.getTitle());
         editProjectPanelViewModel.setBudget(outputData.getBudget());
         editProjectPanelViewModel.setDescription(outputData.getDescription());
         editProjectPanelViewModel.setTags(outputData.getTags());
