@@ -57,7 +57,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             viewManagerModel.firePropertyChanged();
         });
 
-        getProjectsButton.addActionListener(e -> {
+        getUserProfileButton.addActionListener(e -> {
             viewManagerModel.setActiveView("GetMyProfile");
             viewManagerModel.firePropertyChanged();
         });
