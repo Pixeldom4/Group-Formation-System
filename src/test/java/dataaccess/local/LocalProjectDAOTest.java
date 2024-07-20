@@ -25,7 +25,8 @@ public class LocalProjectDAOTest {
         projectRepository.createProject("Test Project",
                                         1000.0, "This is a test project.",
                                         new HashSet<>(Arrays.asList("Java", "Programming")),
-                                        new float[]{0.1f, 0.2f, 0.3f, 0.4f, 0.5f});
+                                        new float[]{0.1f, 0.2f, 0.3f, 0.4f, 0.5f},
+                                        10);
     }
 
     @Test
@@ -61,6 +62,11 @@ public class LocalProjectDAOTest {
         assertEquals(projectRepository.getProjectById(1).getProjectDescription(), "This is a test project 2.");
         assertEquals(projectRepository.getProjectById(1).getProjectTags(), new HashSet<>(Arrays.asList("Python", "Coding")));
         assertArrayEquals(projectRepository.getAllEmbeddings().get(1), new float[]{0.6f, 0.7f, 0.8f, 0.9f, 1.0f});
+    }
+
+    @Test
+    public void testGetOwner(){
+        assertEquals(10, projectRepository.getOwnerId(1));
     }
 
 }

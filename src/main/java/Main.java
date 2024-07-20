@@ -8,6 +8,7 @@ import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.logout.LogoutController;
 import usecase.logout.LogoutUseCaseFactory;
+import usecase.searchforproject.SearchProjectController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
 import usecase.createuser.CreateUserUseCaseFactory;
 import view.*;
@@ -41,7 +42,9 @@ class Main {
         LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel, loginUserController);
 
         SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
-        SearchPanel searchPanel = SearchProjectUseCaseFactory.createSearchProjectPanel(searchPanelViewModel);
+        SearchProjectController searchProjectController = SearchProjectUseCaseFactory.createSearchProjectController(searchPanelViewModel);
+        GetLoggedInUserController searchPanelGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(searchPanelViewModel);
+        SearchPanel searchPanel = new SearchPanel(viewManagerModel,searchPanelViewModel, searchProjectController, searchPanelGetLoggedInUserController);
 
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
         CreateProjectController createProjectController = CreateProjectUseCaseFactory.createController(addProjectPanelModel);

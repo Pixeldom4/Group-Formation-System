@@ -1,12 +1,14 @@
 package view;
 
 import entities.ProjectInterface;
+import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchforuser.SearchUserController;
 import usecase.searchprojectbyid.SearchProjectByIdController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.SearchPanelViewModel;
+import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -21,8 +23,10 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
 
     private final SearchPanelViewModel searchPanelModel;
     private SearchUserController searchUserController;
-    private SearchProjectController searchProjectController = null;
-    private SearchProjectByIdController searchProjectByIdController = null;
+    private SearchProjectController searchProjectController;
+    private SearchProjectByIdController searchProjectByIdController;
+    private GetLoggedInUserController getLoggedInUserController;
+    private ViewManagerModel viewManagerModel;
 
     private final JLabel panelLabel = new JLabel("Search for projects here: ");
     private final JTextField searchBar = new JTextField();
@@ -33,24 +37,33 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final String[] columnNames = {"Project Title", "Description", "View Details", "Request joining"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
-    public SearchPanel(SearchPanelViewModel searchPanelModel, SearchUserController searchUserController) {
-        this(searchPanelModel);
+    public SearchPanel(ViewManagerModel viewManagerModel,
+                       SearchPanelViewModel searchPanelModel,
+                       SearchUserController searchUserController,
+                       GetLoggedInUserController getLoggedInUserController) {
+        this(viewManagerModel, searchPanelModel, getLoggedInUserController);
         this.searchUserController = searchUserController;
         searchButton.addActionListener(e -> {
             searchUserController.searchUserByEmail(searchBar.getText());
         });
     }
 
-    public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectController searchProjectController) {
-        this(searchPanelModel);
+    public SearchPanel(ViewManagerModel viewManagerModel,
+                       SearchPanelViewModel searchPanelModel,
+                       SearchProjectController searchProjectController,
+                       GetLoggedInUserController getLoggedInUserController) {
+        this(viewManagerModel, searchPanelModel, getLoggedInUserController);
         this.searchProjectController = searchProjectController;
         searchButton.addActionListener(e -> {
             searchProjectController.searchProjects(searchBar.getText());
         });
     }
 
-    public SearchPanel(SearchPanelViewModel searchPanelModel, SearchProjectByIdController searchProjectByIdController) {
-        this(searchPanelModel);
+    public SearchPanel(ViewManagerModel viewManagerModel,
+                       SearchPanelViewModel searchPanelModel,
+                       SearchProjectByIdController searchProjectByIdController,
+                       GetLoggedInUserController getLoggedInUserController) {
+        this(viewManagerModel,searchPanelModel, getLoggedInUserController);
         this.searchProjectByIdController = searchProjectByIdController;
         searchButton.addActionListener(e -> {
             searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText()));
@@ -61,9 +74,15 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
      * Used to initialize common components
      * @param searchPanelModel the search panel model
      */
-    private SearchPanel(SearchPanelViewModel searchPanelModel) {
+    private SearchPanel(ViewManagerModel viewManagerModel,
+                        SearchPanelViewModel searchPanelModel,
+                        GetLoggedInUserController getLoggedInUserController) {
+        this.viewManagerModel = viewManagerModel;
+        viewManagerModel.addPropertyChangeListener(this);
         this.searchPanelModel = searchPanelModel;
         searchPanelModel.addPropertyChangeListener(this);
+
+        this.getLoggedInUserController = getLoggedInUserController;
 
         this.setLayout(new BorderLayout());
 
@@ -136,6 +155,9 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                 columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
             }
 
+        }
+        if (evt.getPropertyName().equals("login")) {
+            getLoggedInUserController.getLoggedInUser();
         }
     }
 
