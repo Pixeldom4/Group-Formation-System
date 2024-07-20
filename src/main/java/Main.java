@@ -55,11 +55,11 @@ class Main {
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel);
 
-        MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
-        EditUserController editUserController = EditUserUseCaseFactory.create(myProfileViewModel);
-        GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
+        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
+        EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
+        GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
 
-        MyProfilePanel myProfilePanel = new MyProfilePanel(viewManagerModel, editUserController, myProfileGetLoggedInUserController);
+        EditProfilePanel editProfilePanel = new EditProfilePanel(viewManagerModel, editUserController, myProfileGetLoggedInUserController);
 
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
@@ -67,7 +67,7 @@ class Main {
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
-        views.add(myProfilePanel, myProfileViewModel.getViewName());
+        views.add(editProfilePanel, editProfileViewModel.getViewName());
 
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);

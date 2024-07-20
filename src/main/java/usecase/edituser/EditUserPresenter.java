@@ -1,14 +1,13 @@
 package usecase.edituser;
 
-import viewmodel.AddProjectPanelViewModel;
-import viewmodel.EditUserViewModel;
-import viewmodel.MyProfileViewModel;
+import viewmodel.EditProfileViewModel;
+import viewmodel.EditProfileViewModel;
 
 public class EditUserPresenter implements EditUserOutputBoundary{
-    private final MyProfileViewModel myProfileViewModel;
+    private final EditProfileViewModel editProfileViewModel;
 
-    public EditUserPresenter(MyProfileViewModel myProfileViewModel){
-        this.myProfileViewModel = myProfileViewModel;
+    public EditUserPresenter(EditProfileViewModel editProfileViewModel){
+        this.editProfileViewModel = editProfileViewModel;
     }
 
     @Override

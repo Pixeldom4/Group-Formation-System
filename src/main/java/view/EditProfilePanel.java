@@ -2,10 +2,8 @@ package view;
 
 import java.util.HashSet;
 
-import entities.User;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
-import viewmodel.LoginPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
@@ -17,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class MyProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
+public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final GetLoggedInUserController getLoggedInUserController;
     private final ViewManagerModel viewManagerModel;
     private final EditUserController editUserController;
@@ -47,7 +45,7 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
 
 
 
-    public MyProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController) {
+    public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController) {
         this.viewManagerModel = viewManagerModel;
         this.viewManagerModel.addPropertyChangeListener(this);
         this.editUserController = editUserController;
