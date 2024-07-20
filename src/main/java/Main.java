@@ -1,7 +1,11 @@
-import dataaccess.DataAccessConfig;
+
+import dataaccess.DAOImplementationConfig;
+import interfaceadapter.EditProjectController;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
+import usecase.edituser.EditUserController;
+import usecase.edituser.EditUserUseCaseFactory;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.loginuser.LoginUserController;
@@ -52,15 +56,18 @@ class Main {
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel);
 
         MyProfileViewModel myProfileViewModel = new MyProfileViewModel();
+        EditUserController editUserController = EditUserUseCaseFactory.create(myProfileViewModel);
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProfileViewModel);
-//        MyProfileViewPanel myProfileViewPanel = new MyProfileViewPanel();
+
+        MyProfilePanel myProfilePanel = new MyProfilePanel(viewManagerModel, editUserController, myProfileGetLoggedInUserController);
+
 
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
         views.add(addProjectPanel, addProjectPanelModel.getViewName());
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
-        //views.add(MyProfileViewPanel, MyProfileViewPanel.getViewName());
+        views.add(myProfilePanel, myProfileViewModel.getViewName());
 
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);

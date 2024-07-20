@@ -1,11 +1,14 @@
 package view;
 
+import java.util.HashSet;
+
 import entities.User;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -30,7 +33,18 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
     private final JTextField lastNameField = new JTextField();
     private final JTextField desiredCompensationField = new NumericTextField();
 
+    private final JLabel projectTagsLabel = new JLabel("Project Tags");
+    private final JTextField projectTagsField = new JTextField();
+    private final GridLayout tagPanelLayout = new GridLayout(0, 1);
+    private final JPanel tagPanel = new JPanel();
+    private final JButton addTagButton = new JButton("Add Tag");
+    private final JLabel tagPanelLabel = new JLabel("Project tags: ");
+    private final HashSet<String> tags = new HashSet<>();
+
     private final JButton saveButton = new JButton("Save");
+
+
+
 
     public MyProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController) {
         this.viewManagerModel = viewManagerModel;
@@ -54,16 +68,71 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
 
         this.add(userInfoPanel);
 
+        addTagButton.addActionListener(e -> {
+            String tagText = projectTagsField.getText();
+            if (!tagText.isEmpty()) {
+                addTagToPanel(tagText);
+                tags.add(tagText);
+                projectTagsField.setText("");
+            }
+        });
+
         saveButton.addActionListener(e -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             double desiredCompensation = Double.parseDouble(desiredCompensationField.getText());
+            HashSet<String> tags = null;
 
             // Call the EditUserController to save the user information
-//            editUserController.editUser(firstName, lastName, desiredCompensation);
+            // The userid is just for testing
+            editUserController.editUser(31232, firstName, lastName, desiredCompensation,tags);
         });
 
         this.add(saveButton);
+    }
+
+    private void addTagToPanel(String text) {
+
+        if (text.isEmpty()) {
+            return;
+        }
+
+        if (tags.contains(text)) {
+            return;
+        }
+
+        JLabel label = new JLabel(text);
+        label.setOpaque(true);
+        label.setBackground(Color.LIGHT_GRAY);
+        label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JButton removeButton = new JButton("x");
+
+        JPanel tag = new JPanel();
+        tag.setBorder(new EmptyBorder(0, 10, 0, 10));
+        tag.setLayout(new GridBagLayout());
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridy = 0;
+
+        constraints.gridx = 0;
+        constraints.weightx = 0.8;
+        tag.add(label, constraints);
+
+        constraints.gridx = 1;
+        constraints.weightx = 0.2;
+        tag.add(removeButton, constraints);
+
+        removeButton.addActionListener(e -> {
+            tags.remove(text);
+            tagPanel.remove(tag);
+            tagPanel.revalidate();
+            tagPanel.repaint();
+        });
+
+        tagPanel.add(tag);
+        tagPanel.revalidate();
+        tagPanel.repaint();
     }
 
 
@@ -75,12 +144,12 @@ public class MyProfilePanel extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("login")) {
-            User user = (User) evt.getNewValue();
-            firstNameField.setText(user.getFirstName());
-            lastNameField.setText(user.getLastName());
-            desiredCompensationField.setText(String.valueOf(user.getDesiredCompensation()));
-        }
+//        if (evt.getPropertyName().equals("login")) {
+//            User user =
+//            firstNameField.setText(user.getFirstName());
+//            lastNameField.setText(user.getLastName());
+//            desiredCompensationField.setText(String.valueOf(user.getDesiredCompensation()));
+//        }
         if (evt.getPropertyName().equals("login")) {
             getLoggedInUserController.getLoggedInUser();
         }
