@@ -1,31 +1,23 @@
 package viewmodel;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.util.HashSet;
 import java.util.Set;
 
 public class EditProjectPanelViewModel {
-    private boolean success;
     private int projectId;
-    private String projectName;
+    private String title;
     private double budget;
     private String description;
-    private Set<String> tags;
+    private HashSet<String> tags;
+    private boolean success;
     private String errorMessage;
-    private final PropertyChangeSupport support;
 
-    public EditProjectPanelViewModel() {
-        this.support = new PropertyChangeSupport(this);
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        boolean oldSuccess = this.success;
-        this.success = success;
-        support.firePropertyChange("success", oldSuccess, success);
+    public EditProjectPanelViewModel(int projectId, String title, double budget, String description, HashSet<String> tags) {
+        this.projectId = projectId;
+        this.title = title;
+        this.budget = budget;
+        this.description = description;
+        this.tags = tags;
     }
 
     public int getProjectId() {
@@ -33,19 +25,15 @@ public class EditProjectPanelViewModel {
     }
 
     public void setProjectId(int projectId) {
-        int oldProjectId = this.projectId;
         this.projectId = projectId;
-        support.firePropertyChange("projectId", oldProjectId, projectId);
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setProjectName(String projectName) {
-        String oldProjectName = this.projectName;
-        this.projectName = projectName;
-        support.firePropertyChange("projectName", oldProjectName, projectName);
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public double getBudget() {
@@ -53,9 +41,7 @@ public class EditProjectPanelViewModel {
     }
 
     public void setBudget(double budget) {
-        double oldBudget = this.budget;
         this.budget = budget;
-        support.firePropertyChange("budget", oldBudget, budget);
     }
 
     public String getDescription() {
@@ -63,19 +49,23 @@ public class EditProjectPanelViewModel {
     }
 
     public void setDescription(String description) {
-        String oldDescription = this.description;
         this.description = description;
-        support.firePropertyChange("description", oldDescription, description);
     }
 
     public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(Set<String> tags) {
-        Set<String> oldTags = this.tags;
+    public void setTags(HashSet<String> tags) {
         this.tags = tags;
-        support.firePropertyChange("tags", oldTags, tags);
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getErrorMessage() {
@@ -83,20 +73,10 @@ public class EditProjectPanelViewModel {
     }
 
     public void setErrorMessage(String errorMessage) {
-        String oldErrorMessage = this.errorMessage;
         this.errorMessage = errorMessage;
-        support.firePropertyChange("errorMessage", oldErrorMessage, errorMessage);
     }
 
     public void firePropertyChanged() {
-        support.firePropertyChange(null, null, null);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-        support.addPropertyChangeListener(pcl);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
+        // Notify listeners that properties have changed (if needed)
     }
 }
