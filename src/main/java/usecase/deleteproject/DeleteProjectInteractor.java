@@ -14,7 +14,8 @@ public class DeleteProjectInteractor implements DeleteProjectInputBoundary{
 
     @Override
     public void deleteProject(DeleteProjectInputData inputData) {
-        projectRepository.deleteProject(inputData.getProjectId());
-        deleteProjectPresenter.prepareSuccessView(new DeleteProjectOutputData());
+        int projectId = inputData.getProjectId();
+        projectRepository.deleteProject(projectId);
+        deleteProjectPresenter.prepareSuccessView(new DeleteProjectOutputData(projectId));
     }
 }
