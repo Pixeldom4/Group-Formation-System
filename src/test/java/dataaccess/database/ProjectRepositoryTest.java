@@ -4,6 +4,7 @@ import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;
 import entities.Project;
+import entities.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,11 @@ class ProjectRepositoryTest {
     private UserRepository userRepository;
     private UserProjectsRepository userProjectsRepository;
     private int testProjectId;
+    private int testOwnerId;
 
     @BeforeEach
     void setUp() {
-        String databaseName = "test.db";
+        String databaseName = "test123.db";
 
         this.userProjectsRepository = new UserProjectsRepository(databaseName);
         this.userRepository = new UserRepository(databaseName, userProjectsRepository);
@@ -36,17 +38,26 @@ class ProjectRepositoryTest {
         this.projectRepository.initialize();
         this.userProjectsRepository.initialize();
 
+        // Clean up any existing user with the test email
+        String testEmail = "owner@test.com";
+        deleteUserByEmail(testEmail);
+
+        // Create a test user to be the owner of the projects
+        HashSet<String> userTags = new HashSet<>();
+        userTags.add("Developer");
+        User user = userRepository.createUser(testEmail, "Owner", "Test", userTags, 100000.0, "password");
+        testOwnerId = user.getUserId();
+
         HashSet<String> tags = new HashSet<>();
         tags.add("Java");
         tags.add("SQL");
 
-        Project project = projectRepository.createProject("Test Project", 1000.0, "This is a test project", tags, new float[]{0.1f, 0.2f, 0.3f});
+        Project project = projectRepository.createProject("Test Project", 1000.0, "This is a test project", tags, new float[]{0.1f, 0.2f, 0.3f}, testOwnerId);
         testProjectId = project.getProjectId();
     }
 
     @AfterEach
     void tearDown() {
-        // Disconnect from the databases
         if (projectRepository != null) {
             projectRepository.disconnect();
         }
@@ -58,13 +69,21 @@ class ProjectRepositoryTest {
         }
     }
 
+    // Method to delete user by email using UserRepository methods
+    private void deleteUserByEmail(String email) {
+        User user = userRepository.getUserByEmail(email);
+        if (user != null) {
+            userRepository.deleteUser(user.getUserId());
+        }
+    }
+
     @Test
     void createProject() {
         HashSet<String> tags = new HashSet<>();
         tags.add("Java");
         tags.add("SQL");
 
-        Project project = projectRepository.createProject("Another Test Project", 2000.0, "This is another test project", tags, new float[]{0.1f, 0.2f, 0.3f});
+        Project project = projectRepository.createProject("Another Test Project", 2000.0, "This is another test project", tags, new float[]{0.1f, 0.2f, 0.3f}, testOwnerId);
 
         assertNotNull(project);
         assertEquals("Another Test Project", project.getProjectTitle());
