@@ -22,7 +22,7 @@ public class RemoveUserFromProjectInteractor implements RemoveUserFromProjectInp
         this.removeUserFromProjectPresenter = removeUserFromProjectPresenter;
         this.userProjectsRepository = userProjectsRepository;
         this.projectRepository = projectRepository;
-    };
+    }
 
     /**
      * Removes a user from the project.

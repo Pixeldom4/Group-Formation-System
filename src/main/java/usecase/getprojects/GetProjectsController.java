@@ -7,7 +7,8 @@ public class GetProjectsController {
         this.getProjectsInteractor = getProjectsInteractor;
     }
 
-    public void getProjects(GetProjectsInputData inputData) {
+    public void getProjects() {
+        GetProjectsInputData inputData = new GetProjectsInputData();
         getProjectsInteractor.getProjects(inputData);
     }
 }

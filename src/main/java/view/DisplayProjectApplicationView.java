@@ -1,14 +1,17 @@
 package view;
 
-import entities.Application;
 import entities.ProjectInterface;
-import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.GetProjectsInteractor;
-import usecase.getprojects.GetProjectsPresenter;
-import usecase.manageapplications.ManageApplicationsController;
-import usecase.manageapplications.ManageApplicationsInputData;
-import usecase.manageapplications.ManageApplicationsInteractor;
-import usecase.manageapplications.ManageApplicationsPresenter;
+import usecase.acceptapplication.AcceptApplicationController;
+import usecase.acceptapplication.AcceptApplicationInputData;
+import usecase.acceptapplication.AcceptApplicationInteractor;
+import usecase.acceptapplication.AcceptApplicationPresenter;
+import usecase.getapplications.GetApplicationsController;
+import usecase.getapplications.GetApplicationsInputData;
+import usecase.getapplications.GetApplicationsInteractor;
+import usecase.getapplications.GetApplicationsPresenter;
+import usecase.rejectapplication.RejectApplicationController;
+import usecase.rejectapplication.RejectApplicationInteractor;
+import usecase.rejectapplication.RejectApplicationPresenter;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 
@@ -26,7 +29,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class DisplayProjectApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
 
@@ -39,20 +41,33 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
     private final JTable infoTable = new JTable();
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
-    private final ManageApplicationsPresenter manageApplicationsPresenter;
-    private final ManageApplicationsController manageApplicationsController;
+    private final GetApplicationsPresenter getApplicationsPresenter;
+    private final GetApplicationsController getApplicationsController;
+
+    private final AcceptApplicationPresenter acceptApplicationPresenter;
+    private final AcceptApplicationController acceptApplicationController;
+
+    private final RejectApplicationPresenter rejectApplicationPresenter;
+    private final RejectApplicationController rejectApplicationController;
 
     public DisplayProjectApplicationView(int projectId) {
         this.projectId = projectId;
-        this.manageApplicationsPresenter = new ManageApplicationsPresenter(this);
-        this.manageApplicationsController = new ManageApplicationsController(new ManageApplicationsInteractor(this.manageApplicationsPresenter));
+        this.getApplicationsPresenter = new GetApplicationsPresenter(this);
+        this.getApplicationsController = new GetApplicationsController(new GetApplicationsInteractor(this.getApplicationsPresenter));
+
+        this.acceptApplicationPresenter = new AcceptApplicationPresenter(this);
+        this.acceptApplicationController = new AcceptApplicationController(new AcceptApplicationInteractor(this.acceptApplicationPresenter));
+
+        this.rejectApplicationPresenter = new RejectApplicationPresenter(this);
+        this.rejectApplicationController = new RejectApplicationController(new RejectApplicationInteractor(this.rejectApplicationPresenter));
+
 
         setTitle("Project Applications");
         setSize(400, 600);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        manageApplicationsController.getApplicationsForProject(new ManageApplicationsInputData(projectId));
+        getApplicationsController.getApplicationsForProject(projectId);
     }
 
     public void displayApplicants(Object[][] applicationsData){
@@ -106,16 +121,16 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 @Override
                 public void onClick() {
                     JOptionPane.showMessageDialog(null, "Accepted application for: " + applicationsData[finalI][0]);
-                    manageApplicationsController.acceptApplicant(new ManageApplicationsInputData(projectId, (Integer) applicationsData[finalI][1]));
-                    manageApplicationsController.getApplicationsForProject(new ManageApplicationsInputData(projectId));
+                    acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
+                    getApplicationsController.getApplicationsForProject(projectId);
                 }
             });
             declineButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
                     JOptionPane.showMessageDialog(null, "Rejected application for: " + applicationsData[finalI][0]);
-                    manageApplicationsController.acceptApplicant(new ManageApplicationsInputData(projectId, (Integer) applicationsData[finalI][1]));
-                    manageApplicationsController.getApplicationsForProject(new ManageApplicationsInputData(projectId));
+                    rejectApplicationController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]);
+                    getApplicationsController.getApplicationsForProject(projectId);
                 }
             });
         }
