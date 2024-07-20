@@ -1,5 +1,8 @@
 package usecase.deleteuser;
 
+/**
+ * The output boundary for deleting a user use case.
+ */
 public interface DeleteUserOutputBoundary {
     /**
      * Prepares the success view with the provided output data.

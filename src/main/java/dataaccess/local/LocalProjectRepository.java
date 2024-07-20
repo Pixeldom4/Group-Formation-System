@@ -1,6 +1,6 @@
 package dataaccess.local;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
@@ -16,15 +16,15 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LocalProjectDataAccessObject implements IProjectRepository {
+public class LocalProjectRepository implements IProjectRepository {
 
-    private EmbedDataAccessInterface embedDataAccess = DAOImplementationConfig.getEmbedDataAccess();
-    private String FILE_PATH = DAOImplementationConfig.getProjectCSVPath() + "projects.csv";
+    private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
+    private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags"};
     private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
     private int maxId = 0;
 
-    public LocalProjectDataAccessObject() {
+    public LocalProjectRepository() {
         File f = new File(FILE_PATH);
         try {
             Files.createDirectories(f.getParentFile().toPath());
@@ -42,9 +42,9 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
      * Reads the projects from the CSV file if it exists.
      * @param path the path to the folder of the CSV file
      */
-    public LocalProjectDataAccessObject(String path) {
+    public LocalProjectRepository(String path) {
         FILE_PATH = path + "projects.csv";
-        embedDataAccess = new LocalEmbedDataAccessObject(path + "embeds.csv");
+        embedDataAccess = new LocalEmbedRepository(path + "embeds.csv");
         File f = new File(path);
         File parent = f.getParentFile();
         try {
@@ -150,10 +150,12 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
 
 
     @Override
-    public void deleteProject(int projectId) {
+    public boolean deleteProject(int projectId) {
         projects.remove(projectId);
         embedDataAccess.removeEmbedData(projectId);
         saveToCSV();
+
+        return true;
     }
 
     @Override
@@ -165,7 +167,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
     }
 
     @Override
-    public void addTags(int projectId, HashSet<String> tags) {
+    public boolean addTags(int projectId, HashSet<String> tags) {
         ProjectInterface project = getProjectById(projectId);
         HashSet<String> currentTags = project.getProjectTags();
         currentTags.addAll(tags);
@@ -175,10 +177,12 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
                project.getProjectDescription(),
                currentTags,
                embedDataAccess.getEmbedData(projectId));
+
+        return true;
     }
 
     @Override
-    public void removeTags(int projectId, HashSet<String> tags) {
+    public boolean removeTags(int projectId, HashSet<String> tags) {
         ProjectInterface project = getProjectById(projectId);
         HashSet<String> currentTags = project.getProjectTags();
         currentTags.removeAll(tags);
@@ -188,6 +192,8 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
                project.getProjectDescription(),
                currentTags,
                embedDataAccess.getEmbedData(projectId));
+
+        return true;
     }
 
     @Override
@@ -223,7 +229,7 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
     }
 
     @Override
-    public void update(int projectId,
+    public boolean update(int projectId,
                        String title,
                        double budget,
                        String description,
@@ -236,6 +242,8 @@ public class LocalProjectDataAccessObject implements IProjectRepository {
         editProject.setProjectTags(tags);
         embedDataAccess.saveEmbedData(embeddings, editProject.getProjectId());
         saveToCSV();
+
+        return true;
     }
 
     @Override

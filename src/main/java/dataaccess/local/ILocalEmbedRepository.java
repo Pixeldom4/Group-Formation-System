@@ -3,7 +3,7 @@ package dataaccess.local;
 
 import java.util.HashMap;
 
-public interface EmbedDataAccessInterface {
+public interface ILocalEmbedRepository {
 
     /**
      * Saves an embedding for a project.

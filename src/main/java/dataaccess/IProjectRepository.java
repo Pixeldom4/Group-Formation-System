@@ -15,16 +15,17 @@ public interface IProjectRepository {
      * @param description the description of the project
      * @param tags the tags associated with the project
      * @param embeddings the embeddings associated with the project
+     * @param ownerId the user ID of the creator of the project.
      * @return the created project
      */
-    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings);
+    Project createProject(String title, double budget, String description, HashSet<String> tags, float[] embeddings, int ownerId);
 
     /**
      * Deletes a project.
      *
      * @param projectId the id of the project to be deleted
      */
-    void deleteProject(int projectId);
+    boolean deleteProject(int projectId);
 
     /**
      * Gets a project by its id.
@@ -40,7 +41,7 @@ public interface IProjectRepository {
      * @param projectId the id of the project to add the tags to.
      * @param tags a set of tags associated with the project.
      */
-    void addTags(int projectId, HashSet<String> tags);
+    boolean addTags(int projectId, HashSet<String> tags);
 
     /**
      * Removes a set of tags to a project.
@@ -48,7 +49,7 @@ public interface IProjectRepository {
      * @param projectId the id of the project to add the tags to.
      * @param tags a set of tags to be removed.
      */
-    void removeTags(int projectId, HashSet<String> tags);
+    boolean removeTags(int projectId, HashSet<String> tags);
 
     /**
      * Retrieves a set of projects that match the given keyword in their title, description, or tags.
@@ -68,11 +69,19 @@ public interface IProjectRepository {
      * @param tags the tags associated with the project
      * @param embeddings the embeddings associated with the project
      */
-    void update(int id, String title, double budget, String description, HashSet<String> tags, float[] embeddings);
+    boolean update(int id, String title, double budget, String description, HashSet<String> tags, float[] embeddings);
 
     /**
      * Retrieves all project embeddings from the database and returns them as a HashMap.
      * @return a hashmap where the keys are the project ids and the values are the embeddings
      */
     HashMap<Integer, float[]> getAllEmbeddings();
+
+    /**
+     * Retrieves the owner ID of a project from the database by its project ID.
+     *
+     * @param projectId The ID of the project whose owner ID is to be retrieved.
+     * @return The ID of the user who owns the project, or -1 if the project is not found.
+     */
+    int getOwnerId(int projectId);
 }

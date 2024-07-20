@@ -1,12 +1,12 @@
 package usecase.searchforuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserRepository;
 import entities.User;
 import entities.UserInterface;
 
 public class LocalUserSearchObject implements SearchUserInterface {
-    private IUserRepository userDataAccess = DAOImplementationConfig.getUserRepository();
+    private IUserRepository userDataAccess = DataAccessConfig.getUserRepository();
 
     /**
      * Creates a new LocalUserSearchObject.

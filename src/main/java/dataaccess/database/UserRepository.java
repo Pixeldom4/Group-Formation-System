@@ -41,10 +41,10 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param tags a set of tags associated with the project.
      */
     @Override
-    public void addTags(int userId, HashSet<String> tags) {
+    public boolean addTags(int userId, HashSet<String> tags) {
         String sql = "INSERT INTO UserTags (UserId, Tag) VALUES (?, ?)";
 
-        executeTagUpdates(userId, tags, sql);
+        return executeTagUpdates(userId, tags, sql);
     }
 
     /**
@@ -55,10 +55,10 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param tags a set of tags associated with the project.
      */
     @Override
-    public void removeTags(int userId, HashSet<String> tags) {
+    public boolean removeTags(int userId, HashSet<String> tags) {
         String sql = "DELETE FROM UserTags WHERE UserId = ? AND Tag = ?";
 
-        executeTagUpdates(userId, tags, sql);
+        return executeTagUpdates(userId, tags, sql);
     }
 
     /**
@@ -92,7 +92,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param tags a set of tags associated with the project.
      * @param sql the SQL statement to execute in batch.
      */
-    private void executeTagUpdates(int userId, HashSet<String> tags, String sql) {
+    private boolean executeTagUpdates(int userId, HashSet<String> tags, String sql) {
         Connection connection = super.getConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -102,9 +102,13 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
+
+            return true;
         } catch(SQLException e) {
             System.err.println(e.getMessage());
         }
+
+        return false;
     }
 
 
@@ -184,8 +188,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public User getUserByEmail(String email) {
         String sql = "SELECT Id, FirstName, LastName, DesiredCompensation FROM Users WHERE Email = ?";
 
-        try (Connection connection = super.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        Connection connection = super.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
@@ -238,8 +242,9 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
     public User getUserById(int userId) {
         String sql = "SELECT FirstName, LastName, Email, DesiredCompensation FROM Users WHERE Id = ?";
 
-        try (Connection connection = super.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        Connection connection = super.getConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, userId);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
@@ -263,7 +268,7 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      * @param userId the user id of the user to delete.
      */
     @Override
-    public void deleteUser(int userId) {
+    public boolean deleteUser(int userId) {
         String sql = "DELETE FROM Users WHERE Id = ?";
 
         Connection connection = super.getConnection();
@@ -280,6 +285,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
             }
 
             connection.commit(); // end transaction
+
+            return true;
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -294,6 +301,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
                 System.err.println(e.getMessage());
             }
         }
+
+        return false;
     }
 
 

@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserProjectsRepository;
 
 import java.io.File;
@@ -23,7 +23,7 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
     private final HashMap<Integer, HashSet<Integer>> projectUsers = new HashMap<>();
 
     public LocalUserProjectsRepository() {
-        this(DAOImplementationConfig.getProjectCSVPath());
+        this(DataAccessConfig.getProjectCSVPath());
     }
 
     public LocalUserProjectsRepository(String path) {
@@ -102,37 +102,45 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
     }
 
     @Override
-    public void addUserToProject(int userId, int projectId) {
+    public boolean addUserToProject(int userId, int projectId) {
         userProjects.putIfAbsent(userId, new HashSet<Integer>());
         userProjects.get(userId).add(projectId);
         projectUsers.putIfAbsent(projectId, new HashSet<Integer>());
         projectUsers.get(projectId).add(userId);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void removeUserFromProject(int userId, int projectId) {
+    public boolean removeUserFromProject(int userId, int projectId) {
         userProjects.get(userId).remove(projectId);
         projectUsers.get(projectId).remove(userId);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void removeUserFromAllProjects(int userId) {
+    public boolean removeUserFromAllProjects(int userId) {
         for (int projectId : userProjects.get(userId)) {
             projectUsers.get(projectId).remove(userId);
         }
         userProjects.remove(userId);
         saveToCSV();
+
+        return true;
     }
 
     @Override
-    public void removeProjectFromAllUsers(int projectId) {
+    public boolean removeProjectFromAllUsers(int projectId) {
         for (int userId : projectUsers.get(projectId)) {
             userProjects.get(userId).remove(projectId);
         }
         projectUsers.remove(projectId);
         saveToCSV();
+
+        return true;
     }
 
     @Override

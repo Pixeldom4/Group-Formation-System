@@ -3,7 +3,7 @@ package edit_project_use_case;
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
-import dataaccess.local.LocalProjectDataAccessObject;
+import dataaccess.local.LocalProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,7 +38,7 @@ public class EditProjectInteractorTest {
     };
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary searchPresenter = new SearchProjectsPresenter(searchPanelViewModel);
-    private final static IProjectRepository projectDAO = new LocalProjectDataAccessObject(SAVE_LOCATION);
+    private final static IProjectRepository projectDAO = new LocalProjectRepository(SAVE_LOCATION);
     private final static EmbeddingAPIInterface apiInterface = new OpenAPIDataEmbed();
     private final static EditProjectInteractor editProjectInteractor = new EditProjectInteractor(projectDAO, editPresenter, apiInterface);
     private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(searchPresenter, projectDAO);
@@ -59,11 +59,12 @@ public class EditProjectInteractorTest {
     private static void addDummyProjects() {
         for (String[] project : dummyProjects) {
             float[] embedding = apiInterface.getEmbedData(project[3]);
+            int editorId = 0; // MAKE THIS THE EDITOR ID
             projectDAO.createProject(project[1],
                     Double.parseDouble(project[2]),
                     project[3],
                     new HashSet<>(Arrays.asList(project[4].split(";"))),
-                    embedding);
+                    embedding, editorId);
         }
     }
 
@@ -76,7 +77,8 @@ public class EditProjectInteractorTest {
         String newDescription = "An updated project about Java development, focusing on new features.";
         HashSet<String> newTags = new HashSet<>(Arrays.asList("Java", "Programming", "Updated"));
 
-        EditProjectInputData inputData = new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags);
+        int editorId = 0; // MAKE THIS THE PROJECT OWNER ID
+        EditProjectInputData inputData = new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags, editorId);
         editProjectInteractor.editProject(inputData);
 
         Project editedProject = projectDAO.getProjectById(projectId);

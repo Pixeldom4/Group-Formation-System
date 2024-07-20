@@ -1,24 +1,42 @@
 package usecase.deleteuser;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IUserProjectsRepository;
-import dataaccess.database.UserProjectsRepository;
+import dataaccess.IUserRepository;
 
+/**
+ * Interactor for the delete user use case.
+ * Handles the business logic for deleting a user..
+ */
 public class DeleteUserInteractor implements DeleteUserInputBoundary {
-    private final IUserProjectsRepository userProjectsRepository;
+    private final IUserRepository userRepository;
     private final DeleteUserPresenter deleteUserPresenter;
 
-    public DeleteUserInteractor(DeleteUserPresenter deleteUserPresenter) {
+    /**
+     * Constructs a DeleteUserInteractor with the specified repository and presenter.
+     *
+     * @param userRepository the repository to interact with the database.
+     * @param deleteUserPresenter the presenter to handle the output presentation.
+     */
+    public DeleteUserInteractor(IUserRepository userRepository, DeleteUserPresenter deleteUserPresenter) {
+        this.userRepository = userRepository;
         this.deleteUserPresenter = deleteUserPresenter;
-        this.userProjectsRepository = DAOImplementationConfig.getUserProjectsRepository();
     };
 
+    /**
+     * Deletes a user with the provided input data.
+     *
+     * @param inputData the input data required to delete the user.
+     */
     @Override
-    public void deleteUser(DeleteUserInputData deleteUserData) {
-        int userId = deleteUserData.getUserId();
-        int projectId = deleteUserData.getProjectId();
-        userProjectsRepository.removeUserFromProject(userId, projectId);
+    public void deleteUser(DeleteUserInputData inputData) {
+        int userId = inputData.getUserId();
 
-        deleteUserPresenter.prepareSuccessView(new DeleteUserOutputData());
+        if (userRepository.deleteUser(userId)) {
+            DeleteUserOutputData outputData = new DeleteUserOutputData(userId);
+            deleteUserPresenter.prepareSuccessView(outputData);
+        } else {
+            deleteUserPresenter.prepareFailView("Failed to delete user.");
+        }
     }
 }

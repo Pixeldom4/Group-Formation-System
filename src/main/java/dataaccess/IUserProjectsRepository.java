@@ -8,7 +8,7 @@ public interface IUserProjectsRepository {
      * @param userId The ID of the user.
      * @param projectId The ID of the project.
      */
-    void addUserToProject(int userId, int projectId);
+    boolean addUserToProject(int userId, int projectId);
 
     /**
      * Removes a User-Project association.
@@ -16,7 +16,7 @@ public interface IUserProjectsRepository {
      * @param userId The ID of the user.
      * @param projectId The ID of the project.
      */
-     void removeUserFromProject(int userId, int projectId);
+     boolean removeUserFromProject(int userId, int projectId);
 
     /**
      * Removes all project associations for a given user from the UserProjects table.
@@ -24,7 +24,7 @@ public interface IUserProjectsRepository {
      *
      * @param userId The ID of the user whose project associations are to be removed.
      */
-     void removeUserFromAllProjects(int userId);
+     boolean removeUserFromAllProjects(int userId);
 
     /**
      * Removes all user associations for a given project from the UserProjects table.
@@ -32,7 +32,7 @@ public interface IUserProjectsRepository {
      *
      * @param projectId The ID of the project whose user associations are to be removed.
      */
-     void removeProjectFromAllUsers(int projectId);
+     boolean removeProjectFromAllUsers(int projectId);
 
     /**
      * Retrieves all projects Ids for a specific user.

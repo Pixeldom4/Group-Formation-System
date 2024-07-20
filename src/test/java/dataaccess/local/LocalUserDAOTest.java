@@ -71,7 +71,7 @@ public class LocalUserDAOTest {
     public void testUpdateUser(){
         UserInterface user = userRepository.getUserById(1);
         user.setFirstName("Joe");
-        userRepository.updateUser((User) user);
+        userRepository.updateUser(user.getUserId(), user.getFirstName(), user.getLastName(), user.getDesiredCompensation(), user.getTags());
         assertEquals(userRepository.getUserById(1).getFirstName(), "Joe");
 
     }

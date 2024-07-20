@@ -1,13 +1,13 @@
 package usecase.createproject;
 
-import dataaccess.DAOImplementationConfig;
+import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import viewmodel.AddProjectPanelViewModel;
 
 public class CreateProjectUseCaseFactory {
-    private static final IProjectRepository projectRepository = DAOImplementationConfig.getProjectRepository();
-    private static final IUserProjectsRepository userProjectsRepository = DAOImplementationConfig.getUserProjectsRepository();
+    private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
+    private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
 
     private CreateProjectUseCaseFactory(){}
 
