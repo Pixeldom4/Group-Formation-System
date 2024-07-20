@@ -313,8 +313,8 @@ public class UserRepository extends SQLDatabaseManager implements IUserRepositor
      */
     @Override
     public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
-        String updateUserSql = "UPDATE Users SET FirstName = ?, LastName = ?, DesiredCompensation = ? WHERE ID = ?";
-        String deleteTagsSql = "DELETE FROM UserTags WHERE ID = ?";
+        String updateUserSql = "UPDATE Users SET FirstName = ?, LastName = ?, DesiredCompensation = ? WHERE Id = ?";
+        String deleteTagsSql = "DELETE FROM UserTags WHERE UserId = ?";
         String insertTagSql = "INSERT INTO UserTags (UserId, Tag) VALUES (?, ?)";
 
         Connection connection = super.getConnection();
