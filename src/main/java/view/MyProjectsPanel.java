@@ -29,9 +29,10 @@ import java.util.ArrayList;
 
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final GetProjectsController getProjectsController;
     private final GetProjectsPresenter getProjectsPresenter;
+
+    private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
 
     private final JTable infoTable = new JTable();
@@ -56,7 +57,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.add(refreshButton);
 
         refreshButton.addActionListener(e -> {
-            getProjectsController.getProjects(new GetProjectsInputData());
+            getProjectsController.getProjects();
         });
     }
 
@@ -97,7 +98,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                         DeleteProjectPresenter deleteProjectPresenter = new DeleteProjectPresenter();
                         DeleteProjectController deleteProjectController = new DeleteProjectController(new DeleteProjectInteractor(deleteProjectPresenter));
 
-                        deleteProjectController.deleteProject(new DeleteProjectInputData((int) data[finalI][0]));
+                        deleteProjectController.deleteProject((int) data[finalI][0]);
 //
                     }
                 }
@@ -143,7 +144,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("login")) {
             boolean login = (boolean) evt.getNewValue();
             if (login) {
-                getProjectsController.getProjects(new GetProjectsInputData());
+                getProjectsController.getProjects();
             }
         }
         if (evt.getPropertyName().equals("error")) {

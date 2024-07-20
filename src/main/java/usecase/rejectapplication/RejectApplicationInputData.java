@@ -1,15 +1,15 @@
-package usecase.manageapplications;
+package usecase.rejectapplication;
 
-public class ManageApplicationsInputData {
+public class RejectApplicationInputData {
     private int userId;
     private int projectId;
 
-    public ManageApplicationsInputData(int projectId, int userId){
+    public RejectApplicationInputData(int projectId, int userId){
         this.projectId = projectId;
         this.userId = userId;
     }
 
-    public ManageApplicationsInputData(int projectId){
+    public RejectApplicationInputData(int projectId){
         this.projectId = projectId;
     }
 

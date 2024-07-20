@@ -1,4 +1,4 @@
-package usecase.manageapplications;
+package usecase.getapplications;
 
 import dataaccess.*;
 import entities.Application;
@@ -6,13 +6,13 @@ import entities.User;
 
 import java.util.HashSet;
 
-public class ManageApplicationsInteractor implements ManageApplicationsInputBoundary {
+public class GetApplicationsInteractor implements GetApplicationsInputBoundary {
     private final IApplicationRepository applicationRepository;
     private final IUserProjectsRepository userProjectsRepository;
     private final IUserRepository userRepository;
-    private final ManageApplicationsPresenter manageApplicationsPresenter;
+    private final GetApplicationsPresenter manageApplicationsPresenter;
 
-    public ManageApplicationsInteractor(ManageApplicationsPresenter manageApplicationsPresenter){
+    public GetApplicationsInteractor(GetApplicationsPresenter manageApplicationsPresenter){
        this.manageApplicationsPresenter = manageApplicationsPresenter;
        this.applicationRepository = DataAccessConfig.getApplicationRepository();
        this.userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
@@ -20,7 +20,7 @@ public class ManageApplicationsInteractor implements ManageApplicationsInputBoun
     }
 
     @Override
-    public void getApplicationsForProject(ManageApplicationsInputData inputData) {
+    public void getApplicationsForProject(GetApplicationsInputData inputData) {
         HashSet<Application> applications = applicationRepository.getApplicationsForProject(inputData.getProjectId());
         Object[][] applicationsData = new Object[applications.size()][4];
         int count = 0;
@@ -33,27 +33,12 @@ public class ManageApplicationsInteractor implements ManageApplicationsInputBoun
             System.out.println(user.getFirstName() + " " + user.getLastName());
             count++;
         }
-        manageApplicationsPresenter.prepareSuccessProjectApplicationView(new ManageApplicationsOutputData(applicationsData));
+        manageApplicationsPresenter.prepareSuccessView(new GetApplicationsOutputData(applicationsData));
     }
 
     @Override
-    public void getApplicationsForSelf(ManageApplicationsInputData inputData) {
+    public void getApplicationsForSelf(GetApplicationsInputData inputData) {
         HashSet<Application> applications = applicationRepository.getApplicationsForUser(inputData.getUserId());
 //        manageApplicationsPresenter.prepareSuccessSelfApplicationView(new ManageApplicationsOutputData(applications));
-    }
-
-    @Override
-    public void rejectApplicant(ManageApplicationsInputData inputData) {
-        applicationRepository.deleteApplication(inputData.getUserId(), inputData.getProjectId());
-        manageApplicationsPresenter.prepareSuccessDecisionView("Rejected Applicant");
-    }
-
-    @Override
-    public void acceptApplicant(ManageApplicationsInputData inputData) {
-        int userId = inputData.getUserId();
-        int projectId = inputData.getProjectId();
-        userProjectsRepository.addUserToProject(userId, projectId);
-        applicationRepository.deleteApplication(userId, projectId);
-        manageApplicationsPresenter.prepareSuccessDecisionView("Accepted Applicant");
     }
 }

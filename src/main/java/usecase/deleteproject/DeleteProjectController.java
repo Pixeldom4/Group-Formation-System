@@ -9,7 +9,8 @@ public class DeleteProjectController {
         this.deleteProjectInteractor = deleteProjectInteractor;
     }
 
-    public void deleteProject(DeleteProjectInputData inputData) {
+    public void deleteProject(int projectId) {
+        DeleteProjectInputData inputData = new DeleteProjectInputData(projectId);
         deleteProjectInteractor.deleteProject(inputData);
     }
 }
