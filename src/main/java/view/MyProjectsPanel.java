@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -61,15 +62,15 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         });
     }
 
-    private void addProjects(Object[][] data){
+    private void addProjects(Object[][] projectData){
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> applicationButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> deleteButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[data.length][5];
-        for (int i = 0; i < data.length; i++) {
-            info[i][0] = data[i][1];
-            info[i][1] = data[i][2];
+        Object[][] info = new Object[projectData.length][5];
+        for (int i = 0; i < projectData.length; i++) {
+            info[i][0] = projectData[i][1];
+            info[i][1] = projectData[i][2];
             info[i][2] = "Edit";
             info[i][3] = "View Applications";
             info[i][4] = "Delete";
@@ -77,28 +78,33 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             editButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on edit for " + data[finalI][0]);
-//                    System.out.println("Viewing details for project: " + projectRankingList.get(finalI).getProjectId());
-//                    DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
+                    System.out.println("clicked on edit for " + projectData[finalI][0]);
+                    int projectId = (int) projectData[finalI][0];
+                    String projectTitle = (String) projectData[finalI][1];
+                    String projectDescription = (String) projectData[finalI][2];
+                    double projectBudget = (double) projectData[finalI][3];
+                    HashSet<String> projectTags = (HashSet<String>) projectData[finalI][4];
+                    //TODO: Add edit panel
+
                 }
             });
             applicationButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on application for " + data[finalI][0]);
-                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)data[finalI][0]);
+                    System.out.println("clicked on application for " + projectData[finalI][0]);
+                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)projectData[finalI][0]);
                 }
             });
             deleteButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on delete for " + data[finalI][0]);
-                    int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you would like to delete " + data[finalI][0] + "?","Warning",JOptionPane.YES_NO_OPTION);
+                    System.out.println("clicked on delete for " + projectData[finalI][0]);
+                    int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you would like to delete " + projectData[finalI][0] + "?","Warning",JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION){
                         DeleteProjectPresenter deleteProjectPresenter = new DeleteProjectPresenter();
                         DeleteProjectController deleteProjectController = new DeleteProjectController(new DeleteProjectInteractor(deleteProjectPresenter));
 
-                        deleteProjectController.deleteProject((int) data[finalI][0]);
+                        deleteProjectController.deleteProject((int) projectData[finalI][0]);
 //
                     }
                 }
