@@ -1,15 +1,14 @@
-
 import dataaccess.DataAccessConfig;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.acceptapplication.AcceptApplicationUseCaseFactory;
 import usecase.createapplication.CreateApplicationController;
 import usecase.createapplication.CreateApplicationUseCaseFactory;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.deleteproject.DeleteProjectUseCaseFactory;
-import usecase.editproject.EditProjectController;
 import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
+import usecase.createuser.CreateUserUseCaseFactory;
+import usecase.deleteproject.DeleteProjectController;
+import usecase.deleteproject.DeleteProjectUseCaseFactory;
 import usecase.edituser.EditUserController;
 import usecase.edituser.EditUserUseCaseFactory;
 import usecase.getapplications.GetApplicationsController;
@@ -26,7 +25,6 @@ import usecase.rejectapplication.RejectApplicationController;
 import usecase.rejectapplication.RejectApplicationUseCaseFactory;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
-import usecase.createuser.CreateUserUseCaseFactory;
 import view.*;
 import viewmodel.*;
 

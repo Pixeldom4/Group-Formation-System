@@ -1,17 +1,8 @@
 package view;
 
-import dataaccess.DataAccessConfig;
-import dataaccess.IApplicationRepository;
-import dataaccess.ILoginUserDetails;
-import dataaccess.IUserRepository;
-import entities.ProjectInterface;
 import usecase.createapplication.CreateApplicationController;
-import usecase.createapplication.CreateApplicationInteractor;
-import usecase.createapplication.CreateApplicationOutputBoundary;
-import usecase.createapplication.CreateApplicationPresenter;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

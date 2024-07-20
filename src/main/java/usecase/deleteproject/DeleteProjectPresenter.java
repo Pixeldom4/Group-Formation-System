@@ -1,9 +1,6 @@
 package usecase.deleteproject;
 
-import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
-
-import javax.swing.*;
 
 public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;

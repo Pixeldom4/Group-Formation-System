@@ -1,7 +1,5 @@
 package usecase.getprojects;
 
-import usecase.getapplications.GetApplicationsInputBoundary;
-
 public class GetProjectsController {
     private final GetProjectsInputBoundary getProjectsInteractor;
 

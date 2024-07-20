@@ -7,14 +7,12 @@ import dataaccess.IUserRepository;
 
 public class RejectApplicationInteractor implements RejectApplicationInputBoundary {
     private final IApplicationRepository applicationRepository;
-    private final IUserProjectsRepository userProjectsRepository;
     private final IUserRepository userRepository;
     private final RejectApplicationOutputBoundary rejectApplicationPresenter;
 
     public RejectApplicationInteractor(RejectApplicationOutputBoundary manageApplicationsPresenter){
        this.rejectApplicationPresenter = manageApplicationsPresenter;
        this.applicationRepository = DataAccessConfig.getApplicationRepository();
-       this.userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
        this.userRepository = DataAccessConfig.getUserRepository();
     }
 

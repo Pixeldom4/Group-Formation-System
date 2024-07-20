@@ -2,16 +2,8 @@ package view;
 
 import entities.ProjectInterface;
 import usecase.acceptapplication.AcceptApplicationController;
-import usecase.acceptapplication.AcceptApplicationInputData;
-import usecase.acceptapplication.AcceptApplicationInteractor;
-import usecase.acceptapplication.AcceptApplicationPresenter;
 import usecase.getapplications.GetApplicationsController;
-import usecase.getapplications.GetApplicationsInputData;
-import usecase.getapplications.GetApplicationsInteractor;
-import usecase.getapplications.GetApplicationsPresenter;
 import usecase.rejectapplication.RejectApplicationController;
-import usecase.rejectapplication.RejectApplicationInteractor;
-import usecase.rejectapplication.RejectApplicationPresenter;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.DisplayProjectApplicationViewModel;
@@ -76,7 +68,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 displayProjectApplicationViewModel.removePropertyChangeListener(DisplayProjectApplicationView.this);
             }
         });
-    };
+    }
 
     private void displayApplicants(Object[][] applicationsData){
         ArrayList<ButtonAction> viewButtonActions = new ArrayList<>();
@@ -87,7 +79,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
         DisplayProjectApplicationView temp = this;
         for (int i = 0; i < applicationsData.length; i++) {
-            System.out.println(applicationsData[i][0]);
 //            applicationsData[count][0] = user.getFirstName() + " " + user.getLastName();
 //            applicationsData[count][1] = application.getSenderUserId();
 //            applicationsData[count][2] = application.getText();
@@ -100,7 +91,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             viewButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on edit for " );
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 

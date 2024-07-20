@@ -1,7 +1,7 @@
 package usecase.acceptapplication;
 
 public class AcceptApplicationOutputData {
-    private String acceptedName;
+    private final String acceptedName;
 
     public AcceptApplicationOutputData(String acceptedName) {
         this.acceptedName = acceptedName;

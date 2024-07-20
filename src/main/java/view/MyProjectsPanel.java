@@ -2,17 +2,8 @@ package view;
 
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.deleteproject.DeleteProjectController;
-import usecase.deleteproject.DeleteProjectInputData;
-import usecase.deleteproject.DeleteProjectInteractor;
-import usecase.deleteproject.DeleteProjectPresenter;
-import usecase.deleteuser.DeleteUserPresenter;
 import usecase.getapplications.GetApplicationsController;
-import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.GetProjectsInputData;
-import usecase.getprojects.GetProjectsInteractor;
-import usecase.getprojects.GetProjectsPresenter;
-import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
@@ -22,9 +13,7 @@ import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -111,7 +100,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             applicationButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on application for " + projectData[finalI][0]);
                     new DisplayProjectApplicationView((int)projectData[finalI][0],
                                                       displayProjectApplicationViewModel,
                                                       getApplicationsController,
@@ -122,7 +110,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             deleteButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on delete for " + projectData[finalI][0]);
                     int dialogResult = JOptionPane.showConfirmDialog (null,
                                                                       "Are you sure you would like to delete " + projectData[finalI][0] + "?",
                                                                       "Warning",

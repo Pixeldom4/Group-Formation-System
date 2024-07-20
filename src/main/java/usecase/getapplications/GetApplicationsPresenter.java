@@ -1,6 +1,5 @@
 package usecase.getapplications;
 
-import view.DisplayProjectApplicationView;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 public class GetApplicationsPresenter implements GetApplicationsOutputBoundary {

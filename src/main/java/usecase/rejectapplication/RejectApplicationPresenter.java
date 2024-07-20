@@ -1,6 +1,5 @@
 package usecase.rejectapplication;
 
-import view.DisplayProjectApplicationView;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 public class RejectApplicationPresenter implements RejectApplicationOutputBoundary {
