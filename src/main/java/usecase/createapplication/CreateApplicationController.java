@@ -3,6 +3,10 @@ package usecase.createapplication;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Controller class for creating applications.
+ * Interacts with the input boundary to process application creation.
+ */
 public class CreateApplicationController {
     private final CreateApplicationInputBoundary createApplicationInteractor;
 

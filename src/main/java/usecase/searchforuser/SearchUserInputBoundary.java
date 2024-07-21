@@ -1,11 +1,14 @@
 package usecase.searchforuser;
 
+/**
+ * Input boundary interface for searching users.
+ * Defines the method to search for users based on the given email.
+ */
 public interface SearchUserInputBoundary {
     /**
-     * Search for a user by its email.
+     * Searches for a user by email.
      *
-     * @param email the email to search for
+     * @param email The email to search for.
      */
-
     void searchUserByEmail(String email);
 }

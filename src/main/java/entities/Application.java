@@ -1,11 +1,22 @@
 package entities;
 
+/**
+ * Represents an application entity with details about a user application for a project.
+ */
 public class Application implements ApplicationInterface {
     private int senderUserId;
     private int projectId;
     private String text;
     private byte[] pdfBytes;
 
+    /**
+     * Constructs an Application object with the specified details.
+     *
+     * @param senderUserId the ID of the user sending the application.
+     * @param projectId the ID of the project for which the application is made.
+     * @param text the text content of the application.
+     * @param pdfBytes the PDF file as a byte array.
+     */
     public Application(int senderUserId, int projectId, String text, byte[] pdfBytes) {
         this.senderUserId = senderUserId;
         this.projectId = projectId;

@@ -6,15 +6,27 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+/**
+ * A class that implements the EmbeddingAPIInterface to interact with the OpenAI API for generating text embeddings.
+ */
 public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
 
     private static final String API_URL = "https://api.openai.com/v1/embeddings";
     private static final String API_MODEL = "text-embedding-3-small";
-    private static final String API_TOKEN = "sk-project-general-LZZJLKpAXNO7ft1lMYIsT3BlbkFJ0EURr0xssgk5a5yG8HpA";//System.getenv("API_KEY");
+    private static final String API_TOKEN = "sk-project-general-LZZJLKpAXNO7ft1lMYIsT3BlbkFJ0EURr0xssgk5a5yG8HpA"; // Note: This should typically be fetched from environment variables.
 
+    /**
+     * Constructs an OpenAPIDataEmbed object.
+     */
     public OpenAPIDataEmbed() {
     }
 
+    /**
+     * Returns an embedding for the given text by calling the OpenAI API.
+     *
+     * @param text the text to be used for embedding
+     * @return an array of floats representing the embedding
+     */
     @Override
     public float[] getEmbedData(String text) {
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -42,8 +54,7 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
                 data[i] = embedData.getJSONArray("embedding").getFloat(i);
             }
             return data;
-        }
-        catch (IOException | JSONException e) {
+        } catch (IOException | JSONException e) {
             System.out.println(responseBody);
             throw new RuntimeException(e);
         }

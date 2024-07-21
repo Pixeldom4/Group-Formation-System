@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.HashSet;
 
 /**
- * A class representing the User Repository. In particular, this class manages the User table.
+ * A class representing the User Repository. In particular, this class manages the Users table.
  */
 public class UserRepository extends SQLDatabaseManager implements IUserRepository {
     private final IUserProjectsRepository userProjectsRepository;

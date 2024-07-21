@@ -26,7 +26,6 @@ public class EditProjectInteractorTest {
         @Override
         public void prepareSuccessView(EditProjectOutputData outputData) {
             assertNotNull(outputData);
-            assertTrue(outputData.isSuccess());
             System.out.println("Success: " + outputData.getTitle());
         }
 

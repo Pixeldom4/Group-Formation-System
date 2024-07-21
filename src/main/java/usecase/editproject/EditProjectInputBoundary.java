@@ -1,7 +1,8 @@
 package usecase.editproject;
 
 /**
- * The input boundary for editing a project use case.
+ * Input boundary interface for editing projects.
+ * Defines the method to edit a project.
  */
 public interface EditProjectInputBoundary {
     /**

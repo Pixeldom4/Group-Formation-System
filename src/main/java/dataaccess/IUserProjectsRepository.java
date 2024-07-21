@@ -2,6 +2,10 @@ package dataaccess;
 
 import java.util.HashSet;
 
+/**
+ * Interface for user projects repository operations.
+ * Defines methods for managing user project relationships in the database.
+ */
 public interface IUserProjectsRepository {
     /**
      * Adds a User-Project association.

@@ -2,17 +2,26 @@ package usecase.editproject;
 
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
-import entities.Project;
 import dataaccess.IProjectRepository;
 
 import java.util.HashSet;
 
+/**
+ * Interactor class for editing projects.
+ * Implements the input boundary to handle project editing logic.
+ */
 public class EditProjectInteractor implements EditProjectInputBoundary {
     private final IProjectRepository projectRepository;
     private final EditProjectOutputBoundary projectPresenter;
     private final EmbeddingAPIInterface embeddingAPI;
 
-
+    /**
+     * Constructs an EditProjectInteractor with the specified repository, presenter, and embedding API.
+     *
+     * @param projectRepository  the project repository.
+     * @param projectPresenter   the presenter to handle output.
+     * @param apiInterface       the embedding API interface.
+     */
     public EditProjectInteractor(IProjectRepository projectRepository, EditProjectOutputBoundary projectPresenter, EmbeddingAPIInterface apiInterface) {
         this.projectRepository = projectRepository;
         this.projectPresenter = projectPresenter;
@@ -37,7 +46,7 @@ public class EditProjectInteractor implements EditProjectInputBoundary {
         if (projectRepository.getOwnerId(projectId) != editorId) {
             projectPresenter.prepareFailView("Insufficient Permissions.");
         } else if (projectRepository.update(projectId, title, budget, description, tags, embedding)) {
-            EditProjectOutputData outputData = new EditProjectOutputData(projectId, title, budget, description, tags, true);
+            EditProjectOutputData outputData = new EditProjectOutputData(projectId, title, budget, description, tags);
             projectPresenter.prepareSuccessView(outputData);
         } else {
             projectPresenter.prepareFailView("Failed to edit project.");

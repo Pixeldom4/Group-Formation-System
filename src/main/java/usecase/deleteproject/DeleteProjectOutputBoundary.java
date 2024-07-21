@@ -1,7 +1,9 @@
 package usecase.deleteproject;
 
-import usecase.deleteuser.DeleteUserOutputData;
-
+/**
+ * Output boundary interface for deleting projects.
+ * Defines methods to prepare success and failure views.
+ */
 public interface DeleteProjectOutputBoundary {
     /**
      * Prepares the success view with the provided output data.

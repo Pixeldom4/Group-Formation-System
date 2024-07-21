@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * A class representing the Project Repository. In particular, this class manages the Projects table.
+ */
 public class ProjectRepository extends SQLDatabaseManager implements IProjectRepository {
     private final IUserProjectsRepository userProjectsRepository;
 

@@ -5,6 +5,10 @@ import entities.Project;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Interface for project repository operations.
+ * Defines methods for managing projects in the database.
+ */
 public interface IProjectRepository {
 
     /**

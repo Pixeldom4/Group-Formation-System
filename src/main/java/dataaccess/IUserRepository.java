@@ -4,6 +4,10 @@ import entities.User;
 
 import java.util.HashSet;
 
+/**
+ * Interface for user repository operations.
+ * Defines methods for managing users in the database.
+ */
 public interface IUserRepository {
 
     /**

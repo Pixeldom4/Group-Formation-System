@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Repository class for managing Application entities in the database.
+ * A class representing the Application Repository. In particular, this class manages the Applications table.
  */
 public class ApplicationRepository extends SQLDatabaseManager implements IApplicationRepository {
 

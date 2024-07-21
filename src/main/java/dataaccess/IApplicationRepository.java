@@ -5,7 +5,8 @@ import entities.Application;
 import java.util.HashSet;
 
 /**
- * Interface for managing Application entities.
+ * Interface for application repository operations.
+ * Defines methods for managing applications in the database.
  */
 public interface IApplicationRepository {
 
