@@ -1,14 +1,10 @@
 package view;
 
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.deleteproject.DeleteProjectController;
 import usecase.getapplications.GetApplicationsController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
-import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
-import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;

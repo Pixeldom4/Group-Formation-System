@@ -21,7 +21,6 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final EditUserController editUserController;
     private final ViewManagerModel viewManagerModel;
     private final GetLoggedInUserController getLoggedInUserController;
-    private User loggedInUser;
     private final EditProfileViewModel editProfileViewModel;
 
     private final JPanel userInfoPanel = new JPanel();
@@ -31,7 +30,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final JLabel firstNameLabel = new JLabel("First Name");
     private final JLabel lastNameLabel = new JLabel("Last Name");
     private final JLabel desiredCompensationLabel = new JLabel("Desired Compensation");
-    private final JLabel projectTagsLabel = new JLabel("Project Tags");
+    private final JLabel projectTagsLabel = new JLabel("User Tags To Add");
 
     private final JTextField firstNameField = new JTextField();
     private final JTextField lastNameField = new JTextField();
@@ -42,7 +41,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final GridLayout tagPanelLayout = new GridLayout(0, 1);
     private final JPanel tagPanel = new JPanel();
     private final JButton addTagButton = new JButton("Add Tag");
-    private final JLabel tagPanelLabel = new JLabel("Project tags: ");
+    private final JLabel tagPanelLabel = new JLabel("User tags (Press add tag to add): ");
     private final HashSet<String> tags = new HashSet<>();
     private final JButton myCurrentProfileButton = new JButton("Current Profile");
     private final JButton saveButton = new JButton("Save");
@@ -51,9 +50,9 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
         this.editProfileViewModel = editProfileViewModel;
-        this.viewManagerModel.addPropertyChangeListener(this);
+        viewManagerModel.addPropertyChangeListener(this);
+        editProfileViewModel.addPropertyChangeListener(this);
         this.editUserController = editUserController;
-        this.loggedInUser = loggedInUser;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
@@ -95,16 +94,18 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             double desiredCompensation = Double.parseDouble(desiredCompensationField.getText());
+            String email = editProfileViewModel.getUserEmail();
 
             // Call the EditUserController to save the user information
-            editUserController.editUser(editProfileViewModel.getUserId(), firstName, lastName, loggedInUser.getUserEmail(), desiredCompensation, tags);
+            editUserController.editUser(editProfileViewModel.getUserId(), firstName, lastName, email, desiredCompensation, tags);
         });
 
         this.add(saveButton);
         this.add(myCurrentProfileButton);
 
         myCurrentProfileButton.addActionListener(e -> {
-            DisplayMyProfileView displayMyProfileView = new DisplayMyProfileView(loggedInUser); // Use this line when want to display project
+            User loggedInUser = editProfileViewModel.getLoggedInUser();
+            new DisplayMyProfileView(loggedInUser); // Use this line when want to display project
         });
     }
 
@@ -158,13 +159,37 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("login")) {
+            getLoggedInUserController.getLoggedInUser();
+        }
+
+        if (evt.getPropertyName().equals("userUpdate")) {
+            User loggedInUser = (User) evt.getNewValue();
             if (loggedInUser != null) {
                 firstNameField.setText(loggedInUser.getFirstName());
                 lastNameField.setText(loggedInUser.getLastName());
                 desiredCompensationField.setText(String.valueOf(loggedInUser.getDesiredCompensation()));
                 for (String tag : loggedInUser.getTags()) {
                     addTagToPanel(tag);
+                    tags.add(tag);
                 }
+            }
+            else {
+                firstNameField.setText("");
+                lastNameField.setText("");
+                desiredCompensationField.setText("");
+                projectTagsField.setText("");
+                tagPanel.removeAll();
+                tags.clear();
+            }
+        }
+
+        if (evt.getPropertyName().equals("saveUser")) {
+            Boolean success = (Boolean) evt.getNewValue();
+            if (success) {
+                getLoggedInUserController.getLoggedInUser();
+                JOptionPane.showMessageDialog(null, "Profile updated successfully!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to update profile: " + editProfileViewModel.getErrorMessage());
             }
         }
     }

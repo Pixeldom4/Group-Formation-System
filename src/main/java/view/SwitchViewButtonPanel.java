@@ -21,7 +21,6 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
     private final JButton addProjectButton = new JButton("Add Project");
     private final JButton searchProjectButton = new JButton("Search Project");
     private final JButton getProjectsButton = new JButton("My Projects");
-    //TODO Implement for getUserView
     private final JButton editUserProfileButton = new JButton("Edit My Profile");
 
 

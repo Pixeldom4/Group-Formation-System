@@ -12,11 +12,11 @@ public class EditUserPresenter implements EditUserOutputBoundary{
 
     @Override
     public void prepareSuccessView(EditUserOutputData outputData) {
-
+        editProfileViewModel.saveSuccess();
     }
 
     @Override
     public void prepareFailView(String error) {
-
+        editProfileViewModel.saveFail(error);
     }
 }
