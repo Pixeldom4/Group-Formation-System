@@ -25,9 +25,8 @@ public class EditProjectOutputDataTest {
         HashSet<String> tags = new HashSet<>();
         tags.add("tag1");
         tags.add("tag2");
-        boolean success = true;
 
-        EditProjectOutputData outputData = new EditProjectOutputData(projectId, title, budget, description, tags, success);
+        EditProjectOutputData outputData = new EditProjectOutputData(projectId, title, budget, description, tags);
 
         // Verify that the data is correctly set
         assertEquals(projectId, outputData.getProjectId());
@@ -36,7 +35,6 @@ public class EditProjectOutputDataTest {
         assertEquals(description, outputData.getDescription());
         assertEquals(tags, outputData.getTags());
         assertNotSame(tags, outputData.getTags()); // Ensure defensive copy
-        assertTrue(outputData.isSuccess());
     }
 
     /**
@@ -48,7 +46,7 @@ public class EditProjectOutputDataTest {
         tags.add("tag1");
         tags.add("tag2");
 
-        EditProjectOutputData outputData = new EditProjectOutputData(1, "New Title", 5000.0, "New Description", tags, true);
+        EditProjectOutputData outputData = new EditProjectOutputData(1, "New Title", 5000.0, "New Description", tags);
 
         HashSet<String> retrievedTags = outputData.getTags();
         retrievedTags.add("tag3");
