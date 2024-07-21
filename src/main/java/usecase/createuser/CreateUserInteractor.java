@@ -45,16 +45,31 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
      */
     @Override
     public void createUser(CreateUserInputData inputData) {
-        if (userRepository.getUserByEmail(inputData.getEmail()) != null) {
+        String email = inputData.getEmail();
+
+        if (userRepository.getUserByEmail(email) != null) {
             userPresenter.prepareFailView("Email is already in use.");
             return;
         }
+
+        boolean isValidEmail = email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+        if (!isValidEmail) {
+            userPresenter.prepareFailView("Please enter a valid email.");
+            return;
+        }
+
+        if (inputData.getPassword().length() < 5) {
+            userPresenter.prepareFailView("Password must be at least 5 characters long.");
+            return;
+        }
+
         String hashedPassword = this.passwordHasher.hashPassword(inputData.getPassword());
-        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword);
+        User user = userRepository.createUser(email, inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword);
 
         CreateUserOutputData outputData;
         if (user != null) {
-            outputData = new CreateUserOutputData(user.getUserId(), user.getFirstName(), user.getLastName(), user.getUserEmail(), user.getDesiredCompensation(), user.getTags(), true);
+            outputData = new CreateUserOutputData(user.getUserId(), user.getFirstName(), user.getLastName(),email, user.getDesiredCompensation(), user.getTags(), true);
             userPresenter.prepareSuccessView(outputData);
         } else {
             userPresenter.prepareFailView("Failed to create user.");
