@@ -1,9 +1,10 @@
 package view;
 
-import java.util.HashSet;
-
+import entities.User;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.getloggedinuser.GetLoggedInUserPresenter;
+import viewmodel.EditProfileViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
@@ -14,11 +15,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashSet;
 
 public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
-    private final GetLoggedInUserController getLoggedInUserController;
-    private final ViewManagerModel viewManagerModel;
     private final EditUserController editUserController;
+    private final ViewManagerModel viewManagerModel;
+    private final GetLoggedInUserController getLoggedInUserController;
+    private User loggedInUser;
+    private final EditProfileViewModel editProfileViewModel;
 
     private final JPanel userInfoPanel = new JPanel();
     private final JPanel userDataPanel = new JPanel();
@@ -42,14 +46,13 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
 
     private final JButton saveButton = new JButton("Save");
 
-
-
-
-    public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController) {
+    public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
         this.viewManagerModel = viewManagerModel;
+        this.getLoggedInUserController = getLoggedInUserController;
+        this.editProfileViewModel = editProfileViewModel;
         this.viewManagerModel.addPropertyChangeListener(this);
         this.editUserController = editUserController;
-        this.getLoggedInUserController = getLoggedInUserController;
+        this.loggedInUser = loggedInUser;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
@@ -65,7 +68,9 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
 
         userInfoPanel.add(userDataPanel);
 
-        this.add(userInfoPanel);
+        tagPanel.setLayout(tagPanelLayout);
+        tagPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        tagPanel.add(tagPanelLabel);
 
         addTagButton.addActionListener(e -> {
             String tagText = projectTagsField.getText();
@@ -76,28 +81,28 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
             }
         });
 
+        userInfoPanel.add(projectTagsField);
+        userInfoPanel.add(addTagButton);
+        userInfoPanel.add(tagPanel);
+
+        this.add(userInfoPanel);
+
         saveButton.addActionListener(e -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             double desiredCompensation = Double.parseDouble(desiredCompensationField.getText());
-            HashSet<String> tags = null;
 
             // Call the EditUserController to save the user information
-            // The userid is just for testing
-            //LoginPanelViewModel loginPanelViewModel = null;
-            editUserController.editUser(//loginPanelViewModel.getLoginUser()
-                    12323 , firstName, lastName, desiredCompensation,tags);
+            editUserController.editUser(editProfileViewModel.getUserId(), firstName, lastName, loggedInUser.getUserEmail(), desiredCompensation, tags);
         });
 
         this.add(saveButton);
     }
 
     private void addTagToPanel(String text) {
-
         if (text.isEmpty()) {
             return;
         }
-
         if (tags.contains(text)) {
             return;
         }
@@ -136,8 +141,6 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         tagPanel.repaint();
     }
 
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         // Implement any additional action events if needed
@@ -145,14 +148,15 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-//        if (evt.getPropertyName().equals("login")) {
-//            User user =
-//            firstNameField.setText(user.getFirstName());
-//            lastNameField.setText(user.getLastName());
-//            desiredCompensationField.setText(String.valueOf(user.getDesiredCompensation()));
-//        }
         if (evt.getPropertyName().equals("login")) {
-            getLoggedInUserController.getLoggedInUser();
+            if (loggedInUser != null) {
+                firstNameField.setText(loggedInUser.getFirstName());
+                lastNameField.setText(loggedInUser.getLastName());
+                desiredCompensationField.setText(String.valueOf(loggedInUser.getDesiredCompensation()));
+                for (String tag : loggedInUser.getTags()) {
+                    addTagToPanel(tag);
+                }
+            }
         }
     }
 

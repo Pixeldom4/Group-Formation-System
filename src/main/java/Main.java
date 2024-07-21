@@ -110,10 +110,13 @@ class Main {
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
+
+
         EditProfilePanel editProfilePanel = new EditProfilePanel(
                 viewManagerModel,
                 editUserController,
-                myProfileGetLoggedInUserController
+                myProfileGetLoggedInUserController,
+                editProfileViewModel
         );
 
         // add views to card layout
