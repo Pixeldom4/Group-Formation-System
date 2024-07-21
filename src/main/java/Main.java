@@ -87,18 +87,34 @@ class Main {
         // Edit Project Panel
         EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
         EditProjectController editProjectController = EditProjectUseCaseFactory.createController(editProjectPanelViewModel);
-        EditProjectPanel editProjectPanel = new EditProjectPanel(editProjectPanelViewModel, editProjectController);
+        EditProjectPanel editProjectPanel = new EditProjectPanel(
+                editProjectPanelViewModel,
+                editProjectController,
+                getApplicationsController,
+                deleteProjectController,
+                displayProjectApplicationViewModel,
+                acceptApplicationController,
+                rejectApplicationController
+        );
 
-        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel, getLoggedInUserController, getProjectsController,
-                                                              deleteProjectController, displayProjectApplicationViewModel,
-                                                              getApplicationsController, acceptApplicationController, rejectApplicationController,
-                                                              editProjectPanelViewModel, editProjectPanel);
+        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(
+                myProjectsViewModel,
+                viewManagerModel,
+                getLoggedInUserController,
+                getProjectsController,
+                getApplicationsController,
+                editProjectPanelViewModel,
+                editProjectPanel);
 
         // Edit Profile Panel
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
-        EditProfilePanel editProfilePanel = new EditProfilePanel(viewManagerModel, editUserController, myProfileGetLoggedInUserController);
+        EditProfilePanel editProfilePanel = new EditProfilePanel(
+                viewManagerModel,
+                editUserController,
+                myProfileGetLoggedInUserController
+        );
 
         // add views to card layout
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
