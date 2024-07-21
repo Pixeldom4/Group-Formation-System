@@ -7,6 +7,10 @@ import dataaccess.database.UserRepository;
 import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
 
+/**
+ * Configuration class for setting up data access repositories.
+ * Provides methods to get the appropriate repositories based on configuration.
+ */
 public class DataAccessConfig {
     public static int USE_LOCAL = 0; // Set this to 1 to use local, 0 to use database
 
@@ -28,10 +32,9 @@ public class DataAccessConfig {
     private DataAccessConfig() { }
 
     /**
-     * Initializes the database
+     * Initializes the database by connecting to it and creating necessary tables.
      */
     public static void initializeDatabase(){
-        // Casting so that database can be initialized with parent class methods
         Database init_upr = (Database) userProjectsRepository;
         Database init_ur = (Database) userRepository;
         Database init_pr = (Database) projectRepository;
@@ -49,55 +52,58 @@ public class DataAccessConfig {
     }
 
     /**
-     * Returns the ProjectRepository that would be used in the application
-     * @return the ProjectRepository
+     * Returns the ProjectRepository that will be used in the application.
+     * @return the ProjectRepository instance
      */
     public static IProjectRepository getProjectRepository() {
         return USE_LOCAL == 1 ? projectDataAccess : projectRepository;
     }
 
+    /**
+     * Returns the LocalEmbedRepository that will be used in the application.
+     * @return the LocalEmbedRepository instance
+     */
     public static ILocalEmbedRepository getEmbedDataAccess() {
         return embedDataAccess;
     }
 
     /**
-     * Returns the UserRepository that would be used in the application
-     * @return the UserRepository
+     * Returns the UserRepository that will be used in the application.
+     * @return the UserRepository instance
      */
     public static IUserRepository getUserRepository() {
         return USE_LOCAL == 1 ? userDataAccess : userRepository;
     }
 
     /**
-     * Returns the UserProjectsRepository that would be used in the application
-     * @return the UserProjectsRepository
+     * Returns the UserProjectsRepository that will be used in the application.
+     * @return the UserProjectsRepository instance
      */
     public static IUserProjectsRepository getUserProjectsRepository() {
         return USE_LOCAL == 1 ? userProjectsDataAccess : userProjectsRepository;
     }
 
     /**
-     * Returns the ApplicationRepository that would be used in the application
-     * @return the ApplicationRepository
+     * Returns the ApplicationRepository that will be used in the application.
+     * @return the ApplicationRepository instance
      */
     public static IApplicationRepository getApplicationRepository() {
         return USE_LOCAL == 1 ? applicationDataAccess : applicationRepository;
     }
 
     /**
-     * Returns the LoginUserDetails that would be used in the application
-     * @return the LoginUserDetails
+     * Returns the LoginUserDetails that will be used in the application.
+     * @return the LoginUserDetails instance
      */
     public static ILoginUserDetails getLoginUserDetails() {
         return loginUserDetails;
     }
 
     /**
-     * Returns the path to the CSV files for the application
+     * Returns the path to the CSV files for the application.
      * @return the path to the CSV files
      */
     public static String getProjectCSVPath() {
         return "local_data/projects/";
     }
-
 }

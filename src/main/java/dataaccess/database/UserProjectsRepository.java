@@ -8,6 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 
+/**
+ * A class representing the UserProjects Repository. In particular, this class manages the UserProjects table, which
+ * handles the many-to-many relationship between Users and Projects.
+ */
 public class UserProjectsRepository extends SQLDatabaseManager implements IUserProjectsRepository {
 
     public UserProjectsRepository(String databaseName) {
