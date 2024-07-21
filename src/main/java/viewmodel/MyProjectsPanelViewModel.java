@@ -11,7 +11,7 @@ import java.util.HashSet;
 public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private Object[][] data;
-    private String errorMessage;
+    public String errorMessage;
     private User loggedInUser;
 
     public MyProjectsPanelViewModel() {

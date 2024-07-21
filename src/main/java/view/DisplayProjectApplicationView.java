@@ -33,7 +33,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
     private final int projectId;
 
     private final int[] columnWidths = {400, 200, 200, 200};
-    private final String[] columnNames = {"Applicant", "View", "Accept", "Decline"};
+    private final String[] columnNames = {"Applicant", "view", "Accept", "Decline"};
     private final JTable infoTable = new JTable();
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
@@ -96,7 +96,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         DisplayProjectApplicationView temp = this;
         for (int i = 0; i < applicationsData.length; i++) {
             info[i][0] = applicationsData[i][0];
-            info[i][1] = "View";
+            info[i][1] = "view";
             info[i][2] = "Accept";
             info[i][3] = "Decline";
             int finalI = i;
