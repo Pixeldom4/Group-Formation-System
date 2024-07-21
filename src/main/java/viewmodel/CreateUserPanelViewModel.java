@@ -3,18 +3,25 @@ package viewmodel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * ViewModel for the Create User Panel.
+ */
 public class CreateUserPanelViewModel extends ViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private boolean success;
     private String errorMessage;
     private String createdUser;
 
+    /**
+     * Constructs a CreateUserPanelViewModel.
+     */
     public CreateUserPanelViewModel(){
         super("CreateUserView");
     }
 
     /**
-     * Sets whether the creation was successful
+     * Sets whether the creation was successful.
+     *
      * @param success the success of the creation
      */
     public void setSuccess(boolean success) {
@@ -22,7 +29,8 @@ public class CreateUserPanelViewModel extends ViewModel {
     }
 
     /**
-     * Gets whether the creation was successful
+     * Gets whether the creation was successful.
+     *
      * @return the success of the creation
      */
     public boolean isSuccess() {
@@ -30,7 +38,8 @@ public class CreateUserPanelViewModel extends ViewModel {
     }
 
     /**
-     * Sets the error message during the creation
+     * Sets the error message during the creation.
+     *
      * @param errorMessage the error message
      */
     public void setErrorMessage(String errorMessage) {
@@ -38,7 +47,8 @@ public class CreateUserPanelViewModel extends ViewModel {
     }
 
     /**
-     * Gets the error message during the creation
+     * Gets the error message during the creation.
+     *
      * @return the error message
      */
     public String getErrorMessage() {
@@ -46,7 +56,8 @@ public class CreateUserPanelViewModel extends ViewModel {
     }
 
     /**
-     * Sets the created user
+     * Sets the created user.
+     *
      * @param createdUser the name of the created user
      */
     public void setCreatedUser(String createdUser) {
@@ -54,18 +65,27 @@ public class CreateUserPanelViewModel extends ViewModel {
     }
 
     /**
-     * Returns the name of the created user
+     * Returns the name of the created user.
+     *
      * @return the name of the created user
      */
     public String getCreatedUser() {
         return createdUser;
     }
 
+    /**
+     * Fires a property change event for the success property.
+     */
     @Override
     public void firePropertyChanged() {
         support.firePropertyChange("success", null, success);
     }
 
+    /**
+     * Adds a property change listener.
+     *
+     * @param listener the property change listener
+     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);

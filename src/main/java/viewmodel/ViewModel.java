@@ -2,12 +2,17 @@ package viewmodel;
 
 import java.beans.PropertyChangeListener;
 
+/**
+ * Abstract base class for all view models.
+ * Provides common functionality for managing view names and property change events.
+ */
 public abstract class ViewModel {
 
     private final String viewName;
 
     /**
      * Creates a view model with the given view name.
+     *
      * @param viewName the name of the view
      */
     public ViewModel(String viewName) {
@@ -16,6 +21,7 @@ public abstract class ViewModel {
 
     /**
      * Returns the name of the view.
+     *
      * @return the name of the view
      */
     public String getViewName() {
@@ -31,6 +37,7 @@ public abstract class ViewModel {
     /**
      * Adds a listener to the property change event.
      * Used to register listeners (usually views) to the view model.
+     *
      * @param listener the listener
      */
     public abstract void addPropertyChangeListener(PropertyChangeListener listener);
