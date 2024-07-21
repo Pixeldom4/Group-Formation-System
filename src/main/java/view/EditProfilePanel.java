@@ -43,7 +43,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final JButton addTagButton = new JButton("Add Tag");
     private final JLabel tagPanelLabel = new JLabel("Project tags: ");
     private final HashSet<String> tags = new HashSet<>();
-
+    private final JButton myCurrentProfileButton = new JButton("Current Profile");
     private final JButton saveButton = new JButton("Save");
 
     public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
@@ -97,6 +97,11 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         });
 
         this.add(saveButton);
+        this.add(myCurrentProfileButton);
+
+        myCurrentProfileButton.addActionListener(e -> {
+            DisplayMyProfileView displayMyProfileView = new DisplayMyProfileView(loggedInUser); // Use this line when want to display project
+        });
     }
 
     private void addTagToPanel(String text) {
