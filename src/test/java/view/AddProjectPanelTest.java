@@ -1,6 +1,5 @@
 package view;
 
-import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.createproject.CreateProjectController;
