@@ -19,23 +19,33 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * A panel for displaying and managing the user's projects.
+ */
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final GetProjectsController getProjectsController;
-
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
-
     private final EditProjectPanelViewModel editProjectPanelViewModel;
     private final EditProjectPanel editProjectPanel;
-
     private final GetLoggedInUserController getLoggedInUserController;
-
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100};
     private final String[] columnNames = {"Project Title", "Description", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
+    /**
+     * Constructs a MyProjectsPanel.
+     *
+     * @param myProjectsPanelViewModel the view model for the user's projects
+     * @param viewManagerModel the view manager model
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param getProjectsController the controller for getting projects
+     * @param getApplicationsController the controller for getting applications
+     * @param editProjectPanelViewModel the view model for editing a project
+     * @param editProjectPanel the panel for editing a project
+     */
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
@@ -44,11 +54,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                            EditProjectPanelViewModel editProjectPanelViewModel,
                            EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;
-
         this.getLoggedInUserController = getLoggedInUserController;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
         this.getProjectsController = getProjectsController;
-
         this.editProjectPanelViewModel = editProjectPanelViewModel;
         this.editProjectPanel = editProjectPanel;
 
@@ -56,7 +64,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         viewManagerModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         this.add(infoPanel);
 
         JButton refreshButton = new JButton("Refresh");
@@ -67,6 +74,11 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         });
     }
 
+    /**
+     * Adds projects to the table.
+     *
+     * @param projectData the data of the projects
+     */
     private void addProjects(Object[][] projectData){
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> applicationButtonActions = new ArrayList<>();
@@ -89,7 +101,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                     int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
 
                     editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
-                                                                projectDescription, projectTags, editorId);
+                            projectDescription, projectTags, editorId);
                     editProjectPanelViewModel.initDetails();
 
                     // Display editProjectPanel in your application window
@@ -123,7 +135,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override
@@ -144,7 +156,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             JOptionPane.showMessageDialog(this, errorMessage);
         }
         if (evt.getPropertyName().equals("deleteProject")) {
-            JOptionPane.showMessageDialog(null, "Sucessfully deleted project");
+            JOptionPane.showMessageDialog(null, "Successfully deleted project");
         }
     }
 }

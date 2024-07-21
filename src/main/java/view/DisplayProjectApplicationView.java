@@ -23,6 +23,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * A view for displaying and managing project applications.
+ */
 public class DisplayProjectApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
 
     private JTextField projectTitleField;
@@ -40,6 +43,15 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
     private final AcceptApplicationController acceptApplicationController;
     private final RejectApplicationController rejectApplicationController;
 
+    /**
+     * Constructs a DisplayProjectApplicationView.
+     *
+     * @param projectId the ID of the project
+     * @param displayProjectApplicationViewModel the view model for displaying project applications
+     * @param getApplicationsController the controller for getting applications
+     * @param acceptApplicationController the controller for accepting applications
+     * @param rejectApplicationController the controller for rejecting applications
+     */
     public DisplayProjectApplicationView(int projectId,
                                          DisplayProjectApplicationViewModel displayProjectApplicationViewModel,
                                          GetApplicationsController getApplicationsController,
@@ -55,7 +67,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
         this.rejectApplicationController = rejectApplicationController;
 
-
         setTitle("Project Applications");
         setSize(400, 600);
         setLayout(new BorderLayout());
@@ -70,6 +81,11 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         });
     }
 
+    /**
+     * Displays the applicants in the table.
+     *
+     * @param applicationsData the data of the applications
+     */
     private void displayApplicants(Object[][] applicationsData){
         ArrayList<ButtonAction> viewButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> acceptButtonActions = new ArrayList<>();
@@ -79,10 +95,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
         DisplayProjectApplicationView temp = this;
         for (int i = 0; i < applicationsData.length; i++) {
-//            applicationsData[count][0] = user.getFirstName() + " " + user.getLastName();
-//            applicationsData[count][1] = application.getSenderUserId();
-//            applicationsData[count][2] = application.getText();
-//            applicationsData[count][3] = application.getPdfBytes();
             info[i][0] = applicationsData[i][0];
             info[i][1] = "view";
             info[i][2] = "Accept";
@@ -194,7 +206,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             }
             else {
                 JOptionPane.showMessageDialog(null,
-                                              displayProjectApplicationViewModel.getErrorMessage());
+                        displayProjectApplicationViewModel.getErrorMessage());
             }
         }
 
@@ -207,7 +219,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             }
             else {
                 JOptionPane.showMessageDialog(null,
-                                              displayProjectApplicationViewModel.getErrorMessage());
+                        displayProjectApplicationViewModel.getErrorMessage());
             }
         }
 
@@ -220,7 +232,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             }
             else {
                 JOptionPane.showMessageDialog(null,
-                                              displayProjectApplicationViewModel.getErrorMessage());
+                        displayProjectApplicationViewModel.getErrorMessage());
             }
         }
     }

@@ -17,6 +17,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 
+/**
+ * A panel for editing project details.
+ */
 public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     private final EditProjectPanelViewModel editProjectViewModel;
@@ -37,6 +40,17 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
     private int projectId;
     private int editorId;
 
+    /**
+     * Constructs an EditProjectPanel.
+     *
+     * @param editProjectViewModel the view model for editing the project
+     * @param editProjectController the controller for editing the project
+     * @param getApplicationsController the controller for getting applications
+     * @param deleteProjectController the controller for deleting the project
+     * @param displayProjectApplicationViewModel the view model for displaying project applications
+     * @param acceptApplicationController the controller for accepting applications
+     * @param rejectApplicationController the controller for rejecting applications
+     */
     public EditProjectPanel(
             EditProjectPanelViewModel editProjectViewModel,
             EditProjectController editProjectController,
@@ -122,6 +136,16 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     }
 
+    /**
+     * Sets the project details in the panel.
+     *
+     * @param projectId the ID of the project
+     * @param editorId the ID of the editor
+     * @param title the title of the project
+     * @param budget the budget of the project
+     * @param description the description of the project
+     * @param tags the tags associated with the project
+     */
     public void setProjectDetails(int projectId, int editorId, String title, double budget, String description, HashSet<String> tags) {
         this.projectId = projectId;
         this.editorId = editorId;
@@ -131,6 +155,9 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         tagsField.setText(String.join(", ", tags));
     }
 
+    /**
+     * Saves the project details by calling the edit project controller.
+     */
     private void saveProject() {
         String newTitle = titleField.getText();
         double newBudget = Double.parseDouble(budgetField.getText());
@@ -142,6 +169,9 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         editProjectController.editProject(projectId, newTitle, newBudget, newDescription, newTags, editorId);
     }
 
+    /**
+     * Refreshes the project details from the view model.
+     */
     private void refreshProject() {
         // Assume the view model already has the current project details
         titleField.setText(editProjectViewModel.getTitle());

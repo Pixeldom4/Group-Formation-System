@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * A view for displaying the details of an individual project.
+ */
 public class DisplayIndividualProjectView extends JFrame implements ActionListener, PropertyChangeListener {
 
     private JTextField projectTitleField;
@@ -16,8 +19,11 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
     private JTextArea projectDescriptionArea;
     private JTextField projectID;
 
-
-
+    /**
+     * Constructs a DisplayIndividualProjectView.
+     *
+     * @param project the project to display
+     */
     public DisplayIndividualProjectView(ProjectInterface project) {
         setTitle("Project Details");
         setSize(400, 600);
@@ -35,14 +41,15 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
         tagsField.setEditable(false);
         projectDescriptionArea = new JTextArea(project.getProjectDescription());
         projectDescriptionArea.setEditable(false);
+
         // Project Title
-        detailsPanel.add(new JLabel("Project Title:" + project.getProjectTitle() ));
+        detailsPanel.add(new JLabel("Project Title:" + project.getProjectTitle()));
 
         // Project ID
-        detailsPanel.add(new JLabel("Project ID:"+ project.getProjectId()));
+        detailsPanel.add(new JLabel("Project ID:" + project.getProjectId()));
 
         // Project Tags
-        detailsPanel.add(new JLabel("Tags:" + project.getProjectTags() ));
+        detailsPanel.add(new JLabel("Tags:" + project.getProjectTags()));
 
         // Project Description
         JLabel projectDescriptionLabel = new JLabel("Project Description:");
@@ -57,20 +64,17 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
 
         add(detailsPanel, BorderLayout.CENTER);
 
-        add(detailsPanel, BorderLayout.CENTER);
-
         this.setVisible(true);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName().equals("displayDetailProject")){
+        if (evt.getPropertyName().equals("displayDetailProject")) {
             ProjectInterface project = (ProjectInterface) evt.getNewValue();
             projectTitleField.setText(project.getProjectTitle());
         }

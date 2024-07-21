@@ -7,11 +7,15 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 /**
- * A text field that only accepts numeric input
+ * A text field that only accepts numeric input.
  */
 public class NumericTextField extends JTextField {
     private DocumentFilter filter;
 
+    /**
+     * Constructs a NumericTextField with a default column size of 10.
+     * Sets up a DocumentFilter to allow only numeric input.
+     */
     public NumericTextField() {
         super(10);
         filter = new DocumentFilter() {
@@ -32,6 +36,10 @@ public class NumericTextField extends JTextField {
         ((AbstractDocument) this.getDocument()).setDocumentFilter(filter);
     }
 
+    /**
+     * Clears the text field.
+     * Temporarily removes the DocumentFilter to ensure the field is cleared.
+     */
     public void clear() {
         AbstractDocument doc = (AbstractDocument) this.getDocument();
         doc.setDocumentFilter(null);

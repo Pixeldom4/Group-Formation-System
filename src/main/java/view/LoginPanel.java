@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * A panel for logging in the user.
+ */
 public class LoginPanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final LoginPanelViewModel loginPanelViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -23,6 +26,13 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     private final JPasswordField passwordField = new JPasswordField();
     private final JButton loginButton = new JButton("Login");
 
+    /**
+     * Constructs a LoginPanel.
+     *
+     * @param viewManagerModel the view manager model
+     * @param loginPanelViewModel the view model for the login panel
+     * @param loginUserController the controller for logging in the user
+     */
     public LoginPanel(ViewManagerModel viewManagerModel, LoginPanelViewModel loginPanelViewModel, LoginUserController loginUserController) {
         this.loginUserController = loginUserController;
         this.loginPanelViewModel = loginPanelViewModel;
@@ -50,7 +60,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override
@@ -70,6 +80,9 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         }
     }
 
+    /**
+     * Handles the login process by updating the view manager model.
+     */
     private void login(){
         viewManagerModel.login();
     }

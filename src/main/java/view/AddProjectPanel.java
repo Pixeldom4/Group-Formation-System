@@ -16,6 +16,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 
+/**
+ * Panel for adding a new project.
+ */
 public class AddProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final AddProjectPanelViewModel addProjectPanelViewModel;
@@ -44,6 +47,14 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     private final HashSet<String> tags = new HashSet<>();
 
+    /**
+     * Constructs an AddProjectPanel.
+     *
+     * @param viewManagerModel the view manager model
+     * @param addProjectPanelViewModel the view model for the add project panel
+     * @param createProjectController the controller for creating projects
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     */
     public AddProjectPanel(ViewManagerModel viewManagerModel,
                            AddProjectPanelViewModel addProjectPanelViewModel,
                            CreateProjectController createProjectController,
@@ -106,6 +117,11 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     }
 
+    /**
+     * Adds a tag to the panel.
+     *
+     * @param text the tag text
+     */
     private void addTagToPanel(String text) {
 
         if (text.isEmpty()) {
@@ -152,9 +168,12 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
+    /**
+     * Clears the panel fields and tags.
+     */
     private void clearPanel(){
         projectNameField.setText("");
         projectBudgetField.clear();
