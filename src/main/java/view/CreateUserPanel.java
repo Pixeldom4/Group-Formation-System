@@ -12,6 +12,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 
+/**
+ * Panel for creating a new user.
+ */
 public class CreateUserPanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final CreateUserPanelViewModel createUserPanelViewModel;
     private final CreateUserController createUserController;
@@ -29,7 +32,12 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
     private final NumericTextField compensationField = new NumericTextField();
     private final JButton createUserButton = new JButton("Create User");
 
-
+    /**
+     * Constructs a CreateUserPanel.
+     *
+     * @param createUserPanelViewModel the view model for the create user panel
+     * @param createUserController the controller for creating users
+     */
     public CreateUserPanel(CreateUserPanelViewModel createUserPanelViewModel, CreateUserController createUserController) {
         this.createUserPanelViewModel = createUserPanelViewModel;
         createUserPanelViewModel.addPropertyChangeListener(this);
@@ -60,12 +68,11 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
 
         this.add(createUserInfo);
         this.add(createUserButton);
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override

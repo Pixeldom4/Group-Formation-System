@@ -3,7 +3,6 @@ package view;
 import entities.User;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getloggedinuser.GetLoggedInUserPresenter;
 import viewmodel.EditProfileViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -17,6 +16,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 
+/**
+ * A panel for editing the user's profile.
+ */
 public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final EditUserController editUserController;
     private final ViewManagerModel viewManagerModel;
@@ -37,7 +39,6 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final JTextField desiredCompensationField = new NumericTextField();
     private final JTextField projectTagsField = new JTextField();
 
-
     private final GridLayout tagPanelLayout = new GridLayout(0, 1);
     private final JPanel tagPanel = new JPanel();
     private final JButton addTagButton = new JButton("Add Tag");
@@ -46,6 +47,14 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final JButton myCurrentProfileButton = new JButton("Current Profile");
     private final JButton saveButton = new JButton("Save");
 
+    /**
+     * Constructs an EditProfilePanel.
+     *
+     * @param viewManagerModel the view manager model
+     * @param editUserController the controller for editing user information
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param editProfileViewModel the view model for editing the profile
+     */
     public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
@@ -73,7 +82,6 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         tagPanel.add(tagPanelLabel);
         tagPanel.setLayout(tagPanelLayout);
         tagPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
 
         addTagButton.addActionListener(e -> {
             String tagText = projectTagsField.getText();
@@ -109,6 +117,11 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         });
     }
 
+    /**
+     * Adds a tag to the tag panel.
+     *
+     * @param text the text of the tag to add
+     */
     private void addTagToPanel(String text) {
         if (text.isEmpty()) {
             return;

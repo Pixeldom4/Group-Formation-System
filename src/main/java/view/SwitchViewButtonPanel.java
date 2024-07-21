@@ -12,6 +12,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * A panel that contains buttons for switching views in the application.
+ */
 public class SwitchViewButtonPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel;
@@ -23,12 +26,18 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
     private final JButton getProjectsButton = new JButton("My Projects");
     private final JButton editUserProfileButton = new JButton("Edit My Profile");
 
-
     private final JButton createUserButton = new JButton("Create User");
     private final JButton loginUserButton = new JButton("Login User");
 
     private final JButton logoutButton = new JButton("Logout");
 
+    /**
+     * Constructs a SwitchViewButtonPanel.
+     *
+     * @param viewManagerModel the view manager model
+     * @param switchViewButtonPanelViewModel the view model for the switch view button panel
+     * @param logoutController the controller for logging out the user
+     */
     public SwitchViewButtonPanel(ViewManagerModel viewManagerModel,
                                  SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel,
                                  LogoutController logoutController) {
@@ -88,7 +97,7 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override

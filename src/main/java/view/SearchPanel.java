@@ -20,6 +20,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+/**
+ * A panel for searching and displaying projects.
+ */
 public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SearchPanelViewModel searchPanelModel;
@@ -41,6 +44,15 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final String[] columnNames = {"Project Title", "Description", "View Details", "Request joining"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
+    /**
+     * Constructs a SearchPanel for searching users.
+     *
+     * @param viewManagerModel the view manager model
+     * @param searchPanelModel the search panel model
+     * @param searchUserController the controller for searching users
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param createApplicationController the controller for creating applications
+     */
     public SearchPanel(ViewManagerModel viewManagerModel,
                        SearchPanelViewModel searchPanelModel,
                        SearchUserController searchUserController,
@@ -53,6 +65,15 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         });
     }
 
+    /**
+     * Constructs a SearchPanel for searching projects.
+     *
+     * @param viewManagerModel the view manager model
+     * @param searchPanelModel the search panel model
+     * @param searchProjectController the controller for searching projects
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param createApplicationController the controller for creating applications
+     */
     public SearchPanel(ViewManagerModel viewManagerModel,
                        SearchPanelViewModel searchPanelModel,
                        SearchProjectController searchProjectController,
@@ -65,6 +86,15 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         });
     }
 
+    /**
+     * Constructs a SearchPanel for searching projects by ID.
+     *
+     * @param viewManagerModel the view manager model
+     * @param searchPanelModel the search panel model
+     * @param searchProjectByIdController the controller for searching projects by ID
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param createApplicationController the controller for creating applications
+     */
     public SearchPanel(ViewManagerModel viewManagerModel,
                        SearchPanelViewModel searchPanelModel,
                        SearchProjectByIdController searchProjectByIdController,
@@ -78,8 +108,12 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     }
 
     /**
-     * Used to initialize common components
+     * Used to initialize common components.
+     *
+     * @param viewManagerModel the view manager model
      * @param searchPanelModel the search panel model
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param createApplicationController the controller for creating applications
      */
     private SearchPanel(ViewManagerModel viewManagerModel,
                         SearchPanelViewModel searchPanelModel,
@@ -112,7 +146,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override
@@ -140,6 +174,12 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         }
     }
 
+    /**
+     * Cuts a string to a maximum length.
+     *
+     * @param str the string to cut
+     * @return the cut string
+     */
     private String cutString(String str) {
         int maxLength = 100;
         if (str.length() <= maxLength) {
@@ -148,6 +188,11 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         return str.substring(0, maxLength) + "...";
     }
 
+    /**
+     * Displays the search results in the table.
+     *
+     * @param projectRankingList the list of projects to display
+     */
     private void displaySearchResult(ArrayList<ProjectInterface> projectRankingList) {
         ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> requestToJoinButtonActions = new ArrayList<>();
@@ -171,8 +216,8 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                     int projectId = projectRankingList.get(finalI).getProjectId();
                     System.out.println("Requesting to join project: " + projectId);
                     displayView = new DisplayCreateApplicationView(searchPanelModel.getLoggedInUser().getUserId(),
-                                                                   projectId,
-                                                                   createApplicationController);
+                            projectId,
+                            createApplicationController);
                 }
             });
         }
@@ -194,6 +239,4 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
             columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
         }
     }
-
-
 }

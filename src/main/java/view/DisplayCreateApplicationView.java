@@ -13,6 +13,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/**
+ * A view for creating an application.
+ */
 public class DisplayCreateApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
     private final CreateApplicationController createApplicationController;
 
@@ -24,15 +27,20 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
     private final JButton applicationButton = new JButton("Upload file");
     private final JButton submitButton = new JButton("Submit");
 
+    /**
+     * Constructs a DisplayCreateApplicationView.
+     *
+     * @param loginUserId the ID of the logged-in user
+     * @param projectId the ID of the project
+     * @param createApplicationController the controller for creating applications
+     */
     public DisplayCreateApplicationView(int loginUserId, int projectId, CreateApplicationController createApplicationController) {
-
         this.createApplicationController = createApplicationController;
 
         setTitle("Create Application");
         setSize(400, 200);
 
         JPanel panel = new JPanel();
-
         panel.setLayout(new GridLayout(0, 2));
 
         panel.add(infoLabel);
@@ -69,14 +77,13 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
         this.setVisible(true);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // No implementation needed
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        // No implementation needed
     }
 }
