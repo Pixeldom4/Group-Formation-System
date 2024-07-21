@@ -1,19 +1,23 @@
 package usecase.searchforuser;
 
+/**
+ * Controller class for searching users.
+ * Interacts with the input boundary to process user search by email.
+ */
 public class SearchUserController {
     private final SearchUserInputBoundary interactor;
 
     /**
-     * Constructor for the SearchUserController class.
+     * Constructs a SearchUserController.
      *
-     * @param interactor The interactor to be used.
+     * @param interactor The interactor that handles the search user use case.
      */
     public SearchUserController(SearchUserInputBoundary interactor) {
         this.interactor = interactor;
     }
 
     /**
-     * Search for a user by his email.
+     * Searches for a user by email.
      *
      * @param email The email of the user to search for.
      */

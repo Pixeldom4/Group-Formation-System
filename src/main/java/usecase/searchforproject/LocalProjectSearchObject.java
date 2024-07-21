@@ -8,24 +8,38 @@ import dataaccess.IProjectRepository;
 
 import java.util.*;
 
+/**
+ * Local implementation for searching projects.
+ * Uses an embedding API to search for projects based on cosine similarity.
+ */
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
     private IProjectRepository projectDataAccess = DataAccessConfig.getProjectRepository();
 
+    /**
+     * Constructs a LocalProjectSearchObject with the default project repository.
+     */
     public LocalProjectSearchObject() {
-
     }
 
     /**
-     * Creates a new LocalProjectSearchObject using the given project repository.
+     * Constructs a LocalProjectSearchObject using the given project repository.
      * Used for testing where files are not stored in the project folder.
-     * @param projectRepository the project repository to use
+     *
+     * @param projectRepository the project repository to use.
      */
-    public LocalProjectSearchObject(IProjectRepository projectRepository){
+    public LocalProjectSearchObject(IProjectRepository projectRepository) {
         projectDataAccess = projectRepository;
     }
 
+    /**
+     * Searches for projects based on the given query.
+     *
+     * @param query  the query to search for.
+     * @param amount the amount of projects to return.
+     * @return the list of projects that match the query.
+     */
     @Override
     public ArrayList<ProjectInterface> searchProjects(String query, int amount) {
         float[] queryEmbedding = embeddingAPI.getEmbedData(query);
@@ -51,6 +65,14 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
         return result;
     }
 
+    /**
+     * Sorts the map by its values.
+     *
+     * @param map the map to sort.
+     * @param <K> the type of keys.
+     * @param <V> the type of values.
+     * @return the sorted map.
+     */
     private <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
         list.sort(Map.Entry.comparingByValue());
@@ -64,6 +86,13 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
         return result;
     }
 
+    /**
+     * Calculates the cosine similarity between two vectors.
+     *
+     * @param vectorA the first vector.
+     * @param vectorB the second vector.
+     * @return the cosine similarity.
+     */
     private float calcCosineSimilarity(float[] vectorA, float[] vectorB) {
         double dotProduct = 0.0;
         double normA = 0.0;

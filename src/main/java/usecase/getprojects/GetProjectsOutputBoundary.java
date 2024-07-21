@@ -1,9 +1,9 @@
 package usecase.getprojects;
 
-import usecase.loginuser.LoginUserOutputData;
-
-import java.util.HashSet;
-
+/**
+ * Output boundary interface for retrieving projects.
+ * Defines methods to prepare success and failure views.
+ */
 public interface GetProjectsOutputBoundary {
     /**
      * Prepares the success view with the provided output data.

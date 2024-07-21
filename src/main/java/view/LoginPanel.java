@@ -71,8 +71,6 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     }
 
     private void login(){
-        viewManagerModel.setActiveView("SearchPanelView");
         viewManagerModel.login();
-        viewManagerModel.firePropertyChanged();
     }
 }

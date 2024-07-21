@@ -12,7 +12,7 @@ public class CreateProjectOutputData {
     private final double budget;
     private final String description;
     private final HashSet<String> tags;
-    private final boolean success;
+
     /**
      * Constructs a CreateProjectOutputData object with the specified details.
      *
@@ -21,15 +21,13 @@ public class CreateProjectOutputData {
      * @param budget      the budget allocated for the project.
      * @param description a brief description of the project.
      * @param tags        a set of tags associated with the project.
-     * @param success     whether the project creation was successful.
      */
-    public CreateProjectOutputData(int projectId, String title, double budget, String description, HashSet<String> tags, boolean success) {
+    public CreateProjectOutputData(int projectId, String title, double budget, String description, HashSet<String> tags) {
         this.projectId = projectId;
         this.title = title;
         this.budget = budget;
         this.description = description;
         this.tags = new HashSet<>(tags); // Defensive copy to ensure immutability
-        this.success = success;
     }
 
     /**
@@ -75,14 +73,5 @@ public class CreateProjectOutputData {
      */
     public HashSet<String> getTags() {
         return new HashSet<>(tags); // Return an unmodifiable view
-    }
-
-    /**
-     * Returns whether the project creation was successful.
-     *
-     * @return true if the project creation was successful, otherwise false.
-     */
-    public boolean isSuccess() {
-        return success;
     }
 }

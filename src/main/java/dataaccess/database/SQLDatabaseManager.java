@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * An abstract class that manages the SQL database connection and initialization.
+ */
 public abstract class SQLDatabaseManager implements Database {
     private final String DATABASE_NAME;
     private Connection connection;

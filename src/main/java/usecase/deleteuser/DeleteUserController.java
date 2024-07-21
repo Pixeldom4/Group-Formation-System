@@ -1,5 +1,9 @@
 package usecase.deleteuser;
 
+/**
+ * Controller class for deleting users.
+ * Interacts with the input boundary to process user deletion.
+ */
 public class DeleteUserController {
     private final DeleteUserInputBoundary deleteUserInteractor;
 
@@ -8,7 +12,7 @@ public class DeleteUserController {
      *
      * @param deleteUserInteractor the delete user interactor.
      */
-    public DeleteUserController(DeleteUserInputBoundary deleteUserInteractor){
+    public DeleteUserController(DeleteUserInputBoundary deleteUserInteractor) {
         this.deleteUserInteractor = deleteUserInteractor;
     }
 

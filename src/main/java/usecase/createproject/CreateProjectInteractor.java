@@ -45,7 +45,7 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
 
         if (project != null) {
             userProjectsRepository.addUserToProject(inputData.getCreatorUserId(), project.getProjectId());
-            outputData = new CreateProjectOutputData(project.getProjectId(), project.getProjectTitle(), project.getProjectBudget(), project.getProjectDescription(), project.getProjectTags(), true);
+            outputData = new CreateProjectOutputData(project.getProjectId(), project.getProjectTitle(), project.getProjectBudget(), project.getProjectDescription(), project.getProjectTags());
             projectPresenter.prepareSuccessView(outputData);
         } else {
             projectPresenter.prepareFailView("Failed to create project.");

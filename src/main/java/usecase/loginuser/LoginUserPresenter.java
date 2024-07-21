@@ -3,9 +3,18 @@ package usecase.loginuser;
 import org.apache.commons.lang3.NotImplementedException;
 import viewmodel.LoginPanelViewModel;
 
+/**
+ * Presenter class for user login.
+ * Implements the output boundary to prepare views for login operations.
+ */
 public class LoginUserPresenter implements LoginUserOutputBoundary {
     private final LoginPanelViewModel loginPanelViewModel;
 
+    /**
+     * Constructs a LoginUserPresenter with the specified view model.
+     *
+     * @param loginPanelViewModel the view model to update with login results.
+     */
     public LoginUserPresenter(LoginPanelViewModel loginPanelViewModel) {
         this.loginPanelViewModel = loginPanelViewModel;
     }
