@@ -1,4 +1,4 @@
-package usecase.create_user_use_case;
+package usecase.createuser;
 
 import dataaccess.IUserRepository;
 import dataaccess.local.LocalUserRepository;
@@ -6,10 +6,6 @@ import entities.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import usecase.PasswordHasher;
-import usecase.createuser.CreateUserInputData;
-import usecase.createuser.CreateUserInteractor;
-import usecase.createuser.CreateUserOutputBoundary;
-import usecase.createuser.CreateUserOutputData;
 
 import java.util.Arrays;
 import java.util.HashSet;

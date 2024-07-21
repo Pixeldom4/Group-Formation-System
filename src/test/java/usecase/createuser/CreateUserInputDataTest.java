@@ -1,6 +1,4 @@
-package usecase.create_user_use_case;
-
-import usecase.createuser.CreateUserInputData;
+package usecase.createuser;
 
 import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;

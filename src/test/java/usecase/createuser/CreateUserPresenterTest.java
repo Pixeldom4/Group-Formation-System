@@ -1,9 +1,7 @@
-package usecase.create_user_use_case;
+package usecase.createuser;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.createuser.CreateUserOutputData;
-import usecase.createuser.CreateUserPresenter;
 import viewmodel.CreateUserPanelViewModel;
 
 import static org.junit.jupiter.api.Assertions.*;

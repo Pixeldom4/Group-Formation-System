@@ -1,10 +1,8 @@
-package usecase.create_user_use_case;
+package usecase.createuser;
 
 import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
-
-import usecase.createuser.CreateUserOutputData;
 
 /**
  * Unit tests for the CreateUserOutputData class.
