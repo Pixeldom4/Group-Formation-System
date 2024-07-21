@@ -15,6 +15,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the ProjectRepository class.
+ */
 class ProjectRepositoryTest {
     private ProjectRepository projectRepository;
     private UserRepository userRepository;
@@ -22,6 +25,9 @@ class ProjectRepositoryTest {
     private int testProjectId;
     private int testOwnerId;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     void setUp() {
         String databaseName = "test123.db";
@@ -56,6 +62,9 @@ class ProjectRepositoryTest {
         testProjectId = project.getProjectId();
     }
 
+    /**
+     * Cleans up the test environment after each test.
+     */
     @AfterEach
     void tearDown() {
         if (projectRepository != null) {
@@ -69,7 +78,11 @@ class ProjectRepositoryTest {
         }
     }
 
-    // Method to delete user by email using UserRepository methods
+    /**
+     * Deletes a user by email using UserRepository methods.
+     *
+     * @param email the email of the user to delete
+     */
     private void deleteUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email);
         if (user != null) {
@@ -77,6 +90,9 @@ class ProjectRepositoryTest {
         }
     }
 
+    /**
+     * Tests the creation of a project.
+     */
     @Test
     void createProject() {
         HashSet<String> tags = new HashSet<>();
@@ -93,6 +109,9 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("SQL"));
     }
 
+    /**
+     * Tests the deletion of a project.
+     */
     @Test
     void deleteProject() {
         projectRepository.deleteProject(testProjectId);
@@ -101,6 +120,9 @@ class ProjectRepositoryTest {
         assertNull(project);
     }
 
+    /**
+     * Tests the retrieval of a project by its ID.
+     */
     @Test
     void getProjectById() {
         // Now retrieve the project by its ID
@@ -114,6 +136,9 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("SQL"));
     }
 
+    /**
+     * Tests adding tags to a project.
+     */
     @Test
     void addTags() {
         HashSet<String> newTags = new HashSet<>();
@@ -129,6 +154,9 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("NewTag2"));
     }
 
+    /**
+     * Tests removing tags from a project.
+     */
     @Test
     void removeTags() {
         HashSet<String> tagsToRemove = new HashSet<>();
@@ -143,6 +171,9 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("SQL"));
     }
 
+    /**
+     * Tests updating a project's details.
+     */
     @Test
     void update() {
         HashSet<String> newTags = new HashSet<>();
@@ -176,6 +207,9 @@ class ProjectRepositoryTest {
         assertArrayEquals(newEmbeddings, retrievedEmbeddings);
     }
 
+    /**
+     * Tests the retrieval of all project embeddings.
+     */
     @Test
     void getAllEmbeddings() {
         HashMap<Integer, float[]> embeddingsMap = projectRepository.getAllEmbeddings();
@@ -191,6 +225,9 @@ class ProjectRepositoryTest {
         assertEquals(0.3f, embeddings[2], 0);
     }
 
+    /**
+     * Tests the retrieval of the owner ID of a project.
+     */
     @Test
     void getOwnerId() {
         int ownerId = projectRepository.getOwnerId(testProjectId);

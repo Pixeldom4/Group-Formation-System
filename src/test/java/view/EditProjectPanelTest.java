@@ -19,6 +19,9 @@ import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the EditProjectPanel class.
+ */
 public class EditProjectPanelTest {
 
     private EditProjectPanel editProjectPanel;
@@ -31,6 +34,9 @@ public class EditProjectPanelTest {
     private RejectApplicationController rejectApplicationController;
     private EditProjectInputBoundary editProjectInteractor;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     public void setUp() {
         editProjectViewModel = new EditProjectPanelViewModel();
@@ -55,12 +61,18 @@ public class EditProjectPanelTest {
         );
     }
 
+    /**
+     * Tests the initialization of the EditProjectPanel.
+     */
     @Test
     public void testInitialization() {
         assertNotNull(editProjectPanel);
         assertEquals(10, editProjectPanel.getComponentCount());
     }
 
+    /**
+     * Tests setting project details in the EditProjectPanel.
+     */
     @Test
     public void testSetProjectDetails() {
         int projectId = 1;
@@ -80,6 +92,9 @@ public class EditProjectPanelTest {
         assertEquals("tag1, tag2", ((JTextField) editProjectPanel.getComponent(7)).getText());
     }
 
+    /**
+     * Tests saving a project in the EditProjectPanel.
+     */
     @Test
     public void testSaveProject() {
         // Set initial project details
@@ -107,6 +122,9 @@ public class EditProjectPanelTest {
         verify(editProjectInteractor).editProject(any(EditProjectInputData.class));
     }
 
+    /**
+     * Tests property change handling in the EditProjectPanel.
+     */
     @Test
     public void testPropertyChange() {
         // Test detailInit property change

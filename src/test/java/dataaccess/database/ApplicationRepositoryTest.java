@@ -13,6 +13,9 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the ApplicationRepository class.
+ */
 class ApplicationRepositoryTest {
     private ApplicationRepository applicationRepository;
     private UserRepository userRepository;
@@ -22,6 +25,9 @@ class ApplicationRepositoryTest {
     private int testProjectId;
     private String testEmail = "testuser@test.com";
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     void setUp() {
         tearDown();
@@ -59,6 +65,9 @@ class ApplicationRepositoryTest {
         testProjectId = project.getProjectId();
     }
 
+    /**
+     * Cleans up the test environment after each test.
+     */
     @AfterEach
     void tearDown() {
         // Clean up any existing data
@@ -80,7 +89,11 @@ class ApplicationRepositoryTest {
         }
     }
 
-    // Method to delete user by email using UserRepository methods
+    /**
+     * Deletes a user by email using UserRepository methods.
+     *
+     * @param email the email of the user to delete
+     */
     private void deleteUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email);
         if (user != null) {
@@ -88,6 +101,9 @@ class ApplicationRepositoryTest {
         }
     }
 
+    /**
+     * Tests the creation of an application.
+     */
     @Test
     void createApplication() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -100,6 +116,9 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
+    /**
+     * Tests the retrieval of an application.
+     */
     @Test
     void getApplication() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -114,6 +133,9 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
+    /**
+     * Tests the retrieval of applications for a specific user.
+     */
     @Test
     void getApplicationsForUser() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -130,6 +152,9 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
+    /**
+     * Tests the retrieval of applications for a specific project.
+     */
     @Test
     void getApplicationsForProject() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -146,6 +171,9 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
+    /**
+     * Tests the deletion of an application.
+     */
     @Test
     void deleteApplication() {
         byte[] pdfBytes = "Test PDF Content".getBytes();

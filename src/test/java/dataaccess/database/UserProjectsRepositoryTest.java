@@ -13,6 +13,9 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the UserProjectsRepository class.
+ */
 class UserProjectsRepositoryTest {
     private UserProjectsRepository userProjectsRepository;
     private UserRepository userRepository;
@@ -21,6 +24,9 @@ class UserProjectsRepositoryTest {
     private int testProjectId;
     private String testEmail = "testuser@test.com";
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     void setUp() {
         tearDown();
@@ -55,6 +61,9 @@ class UserProjectsRepositoryTest {
         testProjectId = project.getProjectId();
     }
 
+    /**
+     * Cleans up the test environment after each test.
+     */
     @AfterEach
     void tearDown() {
         // Clean up any existing data
@@ -73,7 +82,11 @@ class UserProjectsRepositoryTest {
         }
     }
 
-    // Method to delete user by email using UserRepository methods
+    /**
+     * Deletes a user by email using UserRepository methods.
+     *
+     * @param email the email of the user to delete
+     */
     private void deleteUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email);
         if (user != null) {
@@ -81,6 +94,9 @@ class UserProjectsRepositoryTest {
         }
     }
 
+    /**
+     * Tests adding a user to a project.
+     */
     @Test
     void addUserToProject() {
         boolean result = userProjectsRepository.addUserToProject(testUserId, testProjectId);
@@ -90,6 +106,9 @@ class UserProjectsRepositoryTest {
         assertTrue(projectIds.contains(testProjectId));
     }
 
+    /**
+     * Tests removing a user from a project.
+     */
     @Test
     void removeUserFromProject() {
         // First, add the user to the project
@@ -103,6 +122,9 @@ class UserProjectsRepositoryTest {
         assertFalse(projectIds.contains(testProjectId));
     }
 
+    /**
+     * Tests removing a user from all projects.
+     */
     @Test
     void removeUserFromAllProjects() {
         // First, add the user to the project
@@ -116,6 +138,9 @@ class UserProjectsRepositoryTest {
         assertFalse(projectIds.contains(testProjectId));
     }
 
+    /**
+     * Tests removing a project from all users.
+     */
     @Test
     void removeProjectFromAllUsers() {
         // First, add the user to the project
@@ -129,6 +154,9 @@ class UserProjectsRepositoryTest {
         assertFalse(userIds.contains(testUserId));
     }
 
+    /**
+     * Tests the retrieval of project IDs for a specific user.
+     */
     @Test
     void getProjectIdsForUser() {
         // First, add the user to the project
@@ -141,6 +169,9 @@ class UserProjectsRepositoryTest {
         assertTrue(projectIds.contains(testProjectId));
     }
 
+    /**
+     * Tests the retrieval of user IDs for a specific project.
+     */
     @Test
     void getUserIdsForProject() {
         // First, add the user to the project
