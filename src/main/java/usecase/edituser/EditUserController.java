@@ -13,13 +13,14 @@ public class EditUserController {
     /**
      * Updates the user.
      *
-     * @param userId the ID of the user.
-     * @param firstName the first name of the user.
-     * @param lastName the last name of the user.
+     * @param userId              the ID of the user.
+     * @param firstName           the first name of the user.
+     * @param lastName            the last name of the user.
+     * @param email
      * @param desiredCompensation the desired compensation of the user.
-     * @param tags the tags for the user.
+     * @param tags                the tags for the user.
      */
-     public void editUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags){
+     public void editUser(int userId, String firstName, String lastName, String email, double desiredCompensation, HashSet<String> tags){
          EditUserInputData inputData = new EditUserInputData(userId, firstName, lastName, desiredCompensation, tags);
          EditUserInteractor.editUser(inputData);
      }

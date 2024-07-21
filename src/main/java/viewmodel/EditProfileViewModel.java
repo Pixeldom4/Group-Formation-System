@@ -20,6 +20,30 @@ public class EditProfileViewModel extends ViewModel implements LoggedInDataAcces
         this.loggedInUser = new User(userId, firstName, lastName, userEmail, tags, desiredCompensation);
     }
 
+    public int getUserId(){
+        return loggedInUser.getUserId();
+    }
+
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public String getFirstName(){
+        return loggedInUser.getFirstName();
+    }
+
+    public String getLastName(){
+        return loggedInUser.getLastName();
+    }
+
+    public String getUserEmail(){
+        return loggedInUser.getUserEmail();
+    }
+
+    public double getDesiredCompensation(){
+        return loggedInUser.getDesiredCompensation();
+    }
+
     @Override
     public void notLoggedIn() {
         loggedInUser = null;
@@ -29,6 +53,7 @@ public class EditProfileViewModel extends ViewModel implements LoggedInDataAcces
     public void firePropertyChanged() {
 
     }
+
 
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
