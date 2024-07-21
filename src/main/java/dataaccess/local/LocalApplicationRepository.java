@@ -15,16 +15,28 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+/**
+ * Local implementation of the IApplicationRepository interface.
+ * Manages application data using CSV files for storage.
+ */
 public class LocalApplicationRepository implements IApplicationRepository {
 
     private final String FILE_PATH;
     private final String[] header = {"sender", "projectId", "text", "pdfBytes"};
     private final HashMap<Integer, ArrayList<ApplicationInterface>> applications = new HashMap<>();
 
+    /**
+     * Constructs a LocalApplicationRepository with the default file path.
+     */
     public LocalApplicationRepository() {
         this(DataAccessConfig.getProjectCSVPath());
     }
 
+    /**
+     * Constructs a LocalApplicationRepository with the specified file path.
+     *
+     * @param path the path to the directory where the CSV file is stored
+     */
     public LocalApplicationRepository(String path) {
         FILE_PATH = path + "applications.csv";
         File f = new File(FILE_PATH);
@@ -39,6 +51,15 @@ public class LocalApplicationRepository implements IApplicationRepository {
         }
     }
 
+    /**
+     * Creates a new application and saves it to the CSV file.
+     *
+     * @param senderUserId the ID of the user sending the application
+     * @param projectId the ID of the project the application is for
+     * @param text the text content of the application
+     * @param pdfBytes the PDF content of the application as a byte array
+     * @return the created Application object, or null if an application from the same user already exists for the project
+     */
     @Override
     public Application createApplication(int senderUserId, int projectId, String text, byte[] pdfBytes) {
         if (applications.get(projectId) != null) {
@@ -55,6 +76,13 @@ public class LocalApplicationRepository implements IApplicationRepository {
         return application;
     }
 
+    /**
+     * Retrieves an application for a specific user and project.
+     *
+     * @param userId the ID of the user
+     * @param projectId the ID of the project
+     * @return the Application object, or null if no application is found
+     */
     @Override
     public Application getApplication(int userId, int projectId) {
         for (ApplicationInterface application : applications.get(projectId)) {
@@ -65,6 +93,12 @@ public class LocalApplicationRepository implements IApplicationRepository {
         return null;
     }
 
+    /**
+     * Retrieves all applications for a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a HashSet of Application objects for the user
+     */
     @Override
     public HashSet<Application> getApplicationsForUser(int userId) {
         HashSet<Application> userApplications = new HashSet<>();
@@ -78,6 +112,12 @@ public class LocalApplicationRepository implements IApplicationRepository {
         return userApplications;
     }
 
+    /**
+     * Retrieves all applications for a specific project.
+     *
+     * @param projectId the ID of the project
+     * @return a HashSet of Application objects for the project, or null if no applications are found
+     */
     @Override
     public HashSet<Application> getApplicationsForProject(int projectId) {
         HashSet<Application> projectApplications = new HashSet<>();
@@ -91,6 +131,13 @@ public class LocalApplicationRepository implements IApplicationRepository {
         return projectApplications;
     }
 
+    /**
+     * Deletes an application for a specific user and project.
+     *
+     * @param senderUserId the ID of the user sending the application
+     * @param projectId the ID of the project the application is for
+     * @return true if the application was successfully deleted, false otherwise
+     */
     @Override
     public boolean deleteApplication(int senderUserId, int projectId) {
         for (ApplicationInterface application : applications.get(projectId)) {
@@ -104,7 +151,7 @@ public class LocalApplicationRepository implements IApplicationRepository {
     }
 
     /**
-     * Saves the projects to a CSV file.
+     * Saves the applications to a CSV file.
      */
     private void saveToCSV() {
         CSVWriter writer;
@@ -130,6 +177,12 @@ public class LocalApplicationRepository implements IApplicationRepository {
         }
     }
 
+    /**
+     * Converts an ApplicationInterface object to a String array for CSV writing.
+     *
+     * @param application the ApplicationInterface object to convert
+     * @return a String array representing the application
+     */
     private String[] applicationToString(ApplicationInterface application) {
         String[] row = new String[header.length];
         row[0] = String.valueOf(application.getSenderUserId());
@@ -140,7 +193,7 @@ public class LocalApplicationRepository implements IApplicationRepository {
     }
 
     /**
-     * Reads the projects from a CSV file.
+     * Reads the applications from a CSV file.
      */
     private void readFromCSV() {
         CSVReader reader;

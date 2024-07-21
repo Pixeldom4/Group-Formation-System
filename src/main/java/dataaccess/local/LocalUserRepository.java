@@ -17,6 +17,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Local implementation of the IUserRepository interface.
+ * Manages user data using CSV files for storage.
+ */
 public class LocalUserRepository implements IUserRepository {
     private final String FILE_PATH;
     private final String[] header = {"userID", "userEmail", "userFirstName", "userLastName", "userTags", "userDesiredCompensation", "userPassword"};
@@ -24,10 +28,18 @@ public class LocalUserRepository implements IUserRepository {
     private final HashMap<Integer, String> userPasswords = new HashMap<Integer, String>();
     private int maxId = 0;
 
+    /**
+     * Constructs a LocalUserRepository with the default file path.
+     */
     public LocalUserRepository() {
         this(DataAccessConfig.getProjectCSVPath());
     }
 
+    /**
+     * Constructs a LocalUserRepository with the specified file path.
+     *
+     * @param path the path to the directory where the CSV file is stored
+     */
     public LocalUserRepository(String path) {
         FILE_PATH = path + "users.csv";
         File f = new File(FILE_PATH);
@@ -42,6 +54,17 @@ public class LocalUserRepository implements IUserRepository {
         }
     }
 
+    /**
+     * Creates a new user and saves it to the CSV file.
+     *
+     * @param email the email of the user
+     * @param firstName the first name of the user
+     * @param lastName the last name of the user
+     * @param tags the tags associated with the user
+     * @param desiredCompensation the desired compensation of the user
+     * @param password the password of the user
+     * @return the created User object
+     */
     @Override
     public User createUser(String email, String firstName, String lastName, HashSet<String> tags, double desiredCompensation, String password) {
         UserInterface user = new User(maxId + 1, firstName, lastName, email, tags, desiredCompensation);
@@ -52,6 +75,12 @@ public class LocalUserRepository implements IUserRepository {
         return (User) user;
     }
 
+    /**
+     * Retrieves a user by their email.
+     *
+     * @param email the email of the user
+     * @return the User object, or null if no user is found
+     */
     @Override
     public User getUserByEmail(String email) {
         for (UserInterface user : users.values()) {
@@ -62,6 +91,12 @@ public class LocalUserRepository implements IUserRepository {
         return null;
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param userId the ID of the user
+     * @return the User object, or null if no user is found
+     */
     @Override
     public User getUserById(int userId) {
         if (users.containsKey(userId)) {
@@ -70,19 +105,41 @@ public class LocalUserRepository implements IUserRepository {
         return null;
     }
 
+    /**
+     * Updates a user's information.
+     *
+     * @param userId the ID of the user
+     * @param firstName the new first name of the user
+     * @param lastName the new last name of the user
+     * @param desiredCompensation the new desired compensation of the user
+     * @param tags the new tags of the user
+     * @return false (method not implemented)
+     */
     @Override
     public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
         return false;
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param userId the ID of the user to be deleted
+     * @return true if the user was successfully deleted, false otherwise
+     */
     @Override
     public boolean deleteUser(int userId) {
         users.remove(userId);
         saveToCSV();
-
         return true;
     }
 
+    /**
+     * Adds tags to a user.
+     *
+     * @param userId the ID of the user
+     * @param tags the tags to be added
+     * @return true if the tags were successfully added, false otherwise
+     */
     @Override
     public boolean addTags(int userId, HashSet<String> tags) {
         UserInterface user = users.get(userId);
@@ -90,10 +147,16 @@ public class LocalUserRepository implements IUserRepository {
         currentTags.addAll(tags);
         user.setTags(currentTags);
         saveToCSV();
-
         return true;
     }
 
+    /**
+     * Removes tags from a user.
+     *
+     * @param userId the ID of the user
+     * @param tags the tags to be removed
+     * @return true if the tags were successfully removed, false otherwise
+     */
     @Override
     public boolean removeTags(int userId, HashSet<String> tags) {
         UserInterface user = users.get(userId);
@@ -101,10 +164,15 @@ public class LocalUserRepository implements IUserRepository {
         currentTags.removeAll(tags);
         user.setTags(currentTags);
         saveToCSV();
-
         return true;
     }
 
+    /**
+     * Retrieves the password of a user by their email.
+     *
+     * @param email the email of the user
+     * @return the password of the user, or null if no user is found
+     */
     @Override
     public String getPasswordByEmail(String email) {
         User user = getUserByEmail(email);
@@ -114,6 +182,12 @@ public class LocalUserRepository implements IUserRepository {
         return userPasswords.get(user.getUserId());
     }
 
+    /**
+     * Converts a UserInterface object to a String array for CSV writing.
+     *
+     * @param user the UserInterface object to convert
+     * @return a String array representing the user
+     */
     private String[] userToString(UserInterface user) {
         String[] row = new String[header.length];
         row[0] = String.valueOf(user.getUserId());
@@ -127,23 +201,20 @@ public class LocalUserRepository implements IUserRepository {
     }
 
     /**
-     * Saves the projects to a CSV file.
+     * Saves the users to a CSV file.
      */
     private void saveToCSV() {
         CSVWriter writer;
-
         try {
             writer = new CSVWriter(new FileWriter(FILE_PATH));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         writer.writeNext(header);
         for (UserInterface user : users.values()) {
             String[] row = userToString(user);
             writer.writeNext(row);
         }
-
         try {
             writer.close();
         } catch (IOException e) {
@@ -152,17 +223,15 @@ public class LocalUserRepository implements IUserRepository {
     }
 
     /**
-     * Reads the projects from a CSV file.
+     * Reads the users from a CSV file.
      */
     private void readFromCSV() {
         CSVReader reader;
-
         try {
             reader = new CSVReader(new FileReader(FILE_PATH));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         String[] line;
         try {
             reader.readNext();
@@ -182,7 +251,6 @@ public class LocalUserRepository implements IUserRepository {
         } catch (IOException | CsvValidationException e) {
             throw new RuntimeException(e);
         }
-
         try {
             reader.close();
         } catch (IOException e) {
