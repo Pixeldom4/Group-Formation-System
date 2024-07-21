@@ -5,6 +5,9 @@ import entities.User;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * A view for displaying the user's profile.
+ */
 public class DisplayMyProfileView extends JFrame {
 
     private JTextField firstNameField;
@@ -12,7 +15,11 @@ public class DisplayMyProfileView extends JFrame {
     private JTextField emailField;
     private JTextArea tagsArea;
 
-
+    /**
+     * Constructs a DisplayMyProfileView.
+     *
+     * @param user the user whose profile is to be displayed
+     */
     public DisplayMyProfileView(User user) {
         setTitle("My Profile");
         setSize(400, 600);
@@ -54,7 +61,5 @@ public class DisplayMyProfileView extends JFrame {
         add(detailsPanel, BorderLayout.CENTER);
 
         this.setVisible(true);
-
-
     }
 }

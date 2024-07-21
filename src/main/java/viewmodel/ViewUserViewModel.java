@@ -4,6 +4,9 @@ import entities.User;
 
 import java.beans.PropertyChangeSupport;
 
+/**
+ * ViewModel for viewing user details.
+ */
 public class ViewUserViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 

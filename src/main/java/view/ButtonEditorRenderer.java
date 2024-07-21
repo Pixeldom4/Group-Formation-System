@@ -7,11 +7,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * A class that provides both cell rendering and editing capabilities for a button in a table cell.
+ */
 public class ButtonEditorRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
     private final JButton renderButton;
     private final JButton editButton;
     private String text;
 
+    /**
+     * Constructs a ButtonEditorRenderer with default settings.
+     */
     public ButtonEditorRenderer() {
         renderButton = new JButton();
         editButton = new JButton();
