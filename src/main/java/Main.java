@@ -44,6 +44,10 @@ class Main {
         JPanel views = new JPanel(cardLayout);
         application.add(views);
 
+        // Print which data access implementation is used
+        System.out.println(DataAccessConfig.getImplementation());
+
+        // Initialize database
         DataAccessConfig.initializeDatabase();
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
