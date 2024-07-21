@@ -17,12 +17,12 @@ public class EditProjectInputData {
     /**
      * Constructs an EditProjectInputData object with the specified details.
      *
-     * @param projectId   the ID of the project.
-     * @param title       the title of the project.
-     * @param budget      the budget allocated for the project.
-     * @param description a brief description of the project.
-     * @param tags        a set of tags associated with the project.
-     * @param editorId    the ID of the user requesting to edit the project.
+     * @param projectId    the ID of the project to be edited.
+     * @param title        the new title of the project.
+     * @param budget       the new budget of the project.
+     * @param description  the new description of the project.
+     * @param tags         the new tags of the project.
+     * @param editorId     the ID of the user editing the project.
      */
     public EditProjectInputData(int projectId, String title, double budget, String description, HashSet<String> tags, int editorId) {
         this.projectId = projectId;
@@ -34,7 +34,7 @@ public class EditProjectInputData {
     }
 
     /**
-     * Returns the ID of the project.
+     * Gets the project ID.
      *
      * @return the project ID.
      */
@@ -43,45 +43,45 @@ public class EditProjectInputData {
     }
 
     /**
-     * Returns the title of the project.
+     * Gets the new title of the project.
      *
-     * @return the project title.
+     * @return the new title of the project.
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * Returns the budget allocated for the project.
+     * Gets the new budget of the project.
      *
-     * @return the project budget.
+     * @return the new budget of the project.
      */
     public double getBudget() {
         return budget;
     }
 
     /**
-     * Returns the description of the project.
+     * Gets the new description of the project.
      *
-     * @return the project description.
+     * @return the new description of the project.
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Returns an unmodifiable set of tags associated with the project.
+     * Gets the new tags of the project.
      *
-     * @return the project tags.
+     * @return the new tags of the project.
      */
     public HashSet<String> getTags() {
         return tags;
     }
 
     /**
-     * Returns the ID of the user requesting to edit the project.
+     * Gets the ID of the user editing the project.
      *
-     * @return the editor ID.
+     * @return the ID of the user editing the project.
      */
     public int getEditorId() {
         return editorId;

@@ -2,9 +2,18 @@ package usecase.createproject;
 
 import java.util.HashSet;
 
+/**
+ * Controller class for creating projects.
+ * Interacts with the input boundary to process project creation.
+ */
 public class CreateProjectController {
     private final CreateProjectInputBoundary createProjectInteractor;
 
+    /**
+     * Constructs a CreateProjectController.
+     *
+     * @param createProjectInteractor the interactor that handles the create project use case
+     */
     public CreateProjectController(CreateProjectInputBoundary createProjectInteractor) {
         this.createProjectInteractor = createProjectInteractor;
     }

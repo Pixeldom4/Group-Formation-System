@@ -5,20 +5,32 @@ import entities.User;
 import dataaccess.IUserRepository;
 import usecase.PasswordHasher;
 
+/**
+ * Interactor class for creating users.
+ * Implements the input boundary to handle user creation logic.
+ */
 public class CreateUserInteractor implements CreateUserInputBoundary {
     private IUserRepository userRepository = DataAccessConfig.getUserRepository();
     private final CreateUserOutputBoundary userPresenter;
     private final PasswordHasher passwordHasher;
 
+    /**
+     * Constructs a CreateUserInteractor with the specified presenter and password hasher.
+     *
+     * @param userPresenter  the presenter to handle output.
+     * @param passwordHasher the password hasher.
+     */
     public CreateUserInteractor(CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
         this.userPresenter = userPresenter;
         this.passwordHasher = passwordHasher;
     }
 
     /**
-     * Used for testing when save file is in another folder
-     * @param userRepository the user repository
-     * @param userPresenter the user presenter
+     * Constructs a CreateUserInteractor with the specified user repository, presenter, and password hasher.
+     *
+     * @param userRepository  the user repository.
+     * @param userPresenter   the presenter to handle output.
+     * @param passwordHasher  the password hasher.
      */
     public CreateUserInteractor(IUserRepository userRepository, CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
@@ -38,7 +50,7 @@ public class CreateUserInteractor implements CreateUserInputBoundary {
             return;
         }
         String hashedPassword = this.passwordHasher.hashPassword(inputData.getPassword());
-        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword) ;
+        User user = userRepository.createUser(inputData.getEmail(), inputData.getFirstName(), inputData.getLastName(), inputData.getTags(), inputData.getDesiredCompensation(), hashedPassword);
 
         CreateUserOutputData outputData;
         if (user != null) {

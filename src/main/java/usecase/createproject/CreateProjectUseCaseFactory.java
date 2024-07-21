@@ -5,11 +5,15 @@ import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import viewmodel.AddProjectPanelViewModel;
 
+/**
+ * Factory class for creating instances of the CreateProject use case.
+ */
 public class CreateProjectUseCaseFactory {
     private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
     private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
 
-    private CreateProjectUseCaseFactory(){}
+    // Private constructor to prevent instantiation
+    private CreateProjectUseCaseFactory() {}
 
     /**
      * Creates a new CreateProjectController with the given AddProjectPanelViewModel.

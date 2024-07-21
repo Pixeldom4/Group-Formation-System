@@ -1,6 +1,15 @@
 package usecase.rejectapplication;
 
+/**
+ * Output boundary interface for rejecting applications.
+ * Defines methods to prepare success and failure views.
+ */
 public interface RejectApplicationOutputBoundary {
+    /**
+     * Prepares the success view with the provided output data.
+     *
+     * @param outputData the output data to present in case of success.
+     */
     void prepareSuccessView(RejectApplicationOutputData outputData);
 
     /**

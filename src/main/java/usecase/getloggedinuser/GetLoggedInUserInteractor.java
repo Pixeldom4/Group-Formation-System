@@ -2,29 +2,45 @@ package usecase.getloggedinuser;
 
 import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
-import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;
 import entities.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 
+/**
+ * Interactor class for getting the logged-in user.
+ * Implements the input boundary to handle the retrieval of the logged-in user's information.
+ */
 public class GetLoggedInUserInteractor implements GetLoggedInUserInputBoundary {
     private final GetLoggedInUserOutputBoundary getLoggedInUserPresenter;
     private ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
     private IUserRepository userRepository = DataAccessConfig.getUserRepository();
 
+    /**
+     * Constructs a GetLoggedInUserInteractor with the specified presenter, login user details, and user repository.
+     *
+     * @param getLoggedInUserPresenter the presenter to handle output.
+     * @param loginUserDetails         the login user details.
+     * @param userRepository           the user repository.
+     */
     public GetLoggedInUserInteractor(GetLoggedInUserOutputBoundary getLoggedInUserPresenter, ILoginUserDetails loginUserDetails, IUserRepository userRepository) {
         this.getLoggedInUserPresenter = getLoggedInUserPresenter;
         this.loginUserDetails = loginUserDetails;
         this.userRepository = userRepository;
     }
 
+    /**
+     * Constructs a GetLoggedInUserInteractor with the specified presenter.
+     *
+     * @param getLoggedInUserPresenter the presenter to handle output.
+     */
     public GetLoggedInUserInteractor(GetLoggedInUserOutputBoundary getLoggedInUserPresenter) {
         this.getLoggedInUserPresenter = getLoggedInUserPresenter;
     }
 
+    /**
+     * Retrieves the logged-in user's information.
+     */
     @Override
     public void getLoggedInUser() {
         if (loginUserDetails.isLoggedIn()) {
@@ -36,8 +52,7 @@ public class GetLoggedInUserInteractor implements GetLoggedInUserInputBoundary {
             double desiredCompensation = user.getDesiredCompensation();
             HashSet<String> tags = user.getTags();
             getLoggedInUserPresenter.returnLoggedInUser(new GetLoggedInUserOutputData(userId, firstName, lastName, userEmail, desiredCompensation, tags));
-        }
-        else {
+        } else {
             getLoggedInUserPresenter.notLoggedIn();
         }
     }

@@ -3,12 +3,16 @@ package usecase.searchforuser;
 import dataaccess.IUserRepository;
 import entities.UserInterface;
 
+/**
+ * Interactor class for searching users.
+ * Implements the input boundary to handle user search logic.
+ */
 public class SearchUserInteractor implements SearchUserInputBoundary {
     private SearchUserInterface userDAO = new LocalUserSearchObject();
-    private SearchUserOutputBoundary presenter;
+    private final SearchUserOutputBoundary presenter;
 
     /**
-     * Creates a new SearchUserInteractor using the given output boundary.
+     * Constructs a SearchUserInteractor with the specified presenter.
      *
      * @param presenter The output boundary.
      */
@@ -21,7 +25,7 @@ public class SearchUserInteractor implements SearchUserInputBoundary {
      * Used for testing where files are not stored in the user folder.
      *
      * @param presenter The output boundary.
-     * @param userRepository The project repository to use.
+     * @param userRepository The user repository to use.
      */
     public SearchUserInteractor(SearchUserOutputBoundary presenter, IUserRepository userRepository) {
         this.presenter = presenter;
@@ -29,11 +33,10 @@ public class SearchUserInteractor implements SearchUserInputBoundary {
     }
 
     /**
-     * Searches for a user by his email.
+     * Searches for a user by email.
      *
      * @param email The email of the user to search for.
      */
-
     @Override
     public void searchUserByEmail(String email) {
         UserInterface user = userDAO.searchUserByEmail(email);

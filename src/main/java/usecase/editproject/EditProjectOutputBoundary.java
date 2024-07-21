@@ -1,13 +1,14 @@
 package usecase.editproject;
 
 /**
- * The output boundary for editing a project use case.
+ * Output boundary interface for editing projects.
+ * Defines methods to prepare success and failure views.
  */
 public interface EditProjectOutputBoundary {
     /**
      * Prepares the success view with the provided output data.
      *
-     * @param outputData the output data to present in case of success.
+     * @param outputData the output data indicating success.
      */
     void prepareSuccessView(EditProjectOutputData outputData);
 
