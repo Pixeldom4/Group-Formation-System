@@ -9,6 +9,8 @@ import usecase.createuser.CreateUserController;
 import usecase.createuser.CreateUserUseCaseFactory;
 import usecase.deleteproject.DeleteProjectController;
 import usecase.deleteproject.DeleteProjectUseCaseFactory;
+import usecase.editproject.EditProjectController;
+import usecase.editproject.EditProjectUseCaseFactory;
 import usecase.edituser.EditUserController;
 import usecase.edituser.EditUserUseCaseFactory;
 import usecase.getapplications.GetApplicationsController;
@@ -72,6 +74,7 @@ class Main {
 
         // My Projects Panel
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
+        GetLoggedInUserController getLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProjectsViewModel);
         GetProjectsController getProjectsController = GetProjectsUseCaseFactory.createGetProjectsController(myProjectsViewModel);
         DeleteProjectController deleteProjectController = DeleteProjectUseCaseFactory.createDeleteProjectController(myProjectsViewModel);
 
@@ -81,7 +84,15 @@ class Main {
         AcceptApplicationController acceptApplicationController = AcceptApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
         RejectApplicationController rejectApplicationController = RejectApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
 
-        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel, getProjectsController, deleteProjectController, displayProjectApplicationViewModel, getApplicationsController, acceptApplicationController, rejectApplicationController);
+        // Edit Project Panel
+        EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
+        EditProjectController editProjectController = EditProjectUseCaseFactory.createController(editProjectPanelViewModel);
+        EditProjectPanel editProjectPanel = new EditProjectPanel(editProjectPanelViewModel, editProjectController);
+
+        MyProjectsPanel myProjectsPanel = new MyProjectsPanel(myProjectsViewModel, viewManagerModel, getLoggedInUserController, getProjectsController,
+                                                              deleteProjectController, displayProjectApplicationViewModel,
+                                                              getApplicationsController, acceptApplicationController, rejectApplicationController,
+                                                              editProjectPanelViewModel, editProjectPanel);
 
         // Edit Profile Panel
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();

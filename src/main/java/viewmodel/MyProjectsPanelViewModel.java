@@ -1,13 +1,18 @@
 package viewmodel;
 
+import entities.User;
+import usecase.getloggedinuser.LoggedInDataAccessViewModel;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashSet;
 
 
-public class MyProjectsPanelViewModel extends ViewModel {
+public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private Object[][] data;
     private String errorMessage;
+    private User loggedInUser;
 
     public MyProjectsPanelViewModel() {
         super("GetProjectsView");
@@ -23,6 +28,10 @@ public class MyProjectsPanelViewModel extends ViewModel {
         support.firePropertyChange("error", null, errorMessage);
     }
 
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
     public void deleteProject() {
         support.firePropertyChange("deleteProject", null, null);
     }
@@ -34,5 +43,15 @@ public class MyProjectsPanelViewModel extends ViewModel {
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void setLoggedInUser(int userId, String firstName, String lastName, String userEmail, double desiredCompensation, HashSet<String> tags) {
+        loggedInUser = new User(userId, firstName, lastName, userEmail, tags, desiredCompensation);
+    }
+
+    @Override
+    public void notLoggedIn() {
+        loggedInUser = null;
     }
 }
