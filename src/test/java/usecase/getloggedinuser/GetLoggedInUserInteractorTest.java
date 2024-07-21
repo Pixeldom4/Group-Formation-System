@@ -19,6 +19,9 @@ import java.util.HashSet;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the GetLoggedInUserInteractor class.
+ */
 public class GetLoggedInUserInteractorTest {
     private final static String SAVE_LOCATION = "local_data/test/usecase/getloggedinuser/";
     private static IUserRepository userRepository;
@@ -46,7 +49,11 @@ public class GetLoggedInUserInteractorTest {
     private static GetLoggedInUserInteractor getLoggedInUserInteractor;
     private static GetLoggedInUserController getLoggedInUserController;
 
-
+    /**
+     * Tests the login details functionality.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Test
     public void testLoginDetails() throws IOException {
         Files.deleteIfExists(saveFile.toPath());
@@ -55,11 +62,11 @@ public class GetLoggedInUserInteractorTest {
         getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserOutputBoundary, loginUserDetails, userRepository);
         getLoggedInUserController = new GetLoggedInUserController(getLoggedInUserInteractor);
         userRepository.createUser("test@test.com",
-                                  "first",
-                                  "last",
-                                  new HashSet<>(Arrays.asList("Java", "Programming")),
-                                  1234.5,
-                                  "password");
+                "first",
+                "last",
+                new HashSet<>(Arrays.asList("Java", "Programming")),
+                1234.5,
+                "password");
         loginUserDetails.login(1);
         getLoggedInUserController.getLoggedInUser();
 

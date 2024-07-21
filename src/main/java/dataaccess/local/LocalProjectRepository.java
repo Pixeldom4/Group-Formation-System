@@ -16,6 +16,10 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Local implementation of the IProjectRepository interface.
+ * Manages project data using CSV files for storage.
+ */
 public class LocalProjectRepository implements IProjectRepository {
 
     private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
@@ -25,6 +29,10 @@ public class LocalProjectRepository implements IProjectRepository {
     private HashMap<Integer, Integer> projectOwners = new HashMap<Integer, Integer>();
     private int maxId = 0;
 
+    /**
+     * Constructs a LocalProjectRepository with the default file path.
+     * Reads the projects from the CSV file if it exists.
+     */
     public LocalProjectRepository() {
         File f = new File(FILE_PATH);
         try {
@@ -41,6 +49,7 @@ public class LocalProjectRepository implements IProjectRepository {
     /**
      * Creates a new LocalProjectDataAccessObject with the given path as the save location.
      * Reads the projects from the CSV file if it exists.
+     *
      * @param path the path to the folder of the CSV file
      */
     public LocalProjectRepository(String path) {
@@ -122,6 +131,7 @@ public class LocalProjectRepository implements IProjectRepository {
 
     /**
      * Returns a string array representation of a project. Used for CSV export.
+     *
      * @param project The project
      * @return The string array representation
      */
@@ -136,6 +146,17 @@ public class LocalProjectRepository implements IProjectRepository {
         return record;
     }
 
+    /**
+     * Creates a new project and saves it to the CSV file.
+     *
+     * @param title the title of the project
+     * @param budget the budget of the project
+     * @param description the description of the project
+     * @param tags the tags associated with the project
+     * @param embeddings the embeddings of the project
+     * @param ownerId the ID of the owner of the project
+     * @return the created Project object
+     */
     @Override
     public Project createProject(String title,
                                  double budget,
@@ -153,6 +174,12 @@ public class LocalProjectRepository implements IProjectRepository {
         return project;
     }
 
+    /**
+     * Deletes a project by its ID.
+     *
+     * @param projectId the ID of the project to be deleted
+     * @return true if the project was successfully deleted, false otherwise
+     */
     @Override
     public boolean deleteProject(int projectId) {
         if (!projects.containsKey(projectId)) {
@@ -164,6 +191,12 @@ public class LocalProjectRepository implements IProjectRepository {
         return true;
     }
 
+    /**
+     * Retrieves a project by its ID.
+     *
+     * @param projectId the ID of the project to be retrieved
+     * @return the Project object, or null if no project is found
+     */
     @Override
     public Project getProjectById(int projectId) {
         if (projects.containsKey(projectId)) {
@@ -172,6 +205,13 @@ public class LocalProjectRepository implements IProjectRepository {
         return null;
     }
 
+    /**
+     * Adds tags to a project.
+     *
+     * @param projectId the ID of the project
+     * @param tags the tags to be added
+     * @return true if the tags were successfully added, false otherwise
+     */
     @Override
     public boolean addTags(int projectId, HashSet<String> tags) {
         ProjectInterface project = getProjectById(projectId);
@@ -181,15 +221,22 @@ public class LocalProjectRepository implements IProjectRepository {
         HashSet<String> currentTags = project.getProjectTags();
         currentTags.addAll(tags);
         update(projectId,
-               project.getProjectTitle(),
-               project.getProjectBudget(),
-               project.getProjectDescription(),
-               currentTags,
-               embedDataAccess.getEmbedData(projectId));
+                project.getProjectTitle(),
+                project.getProjectBudget(),
+                project.getProjectDescription(),
+                currentTags,
+                embedDataAccess.getEmbedData(projectId));
 
         return true;
     }
 
+    /**
+     * Removes tags from a project.
+     *
+     * @param projectId the ID of the project
+     * @param tags the tags to be removed
+     * @return true if the tags were successfully removed, false otherwise
+     */
     @Override
     public boolean removeTags(int projectId, HashSet<String> tags) {
         ProjectInterface project = getProjectById(projectId);
@@ -199,15 +246,21 @@ public class LocalProjectRepository implements IProjectRepository {
         HashSet<String> currentTags = project.getProjectTags();
         currentTags.removeAll(tags);
         update(projectId,
-               project.getProjectTitle(),
-               project.getProjectBudget(),
-               project.getProjectDescription(),
-               currentTags,
-               embedDataAccess.getEmbedData(projectId));
+                project.getProjectTitle(),
+                project.getProjectBudget(),
+                project.getProjectDescription(),
+                currentTags,
+                embedDataAccess.getEmbedData(projectId));
 
         return true;
     }
 
+    /**
+     * Retrieves projects by a keyword.
+     *
+     * @param keyword the keyword to search for
+     * @return a HashSet of Project objects that match the keyword
+     */
     @Override
     public HashSet<Project> getProjectsByKeyword(String keyword) {
         HashSet<Project> results = new HashSet<>();
@@ -220,7 +273,8 @@ public class LocalProjectRepository implements IProjectRepository {
     }
 
     /**
-     * Checks if a project has a keyword in its title, description, or tags
+     * Checks if a project has a keyword in its title, description, or tags.
+     *
      * @param project The project to be checked
      * @param keyword The keyword to search for
      * @return true if the project has the keyword, false otherwise
@@ -240,13 +294,24 @@ public class LocalProjectRepository implements IProjectRepository {
         return false;
     }
 
+    /**
+     * Updates a project with new information.
+     *
+     * @param projectId the ID of the project to be updated
+     * @param title the new title of the project
+     * @param budget the new budget of the project
+     * @param description the new description of the project
+     * @param tags the new tags of the project
+     * @param embeddings the new embeddings of the project
+     * @return true if the project was successfully updated, false otherwise
+     */
     @Override
     public boolean update(int projectId,
-                       String title,
-                       double budget,
-                       String description,
-                       HashSet<String> tags,
-                       float[] embeddings) {
+                          String title,
+                          double budget,
+                          String description,
+                          HashSet<String> tags,
+                          float[] embeddings) {
         ProjectInterface editProject = getProjectById(projectId);
         editProject.setProjectTitle(title);
         editProject.setProjectBudget(budget);
@@ -258,11 +323,22 @@ public class LocalProjectRepository implements IProjectRepository {
         return true;
     }
 
+    /**
+     * Retrieves all embeddings and their associated project IDs.
+     *
+     * @return a hashmap where the key is the project ID and the value is the embedding
+     */
     @Override
     public HashMap<Integer, float[]> getAllEmbeddings() {
         return embedDataAccess.getAllEmbeddings();
     }
 
+    /**
+     * Retrieves the owner ID of a project.
+     *
+     * @param projectId the ID of the project
+     * @return the owner ID, or 0 if no owner is found
+     */
     @Override
     public int getOwnerId(int projectId) {
         if (projectOwners.containsKey(projectId)) {

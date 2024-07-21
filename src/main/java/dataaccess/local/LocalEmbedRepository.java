@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+/**
+ * Local implementation of the ILocalEmbedRepository interface.
+ * Manages embedding data using CSV files for storage.
+ */
 public class LocalEmbedRepository implements ILocalEmbedRepository {
 
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "embeds.csv";
@@ -40,6 +44,7 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
     /**
      * Creates a new LocalEmbedRepository with the given path as the save location.
      * Reads the embeddings from the CSV file if it exists.
+     *
      * @param path the path to the CSV file
      */
     public LocalEmbedRepository(String path) {
@@ -54,31 +59,59 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
         if (f.exists() && !f.isDirectory()) {
             readFromCSV();
         }
-
     }
+
+    /**
+     * Saves an embedding for a project.
+     *
+     * @param embedding the embedding of the project
+     * @param id the id of the project
+     */
     @Override
     public void saveEmbedData(float[] embedding, int id) {
         embeddings.put(id, embedding);
         saveToCSV();
     }
 
+    /**
+     * Saves an embedding for a project using data.
+     *
+     * @param data the data of the project to be used for embedding
+     * @param id the id of the project
+     */
     @Override
     public void saveEmbedData(String data, int id) {
-        embeddings.put(id ,embeddingAPI.getEmbedData(data));
+        embeddings.put(id, embeddingAPI.getEmbedData(data));
         saveToCSV();
     }
 
+    /**
+     * Removes an embedding for a project.
+     *
+     * @param id the id of the project
+     */
     @Override
     public void removeEmbedData(int id) {
         embeddings.remove(id);
         saveToCSV();
     }
 
+    /**
+     * Retrieves an embedding for a project.
+     *
+     * @param id the id of the project
+     * @return the embedding of the project
+     */
     @Override
     public float[] getEmbedData(int id) {
         return embeddings.get(id);
     }
 
+    /**
+     * Retrieves all embeddings and their associated project ids.
+     *
+     * @return a hashmap where the key is the project id and the value is the embedding
+     */
     @Override
     public HashMap<Integer, float[]> getAllEmbeddings() {
         return embeddings;
@@ -128,7 +161,7 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
                 int projectId = Integer.parseInt(line[0]);
                 Float[] embedding = Arrays.stream(line[1].replace("[", "").replace("]", "").split(",")).map(Float::valueOf).toArray(Float[]::new);
                 float[] floatArray = new float[embedding.length];
-                for (int i = 0 ; i < embedding.length; i++) {
+                for (int i = 0; i < embedding.length; i++) {
                     floatArray[i] = (float) embedding[i];
                 }
                 embeddings.put(projectId, floatArray);

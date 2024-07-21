@@ -17,30 +17,41 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the LocalUserDAO class.
+ */
 public class LocalUserDAOTest {
     private final static String SAVE_LOCATION = "local_data/test/data_access/local_dao/";
     private static IUserRepository userRepository;
     private final static File saveFile = new File(SAVE_LOCATION + "users.csv");
     private static final PasswordHasher passwordHasher = new BCryptPasswordHasher();
 
+    /**
+     * Sets up the test environment before all tests.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @BeforeAll
     public static void setUp() throws IOException {
         Files.deleteIfExists(saveFile.toPath());
         userRepository = new LocalUserRepository(SAVE_LOCATION);
         userRepository.createUser("test@test.com",
-                                  "John",
-                                  "Doe",
-                                  new HashSet<>(Arrays.asList("Java", "Programming")),
-                                  1234.5,
-                                  passwordHasher.hashPassword("password"));
+                "John",
+                "Doe",
+                new HashSet<>(Arrays.asList("Java", "Programming")),
+                1234.5,
+                passwordHasher.hashPassword("password"));
         userRepository.createUser("test2@test.com",
-                                  "Jane",
-                                  "Doe",
-                                  new HashSet<>(Arrays.asList("Python", "Sleeping")),
-                                  5432.1,
-                                  passwordHasher.hashPassword("drowssap"));
+                "Jane",
+                "Doe",
+                new HashSet<>(Arrays.asList("Python", "Sleeping")),
+                5432.1,
+                passwordHasher.hashPassword("drowssap"));
     }
 
+    /**
+     * Tests the retrieval of a user by their ID.
+     */
     @Test
     public void testGetUserById() {
         UserInterface user = userRepository.getUserById(1);
@@ -51,6 +62,9 @@ public class LocalUserDAOTest {
         assertEquals(user.getDesiredCompensation(), 1234.5, 0.01);
     }
 
+    /**
+     * Tests the retrieval of a user by their email.
+     */
     @Test
     public void testGetUserByEmail() {
         UserInterface user = userRepository.getUserByEmail("test@test.com");
@@ -61,12 +75,18 @@ public class LocalUserDAOTest {
         assertEquals(user.getDesiredCompensation(), 1234.5, 0.01);
     }
 
+    /**
+     * Tests the retrieval of a user's password by their email.
+     */
     @Test
     public void testGetPasswordByEmail(){
         String hashedPassword = userRepository.getPasswordByEmail("test@test.com");
         assertTrue(passwordHasher.checkPassword("password", hashedPassword));
     }
 
+    /**
+     * Tests updating a user's details.
+     */
     @Test
     public void testUpdateUser(){
         UserInterface user = userRepository.getUserById(1);
@@ -76,18 +96,27 @@ public class LocalUserDAOTest {
 
     }
 
+    /**
+     * Tests adding tags to a user.
+     */
     @Test
     public void testAddTags(){
         userRepository.addTags(1, new HashSet<>(List.of("Cool tag")));
         assertTrue(userRepository.getUserById(1).getTags().contains("Cool tag"));
     }
 
+    /**
+     * Tests removing tags from a user.
+     */
     @Test
     public void testRemoveTags(){
         userRepository.removeTags(1, new HashSet<>(List.of("Programming")));
         assertFalse(userRepository.getUserById(1).getTags().contains("Programming"));
     }
 
+    /**
+     * Tests deleting a user.
+     */
     @Test
     public void testDeleteUser(){
         userRepository.deleteUser(2);

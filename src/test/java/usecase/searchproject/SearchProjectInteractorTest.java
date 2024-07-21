@@ -18,6 +18,9 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the SearchProjectInteractor class.
+ */
 public class SearchProjectInteractorTest {
 
     private final static String SAVE_LOCATION = "local_data/test/search_projects_interactor/";
@@ -33,25 +36,34 @@ public class SearchProjectInteractorTest {
             {"3", "Web Development", "2000.0", "This project involves creating responsive websites using HTML, CSS, and JavaScript.", "Web Design;JavaScript"},
             {"4", "Database Management", "1200.0", "A project to enhance database performance and security.", "SQL;Database;Security"},
             {"5", "Machine Learning", "2500.0", "Exploring machine learning algorithms to predict data trends.", "Machine Learning;Data Science"}
-
     };
+
+    /**
+     * Sets up the test environment before all tests.
+     */
     @BeforeAll
     public static void setUp() {
         addDummyProjects();
     }
 
+    /**
+     * Adds dummy projects to the repository for testing.
+     */
     private static void addDummyProjects(){
         for (String[] project : dummyprojects) {
             float[] embedding = apiInteface.getEmbedData(project[3]);
             projectDAO.createProject(project[1],
-                                     Double.parseDouble(project[2]),
-                                     project[3],
-                                     new HashSet<String>(Arrays.asList(project[4].split(";"))),
-                                     embedding,
-                                     1);
+                    Double.parseDouble(project[2]),
+                    project[3],
+                    new HashSet<String>(Arrays.asList(project[4].split(";"))),
+                    embedding,
+                    1);
         }
     }
 
+    /**
+     * Tests the search functionality of the SearchProjectsInteractor.
+     */
     @Test
     public void testSearchProjects() {
         searchProjectInteractor.searchProjects("Frontend development projects");
@@ -65,5 +77,4 @@ public class SearchProjectInteractorTest {
             System.out.println(project.getProjectTitle());
         }
     }
-
 }

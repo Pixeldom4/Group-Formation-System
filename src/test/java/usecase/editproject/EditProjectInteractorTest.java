@@ -19,6 +19,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the EditProjectInteractor class.
+ */
 public class EditProjectInteractorTest {
 
     private final static String SAVE_LOCATION = "local_data/test/edit_projects_interactor/";
@@ -49,11 +52,17 @@ public class EditProjectInteractorTest {
             {"5", "Machine Learning", "2500.0", "Exploring machine learning algorithms to predict data trends.", "Machine Learning;Data Science"}
     };
 
+    /**
+     * Sets up the test environment before all tests.
+     */
     @BeforeAll
     public static void setUp() {
         addDummyProjects();
     }
 
+    /**
+     * Adds dummy projects to the repository for testing.
+     */
     private static void addDummyProjects() {
         for (String[] project : dummyProjects) {
             float[] embedding = apiInterface.getEmbedData(project[3]);
@@ -66,6 +75,9 @@ public class EditProjectInteractorTest {
         }
     }
 
+    /**
+     * Tests editing and searching for projects.
+     */
     @Test
     public void testEditAndSearchProjects() {
         // Edit the project with ID 1

@@ -14,6 +14,9 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the MyProjectsPanel class.
+ */
 public class MyProjectsPanelTest {
 
     private MyProjectsPanel myProjectsPanel;
@@ -24,6 +27,9 @@ public class MyProjectsPanelTest {
     private EditProjectPanelViewModel editProjectPanelViewModel;
     private EditProjectPanel editProjectPanel;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     public void setUp() {
         myProjectsPanelViewModel = new MyProjectsPanelViewModel();
@@ -54,12 +60,18 @@ public class MyProjectsPanelTest {
         );
     }
 
+    /**
+     * Tests the initialization of the MyProjectsPanel.
+     */
     @Test
     public void testInitialization() {
         assertNotNull(myProjectsPanel);
         assertEquals(2, myProjectsPanel.getComponentCount());
     }
 
+    /**
+     * Tests the action of the refresh button in the MyProjectsPanel.
+     */
     @Test
     public void testRefreshButtonAction() {
         JButton refreshButton = (JButton) myProjectsPanel.getComponent(1);
@@ -79,6 +91,9 @@ public class MyProjectsPanelTest {
         assertEquals("Description 1", infoTable.getValueAt(0, 1));
     }
 
+    /**
+     * Tests handling of data update property change in the MyProjectsPanel.
+     */
     @Test
     public void testPropertyChangeDataUpdate() {
         Object[][] projectData = {
@@ -96,6 +111,9 @@ public class MyProjectsPanelTest {
         assertEquals("Edit", infoTable.getValueAt(0, 2));
     }
 
+    /**
+     * Tests handling of login property change in the MyProjectsPanel.
+     */
     @Test
     public void testPropertyChangeLogin() {
         PropertyChangeEvent event = new PropertyChangeEvent(this, "login", null, true);
@@ -120,6 +138,9 @@ public class MyProjectsPanelTest {
         assertEquals("Project 1", infoTable.getValueAt(0, 0));
     }
 
+    /**
+     * Tests handling of error property change in the MyProjectsPanel.
+     */
     @Test
     public void testPropertyChangeError() {
         String errorMessage = "An error occurred";
@@ -132,6 +153,9 @@ public class MyProjectsPanelTest {
         assertEquals(errorMessage, myProjectsPanelViewModel.errorMessage);
     }
 
+    /**
+     * Tests handling of delete project property change in the MyProjectsPanel.
+     */
     @Test
     public void testPropertyChangeDeleteProject() {
         PropertyChangeEvent event = new PropertyChangeEvent(this, "deleteProject", null, null);

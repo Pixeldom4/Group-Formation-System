@@ -13,45 +13,68 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the LocalProjectDAO class.
+ */
 public class LocalProjectDAOTest {
     private final static String SAVE_LOCATION = "local_data/test/data_access/local_dao/";
     private static IProjectRepository projectRepository;
     private final static File saveFile = new File(SAVE_LOCATION + "projects.csv");
 
+    /**
+     * Sets up the test environment before each test.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @BeforeEach
     public void setUpEach() throws IOException {
         Files.deleteIfExists(saveFile.toPath());
         projectRepository = new LocalProjectRepository(SAVE_LOCATION);
         projectRepository.createProject("Test Project",
-                                        1000.0, "This is a test project.",
-                                        new HashSet<>(Arrays.asList("Java", "Programming")),
-                                        new float[]{0.1f, 0.2f, 0.3f, 0.4f, 0.5f},
-                                        10);
+                1000.0, "This is a test project.",
+                new HashSet<>(Arrays.asList("Java", "Programming")),
+                new float[]{0.1f, 0.2f, 0.3f, 0.4f, 0.5f},
+                10);
     }
 
+    /**
+     * Tests the retrieval of a project by its ID.
+     */
     @Test
     public void testGetProject() {
         assertEquals("Test Project",projectRepository.getProjectById(1).getProjectTitle());
     }
 
+    /**
+     * Tests adding tags to a project.
+     */
     @Test
     public void testAddTags(){
         projectRepository.addTags(1, new HashSet<>(List.of("New Tag")));
         assertEquals(projectRepository.getProjectById(1).getProjectTags(), new HashSet<>(Arrays.asList("Java", "Programming", "New Tag")));
     }
 
+    /**
+     * Tests removing tags from a project.
+     */
     @Test
     public void testRemoveTags(){
         projectRepository.removeTags(1, new HashSet<>(List.of("Java")));
         assertEquals(new HashSet<>(List.of("Programming")), projectRepository.getProjectById(1).getProjectTags());
     }
 
+    /**
+     * Tests deleting a project.
+     */
     @Test
     public void testDeleteProject(){
         projectRepository.deleteProject(1);
         assertNull(projectRepository.getProjectById(1));
     }
 
+    /**
+     * Tests updating a project's details.
+     */
     @Test
     public void testUpdateProject(){
         projectRepository.update(1, "Test Project 2", 2000.0, "This is a test project 2.",
@@ -64,6 +87,9 @@ public class LocalProjectDAOTest {
         assertArrayEquals(projectRepository.getAllEmbeddings().get(1), new float[]{0.6f, 0.7f, 0.8f, 0.9f, 1.0f});
     }
 
+    /**
+     * Tests retrieving the owner ID of a project.
+     */
     @Test
     public void testGetOwner(){
         assertEquals(10, projectRepository.getOwnerId(1));
