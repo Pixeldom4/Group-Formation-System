@@ -1,4 +1,4 @@
-package search_project_use_case;
+package usecase.searchproject;
 
 import entities.ProjectInterface;
 import api.EmbeddingAPIInterface;
@@ -47,7 +47,8 @@ public class SearchProjectInteractorTest {
                                      Double.parseDouble(project[2]),
                                      project[3],
                                      new HashSet<String>(Arrays.asList(project[4].split(";"))),
-                                     embedding);
+                                     embedding,
+                                     1);
         }
     }
 

@@ -8,16 +8,11 @@ public class SearchProjectUseCaseFactory {
     private SearchProjectUseCaseFactory(){}
 
     /**
-     * Creates a search panel for search project use case.
+     * Creates a search project controller for search project use case.
      * @param searchPanelViewModel the view model of the search panel
-     * @return the search panel
+     * @return the search project controller
      */
-    public static SearchPanel createSearchProjectPanel(SearchPanelViewModel searchPanelViewModel){
-        SearchProjectController searchProjectController = createSearchProjectController(searchPanelViewModel);
-        return new SearchPanel(searchPanelViewModel, searchProjectController);
-    }
-
-    private static SearchProjectController createSearchProjectController(SearchPanelViewModel searchPanelViewModel){
+    public static SearchProjectController createSearchProjectController(SearchPanelViewModel searchPanelViewModel){
         SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
         SearchProjectInputBoundary interactor = new SearchProjectsInteractor(presenter);
         return new SearchProjectController(interactor);

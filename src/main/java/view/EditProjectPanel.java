@@ -8,9 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 
-public class EditProjectPanel extends JPanel {
+public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     private final EditProjectPanelViewModel editProjectViewModel;
     private final EditProjectController editProjectController;
@@ -25,6 +27,7 @@ public class EditProjectPanel extends JPanel {
 
     public EditProjectPanel(EditProjectPanelViewModel editProjectViewModel, EditProjectController editProjectController) {
         this.editProjectViewModel = editProjectViewModel;
+        this.editProjectViewModel.addPropertyChangeListener(this);
         this.editProjectController = editProjectController;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -61,8 +64,6 @@ public class EditProjectPanel extends JPanel {
             }
         });
 
-        // Initialize the fields
-        refreshProject();
     }
 
     public void setProjectDetails(int projectId, int editorId, String title, double budget, String description, HashSet<String> tags) {
@@ -82,7 +83,7 @@ public class EditProjectPanel extends JPanel {
         for (String tag : tagsField.getText().split(",")) {
             newTags.add(tag.trim());
         }
-        editProjectController.editProject(new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags, editorId));
+        editProjectController.editProject(projectId, newTitle, newBudget, newDescription, newTags, editorId);
     }
 
     private void refreshProject() {
@@ -91,5 +92,23 @@ public class EditProjectPanel extends JPanel {
         budgetField.setText(String.valueOf(editProjectViewModel.getBudget()));
         descriptionField.setText(editProjectViewModel.getDescription());
         tagsField.setText(String.join(", ", editProjectViewModel.getTags()));
+        editorId = editProjectViewModel.getEditorId();
+        projectId =  editProjectViewModel.getProjectId();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("detailInit")) {
+            refreshProject();
+        }
+        if (evt.getPropertyName().equals("editSuccess")) {
+            refreshProject();
+            Boolean success = (Boolean) evt.getNewValue();
+            if (success) {
+                JOptionPane.showMessageDialog(null, "Project updated successfully!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to update project: " + editProjectViewModel.getErrorMessage());
+            }
+        }
     }
 }

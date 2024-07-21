@@ -1,20 +1,14 @@
 package view;
 
-import api.EmbeddingAPIInterface;
-import dataaccess.IProjectRepository;
+import usecase.acceptapplication.AcceptApplicationController;
 import usecase.deleteproject.DeleteProjectController;
-import usecase.deleteproject.DeleteProjectInputData;
-import usecase.deleteproject.DeleteProjectInteractor;
-import usecase.deleteproject.DeleteProjectPresenter;
-import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInteractor;
-import usecase.editproject.EditProjectPresenter;
+import usecase.getapplications.GetApplicationsController;
+import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.GetProjectsInputData;
-import usecase.getprojects.GetProjectsInteractor;
-import usecase.getprojects.GetProjectsPresenter;
+import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -32,25 +26,51 @@ import java.util.HashSet;
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final GetProjectsController getProjectsController;
-    private final GetProjectsPresenter getProjectsPresenter;
+    private final DeleteProjectController deleteProjectController;
+
+    private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
+    private final GetApplicationsController getApplicationsController;
+    private final AcceptApplicationController acceptApplicationController;
+    private final RejectApplicationController rejectApplicationController;
 
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
-    private final IProjectRepository projectRepository;  // Add this field
-    private final EmbeddingAPIInterface embeddingAPI;    // Add this field
+
+    private final EditProjectPanelViewModel editProjectPanelViewModel;
+    private final EditProjectPanel editProjectPanel;
+
+    private final GetLoggedInUserController getLoggedInUserController;
 
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100, 100, 100};
     private final String[] columnNames = {"Project Title", "Description", "Edit", "Applications", "Delete"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
-    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel, ViewManagerModel viewManagerModel, IProjectRepository projectRepository, EmbeddingAPIInterface embeddingAPI) {
+    public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
+                           ViewManagerModel viewManagerModel,
+                           GetLoggedInUserController getLoggedInUserController,
+                           GetProjectsController getProjectsController,
+                           DeleteProjectController deleteProjectController,
+                           DisplayProjectApplicationViewModel displayProjectApplicationViewModel,
+                           GetApplicationsController getApplicationsController,
+                           AcceptApplicationController acceptApplicationController,
+                           RejectApplicationController rejectApplicationController,
+                           EditProjectPanelViewModel editProjectPanelViewModel,
+                           EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;
+
+        this.getLoggedInUserController = getLoggedInUserController;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
-        this.projectRepository = projectRepository;
-        this.embeddingAPI = embeddingAPI;
-        this.getProjectsPresenter = new GetProjectsPresenter(myProjectsPanelViewModel);
-        this.getProjectsController = new GetProjectsController(new GetProjectsInteractor(this.getProjectsPresenter));
+        this.getProjectsController = getProjectsController;
+        this.deleteProjectController = deleteProjectController;
+
+        this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
+        this.getApplicationsController = getApplicationsController;
+        this.acceptApplicationController = acceptApplicationController;
+        this.rejectApplicationController = rejectApplicationController;
+
+        this.editProjectPanelViewModel = editProjectPanelViewModel;
+        this.editProjectPanel = editProjectPanel;
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
         viewManagerModel.addPropertyChangeListener(this);
@@ -88,36 +108,39 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                     String projectDescription = (String) projectData[finalI][2];
                     double projectBudget = (double) projectData[finalI][3];
                     HashSet<String> projectTags = (HashSet<String>) projectData[finalI][4];
-                    int editorId = viewManagerModel.getCurrentUserId();
+                    int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
 
-                    EditProjectPanelViewModel viewModel = new EditProjectPanelViewModel(projectId, projectTitle, projectBudget, projectDescription, projectTags);
-                    EditProjectController controller = new EditProjectController(new EditProjectInteractor(projectRepository, new EditProjectPresenter(viewModel), embeddingAPI));
-                    EditProjectPanel editProjectPanel = new EditProjectPanel(viewModel, controller);
+                    editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
+                                                                projectDescription, projectTags, editorId);
+                    editProjectPanelViewModel.initDetails();
 
                     // Display editProjectPanel in your application window
                     JFrame editFrame = new JFrame("Edit Project");
                     editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     editFrame.setSize(400, 300);
                     editFrame.add(editProjectPanel);
+
                     editFrame.setVisible(true);
                 }
             });
             applicationButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on application for " + projectData[finalI][0]);
-                    DisplayProjectApplicationView appView = new DisplayProjectApplicationView((int)projectData[finalI][0]);
+                    new DisplayProjectApplicationView((int)projectData[finalI][0],
+                                                      displayProjectApplicationViewModel,
+                                                      getApplicationsController,
+                                                      acceptApplicationController,
+                                                      rejectApplicationController);
                 }
             });
             deleteButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    System.out.println("clicked on delete for " + projectData[finalI][0]);
-                    int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you would like to delete " + projectData[finalI][0] + "?","Warning",JOptionPane.YES_NO_OPTION);
+                    int dialogResult = JOptionPane.showConfirmDialog (null,
+                                                                      "Are you sure you would like to delete " + projectData[finalI][0] + "?",
+                                                                      "Warning",
+                                                                      JOptionPane.YES_NO_OPTION);
                     if(dialogResult == JOptionPane.YES_OPTION){
-                        DeleteProjectPresenter deleteProjectPresenter = new DeleteProjectPresenter();
-                        DeleteProjectController deleteProjectController = new DeleteProjectController(new DeleteProjectInteractor(deleteProjectPresenter));
-
                         deleteProjectController.deleteProject((int) projectData[finalI][0]);
                     }
                 }
@@ -160,6 +183,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             addProjects(data);
         }
         if (evt.getPropertyName().equals("login")) {
+            getLoggedInUserController.getLoggedInUser();
             boolean login = (boolean) evt.getNewValue();
             if (login) {
                 getProjectsController.getProjects();
@@ -168,6 +192,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("error")) {
             String errorMessage = (String) evt.getNewValue();
             JOptionPane.showMessageDialog(this, errorMessage);
+        }
+        if (evt.getPropertyName().equals("deleteProject")) {
+            JOptionPane.showMessageDialog(null, "Sucessfully deleted project");
         }
     }
 }

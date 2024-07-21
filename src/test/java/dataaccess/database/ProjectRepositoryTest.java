@@ -190,4 +190,10 @@ class ProjectRepositoryTest {
         assertEquals(0.2f, embeddings[1], 0);
         assertEquals(0.3f, embeddings[2], 0);
     }
+
+    @Test
+    void getOwnerId() {
+        int ownerId = projectRepository.getOwnerId(testProjectId);
+        assertEquals(testOwnerId, ownerId);
+    }
 }

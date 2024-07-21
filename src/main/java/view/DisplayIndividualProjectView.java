@@ -50,6 +50,7 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
         projectDescriptionArea.setEditable(false);
         projectDescriptionArea.setLineWrap(true); // Enables line wrapping
         projectDescriptionArea.setWrapStyleWord(true); // Wraps at word boundaries
+        projectDescriptionArea.setEnabled(false);
         JScrollPane scrollPane = new JScrollPane(projectDescriptionArea);
         detailsPanel.add(projectDescriptionLabel);
         detailsPanel.add(scrollPane);

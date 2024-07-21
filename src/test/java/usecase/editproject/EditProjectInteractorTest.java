@@ -1,4 +1,4 @@
-package edit_project_use_case;
+package usecase.editproject;
 
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
@@ -8,7 +8,6 @@ import entities.Project;
 import entities.ProjectInterface;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import usecase.editproject.*;
 import usecase.searchforproject.SearchProjectOutputBoundary;
 import usecase.searchforproject.SearchProjectsInteractor;
 import usecase.searchforproject.SearchProjectsPresenter;

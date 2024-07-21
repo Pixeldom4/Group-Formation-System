@@ -1,6 +1,7 @@
 package usecase.createapplication;
 
 import dataaccess.IApplicationRepository;
+import dataaccess.IUserProjectsRepository;
 import entities.Application;
 
 /**
@@ -10,6 +11,7 @@ import entities.Application;
 public class CreateApplicationInteractor implements CreateApplicationInputBoundary {
     private final IApplicationRepository applicationRepository;
     private final CreateApplicationOutputBoundary applicationPresenter;
+    private final IUserProjectsRepository userProjectsRepository;
 
     /**
      * Constructs a CreateApplicationInteractor with the specified repository and presenter.
@@ -17,8 +19,11 @@ public class CreateApplicationInteractor implements CreateApplicationInputBounda
      * @param applicationRepository the repository to interact with the database.
      * @param applicationPresenter  the presenter to handle the output presentation.
      */
-    public CreateApplicationInteractor(IApplicationRepository applicationRepository, CreateApplicationOutputBoundary applicationPresenter) {
+    public CreateApplicationInteractor(IApplicationRepository applicationRepository,
+                                       IUserProjectsRepository userProjectsRepository,
+                                       CreateApplicationOutputBoundary applicationPresenter) {
         this.applicationRepository = applicationRepository;
+        this.userProjectsRepository = userProjectsRepository;
         this.applicationPresenter = applicationPresenter;
     }
 
@@ -29,6 +34,11 @@ public class CreateApplicationInteractor implements CreateApplicationInputBounda
      */
     @Override
     public void createApplication(CreateApplicationInputData inputData) {
+        if (userProjectsRepository.getUserIdsForProject(inputData.getProjectId()).contains(inputData.getSenderUserId())) {
+            applicationPresenter.prepareFailView("You already have access to project.");
+            return;
+        }
+
         Application application = applicationRepository.createApplication(
                 inputData.getSenderUserId(),
                 inputData.getProjectId(),

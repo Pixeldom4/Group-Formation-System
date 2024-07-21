@@ -11,10 +11,10 @@ import java.util.HashSet;
 public class GetProjectsInteractor implements GetProjectsInputBoundary {
     private final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
     private final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
-    private final GetProjectsPresenter getProjectsPresenter;
+    private final GetProjectsOutputBoundary getProjectsPresenter;
     private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
-    public GetProjectsInteractor(GetProjectsPresenter getProjectsPresenter){
+    public GetProjectsInteractor(GetProjectsOutputBoundary getProjectsPresenter){
         this.getProjectsPresenter = getProjectsPresenter;
     }
 

@@ -1,9 +1,9 @@
 package usecase.rejectapplication;
 
 public class RejectApplicationController {
-    private final RejectApplicationInteractor rejectApplicationsInteractor;
+    private final RejectApplicationInputBoundary rejectApplicationsInteractor;
 
-    public RejectApplicationController(RejectApplicationInteractor rejectApplicationsInteractor){
+    public RejectApplicationController(RejectApplicationInputBoundary rejectApplicationsInteractor){
         this.rejectApplicationsInteractor = rejectApplicationsInteractor;
     }
 

@@ -1,24 +1,21 @@
 package usecase.createapplication;
 
-import org.apache.commons.lang3.NotImplementedException;
-import view.DisplayCreateApplicationView;
-
-import javax.swing.*;
+import viewmodel.SearchPanelViewModel;
 
 public class CreateApplicationPresenter implements CreateApplicationOutputBoundary {
-    private final DisplayCreateApplicationView applicationView;
+    private final SearchPanelViewModel searchPanelViewModel;
 
-    public CreateApplicationPresenter(DisplayCreateApplicationView applicationView) {
-        this.applicationView = applicationView;
+    public CreateApplicationPresenter(SearchPanelViewModel searchPanelViewModel) {
+        this.searchPanelViewModel = searchPanelViewModel;
     }
+
     @Override
     public void prepareSuccessView(CreateApplicationOutputData outputData) {
-        applicationView.dispose();
-        JOptionPane.showMessageDialog(null, "Application submitted");
+        searchPanelViewModel.successApplication();
     }
 
     @Override
     public void prepareFailView(String errorMessage) {
-        JOptionPane.showMessageDialog(null, "There is a problem with the application");
+        searchPanelViewModel.errorApplication(errorMessage);
     }
 }

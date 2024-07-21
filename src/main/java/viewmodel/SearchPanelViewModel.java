@@ -1,17 +1,22 @@
 package viewmodel;
 
 import entities.ProjectInterface;
+import entities.User;
 import entities.UserInterface;
+import usecase.getloggedinuser.LoggedInDataAccessViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
-public class SearchPanelViewModel extends ViewModel {
+public class SearchPanelViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private ArrayList<ProjectInterface> projects;
     private ArrayList<UserInterface> users;
+    private User loggedInUser;
+    private String errorApplicationMessage;
 
     public SearchPanelViewModel() {
         super("SearchPanelView");
@@ -38,6 +43,15 @@ public class SearchPanelViewModel extends ViewModel {
     public void setProjects(ArrayList<ProjectInterface> projects) {
         this.projects = projects;
     }
+
+    /**
+     * Returns the logged-in user
+     * @return the logged-in user
+     */
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -59,5 +73,28 @@ public class SearchPanelViewModel extends ViewModel {
      */
     public ArrayList<UserInterface> getUsers() {
         return users;
+    }
+
+    public void successApplication() {
+        support.firePropertyChange("application", null, true);
+    }
+
+    public void errorApplication(String errorMessage) {
+        this.errorApplicationMessage = errorMessage;
+        support.firePropertyChange("application", null, false);
+    }
+
+    public String getErrorApplicationMessage() {
+        return errorApplicationMessage;
+    }
+
+    @Override
+    public void setLoggedInUser(int userId, String firstName, String lastName, String userEmail, double desiredCompensation, HashSet<String> tags) {
+        loggedInUser = new User(userId, firstName, lastName, userEmail, tags, desiredCompensation);
+    }
+
+    @Override
+    public void notLoggedIn() {
+        loggedInUser = null;
     }
 }

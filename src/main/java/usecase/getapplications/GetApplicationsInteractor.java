@@ -8,14 +8,12 @@ import java.util.HashSet;
 
 public class GetApplicationsInteractor implements GetApplicationsInputBoundary {
     private final IApplicationRepository applicationRepository;
-    private final IUserProjectsRepository userProjectsRepository;
     private final IUserRepository userRepository;
-    private final GetApplicationsPresenter manageApplicationsPresenter;
+    private final GetApplicationsOutputBoundary manageApplicationsPresenter;
 
-    public GetApplicationsInteractor(GetApplicationsPresenter manageApplicationsPresenter){
+    public GetApplicationsInteractor(GetApplicationsOutputBoundary manageApplicationsPresenter){
        this.manageApplicationsPresenter = manageApplicationsPresenter;
        this.applicationRepository = DataAccessConfig.getApplicationRepository();
-       this.userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
        this.userRepository = DataAccessConfig.getUserRepository();
     }
 
