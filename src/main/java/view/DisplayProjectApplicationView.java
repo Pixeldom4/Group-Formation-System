@@ -109,6 +109,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
                         try(FileOutputStream fos = new FileOutputStream(outputFile)){
                             fos.write((byte[])applicationsData[finalI][3]);
+                            JOptionPane.showMessageDialog(temp, "Downloaded file");
                         } catch (IOException ex){
                             JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
                         }
