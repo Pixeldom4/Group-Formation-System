@@ -31,13 +31,14 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final JLabel firstNameLabel = new JLabel("First Name");
     private final JLabel lastNameLabel = new JLabel("Last Name");
     private final JLabel desiredCompensationLabel = new JLabel("Desired Compensation");
+    private final JLabel projectTagsLabel = new JLabel("Project Tags");
 
     private final JTextField firstNameField = new JTextField();
     private final JTextField lastNameField = new JTextField();
     private final JTextField desiredCompensationField = new NumericTextField();
-
-    private final JLabel projectTagsLabel = new JLabel("Project Tags");
     private final JTextField projectTagsField = new JTextField();
+
+
     private final GridLayout tagPanelLayout = new GridLayout(0, 1);
     private final JPanel tagPanel = new JPanel();
     private final JButton addTagButton = new JButton("Add Tag");
@@ -65,12 +66,15 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         userDataPanel.add(lastNameField);
         userDataPanel.add(desiredCompensationLabel);
         userDataPanel.add(desiredCompensationField);
+        userDataPanel.add(projectTagsLabel);
+        userDataPanel.add(projectTagsField);
 
         userInfoPanel.add(userDataPanel);
 
+        tagPanel.add(tagPanelLabel);
         tagPanel.setLayout(tagPanelLayout);
         tagPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        tagPanel.add(tagPanelLabel);
+
 
         addTagButton.addActionListener(e -> {
             String tagText = projectTagsField.getText();
