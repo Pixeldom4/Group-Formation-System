@@ -105,11 +105,12 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
                         File selectedDirectory = fileChooser.getSelectedFile();
 
-                        File outputFile = new File(selectedDirectory, applicationsData[finalI][0]+" application.pdf");
+                        String fileName = applicationsData[finalI][0]+" application.pdf";
+                        File outputFile = new File(selectedDirectory, fileName);
 
                         try(FileOutputStream fos = new FileOutputStream(outputFile)){
                             fos.write((byte[])applicationsData[finalI][3]);
-                            JOptionPane.showMessageDialog(temp, "Downloaded file");
+                            JOptionPane.showMessageDialog(temp, "Downloaded file: " + fileName);
                         } catch (IOException ex){
                             JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
                         }
