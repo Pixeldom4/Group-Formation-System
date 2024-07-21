@@ -1,11 +1,18 @@
 package usecase.getloggedinuser;
 
 import dataaccess.ILoginUserDetails;
+import dataaccess.IUserRepository;
 import dataaccess.inmemory.LoginUserDetails;
+import dataaccess.local.LocalUserRepository;
 import entities.User;
 import entities.UserInterface;
 import org.junit.jupiter.api.Test;
+import usecase.BCryptPasswordHasher;
+import usecase.PasswordHasher;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -13,6 +20,10 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GetLoggedInUserInteractorTest {
+    private final static String SAVE_LOCATION = "local_data/test/usecase/getloggedinuser/";
+    private static IUserRepository userRepository;
+    private final static File saveFile = new File(SAVE_LOCATION + "users.csv");
+    private static final PasswordHasher passwordHasher = new BCryptPasswordHasher();
 
     private static UserInterface outputUser;
     private static boolean interactorCalled = false;
@@ -31,19 +42,25 @@ public class GetLoggedInUserInteractorTest {
             interactorCalled = true;
         }
     };
-    private final static GetLoggedInUserOutputBoundary getLoggedInUserOutputBoundary = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
-    private final static GetLoggedInUserInteractor getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserOutputBoundary, loginUserDetails);
-    private final static GetLoggedInUserController getLoggedInUserController = new GetLoggedInUserController(getLoggedInUserInteractor);
+    private static GetLoggedInUserOutputBoundary getLoggedInUserOutputBoundary;
+    private static GetLoggedInUserInteractor getLoggedInUserInteractor;
+    private static GetLoggedInUserController getLoggedInUserController;
 
 
     @Test
-    public void testLoginDetails(){
-        loginUserDetails.login(1,
-                               "test@test.com",
-                               "first",
-                               "last",
-                               1234.5,
-                               new HashSet<>(Arrays.asList("Java", "Programming")));
+    public void testLoginDetails() throws IOException {
+        Files.deleteIfExists(saveFile.toPath());
+        userRepository = new LocalUserRepository(SAVE_LOCATION);
+        getLoggedInUserOutputBoundary = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
+        getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserOutputBoundary, loginUserDetails, userRepository);
+        getLoggedInUserController = new GetLoggedInUserController(getLoggedInUserInteractor);
+        userRepository.createUser("test@test.com",
+                                  "first",
+                                  "last",
+                                  new HashSet<>(Arrays.asList("Java", "Programming")),
+                                  1234.5,
+                                  "password");
+        loginUserDetails.login(1);
         getLoggedInUserController.getLoggedInUser();
 
         await().until(() -> interactorCalled);

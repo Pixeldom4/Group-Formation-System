@@ -46,12 +46,7 @@ public class LoginUserInteractor implements LoginUserInputBoundary {
                     user.getTags(),
                     true
             );
-            loginUserDetails.login(user.getUserId(),
-                                   user.getUserEmail(),
-                                   user.getFirstName(),
-                                   user.getLastName(),
-                                   user.getDesiredCompensation(),
-                                   user.getTags());
+            loginUserDetails.login(user.getUserId());
             loginUserPresenter.prepareSuccessView(outputData);
         } else {
             loginUserPresenter.prepareFailView("Invalid email or password.");

@@ -11,6 +11,7 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LogoutUseCaseTest {
+
     private static boolean logoutCalled = false;
     private static boolean success = false;
 
@@ -34,12 +35,7 @@ public class LogoutUseCaseTest {
 
     @Test
     public void testLogout() {
-        loginUserDetails.login(1,
-                               "test@test.com",
-                               "first",
-                               "last",
-                               1234.5,
-                               new HashSet<>(Arrays.asList("Java", "Programming")));
+        loginUserDetails.login(1);
         logoutController.logout();
 
         await().until(() -> logoutCalled);
