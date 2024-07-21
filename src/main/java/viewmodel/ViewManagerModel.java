@@ -28,7 +28,9 @@ public class ViewManagerModel {
     }
 
     public void login(){
+        this.activeViewName = "EditMyProfile";
         support.firePropertyChange("login", null, true);
+        this.firePropertyChanged();
     }
 
     public void logout(){
@@ -36,7 +38,6 @@ public class ViewManagerModel {
     }
 
     public void firePropertyChanged() {
-
         support.firePropertyChange("view", null, this.activeViewName);
     }
 

@@ -31,6 +31,14 @@ public class DataAccessConfig {
     // This class should not be instantiated
     private DataAccessConfig() { }
 
+    public static String getImplementation() {
+        if (USE_LOCAL == 1) {
+            return "Using local implementation";
+        } else {
+            return "Using database implementation";
+        }
+    }
+
     /**
      * Initializes the database by connecting to it and creating necessary tables.
      */
