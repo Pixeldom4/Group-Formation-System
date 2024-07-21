@@ -26,12 +26,6 @@ import java.util.HashSet;
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final GetProjectsController getProjectsController;
-    private final DeleteProjectController deleteProjectController;
-
-    private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
-    private final GetApplicationsController getApplicationsController;
-    private final AcceptApplicationController acceptApplicationController;
-    private final RejectApplicationController rejectApplicationController;
 
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -42,19 +36,15 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final GetLoggedInUserController getLoggedInUserController;
 
     private final JTable infoTable = new JTable();
-    private final int[] columnWidths = {200, 400, 100, 100, 100};
-    private final String[] columnNames = {"Project Title", "Description", "Edit", "Applications", "Delete"};
+    private final int[] columnWidths = {200, 400, 100};
+    private final String[] columnNames = {"Project Title", "Description", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
                            GetProjectsController getProjectsController,
-                           DeleteProjectController deleteProjectController,
-                           DisplayProjectApplicationViewModel displayProjectApplicationViewModel,
                            GetApplicationsController getApplicationsController,
-                           AcceptApplicationController acceptApplicationController,
-                           RejectApplicationController rejectApplicationController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
                            EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;
@@ -62,12 +52,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.getLoggedInUserController = getLoggedInUserController;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
         this.getProjectsController = getProjectsController;
-        this.deleteProjectController = deleteProjectController;
-
-        this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
-        this.getApplicationsController = getApplicationsController;
-        this.acceptApplicationController = acceptApplicationController;
-        this.rejectApplicationController = rejectApplicationController;
 
         this.editProjectPanelViewModel = editProjectPanelViewModel;
         this.editProjectPanel = editProjectPanel;
@@ -92,13 +76,11 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         ArrayList<ButtonAction> applicationButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> deleteButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[projectData.length][5];
+        Object[][] info = new Object[projectData.length][3];
         for (int i = 0; i < projectData.length; i++) {
             info[i][0] = projectData[i][1];
             info[i][1] = projectData[i][2];
             info[i][2] = "Edit";
-            info[i][3] = "View Applications";
-            info[i][4] = "Delete";
             int finalI = i;
             editButtonActions.add(new ButtonAction() {
                 @Override
@@ -123,28 +105,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                     editFrame.setVisible(true);
                 }
             });
-            applicationButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    new DisplayProjectApplicationView((int)projectData[finalI][0],
-                                                      displayProjectApplicationViewModel,
-                                                      getApplicationsController,
-                                                      acceptApplicationController,
-                                                      rejectApplicationController);
-                }
-            });
-            deleteButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    int dialogResult = JOptionPane.showConfirmDialog (null,
-                                                                      "Are you sure you would like to delete " + projectData[finalI][0] + "?",
-                                                                      "Warning",
-                                                                      JOptionPane.YES_NO_OPTION);
-                    if(dialogResult == JOptionPane.YES_OPTION){
-                        deleteProjectController.deleteProject((int) projectData[finalI][0]);
-                    }
-                }
-            });
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
@@ -158,12 +118,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
         ButtonColumn editColumn = new ButtonColumn(infoTable, 2);
         editColumn.setActions(editButtonActions);
-
-        ButtonColumn applicationColumn = new ButtonColumn(infoTable, 3);
-        applicationColumn.setActions(applicationButtonActions);
-
-        ButtonColumn deleteColumn = new ButtonColumn(infoTable, 4);
-        deleteColumn.setActions(deleteButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
         for (int i = 0; i < columnWidths.length; i++) {
