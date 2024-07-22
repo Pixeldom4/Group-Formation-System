@@ -33,7 +33,13 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
      */
     @Override
     public void getProjects(GetProjectsInputData inputData) {
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(inputData.getUserId());
+        int loginUserId = inputData.getUserId();
+        if (loginUserId == 0) {
+            getProjectsPresenter.prepareFailView("User not logged in");
+            return;
+        }
+
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
         Object[][] projectData = new Object[projectIds.size()][5];
 
         int count = 0;
