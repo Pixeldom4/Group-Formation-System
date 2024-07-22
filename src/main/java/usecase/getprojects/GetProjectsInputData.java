@@ -8,6 +8,12 @@ public class GetProjectsInputData {
     /**
      * Constructs a GetProjectsInputData object.
      */
-    public GetProjectsInputData() {
+    private final int userId;
+    public GetProjectsInputData(int userId) {
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }

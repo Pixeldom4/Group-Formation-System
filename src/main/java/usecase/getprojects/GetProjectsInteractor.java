@@ -16,7 +16,6 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
     private final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
     private final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
     private final GetProjectsOutputBoundary getProjectsPresenter;
-    private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     /**
      * Constructs a GetProjectsInteractor with the specified presenter.
@@ -34,13 +33,7 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
      */
     @Override
     public void getProjects(GetProjectsInputData inputData) {
-        int loginUserId = loginUserDetails.getUserId();
-        if (loginUserId == 0) {
-            getProjectsPresenter.prepareFailView("User not logged in");
-            return;
-        }
-
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(inputData.getUserId());
         Object[][] projectData = new Object[projectIds.size()][5];
 
         int count = 0;

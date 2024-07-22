@@ -70,7 +70,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.add(refreshButton);
 
         refreshButton.addActionListener(e -> {
-            getProjectsController.getProjects();
+            getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
         });
     }
 
@@ -148,7 +148,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             getLoggedInUserController.getLoggedInUser();
             boolean login = (boolean) evt.getNewValue();
             if (login) {
-                getProjectsController.getProjects();
+                getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
             }
         }
         if (evt.getPropertyName().equals("error")) {

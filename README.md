@@ -3,6 +3,8 @@ It is similar to LinkedIn but except it is for projects.
 
 Creating a project:
 
+https://i.gyazo.com/9dc4f6ee51c85ad049f72cde71170509.mp4
+
 To create a project, press the "Add Project" button, and it will bring you to a panel to input information about the project. The project creation consist of Name, Budget, Description, and Tags.
 
 Viewing your projects:
