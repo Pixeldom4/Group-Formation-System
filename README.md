@@ -25,20 +25,20 @@ Note that there is a basic check of whether the email is in a valid format and t
 
 ![Create User](image/CreatingUser.gif)
 
-### Login User
+### Login
 
 The user can login using the email and password provided during creation.
 
 ![Login User](image/LoginUser.gif)
 
-### EditingUser
+### Editing user information
 
 All information except user email can be edited here.
 The save button needs to be pressed after editing in order to save the changes.
 
 ![Editing User](image/EditingUser.gif)
 
-### LogOutUser
+### Logout
 
 The user can logout using this button.
 
@@ -62,3 +62,8 @@ The user can view their projects, including those they own and those they joined
 The user can view details and applications of their projects, however only the owner can edit and delete projects.
 
 ![img_2.png](img_2.png)
+
+### Search Projects
+
+The user can search projects by typing in keywords or descriptions of projects they want to find. 
+They can also apply to projects by providing a description and a pdf file.
