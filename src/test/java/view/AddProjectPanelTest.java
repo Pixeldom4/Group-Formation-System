@@ -1,5 +1,6 @@
 package view;
 
+import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.createproject.CreateProjectController;
@@ -12,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -99,7 +98,6 @@ public class AddProjectPanelTest {
 
         verify(createProjectController).createProject("Test Project", 1000.0, "Test Description", new HashSet<>(), userId);
     }
-
 
     @Test
     public void testPropertyChangeSuccess() {
