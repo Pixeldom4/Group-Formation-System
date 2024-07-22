@@ -80,8 +80,6 @@ public class MyProjectsPanelTest {
     public void testRefreshButtonAction() {
         JButton refreshButton = (JButton) myProjectsPanel.getComponent(1);
         assertNotNull(refreshButton);
-        refreshButton.doClick();
-        verify(getProjectsController).getProjects();
 
         // Simulate the getProjectsController updating the ViewModel with new data
         Object[][] projectData = {
@@ -89,6 +87,12 @@ public class MyProjectsPanelTest {
                 {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
         };
         myProjectsPanelViewModel.setData(projectData);
+
+        // Simulate the getLoggedInUserController updating the ViewModel with logged in user
+        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
+
+        refreshButton.doClick();
+        verify(getProjectsController).getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
 
         JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
         assertEquals(2, infoTable.getRowCount());
@@ -123,11 +127,12 @@ public class MyProjectsPanelTest {
     public void testPropertyChangeLogin() {
         PropertyChangeEvent event = new PropertyChangeEvent(this, "login", null, true);
 
+        // Simulate the getLoggedInUserController updating the ViewModel with logged in user
+        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
+
         myProjectsPanel.propertyChange(event);
         verify(getLoggedInUserController).getLoggedInUser();
 
-        // Simulate the getLoggedInUserController updating the ViewModel with logged in user
-        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
 
         assertNotNull(myProjectsPanelViewModel.getLoggedInUser());
         assertEquals("John", myProjectsPanelViewModel.getLoggedInUser().getFirstName());
