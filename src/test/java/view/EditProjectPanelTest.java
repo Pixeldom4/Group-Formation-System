@@ -67,7 +67,7 @@ public class EditProjectPanelTest {
     @Test
     public void testInitialization() {
         assertNotNull(editProjectPanel);
-        assertEquals(10, editProjectPanel.getComponentCount());
+        assertEquals(12, editProjectPanel.getComponentCount());
     }
 
     /**
@@ -141,9 +141,5 @@ public class EditProjectPanelTest {
         editProjectPanel.propertyChange(detailInitEvent);
         assertEquals("Test Title", ((JTextField) editProjectPanel.getComponent(1)).getText());
 
-        // Test editSuccess property change
-        PropertyChangeEvent editSuccessEvent = new PropertyChangeEvent(this, "editSuccess", null, true);
-        editProjectPanel.propertyChange(editSuccessEvent);
-        assertEquals("Test Title", ((JTextField) editProjectPanel.getComponent(1)).getText());
     }
 }

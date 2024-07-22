@@ -29,7 +29,7 @@ public class CreateUserInputData {
         this.lastName = lastName;
         this.email = email;
         this.desiredCompensation = desiredCompensation;
-        this.tags = tags;
+        this.tags = tags == null ? new HashSet<>() : tags;
         this.password = password;
     }
 

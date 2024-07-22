@@ -27,7 +27,7 @@ public class EditProjectOutputData {
         this.title = title;
         this.budget = budget;
         this.description = description;
-        this.tags = tags;
+        this.tags = new HashSet<>(tags);
     }
 
     /**
@@ -72,6 +72,6 @@ public class EditProjectOutputData {
      * @return the new tags of the project.
      */
     public HashSet<String> getTags() {
-        return tags;
+        return new HashSet<>(tags);
     }
 }

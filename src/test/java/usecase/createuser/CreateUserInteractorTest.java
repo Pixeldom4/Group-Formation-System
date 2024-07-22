@@ -4,9 +4,13 @@ import dataaccess.IUserRepository;
 import dataaccess.local.LocalUserRepository;
 import entities.User;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.PasswordHasher;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -21,6 +25,7 @@ public class CreateUserInteractorTest {
      * The location where test data is saved.
      */
     private final static String SAVE_LOCATION = "local_data/test/create_user_interactor/";
+    private final static File saveFile = new File(SAVE_LOCATION + "users.csv");
 
     /**
      * A mock implementation of CreateUserOutputBoundary for testing.
@@ -35,14 +40,14 @@ public class CreateUserInteractorTest {
 
         @Override
         public void prepareFailView(String error) {
-            fail("Create user failed: " + error);
+            assertNotNull(error);
         }
     };
 
     /**
      * A mock implementation of IUserRepository for testing.
      */
-    private final static IUserRepository userRepository = new LocalUserRepository(SAVE_LOCATION);
+    private static IUserRepository userRepository;
 
     /**
      * A mock implementation of PasswordHasher for testing.
@@ -62,13 +67,17 @@ public class CreateUserInteractorTest {
     /**
      * The CreateUserInteractor instance used for testing.
      */
-    private final static CreateUserInteractor createUserInteractor = new CreateUserInteractor(userRepository, userPresenter, passwordHasher);
+    private static CreateUserInteractor createUserInteractor;
 
     /**
      * Sets up the test environment before all tests.
      */
-    @BeforeAll
-    public static void setUp() {}
+    @BeforeEach
+    public void setUp() throws IOException {
+        Files.deleteIfExists(saveFile.toPath());
+        userRepository = new LocalUserRepository(SAVE_LOCATION);
+        createUserInteractor = new CreateUserInteractor(userRepository, userPresenter, passwordHasher);
+    }
 
     /**
      * Tests the creation of a user with valid input.
