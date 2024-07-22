@@ -13,14 +13,14 @@ public class EditUserInputData {
     private int userId;
     private HashSet<String> tags;
 
-
     /**
      * Edits a CreateProjectInputData object with the specified details.
      *
-     * @param userId        the ID of the user.
-     * @param firstName     the first name of the user.
-     * @param lastName      the last name of the user.
+     * @param userId              the ID of the user.
+     * @param firstName           the first name of the user.
+     * @param lastName            the last name of the user.
      * @param desiredCompensation the desired compensation of the user.
+     * @param tags                the tags for the user.
      */
     public EditUserInputData(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
         this.userId = userId;
@@ -48,7 +48,9 @@ public class EditUserInputData {
         return lastName;
     }
 
-    /**.
+    /**
+     * Returns the desired compensation of the user.
+     *
      * @return the desired compensation of the user.
      */
     public double getDesiredCompensation() {
@@ -64,8 +66,12 @@ public class EditUserInputData {
         return userId;
     }
 
+    /**
+     * Returns the tags for the user.
+     *
+     * @return the tags for the user.
+     */
     public HashSet<String> getTags() {
         return tags;
     }
-
 }

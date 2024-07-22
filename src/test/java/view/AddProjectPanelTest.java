@@ -1,5 +1,6 @@
 package view;
 
+import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.createproject.CreateProjectController;
@@ -12,12 +13,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the AddProjectPanel class.
+ */
 public class AddProjectPanelTest {
 
     private AddProjectPanel addProjectPanel;
@@ -33,6 +35,9 @@ public class AddProjectPanelTest {
     private JTextField projectTagsField;
     private JButton addTagButton;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @BeforeEach
     public void setUp() {
         addProjectPanelViewModel = new AddProjectPanelViewModel();
@@ -54,6 +59,9 @@ public class AddProjectPanelTest {
         setComponentNames();
     }
 
+    /**
+     * Sets the component names for easy access in tests.
+     */
     private void setComponentNames() {
         projectNameField = (JTextField) projectDataPanel.getComponent(1);
         projectBudgetField = (NumericTextField) projectDataPanel.getComponent(3);
@@ -62,12 +70,18 @@ public class AddProjectPanelTest {
         addTagButton = (JButton) projectDataPanel.getComponent(8);
     }
 
+    /**
+     * Tests the initialization of the AddProjectPanel.
+     */
     @Test
     public void testInitialization() {
         assertNotNull(addProjectPanel);
         assertEquals(2, addProjectPanel.getComponentCount());  // Adjust the number based on the components in your panel
     }
 
+    /**
+     * Tests the add tag functionality.
+     */
     @Test
     public void testAddTag() {
         projectTagsField.setText("testTag");
@@ -77,6 +91,9 @@ public class AddProjectPanelTest {
         assertTrue(doesTagExist("testTag"));
     }
 
+    /**
+     * Tests the create project functionality.
+     */
     @Test
     public void testCreateProject() {
 
@@ -100,7 +117,9 @@ public class AddProjectPanelTest {
         verify(createProjectController).createProject("Test Project", 1000.0, "Test Description", new HashSet<>(), userId);
     }
 
-
+    /**
+     * Tests the property change for success scenario.
+     */
     @Test
     public void testPropertyChangeSuccess() {
         addProjectPanelViewModel.setProjectName("Test Project");
@@ -111,6 +130,9 @@ public class AddProjectPanelTest {
         assertEquals("Test Project", addProjectPanelViewModel.getProjectName());
     }
 
+    /**
+     * Tests the property change for failure scenario.
+     */
     @Test
     public void testPropertyChangeFailure() {
         addProjectPanelViewModel.setErrorMessage("Error creating project");
@@ -121,6 +143,12 @@ public class AddProjectPanelTest {
         assertEquals("Error creating project", addProjectPanelViewModel.getErrorMessage());
     }
 
+    /**
+     * Checks if a tag exists in the tag panel.
+     *
+     * @param tagName the name of the tag to check.
+     * @return true if the tag exists, false otherwise.
+     */
     private boolean doesTagExist(String tagName) {
         JPanel tagPanel = (JPanel) projectInfoPanel.getComponent(1);
         for (Component component : tagPanel.getComponents()) {

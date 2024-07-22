@@ -1,5 +1,9 @@
 package usecase.removeuserfromproject;
 
+/**
+ * Interface for the output boundary of the Remove User From Project use case.
+ * Provides methods to prepare views for success and failure scenarios.
+ */
 public interface RemoveUserFromProjectOutputBoundary {
     /**
      * Prepares the success view with the provided output data.

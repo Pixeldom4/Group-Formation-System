@@ -1,23 +1,63 @@
-The software allows project initiators to propose and recruit members for a small project while allowing project supporters to join posted projects that they are interested in.
-It is similar to LinkedIn but except it is for projects.
+# Group Formation System
 
-Creating a project:
-
-[createproject.mp4](..%2F..%2FDocuments%2FCSC207%2Fgifs%2Fcreateproject.mp4)
-
-To create a project, press the "Add Project" button, and it will bring you to a panel to input information about the project. The project creation consist of Name, Budget, Description, and Tags.
-
-Viewing your projects:
-
-Press the "My Projects" button, and it shows you every project that you are currently part of.
-
-Editing a project:
-
-To edit a project, make sure you are in the "My Projects" panel. Select the project you want to edit and press the edit button. Editing a project consist of Title, Budget, Description, and Tags. After editing, press the save button to save your changes.
-
-Viewing applications for your project:
-
-To view applications, make sure you are currently editing your project. Press the "View Applications" button and it will show you every applicant that has applied to your project. View your applicant's info by pressing "View" and decide by either pressing "Accept" or "Reject".
+This repository contains code for our groups CSC207 project, a Project and User Management system. Through our program, a user can
+manage both the user and projects.
+1. __User__ is which has a username, userid, and tags that assist in matching relevant projects.
+2. __Project__ has a projectId, title, description, budget, and tags.
 
 
+# Instructions
 
+Clone the ```main``` branch of the code base. Invoke ```Main.java``` in the ```src/main/java``` directory.
+
+### Put in the API key
+
+![ss1.png](image/ss1.png)
+![ss2.png](image/ss2.png)
+![ss3.png](image/ss3.png)
+
+We have provided the following GIFs, which demonstrate each use case, for the user's convenience.
+
+### Create User
+
+![Create User](image/CreatingUser.gif)
+
+### Login User
+
+![Login User](image/LoginUser.gif)
+
+### EditingUser
+
+![Editing User](image/EditingUser.gif)
+
+### LogOutUser
+
+![Modify Task](image/LogOutUser.gif)
+
+### Delete Event
+
+![Delete Event](images/DeleteEvent.gif)
+
+### Delete Task
+
+![Delete Task](images/DeleteTask.gif)
+
+### Complete Task
+
+![Complete Task](images/CompleteTask.gif)
+
+### Clear All
+
+![Clear All](images/ClearWeek.gif)
+
+### Create Project
+
+![img.png](img.png)
+
+### View Projects
+
+![img_1.png](img_1.png)
+
+### Edit Projects
+
+![img_2.png](img_2.png)

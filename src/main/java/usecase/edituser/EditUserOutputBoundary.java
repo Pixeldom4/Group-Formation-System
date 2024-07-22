@@ -2,6 +2,10 @@ package usecase.edituser;
 
 import usecase.editproject.EditProjectOutputData;
 
+/**
+ * Interface for the Edit User output boundary.
+ * Defines methods to prepare views for success and failure scenarios.
+ */
 public interface EditUserOutputBoundary {
     /**
      * Prepares the success view with the provided output data.

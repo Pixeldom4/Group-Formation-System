@@ -5,6 +5,10 @@ import viewmodel.SearchPanelViewModel;
 
 import java.util.ArrayList;
 
+/**
+ * Presenter for the Search Project By ID use case.
+ * Implements the SearchProjectByIdOutputBoundary interface to handle the output data.
+ */
 public class SearchProjectByIdPresenter implements SearchProjectByIdOutputBoundary {
     private final SearchPanelViewModel searchPanelViewModel;
 
