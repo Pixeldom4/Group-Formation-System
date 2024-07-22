@@ -31,20 +31,22 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
 
     private final JLabel firstNameLabel = new JLabel("First Name");
     private final JLabel lastNameLabel = new JLabel("Last Name");
+    private final JLabel emailLabel = new JLabel("Email");
     private final JLabel desiredCompensationLabel = new JLabel("Desired Compensation");
     private final JLabel projectTagsLabel = new JLabel("User Tags To Add");
 
     private final JTextField firstNameField = new JTextField();
     private final JTextField lastNameField = new JTextField();
+    private final JTextField emailField = new JTextField();
     private final JTextField desiredCompensationField = new NumericTextField();
     private final JTextField projectTagsField = new JTextField();
 
+    private final JButton addTagButton = new JButton("Add Tag");
     private final GridLayout tagPanelLayout = new GridLayout(0, 1);
     private final JPanel tagPanel = new JPanel();
-    private final JButton addTagButton = new JButton("Add Tag");
+
     private final JLabel tagPanelLabel = new JLabel("User tags (Press add tag to add): ");
     private final HashSet<String> tags = new HashSet<>();
-    private final JButton myCurrentProfileButton = new JButton("Current Profile");
     private final JButton saveButton = new JButton("Save");
 
     /**
@@ -66,23 +68,6 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
 
-        userDataPanel.setLayout(userDataGridLayout);
-
-        userDataPanel.add(firstNameLabel);
-        userDataPanel.add(firstNameField);
-        userDataPanel.add(lastNameLabel);
-        userDataPanel.add(lastNameField);
-        userDataPanel.add(desiredCompensationLabel);
-        userDataPanel.add(desiredCompensationField);
-        userDataPanel.add(projectTagsLabel);
-        userDataPanel.add(projectTagsField);
-
-        userInfoPanel.add(userDataPanel);
-
-        tagPanel.add(tagPanelLabel);
-        tagPanel.setLayout(tagPanelLayout);
-        tagPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
         addTagButton.addActionListener(e -> {
             String tagText = projectTagsField.getText();
             if (!tagText.isEmpty()) {
@@ -92,8 +77,26 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
             }
         });
 
-        userInfoPanel.add(projectTagsField);
-        userInfoPanel.add(addTagButton);
+        userDataPanel.setLayout(userDataGridLayout);
+
+        userDataPanel.add(firstNameLabel);
+        userDataPanel.add(firstNameField);
+        userDataPanel.add(lastNameLabel);
+        userDataPanel.add(lastNameField);
+        userDataPanel.add(emailLabel);
+        userDataPanel.add(emailField);
+        userDataPanel.add(desiredCompensationLabel);
+        userDataPanel.add(desiredCompensationField);
+        userDataPanel.add(projectTagsLabel);
+        userDataPanel.add(projectTagsField);
+        userDataPanel.add(addTagButton);
+
+        userInfoPanel.add(userDataPanel);
+
+        tagPanel.add(tagPanelLabel);
+        tagPanel.setLayout(tagPanelLayout);
+        tagPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
         userInfoPanel.add(tagPanel);
 
         this.add(userInfoPanel);
@@ -101,20 +104,14 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         saveButton.addActionListener(e -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
+            String email = emailField.getText();
             double desiredCompensation = Double.parseDouble(desiredCompensationField.getText());
-            String email = editProfileViewModel.getUserEmail();
 
             // Call the EditUserController to save the user information
             editUserController.editUser(editProfileViewModel.getUserId(), firstName, lastName, email, desiredCompensation, tags);
         });
 
         this.add(saveButton);
-        this.add(myCurrentProfileButton);
-
-        myCurrentProfileButton.addActionListener(e -> {
-            User loggedInUser = editProfileViewModel.getLoggedInUser();
-            new DisplayMyProfileView(loggedInUser); // Use this line when want to display project
-        });
     }
 
     /**
@@ -180,15 +177,16 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
             if (loggedInUser != null) {
                 firstNameField.setText(loggedInUser.getFirstName());
                 lastNameField.setText(loggedInUser.getLastName());
+                emailField.setText(loggedInUser.getUserEmail());
                 desiredCompensationField.setText(String.valueOf(loggedInUser.getDesiredCompensation()));
                 for (String tag : loggedInUser.getTags()) {
                     addTagToPanel(tag);
                     tags.add(tag);
                 }
-            }
-            else {
+            } else {
                 firstNameField.setText("");
                 lastNameField.setText("");
+                emailField.setText("");
                 desiredCompensationField.setText("");
                 projectTagsField.setText("");
                 tagPanel.removeAll();
