@@ -98,6 +98,7 @@ public class EditProfileViewModel extends ViewModel implements LoggedInDataAcces
     @Override
     public void notLoggedIn() {
         loggedInUser = null;
+        support.firePropertyChange("userUpdate", null, null);
     }
 
     /**

@@ -191,8 +191,10 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
                 lastNameField.setText("");
                 desiredCompensationField.setText("");
                 projectTagsField.setText("");
-                tagPanel.removeAll();
                 tags.clear();
+                tagPanel.removeAll();
+                tagPanel.revalidate();
+                tagPanel.repaint();
             }
         }
 
