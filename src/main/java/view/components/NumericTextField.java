@@ -46,4 +46,13 @@ public class NumericTextField extends JTextField {
         this.setText("");
         doc.setDocumentFilter(filter);
     }
+
+    public void setNumber(String text) {
+        if (text.matches("(-?\\d*\\.?\\d+)")) {
+            AbstractDocument doc = (AbstractDocument) this.getDocument();
+            doc.setDocumentFilter(null);
+            this.setText(text);
+            doc.setDocumentFilter(filter);
+        }
+    }
 }

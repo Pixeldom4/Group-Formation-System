@@ -3,6 +3,8 @@ It is similar to LinkedIn but except it is for projects.
 
 Creating a project:
 
+[createproject.mp4](..%2F..%2FDocuments%2FCSC207%2Fgifs%2Fcreateproject.mp4)
+
 To create a project, press the "Add Project" button, and it will bring you to a panel to input information about the project. The project creation consist of Name, Budget, Description, and Tags.
 
 Viewing your projects:
