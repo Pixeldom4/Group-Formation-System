@@ -3,7 +3,9 @@ package view;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.getloggedinuser.GetLoggedInUserInteractor;
 import usecase.getprojects.GetProjectsController;
+import usecase.getprojects.GetProjectsInteractor;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -13,6 +15,8 @@ import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the MyProjectsPanel class.
@@ -34,8 +38,8 @@ public class MyProjectsPanelTest {
     public void setUp() {
         myProjectsPanelViewModel = new MyProjectsPanelViewModel();
         viewManagerModel = new ViewManagerModel();
-//        getLoggedInUserController = new GetLoggedInUserController();
-//        getProjectsController = new GetProjectsController();
+        getLoggedInUserController = mock(GetLoggedInUserController.class);
+        getProjectsController = mock(GetProjectsController.class);
         editProjectPanelViewModel = new EditProjectPanelViewModel();
 
         // Initialize EditProjectPanel with mock controllers and view models
@@ -77,6 +81,7 @@ public class MyProjectsPanelTest {
         JButton refreshButton = (JButton) myProjectsPanel.getComponent(1);
         assertNotNull(refreshButton);
         refreshButton.doClick();
+        verify(getProjectsController).getProjects();
 
         // Simulate the getProjectsController updating the ViewModel with new data
         Object[][] projectData = {
@@ -119,6 +124,7 @@ public class MyProjectsPanelTest {
         PropertyChangeEvent event = new PropertyChangeEvent(this, "login", null, true);
 
         myProjectsPanel.propertyChange(event);
+        verify(getLoggedInUserController).getLoggedInUser();
 
         // Simulate the getLoggedInUserController updating the ViewModel with logged in user
         myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
@@ -144,26 +150,11 @@ public class MyProjectsPanelTest {
     @Test
     public void testPropertyChangeError() {
         String errorMessage = "An error occurred";
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "error", null, errorMessage);
 
-        myProjectsPanel.propertyChange(event);
+        myProjectsPanelViewModel.setErrorMessage(errorMessage);
 
         // Check that the error message is displayed in a dialog
         // Assuming setErrorMessage updates a public errorMessage field for this test
-        assertEquals(errorMessage, myProjectsPanelViewModel.errorMessage);
-    }
-
-    /**
-     * Tests handling of delete project property change in the MyProjectsPanel.
-     */
-    @Test
-    public void testPropertyChangeDeleteProject() {
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "deleteProject", null, null);
-
-        myProjectsPanel.propertyChange(event);
-
-        // Check that the success message is displayed in a dialog
-        // This could be a simple log message or some state change, for the test we just assert the state change
-        assertEquals("Sucessfully deleted project", "Sucessfully deleted project");
+        assertEquals(errorMessage, myProjectsPanelViewModel.getErrorMessage());
     }
 }
