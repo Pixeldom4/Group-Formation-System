@@ -1,5 +1,7 @@
 package view;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,143 +12,172 @@ import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class AddProjectPanelTest {
 
     private AddProjectPanel addProjectPanel;
-    private AddProjectPanelViewModel addProjectPanelViewModel;
-    private CreateProjectController createProjectController;
-    private GetLoggedInUserController getLoggedInUserController;
     private ViewManagerModel viewManagerModel;
+    private AddProjectPanelViewModel addProjectPanelViewModel;
+    private TestCreateProjectController createProjectController;
+    private TestGetLoggedInUserController getLoggedInUserController;
 
     @BeforeEach
     public void setUp() {
-        addProjectPanelViewModel = new AddProjectPanelViewModel();
-        createProjectController = mock(CreateProjectController.class);
-        getLoggedInUserController = mock(GetLoggedInUserController.class);
         viewManagerModel = new ViewManagerModel();
+        addProjectPanelViewModel = new AddProjectPanelViewModel();
+        createProjectController = new TestCreateProjectController();
+        getLoggedInUserController = new TestGetLoggedInUserController();
 
-        addProjectPanel = new AddProjectPanel(
-                viewManagerModel,
-                addProjectPanelViewModel,
-                createProjectController,
-                getLoggedInUserController
-        );
-
-        // Set component names for easy access in tests
-        setComponentNames();
-    }
-
-    private void setComponentNames() {
-        ((JTextField) getComponentByName(addProjectPanel, "projectNameField")).setName("projectNameField");
-        ((NumericTextField) getComponentByName(addProjectPanel, "projectBudgetField")).setName("projectBudgetField");
-        ((JTextField) getComponentByName(addProjectPanel, "projectDescriptionField")).setName("projectDescriptionField");
-        ((JTextField) getComponentByName(addProjectPanel, "projectTagsField")).setName("projectTagsField");
-        ((JButton) getComponentByName(addProjectPanel, "addTagButton")).setName("addTagButton");
-        ((JButton) getComponentByName(addProjectPanel, "addProjectButton")).setName("addProjectButton");
+        addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelViewModel, createProjectController, getLoggedInUserController);
     }
 
     @Test
-    public void testInitialization() {
-        assertNotNull(addProjectPanel);
-        assertEquals(2, addProjectPanel.getComponentCount());  // Adjust the number based on the components in your panel
-    }
+    public void testAddTagToPanel() {
+        JTextField projectTagsField = getFieldValue(addProjectPanel, "projectTagsField");
+        JButton addTagButton = getFieldValue(addProjectPanel, "addTagButton");
 
-    @Test
-    public void testAddTag() {
-        JTextField projectTagsField = (JTextField) getComponentByName(addProjectPanel, "projectTagsField");
-        projectTagsField.setText("testTag");
-
-        JButton addTagButton = (JButton) getComponentByName(addProjectPanel, "addTagButton");
+        projectTagsField.setText("NewTag");
         addTagButton.doClick();
 
-        assertTrue(doesTagExist("testTag"));
+        JPanel tagPanel = getFieldValue(addProjectPanel, "tagPanel");
+        assertEquals(2, tagPanel.getComponentCount()); // One JLabel and one tag panel
     }
 
     @Test
-    public void testCreateProject() {
-        JTextField projectNameField = (JTextField) getComponentByName(addProjectPanel, "projectNameField");
-        NumericTextField projectBudgetField = (NumericTextField) getComponentByName(addProjectPanel, "projectBudgetField");
-        JTextField projectDescriptionField = (JTextField) getComponentByName(addProjectPanel, "projectDescriptionField");
+    public void testAddProjectSuccess() {
+        JTextField projectNameField = getFieldValue(addProjectPanel, "projectNameField");
+        NumericTextField projectBudgetField = getFieldValue(addProjectPanel, "projectBudgetField");
+        JTextField projectDescriptionField = getFieldValue(addProjectPanel, "projectDescriptionField");
+        JButton addProjectButton = getFieldValue(addProjectPanel, "addProjectButton");
 
         projectNameField.setText("Test Project");
-        projectBudgetField.setText("1000.0");
+        projectBudgetField.setText("1000");
         projectDescriptionField.setText("Test Description");
 
-        // Simulate logged-in user
-        int userId = 1;
-        String firstName = "John";
-        String lastName = "Doe";
-        String userEmail = "john.doe@example.com";
-        double desiredCompensation = 5000.0;
-        HashSet<String> tags = new HashSet<>();
+        User testUser = new User(1, "Test", "User", "test@example.com", new HashSet<>(), 1000.0);
+        addProjectPanelViewModel.setLoggedInUser(testUser);
 
-        addProjectPanelViewModel.setLoggedInUser(userId, firstName, lastName, userEmail, desiredCompensation, tags);
-
-        JButton addProjectButton = (JButton) getComponentByName(addProjectPanel, "addProjectButton");
         addProjectButton.doClick();
 
-        verify(createProjectController).createProject("Test Project", 1000.0, "Test Description", new HashSet<>(), userId);
+        assertTrue(createProjectController.isProjectCreated());
+        assertEquals("Test Project", createProjectController.getTitle());
+        assertEquals(1000.0, createProjectController.getBudget());
+        assertEquals("Test Description", createProjectController.getDescription());
+        assertEquals(testUser.getUserId(), createProjectController.getUserId());
+    }
+
+    @Test
+    public void testAddProjectWithoutLogin() {
+        JTextField projectNameField = getFieldValue(addProjectPanel, "projectNameField");
+        NumericTextField projectBudgetField = getFieldValue(addProjectPanel, "projectBudgetField");
+        JTextField projectDescriptionField = getFieldValue(addProjectPanel, "projectDescriptionField");
+        JButton addProjectButton = getFieldValue(addProjectPanel, "addProjectButton");
+
+        projectNameField.setText("Test Project");
+        projectBudgetField.setText("1000");
+        projectDescriptionField.setText("Test Description");
+
+        addProjectPanelViewModel.setLoggedInUser(null);
+
+        addProjectButton.doClick();
+
+        assertFalse(createProjectController.isProjectCreated());
     }
 
     @Test
     public void testPropertyChangeSuccess() {
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "success", false, true);
         addProjectPanelViewModel.setProjectName("Test Project");
+        addProjectPanelViewModel.setSuccess(true);
+
+        PropertyChangeEvent event = new PropertyChangeEvent(this, "success", false, true);
         addProjectPanel.propertyChange(event);
 
-        // Assuming the success dialog shows up correctly
-        assertTrue(addProjectPanelViewModel.isSuccess());
-        assertEquals("Test Project", addProjectPanelViewModel.getProjectName());
+        assertEquals("", getFieldValue(addProjectPanel, "projectNameField").getClass());
+        assertEquals("", getFieldValue(addProjectPanel, "projectBudgetField").getClass());
+        assertEquals("", getFieldValue(addProjectPanel, "projectDescriptionField").getClass());
+        assertEquals("", getFieldValue(addProjectPanel, "projectTagsField").getClass());
     }
 
     @Test
-    public void testPropertyChangeFailure() {
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "success", true, false);
-        addProjectPanelViewModel.setErrorMessage("Error creating project");
+    public void testPropertyChangeLogin() {
+        PropertyChangeEvent event = new PropertyChangeEvent(this, "login", null, true);
+
         addProjectPanel.propertyChange(event);
 
-        // Assuming the error dialog shows up correctly
-        assertFalse(addProjectPanelViewModel.isSuccess());
-        assertEquals("Error creating project", addProjectPanelViewModel.getErrorMessage());
+        assertTrue(getLoggedInUserController.isGetLoggedInUserCalled());
     }
 
-    private JComponent getComponentByName(Container container, String name) {
-        for (Component component : container.getComponents()) {
-            if (name.equals(component.getName())) {
-                return (JComponent) component;
-            }
-            if (component instanceof Container) {
-                JComponent result = getComponentByName((Container) component, name);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-        return null;
+    @Test
+    public void testViewManagerModelInteraction() {
+        viewManagerModel.login();
+        assertEquals("EditMyProfile", viewManagerModel.getActiveView());
     }
 
-    private boolean doesTagExist(String tagName) {
-        JPanel tagPanel = (JPanel) getComponentByName(addProjectPanel, "tagPanel");
-        for (Component component : tagPanel.getComponents()) {
-            if (component instanceof JPanel) {
-                JPanel tag = (JPanel) component;
-                for (Component tagComponent : tag.getComponents()) {
-                    if (tagComponent instanceof JLabel) {
-                        JLabel label = (JLabel) tagComponent;
-                        if (tagName.equals(label.getText())) {
-                            return true;
-                        }
-                    }
-                }
-            }
+    // Utility method to get private fields from AddProjectPanel for testing
+    @SuppressWarnings("unchecked")
+    private <T> T getFieldValue(Object object, String fieldName) {
+        try {
+            java.lang.reflect.Field field = object.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return (T) field.get(object);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get field value", e);
         }
-        return false;
+    }
+
+    // Test implementation of CreateProjectController
+    private static class TestCreateProjectController implements CreateProjectController {
+
+        private boolean projectCreated = false;
+        private String title;
+        private double budget;
+        private String description;
+        private int userId;
+
+        @Override
+        public void createProject(String title, double budget, String description, HashSet<String> tags, int userId) {
+            this.projectCreated = true;
+            this.title = title;
+            this.budget = budget;
+            this.description = description;
+            this.userId = userId;
+        }
+
+        public boolean isProjectCreated() {
+            return projectCreated;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public double getBudget() {
+            return budget;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public int getUserId() {
+            return userId;
+        }
+    }
+
+    // Test implementation of GetLoggedInUserController
+    private static class TestGetLoggedInUserController implements GetLoggedInUserController {
+
+        private boolean getLoggedInUserCalled = false;
+
+        @Override
+        public void getLoggedInUser() {
+            this.getLoggedInUserCalled = true;
+        }
+
+        public boolean isGetLoggedInUserCalled() {
+            return getLoggedInUserCalled;
+        }
     }
 }
