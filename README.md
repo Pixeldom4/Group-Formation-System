@@ -49,3 +49,15 @@ We have provided the following GIFs, which demonstrate each use case, for the us
 ### Clear All
 
 ![Clear All](images/ClearWeek.gif)
+
+### Create Project
+
+![img.png](img.png)
+
+### View Projects
+
+![img_1.png](img_1.png)
+
+### Edit Projects
+
+![img_2.png](img_2.png)
