@@ -38,6 +38,15 @@ public class CreateApplicationInteractor implements CreateApplicationInputBounda
             applicationPresenter.prepareFailView("You already have access to project.");
             return;
         }
+        if (inputData.getPdfBytes() == null || inputData.getPdfBytes().length == 0) {
+            applicationPresenter.prepareFailView("You must submit a PDF file!");
+            return;
+        }
+        final int MAX_SIZE =  3 * 1024 * 1024; // 3MB in bytes
+        if (inputData.getPdfBytes().length >= MAX_SIZE) {
+            applicationPresenter.prepareFailView("The PDF file must be less than 3MB!");
+            return;
+        }
 
         Application application = applicationRepository.createApplication(
                 inputData.getSenderUserId(),
