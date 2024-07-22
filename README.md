@@ -20,44 +20,45 @@ We have provided the following GIFs, which demonstrate each use case, for the us
 
 ### Create User
 
+A user can be created with a first name, last name, email, password, and desired compensation.
+Note that there is a basic check of whether the email is in a valid format and the password needs to be at least 5 characters long.
+
 ![Create User](image/CreatingUser.gif)
 
 ### Login User
+
+The user can login using the email and password provided during creation.
 
 ![Login User](image/LoginUser.gif)
 
 ### EditingUser
 
+All information except user email can be edited here.
+The save button needs to be pressed after editing in order to save the changes.
+
 ![Editing User](image/EditingUser.gif)
 
 ### LogOutUser
 
+The user can logout using this button.
+
 ![Modify Task](image/LogOutUser.gif)
 
-### Delete Event
-
-![Delete Event](images/DeleteEvent.gif)
-
-### Delete Task
-
-![Delete Task](images/DeleteTask.gif)
-
-### Complete Task
-
-![Complete Task](images/CompleteTask.gif)
-
-### Clear All
-
-![Clear All](images/ClearWeek.gif)
-
 ### Create Project
+
+The user can create a project by providing a name, a budget, some description of the project, and some tags.
+The user that created the project will be the owner.
 
 ![img.png](img.png)
 
 ### View Projects
 
+The user can view their projects, including those they own and those they joined.
+
 ![img_1.png](img_1.png)
 
 ### Edit Projects
+
+The user can view details and applications of their projects, however only the owner can edit and delete projects.
 
 ![img_2.png](img_2.png)
