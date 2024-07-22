@@ -14,7 +14,7 @@ import dataaccess.local.*;
 public class DataAccessConfig {
     public static int USE_LOCAL = 0; // Set this to 1 to use local, 0 to use database
 
-    private static final String databaseName = "database.db";
+    private static final String databaseName = "projectDatabase.db";
     private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
     private static final IUserRepository userRepository = new UserRepository(databaseName, userProjectsRepository);
     private static final IProjectRepository projectRepository = new ProjectRepository(databaseName, userProjectsRepository);

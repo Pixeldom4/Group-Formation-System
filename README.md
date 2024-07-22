@@ -5,7 +5,6 @@ manage both the user and projects.
 1. __User__ is which has a username, userid, and tags that assist in matching relevant projects.
 2. __Projects__ (Arthur)
 
-Our program allows the user to Create Tasks and Events, Modify Tasks and Events, Mark Tasks as completed or uncompleted, Delete Tasks and Events and clear their weekly schedule in case the user wants to start from scratch.
 
 # Instructions
 

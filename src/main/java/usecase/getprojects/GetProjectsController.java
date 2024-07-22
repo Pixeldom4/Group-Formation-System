@@ -19,8 +19,8 @@ public class GetProjectsController {
     /**
      * Retrieves projects for the logged-in user.
      */
-    public void getProjects() {
-        GetProjectsInputData inputData = new GetProjectsInputData();
+    public void getProjects(int userId) {
+        GetProjectsInputData inputData = new GetProjectsInputData(userId);
         getProjectsInteractor.getProjects(inputData);
     }
 }

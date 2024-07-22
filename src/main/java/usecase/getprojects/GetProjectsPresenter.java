@@ -36,5 +36,6 @@ public class GetProjectsPresenter implements GetProjectsOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         myProjectsPanelViewModel.setErrorMessage(errorMessage);
+        myProjectsPanelViewModel.showError();
     }
 }

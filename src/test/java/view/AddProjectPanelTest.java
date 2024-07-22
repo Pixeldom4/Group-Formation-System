@@ -1,5 +1,6 @@
 package view;
 
+import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.createproject.CreateProjectController;
@@ -12,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,6 +24,13 @@ public class AddProjectPanelTest {
     private CreateProjectController createProjectController;
     private GetLoggedInUserController getLoggedInUserController;
     private ViewManagerModel viewManagerModel;
+    private JPanel projectInfoPanel;
+    private JPanel projectDataPanel;
+    private JTextField projectNameField;
+    private NumericTextField projectBudgetField;
+    private JTextField projectDescriptionField;
+    private JTextField projectTagsField;
+    private JButton addTagButton;
 
     @BeforeEach
     public void setUp() {
@@ -40,17 +46,19 @@ public class AddProjectPanelTest {
                 getLoggedInUserController
         );
 
+        projectInfoPanel = (JPanel) addProjectPanel.getComponent(0);
+        projectDataPanel = (JPanel) projectInfoPanel.getComponent(0);
+
         // Set component names for easy access in tests
         setComponentNames();
     }
 
     private void setComponentNames() {
-        ((JTextField) getComponentByName(addProjectPanel, "projectNameField")).setName("projectNameField");
-        ((NumericTextField) getComponentByName(addProjectPanel, "projectBudgetField")).setName("projectBudgetField");
-        ((JTextField) getComponentByName(addProjectPanel, "projectDescriptionField")).setName("projectDescriptionField");
-        ((JTextField) getComponentByName(addProjectPanel, "projectTagsField")).setName("projectTagsField");
-        ((JButton) getComponentByName(addProjectPanel, "addTagButton")).setName("addTagButton");
-        ((JButton) getComponentByName(addProjectPanel, "addProjectButton")).setName("addProjectButton");
+        projectNameField = (JTextField) projectDataPanel.getComponent(1);
+        projectBudgetField = (NumericTextField) projectDataPanel.getComponent(3);
+        projectDescriptionField = (JTextField) projectDataPanel.getComponent(5);
+        projectTagsField = (JTextField) projectDataPanel.getComponent(7);
+        addTagButton = (JButton) projectDataPanel.getComponent(8);
     }
 
     @Test
@@ -61,10 +69,8 @@ public class AddProjectPanelTest {
 
     @Test
     public void testAddTag() {
-        JTextField projectTagsField = (JTextField) getComponentByName(addProjectPanel, "projectTagsField");
         projectTagsField.setText("testTag");
 
-        JButton addTagButton = (JButton) getComponentByName(addProjectPanel, "addTagButton");
         addTagButton.doClick();
 
         assertTrue(doesTagExist("testTag"));
@@ -72,12 +78,9 @@ public class AddProjectPanelTest {
 
     @Test
     public void testCreateProject() {
-        JTextField projectNameField = (JTextField) getComponentByName(addProjectPanel, "projectNameField");
-        NumericTextField projectBudgetField = (NumericTextField) getComponentByName(addProjectPanel, "projectBudgetField");
-        JTextField projectDescriptionField = (JTextField) getComponentByName(addProjectPanel, "projectDescriptionField");
 
         projectNameField.setText("Test Project");
-        projectBudgetField.setText("1000.0");
+        projectBudgetField.setNumber("1000.0");
         projectDescriptionField.setText("Test Description");
 
         // Simulate logged-in user
@@ -90,18 +93,16 @@ public class AddProjectPanelTest {
 
         addProjectPanelViewModel.setLoggedInUser(userId, firstName, lastName, userEmail, desiredCompensation, tags);
 
-        JButton addProjectButton = (JButton) getComponentByName(addProjectPanel, "addProjectButton");
+        JButton addProjectButton = (JButton) addProjectPanel.getComponent(1);
         addProjectButton.doClick();
 
         verify(createProjectController).createProject("Test Project", 1000.0, "Test Description", new HashSet<>(), userId);
     }
 
-
     @Test
     public void testPropertyChangeSuccess() {
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "success", false, true);
         addProjectPanelViewModel.setProjectName("Test Project");
-        addProjectPanel.propertyChange(event);
+        addProjectPanelViewModel.setSuccess(true);
 
         // Assuming the success dialog shows up correctly
         assertTrue(addProjectPanelViewModel.isSuccess());
@@ -110,32 +111,16 @@ public class AddProjectPanelTest {
 
     @Test
     public void testPropertyChangeFailure() {
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "success", true, false);
         addProjectPanelViewModel.setErrorMessage("Error creating project");
-        addProjectPanel.propertyChange(event);
+        addProjectPanelViewModel.setSuccess(false);
 
         // Assuming the error dialog shows up correctly
         assertFalse(addProjectPanelViewModel.isSuccess());
         assertEquals("Error creating project", addProjectPanelViewModel.getErrorMessage());
     }
 
-    private JComponent getComponentByName(Container container, String name) {
-        for (Component component : container.getComponents()) {
-            if (name.equals(component.getName())) {
-                return (JComponent) component;
-            }
-            if (component instanceof Container) {
-                JComponent result = getComponentByName((Container) component, name);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-        return null;
-    }
-
     private boolean doesTagExist(String tagName) {
-        JPanel tagPanel = (JPanel) getComponentByName(addProjectPanel, "tagPanel");
+        JPanel tagPanel = (JPanel) projectInfoPanel.getComponent(1);
         for (Component component : tagPanel.getComponents()) {
             if (component instanceof JPanel) {
                 JPanel tag = (JPanel) component;

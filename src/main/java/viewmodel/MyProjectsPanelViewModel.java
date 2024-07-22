@@ -13,7 +13,7 @@ import java.util.HashSet;
 public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private Object[][] data;
-    public String errorMessage;
+    private String errorMessage;
     private User loggedInUser;
 
     /**
@@ -40,6 +40,12 @@ public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataA
      */
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    /**
+     * Fires a property change event to show error message.
+     */
+    public void showError() {
         support.firePropertyChange("error", null, errorMessage);
     }
 
@@ -50,6 +56,15 @@ public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataA
      */
     public User getLoggedInUser() {
         return loggedInUser;
+    }
+
+    /**
+     * Returns the error message.
+     *
+     * @return the error message
+     */
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     /**

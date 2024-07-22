@@ -36,5 +36,6 @@ public class DeleteProjectPresenter implements DeleteProjectOutputBoundary {
     @Override
     public void prepareFailView(String error) {
         myProjectsPanelViewModel.setErrorMessage(error);
+        myProjectsPanelViewModel.showError();
     }
 }

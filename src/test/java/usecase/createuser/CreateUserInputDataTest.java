@@ -105,6 +105,6 @@ class CreateUserInputDataTest {
     void createUserInputDataWithNullTags() {
         CreateUserInputData inputData = new CreateUserInputData("John", "Doe", "john.doe@test.com", 50000.0, null, "password123");
 
-        assertNull(inputData.getTags());
+        assertTrue(inputData.getTags().isEmpty());
     }
 }
