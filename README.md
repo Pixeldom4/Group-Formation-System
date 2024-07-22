@@ -1,21 +1,44 @@
-The software allows project initiators to propose and recruit members for a small project while allowing project supporters to join posted projects that they are interested in.
-It is similar to LinkedIn but except it is for projects.
+# Clean Calendar
 
-Creating a project:
+This repository contains code for our groups CSC207 project, a Project and User Management system. Through our program, a user can
+manage both the user and projects.
+1. __User__ is which has a username, userid, and tags that assist in matching relevant projects.
+2. __Projects__ (Arthur)
 
-To create a project, press the "Add Project" button, and it will bring you to a panel to input information about the project. The project creation consist of Name, Budget, Description, and Tags.
+Our program allows the user to Create Tasks and Events, Modify Tasks and Events, Mark Tasks as completed or uncompleted, Delete Tasks and Events and clear their weekly schedule in case the user wants to start from scratch.
 
-Viewing your projects:
+# Instructions
 
-Press the "My Projects" button, and it shows you every project that you are currently part of.
+Clone the ```main``` branch of the code base. Invoke ```Main.java``` in the ```src/main/java``` directory. We have provided the following GIFs, which demonstrate each use case, for the user's convenience.
 
-Editing a project:
+### Create User
 
-To edit a project, make sure you are in the "My Projects" panel. Select the project you want to edit and press the edit button. Editing a project consist of Title, Budget, Description, and Tags. After editing, press the save button to save your changes.
+![Create User](image/CreatingUser.gif)
 
-Viewing applications for your project:
+### Login User
 
-To view applications, make sure you are currently editing your project. Press the "View Applications" button and it will show you every applicant that has applied to your project. View your applicant's info by pressing "View" and decide by either pressing "Accept" or "Reject".
+![Login User](image/LoginUser.gif)
 
+### EditingUser
 
+![Editing User](image/EditingUser.gif)
 
+### LogOutUser
+
+![Modify Task](image/LogOutUser.gif)
+
+### Delete Event
+
+![Delete Event](images/DeleteEvent.gif)
+
+### Delete Task
+
+![Delete Task](images/DeleteTask.gif)
+
+### Complete Task
+
+![Complete Task](images/CompleteTask.gif)
+
+### Clear All
+
+![Clear All](images/ClearWeek.gif)
