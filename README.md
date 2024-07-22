@@ -3,7 +3,7 @@
 This repository contains code for our groups CSC207 project, a Project and User Management system. Through our program, a user can
 manage both the user and projects.
 1. __User__ is which has a username, userid, and tags that assist in matching relevant projects.
-2. __Projects__ (Arthur)
+2. __Project__ has a projectId, title, description, budget, and tags.
 
 
 # Instructions
@@ -20,32 +20,50 @@ We have provided the following GIFs, which demonstrate each use case, for the us
 
 ### Create User
 
+A user can be created with a first name, last name, email, password, and desired compensation.
+Note that there is a basic check of whether the email is in a valid format and the password needs to be at least 5 characters long.
+
 ![Create User](image/CreatingUser.gif)
 
-### Login User
+### Login
+
+The user can login using the email and password provided during creation.
 
 ![Login User](image/LoginUser.gif)
 
-### EditingUser
+### Editing user information
+
+All information except user email can be edited here.
+The save button needs to be pressed after editing in order to save the changes.
 
 ![Editing User](image/EditingUser.gif)
 
-### LogOutUser
+### Logout
+
+The user can logout using this button.
 
 ![Modify Task](image/LogOutUser.gif)
 
-### Delete Event
+### Create Project
 
-![Delete Event](images/DeleteEvent.gif)
+The user can create a project by providing a name, a budget, some description of the project, and some tags.
+The user that created the project will be the owner.
 
-### Delete Task
+![img.png](img.png)
 
-![Delete Task](images/DeleteTask.gif)
+### View Projects
 
-### Complete Task
+The user can view their projects, including those they own and those they joined.
 
-![Complete Task](images/CompleteTask.gif)
+![img_1.png](img_1.png)
 
-### Clear All
+### Edit Projects
 
-![Clear All](images/ClearWeek.gif)
+The user can view details and applications of their projects, however only the owner can edit and delete projects.
+
+![img_2.png](img_2.png)
+
+### Search Projects
+
+The user can search projects by typing in keywords or descriptions of projects they want to find. 
+They can also apply to projects by providing a description and a pdf file.
