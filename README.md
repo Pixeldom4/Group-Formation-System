@@ -1,4 +1,4 @@
-# Clean Calendar
+# Group Formation System
 
 This repository contains code for our groups CSC207 project, a Project and User Management system. Through our program, a user can
 manage both the user and projects.
@@ -8,7 +8,15 @@ manage both the user and projects.
 
 # Instructions
 
-Clone the ```main``` branch of the code base. Invoke ```Main.java``` in the ```src/main/java``` directory. We have provided the following GIFs, which demonstrate each use case, for the user's convenience.
+Clone the ```main``` branch of the code base. Invoke ```Main.java``` in the ```src/main/java``` directory.
+
+### Put in the API key
+
+![ss1.png](image/ss1.png)
+![ss2.png](image/ss2.png)
+![ss3.png](image/ss3.png)
+
+We have provided the following GIFs, which demonstrate each use case, for the user's convenience.
 
 ### Create User
 
