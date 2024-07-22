@@ -8,10 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * A view for creating an application.
@@ -65,7 +62,8 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
                 InputStream input = new FileInputStream(applicationLabel.getText().substring(applicationText.length()));
                 createApplicationController.createApplication(loginUserId, projectId, infoText, input);
             } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
+                // pass in an empty input stream
+                createApplicationController.createApplication(loginUserId, projectId, infoText, new ByteArrayInputStream(new byte[0]));
             }
 
             System.out.println();
