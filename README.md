@@ -3,7 +3,7 @@
 This repository contains code for our groups CSC207 project, a Project and User Management system. Through our program, a user can
 manage both the user and projects.
 1. __User__ is which has a username, userid, and tags that assist in matching relevant projects.
-2. __Projects__ (Arthur)
+2. __Project__ has a projectId, title, description, budget, and tags.
 
 
 # Instructions
