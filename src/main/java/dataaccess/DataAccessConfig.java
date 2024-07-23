@@ -40,26 +40,6 @@ public class DataAccessConfig {
     }
 
     /**
-     * Initializes the database by connecting to it and creating necessary tables.
-     */
-    public static void initializeDatabase(){
-        Database init_upr = (Database) userProjectsRepository;
-        Database init_ur = (Database) userRepository;
-        Database init_pr = (Database) projectRepository;
-        Database init_ar = (Database) applicationRepository;
-
-        init_upr.connect();
-        init_ur.connect();
-        init_pr.connect();
-        init_ar.connect();
-
-        init_upr.initialize();
-        init_ur.initialize();
-        init_pr.initialize();
-        init_ar.initialize();
-    }
-
-    /**
      * Returns the ProjectRepository that will be used in the application.
      * @return the ProjectRepository instance
      */
