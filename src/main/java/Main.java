@@ -1,4 +1,5 @@
 import dataaccess.DataAccessConfig;
+import dataaccess.DatabaseInitializer;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.acceptapplication.AcceptApplicationUseCaseFactory;
 import usecase.createapplication.CreateApplicationController;
@@ -48,7 +49,8 @@ class Main {
         System.out.println(DataAccessConfig.getImplementation());
 
         // Initialize database
-        DataAccessConfig.initializeDatabase();
+//        DataAccessConfig.initializeDatabase();
+        DatabaseInitializer.initializeDatabase();
 
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
