@@ -62,13 +62,11 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.editProjectPanel = editProjectPanel;
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
+        editProjectPanelViewModel.addPropertyChangeListener(this);
         viewManagerModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(infoPanel);
-
-        JButton refreshButton = new JButton("Refresh");
-        this.add(refreshButton);
 
     }
 
@@ -152,7 +150,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("deleteProject")) {
             JOptionPane.showMessageDialog(null, "Successfully deleted project");
         }
-        if (evt.getPropertyName().equals("addProject")) {
+        if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {
             getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
         }
     }

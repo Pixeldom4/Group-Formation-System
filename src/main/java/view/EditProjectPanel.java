@@ -127,13 +127,6 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
             }
         });
 
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refreshProject();
-            }
-        });
-
     }
 
     /**
