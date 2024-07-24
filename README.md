@@ -12,9 +12,9 @@ Clone the ```main``` branch of the code base. Invoke ```Main.java``` in the ```s
 
 ### Put in the API key
 
-![ss1.png](image/ss1.png)
-![ss2.png](image/ss2.png)
-![ss3.png](image/ss3.png)
+![APIKEYSTEP1.png](image/APIKEYSTEP1.png)
+![APIKEYSTEP2.png](image/APIKEYSTEP2.png)
+![APIKEYSTEP3.png](image/APIKEYSTEP3.png)
 
 We have provided the following GIFs, which demonstrate each use case, for the user's convenience.
 

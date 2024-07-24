@@ -70,9 +70,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         JButton refreshButton = new JButton("Refresh");
         this.add(refreshButton);
 
-        refreshButton.addActionListener(e -> {
-            getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
-        });
     }
 
     /**
@@ -111,6 +108,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                     editFrame.add(editProjectPanel);
 
                     editFrame.setVisible(true);
+
                 }
             });
             i++;
@@ -153,6 +151,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         }
         if (evt.getPropertyName().equals("deleteProject")) {
             JOptionPane.showMessageDialog(null, "Successfully deleted project");
+        }
+        if (evt.getPropertyName().equals("addProject")) {
+            getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
         }
     }
 
