@@ -37,20 +37,43 @@ public class ProjectEmbeddingsManager extends SQLDatabaseManager {
     public boolean addEmbeddings(int projectId, float[] embeddings) {
         String embeddingSql = "INSERT INTO ProjectEmbeddings (ProjectId, EmbeddingIndex, EmbeddingValue) VALUES (?, ?, ?)";
         Connection connection = getConnection();
+
         try (PreparedStatement embeddingStatement = connection.prepareStatement(embeddingSql)) {
+            connection.setAutoCommit(false); // Disable auto-commit
+
             for (int i = 0; i < embeddings.length; i++) {
                 embeddingStatement.setInt(1, projectId);
                 embeddingStatement.setInt(2, i);
                 embeddingStatement.setFloat(3, embeddings[i]);
                 embeddingStatement.addBatch();
+
+                if (i % 1000 == 0 || i == embeddings.length - 1) { // Adjust batch size if necessary
+                    embeddingStatement.executeBatch();
+                }
             }
+
             embeddingStatement.executeBatch();
+            connection.commit(); // Commit the transaction
+            connection.setAutoCommit(true); // Re-enable auto-commit
+
             return true;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+            try {
+                connection.rollback(); // Rollback the transaction
+            } catch (SQLException rollbackException) {
+                System.err.println(rollbackException.getMessage());
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
         }
         return false;
     }
+
 
     /**
      * Removes embeddings for a project from the database.
