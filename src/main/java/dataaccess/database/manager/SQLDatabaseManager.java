@@ -1,18 +1,17 @@
-package dataaccess.database;
+package dataaccess.database.manager;
 
 import dataaccess.Database;
+import dataaccess.database.manager.DatabaseConnection;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.SQLException;
 
 /**
  * An abstract class that manages the SQL database connection and initialization.
  */
 public abstract class SQLDatabaseManager implements Database {
     private final String DATABASE_NAME;
-    private Connection connection;
 
     /**
      * Constructs a DatabaseManager object.
@@ -28,13 +27,7 @@ public abstract class SQLDatabaseManager implements Database {
      */
     @Override
     public void connect() {
-        try {
-            String path = "jdbc:sqlite:" + this.DATABASE_NAME;
-            this.connection = DriverManager.getConnection(path);
-            System.out.println("Connected to the database.");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        DatabaseConnection.getInstance(this.DATABASE_NAME); // Ensure connection is established
     }
 
     /**
@@ -42,16 +35,7 @@ public abstract class SQLDatabaseManager implements Database {
      */
     @Override
     public void disconnect() {
-        if (this.connection != null) {
-            try {
-                this.connection.close();
-                System.out.println("Disconnected from the database.");
-            } catch (SQLException e) {
-                System.err.println("Error while disconnecting: " + e.getMessage());
-            } finally {
-                this.connection = null;
-            }
-        }
+        DatabaseConnection.getInstance(this.DATABASE_NAME).disconnect();
     }
 
     /**
@@ -61,10 +45,7 @@ public abstract class SQLDatabaseManager implements Database {
      * @return the connection for this database.
      */
     protected Connection getConnection() {
-        if (this.connection == null) {
-            this.connect();
-        }
-        return this.connection;
+        return DatabaseConnection.getInstance(this.DATABASE_NAME).getConnection();
     }
 
     /**

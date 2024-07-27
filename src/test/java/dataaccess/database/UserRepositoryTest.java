@@ -1,5 +1,6 @@
 package dataaccess.database;
 
+import dataaccess.database.manager.*;
 import entities.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,31 +10,44 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the UserRepository class.
- */
 class UserRepositoryTest {
     private UserRepository userRepository;
-    private UserProjectsRepository userProjectsRepository;
+    private UserProjectsManager userProjectsManager;
     private int testUserId;
     private String testEmail = "testuser@test.com";
 
-    /**
-     * Sets up the test environment before each test.
-     */
     @BeforeEach
     void setUp() {
         tearDown();
-        String databaseName = "test12345.db";
+        String databaseName = "letstryagain.db";
 
-        this.userProjectsRepository = new UserProjectsRepository(databaseName);
-        this.userRepository = new UserRepository(databaseName, userProjectsRepository);
+        UserTagsManager userTagsManager = new UserTagsManager(databaseName);
+        userProjectsManager = new UserProjectsManager(databaseName);
+        UserManager userManager = new UserManager(databaseName);
 
-        this.userProjectsRepository.connect();
-        this.userRepository.connect();
+        ProjectManager projectManager = new ProjectManager(databaseName);
+        ProjectTagsManager projectTagsManager = new ProjectTagsManager(databaseName);
+        ProjectEmbeddingsManager projectEmbeddingsManager = new ProjectEmbeddingsManager(databaseName);
 
-        this.userRepository.initialize();
-        this.userProjectsRepository.initialize();
+        // Create facade instances
+        userRepository = new UserRepository(userManager, userTagsManager, userProjectsManager);
+        ProjectRepository projectRepository = new ProjectRepository(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
+
+        // Connect to the database
+        userManager.connect();
+        userProjectsManager.connect();
+        userTagsManager.connect();
+        projectManager.connect();
+        projectTagsManager.connect();
+        projectEmbeddingsManager.connect();
+
+        // Initialize the database tables
+        userManager.initialize();
+        userTagsManager.initialize();
+        userProjectsManager.initialize();
+        projectManager.initialize();
+        projectTagsManager.initialize();
+        projectEmbeddingsManager.initialize();
 
         // Clean up any existing user with the test email
         deleteUserByEmail(testEmail);
@@ -45,29 +59,13 @@ class UserRepositoryTest {
         testUserId = user.getUserId();
     }
 
-    /**
-     * Cleans up the test environment after each test.
-     */
     @AfterEach
     void tearDown() {
-        // Clean up any existing user with the test email
         if (userRepository != null) {
             deleteUserByEmail(testEmail);
         }
-
-        if (userRepository != null) {
-            userRepository.disconnect();
-        }
-        if (userProjectsRepository != null) {
-            userProjectsRepository.disconnect();
-        }
     }
 
-    /**
-     * Deletes a user by email using UserRepository methods.
-     *
-     * @param email the email of the user to delete
-     */
     private void deleteUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email);
         if (user != null) {
@@ -75,15 +73,11 @@ class UserRepositoryTest {
         }
     }
 
-    /**
-     * Tests the creation of a user.
-     */
     @Test
     void createUser() {
         HashSet<String> tags = new HashSet<>();
         tags.add("Tester");
 
-        // Use a different email for this test to ensure no conflict
         String newUserEmail = "newuser@test.com";
         deleteUserByEmail(newUserEmail);
 
@@ -96,9 +90,6 @@ class UserRepositoryTest {
         assertTrue(user.getTags().contains("Tester"));
     }
 
-    /**
-     * Tests the retrieval of a user by their email.
-     */
     @Test
     void getUserByEmail() {
         User user = userRepository.getUserByEmail(testEmail);
@@ -109,9 +100,6 @@ class UserRepositoryTest {
         assertEquals(50000.0, user.getDesiredCompensation(), 0);
     }
 
-    /**
-     * Tests the retrieval of a user by their ID.
-     */
     @Test
     void getUserById() {
         User user = userRepository.getUserById(testUserId);
@@ -122,9 +110,6 @@ class UserRepositoryTest {
         assertEquals(50000.0, user.getDesiredCompensation(), 0);
     }
 
-    /**
-     * Tests the deletion of a user.
-     */
     @Test
     void deleteUser() {
         boolean deleted = userRepository.deleteUser(testUserId);
@@ -134,9 +119,6 @@ class UserRepositoryTest {
         assertNull(user);
     }
 
-    /**
-     * Tests adding tags to a user.
-     */
     @Test
     void addTags() {
         HashSet<String> newTags = new HashSet<>();
@@ -151,9 +133,6 @@ class UserRepositoryTest {
         assertTrue(user.getTags().contains("NewTag2"));
     }
 
-    /**
-     * Tests removing tags from a user.
-     */
     @Test
     void removeTags() {
         HashSet<String> tagsToRemove = new HashSet<>();
@@ -166,9 +145,6 @@ class UserRepositoryTest {
         assertFalse(user.getTags().contains("Developer"));
     }
 
-    /**
-     * Tests updating a user's details.
-     */
     @Test
     void updateUser() {
         HashSet<String> newTags = new HashSet<>();
@@ -184,6 +160,4 @@ class UserRepositoryTest {
         assertEquals(70000.0, updatedUser.getDesiredCompensation(), 0);
         assertTrue(updatedUser.getTags().contains("UpdatedTag"));
     }
-
-    // missing test for getPassswordByEmail for now, since that uses hashing. Will implement it later
 }

@@ -1,161 +1,92 @@
 package dataaccess.database;
 
 import dataaccess.IUserProjectsRepository;
+import dataaccess.database.manager.UserProjectsManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashSet;
 
 /**
- * A class representing the UserProjects Repository. In particular, this class manages the UserProjects table, which
- * handles the many-to-many relationship between Users and Projects.
+ * Facade class that implements the IUserProjectsRepository interface and provides methods for managing user-project relationships in the database.
  */
-public class UserProjectsRepository extends SQLDatabaseManager implements IUserProjectsRepository {
+public class UserProjectsRepository implements IUserProjectsRepository {
 
-    public UserProjectsRepository(String databaseName) {
-        super(databaseName);
-    }
+    private final UserProjectsManager userProjectsManager;
 
     /**
-     * Initializes the database with the required tables if they do not already exist.
+     * Constructs a UserProjectsRepository with the specified UserProjectsManager.
+     *
+     * @param userProjectsManager the UserProjectsManager instance.
+     */
+    public UserProjectsRepository(UserProjectsManager userProjectsManager) {
+        this.userProjectsManager = userProjectsManager;
+    }
+
+
+    /**
+     * Adds a user to a project.
+     *
+     * @param userId the ID of the user.
+     * @param projectId the ID of the project.
+     * @return true if the addition was successful, false otherwise.
      */
     @Override
-    public void initialize() {
-        String sql = "CREATE TABLE IF NOT EXISTS UserProjects (UserId INTEGER NOT NULL, ProjectId INTEGER NOT NULL, PRIMARY KEY(UserId, ProjectId), FOREIGN KEY(UserId) REFERENCES Users(Id), FOREIGN KEY(ProjectId) REFERENCES Projects(Id));";
-        super.initializeTables(sql);
-    }
-
-    /**
-     * Adds a User-Project association.
-     *
-     * @param userId The ID of the user.
-     * @param projectId The ID of the project.
-     */
     public boolean addUserToProject(int userId, int projectId) {
-        String sql = "INSERT INTO UserProjects (UserId, ProjectId) VALUES (?, ?)";
-        return executeUpdate(userId, projectId, sql);
-    }
-
-    private boolean executeUpdate(int userId, int projectId, String sql) {
-        Connection connection = super.getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, userId);
-            preparedStatement.setInt(2, projectId);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        return false;
+        return userProjectsManager.addUserToProject(userId, projectId);
     }
 
     /**
-     * Removes a User-Project association.
+     * Removes a user from a project.
      *
-     * @param userId The ID of the user.
-     * @param projectId The ID of the project.
+     * @param userId the ID of the user.
+     * @param projectId the ID of the project.
+     * @return true if the removal was successful, false otherwise.
      */
+    @Override
     public boolean removeUserFromProject(int userId, int projectId) {
-        String sql = "DELETE FROM UserProjects WHERE UserId = ? AND ProjectId = ?";
-        return executeUpdate(userId, projectId, sql);
+        return userProjectsManager.removeUserFromProject(userId, projectId);
     }
 
-
     /**
-     * Removes all project associations for a given user from the UserProjects table.
-     * This method deletes all records where the specified user ID is found.
+     * Removes a user from all projects.
      *
-     * @param userId The ID of the user whose project associations are to be removed.
+     * @param userId the ID of the user.
+     * @return true if the removal was successful, false otherwise.
      */
+    @Override
     public boolean removeUserFromAllProjects(int userId) {
-        String sql = "DELETE FROM UserProjects WHERE UserId = ?";
-        Connection connection = super.getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
-
-            return true;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-
-        return false;
+        return userProjectsManager.removeUserFromAllProjects(userId);
     }
 
     /**
-     * Removes all user associations for a given project from the UserProjects table.
-     * This method deletes all records where the specified project ID is found.
+     * Removes a project from all users.
      *
-     * @param projectId The ID of the project whose user associations are to be removed.
+     * @param projectId the ID of the project.
+     * @return true if the removal was successful, false otherwise.
      */
+    @Override
     public boolean removeProjectFromAllUsers(int projectId) {
-        String sql = "DELETE FROM UserProjects WHERE ProjectId = ?";
-        Connection connection = super.getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, projectId);
-            preparedStatement.executeUpdate();
-
-            return true;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-
-        return false;
+        return userProjectsManager.removeProjectFromAllUsers(projectId);
     }
 
-
     /**
-     * Retrieves all project Ids for a specific user.
+     * Retrieves project IDs for a specific user.
      *
-     * @param userId The ID of the user.
-     * @return A set of project IDs associated with the user.
+     * @param userId the ID of the user.
+     * @return a HashSet of project IDs.
      */
+    @Override
     public HashSet<Integer> getProjectIdsForUser(int userId) {
-        String sql = "SELECT ProjectId FROM UserProjects WHERE UserId = ?";
-        HashSet<Integer> projectIds = new HashSet<>();
-        Connection connection = super.getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, userId);
-
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    projectIds.add(rs.getInt("ProjectId"));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        return projectIds;
+        return userProjectsManager.getProjectIdsForUser(userId);
     }
 
     /**
-     * Retrieves all user Ids for a specific project.
+     * Retrieves user IDs for a specific project.
      *
-     * @param projectId The ID of the project.
-     * @return A set of user IDs associated with the project.
+     * @param projectId the ID of the project.
+     * @return a HashSet of user IDs.
      */
+    @Override
     public HashSet<Integer> getUserIdsForProject(int projectId) {
-        String sql = "SELECT UserId FROM UserProjects WHERE ProjectId = ?";
-        HashSet<Integer> userIds = new HashSet<>();
-        Connection connection = super.getConnection();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, projectId);
-
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    userIds.add(rs.getInt("UserId"));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        return userIds;
+        return userProjectsManager.getUserIdsForProject(projectId);
     }
 }

@@ -1,6 +1,6 @@
 package dataaccess.database;
 
-import dataaccess.IApplicationRepository;
+import dataaccess.database.manager.*;
 import entities.Application;
 import entities.Project;
 import entities.User;
@@ -8,45 +8,57 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the ApplicationRepository class.
- */
 class ApplicationRepositoryTest {
     private ApplicationRepository applicationRepository;
     private UserRepository userRepository;
     private ProjectRepository projectRepository;
-    private UserProjectsRepository userProjectsRepository;
+
     private int testUserId;
     private int testProjectId;
     private String testEmail = "testuser@test.com";
 
-    /**
-     * Sets up the test environment before each test.
-     */
     @BeforeEach
     void setUp() {
         tearDown();
-        String databaseName = "test123.db";
+        String databaseName = "refactoredtest.db";
 
-        this.userProjectsRepository = new UserProjectsRepository(databaseName);
-        this.userRepository = new UserRepository(databaseName, userProjectsRepository);
-        this.projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
-        this.applicationRepository = new ApplicationRepository(databaseName);
+        // Initialize manager classes
+        UserTagsManager userTagsManager = new UserTagsManager(databaseName);
+        UserProjectsManager userProjectsManager = new UserProjectsManager(databaseName);
+        UserManager userManager = new UserManager(databaseName);
 
-        this.userProjectsRepository.connect();
-        this.userRepository.connect();
-        this.projectRepository.connect();
-        this.applicationRepository.connect();
+        ProjectManager projectManager = new ProjectManager(databaseName);
+        ProjectTagsManager projectTagsManager = new ProjectTagsManager(databaseName);
+        ProjectEmbeddingsManager projectEmbeddingsManager = new ProjectEmbeddingsManager(databaseName);
 
-        this.userRepository.initialize();
-        this.projectRepository.initialize();
-        this.userProjectsRepository.initialize();
-        this.applicationRepository.initialize();
+        ApplicationManager applicationManager = new ApplicationManager(databaseName);
+
+        // Create facade instances
+        this.userRepository = new UserRepository(userManager, userTagsManager, userProjectsManager);
+        this.projectRepository = new ProjectRepository(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
+        this.applicationRepository = new ApplicationRepository(applicationManager);
+
+        // Connect to the database
+        userManager.connect();
+        userProjectsManager.connect();
+        userTagsManager.connect();
+        projectManager.connect();
+        projectTagsManager.connect();
+        projectEmbeddingsManager.connect();
+        applicationManager.connect();
+
+        // Initialize the database tables
+        userManager.initialize();
+        userTagsManager.initialize();
+        projectManager.initialize();
+        projectTagsManager.initialize();
+        projectEmbeddingsManager.initialize();
+        userProjectsManager.initialize();
+        applicationManager.initialize();
 
         // Clean up any existing data
         deleteUserByEmail(testEmail);
@@ -65,35 +77,13 @@ class ApplicationRepositoryTest {
         testProjectId = project.getProjectId();
     }
 
-    /**
-     * Cleans up the test environment after each test.
-     */
     @AfterEach
     void tearDown() {
-        // Clean up any existing data
         if (userRepository != null) {
             deleteUserByEmail(testEmail);
         }
-
-        if (applicationRepository != null) {
-            applicationRepository.disconnect();
-        }
-        if (projectRepository != null) {
-            projectRepository.disconnect();
-        }
-        if (userProjectsRepository != null) {
-            userProjectsRepository.disconnect();
-        }
-        if (userRepository != null) {
-            userRepository.disconnect();
-        }
     }
 
-    /**
-     * Deletes a user by email using UserRepository methods.
-     *
-     * @param email the email of the user to delete
-     */
     private void deleteUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email);
         if (user != null) {
@@ -101,9 +91,6 @@ class ApplicationRepositoryTest {
         }
     }
 
-    /**
-     * Tests the creation of an application.
-     */
     @Test
     void createApplication() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -116,9 +103,6 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
-    /**
-     * Tests the retrieval of an application.
-     */
     @Test
     void getApplication() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -133,9 +117,6 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
-    /**
-     * Tests the retrieval of applications for a specific user.
-     */
     @Test
     void getApplicationsForUser() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -152,9 +133,6 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
-    /**
-     * Tests the retrieval of applications for a specific project.
-     */
     @Test
     void getApplicationsForProject() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
@@ -171,9 +149,6 @@ class ApplicationRepositoryTest {
         assertArrayEquals(pdfBytes, application.getPdfBytes());
     }
 
-    /**
-     * Tests the deletion of an application.
-     */
     @Test
     void deleteApplication() {
         byte[] pdfBytes = "Test PDF Content".getBytes();
