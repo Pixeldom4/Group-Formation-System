@@ -2,7 +2,8 @@ package dataaccess;
 
 /**
  * Utility class for initializing the database.
- * This class should not be instantiated.
+ * <p>
+ * Provides a method to initialize the database by connecting to it and creating necessary tables.
  */
 public class DatabaseInitializer {
 
@@ -11,13 +12,14 @@ public class DatabaseInitializer {
 
     /**
      * Initializes the database by connecting to it and creating necessary tables.
-     * This method retrieves the repository instances from DataAccessConfig and
-     * performs the connection and initialization steps.
      */
     public static void initializeDatabase() {
         initializeManagers();
     }
 
+    /**
+     * Connects to and initializes all the database managers.
+     */
     private static void initializeManagers() {
         DataAccessConfig.getUserManager().connect();
         DataAccessConfig.getUserTagsManager().connect();
