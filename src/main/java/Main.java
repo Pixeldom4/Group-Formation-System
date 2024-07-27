@@ -48,10 +48,6 @@ class Main {
         // Print which data access implementation is used
         System.out.println(DataAccessConfig.getImplementation());
 
-        // Initialize database
-//        DataAccessConfig.initializeDatabase();
-        DatabaseInitializer.initializeDatabase();
-
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
