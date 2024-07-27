@@ -66,6 +66,14 @@ public class DataAccessConfig {
         projectEmbeddingsManager.connect();
         userProjectsManager.connect();
         applicationManager.connect();
+
+        userManager.initialize();
+        userTagsManager.initialize();
+        projectManager.initialize();
+        projectTagsManager.initialize();
+        projectEmbeddingsManager.initialize();
+        userProjectsManager.initialize();
+        applicationManager.initialize();
     }
 
     /**

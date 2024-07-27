@@ -51,7 +51,7 @@ public class ProjectRepository implements IProjectRepository {
             int projectId = project.getProjectId();
             projectTagsManager.addTags(projectId, tags);
             projectEmbeddingsManager.addEmbeddings(projectId, embeddings);
-            userProjectsManager.addUserToProject(ownerId, projectId);
+//            userProjectsManager.addUserToProject(ownerId, projectId);
             project.setProjectTags(tags);
         }
         return project;
