@@ -32,6 +32,7 @@ public abstract class SQLDatabaseManager implements Database {
             String path = "jdbc:sqlite:" + this.DATABASE_NAME;
             this.connection = DriverManager.getConnection(path);
             System.out.println("Connected to the database.");
+            initialize();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }

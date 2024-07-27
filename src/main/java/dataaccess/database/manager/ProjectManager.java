@@ -10,8 +10,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 
+/**
+ * Manages project-related operations in the database.
+ */
 public class ProjectManager extends SQLDatabaseManager {
 
+    /**
+     * Constructs a ProjectManager with the specified database name.
+     *
+     * @param databaseName the name of the database.
+     */
     public ProjectManager(String databaseName) {
         super(databaseName);
     }
@@ -22,6 +30,15 @@ public class ProjectManager extends SQLDatabaseManager {
         super.initializeTables(projectSql);
     }
 
+    /**
+     * Creates a new project in the database.
+     *
+     * @param title       the title of the project.
+     * @param budget      the budget of the project.
+     * @param description the description of the project.
+     * @param ownerId     the user ID of the owner of the project.
+     * @return the created Project object, or null if the operation fails.
+     */
     public Project createProject(String title, double budget, String description, int ownerId) {
         String projectSql = "INSERT INTO Projects (Title, Budget, Description, OwnerId) VALUES (?, ?, ?, ?)";
         Connection connection = getConnection();
@@ -47,6 +64,12 @@ public class ProjectManager extends SQLDatabaseManager {
         return null;
     }
 
+    /**
+     * Deletes a project from the database.
+     *
+     * @param projectId the ID of the project to delete.
+     * @return true if the project was deleted successfully, false otherwise.
+     */
     public boolean deleteProject(int projectId) {
         String deleteProjectSql = "DELETE FROM Projects WHERE Id = ?";
         Connection connection = getConnection();
@@ -60,6 +83,12 @@ public class ProjectManager extends SQLDatabaseManager {
         return false;
     }
 
+    /**
+     * Retrieves a project from the database by its ID.
+     *
+     * @param projectId the ID of the project to retrieve.
+     * @return the Project object if found, or null otherwise.
+     */
     public Project getProjectById(int projectId) {
         String sql = "SELECT Title, Budget, Description FROM Projects WHERE Id = ?";
         Connection connection = getConnection();
@@ -79,6 +108,15 @@ public class ProjectManager extends SQLDatabaseManager {
         return null;
     }
 
+    /**
+     * Updates a project's information in the database.
+     *
+     * @param projectId   the ID of the project.
+     * @param title       the title of the project.
+     * @param budget      the budget of the project.
+     * @param description the description of the project.
+     * @return true if the update was successful, false otherwise.
+     */
     public boolean updateProject(int projectId, String title, double budget, String description) {
         String updateProjectSql = "UPDATE Projects SET Title = ?, Budget = ?, Description = ? WHERE Id = ?";
         Connection connection = getConnection();
@@ -95,6 +133,12 @@ public class ProjectManager extends SQLDatabaseManager {
         return false;
     }
 
+    /**
+     * Retrieves the owner ID of a project by its project ID.
+     *
+     * @param projectId the ID of the project.
+     * @return the owner ID of the project, or -1 if the project is not found.
+     */
     public int getOwnerId(int projectId) {
         String sql = "SELECT OwnerId FROM Projects WHERE Id = ?";
         Connection connection = getConnection();

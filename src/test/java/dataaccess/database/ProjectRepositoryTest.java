@@ -1,10 +1,5 @@
 package dataaccess.database;
 
-import dataaccess.IProjectRepository;
-import dataaccess.IUserProjectsRepository;
-import dataaccess.IUserRepository;
-import dataaccess.database.facade.ProjectFacade;
-import dataaccess.database.facade.UserFacade;
 import dataaccess.database.manager.*;
 import entities.Project;
 import entities.User;
@@ -14,31 +9,18 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit tests for the ProjectRepository class.
- */
 class ProjectRepositoryTest {
-//    private ProjectRepository projectRepository;
-//    private UserRepository userRepository;
-//    private UserProjectsRepository userProjectsRepository;
-    private ProjectFacade projectRepository;
-    private UserFacade userRepository;
-    private UserProjectsManager userProjectsRepository;
+    private ProjectRepository projectRepository;
+    private UserRepository userRepository;
+
     private int testProjectId;
     private int testOwnerId;
 
-    /**
-     * Sets up the test environment before each test.
-     */
     @BeforeEach
     void setUp() {
-//        String databaseName = "refactoredtest.db";
-
-        // Initialize manager classes
         String databaseName = "refactoredtest.db";
 
         // Initialize manager classes
@@ -51,14 +33,14 @@ class ProjectRepositoryTest {
         ProjectEmbeddingsManager projectEmbeddingsManager = new ProjectEmbeddingsManager(databaseName);
 
         // Create facade instances
-        this.userRepository = new UserFacade(userManager, userTagsManager, userProjectsManager);
-        this.projectRepository = new ProjectFacade(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
+        this.userRepository = new UserRepository(userManager, userTagsManager, userProjectsManager);
+        this.projectRepository = new ProjectRepository(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
 
         // Connect to the database
         userManager.connect();
         userProjectsManager.connect();
-        projectManager.connect();
         userTagsManager.connect();
+        projectManager.connect();
         projectTagsManager.connect();
         projectEmbeddingsManager.connect();
 
@@ -69,19 +51,6 @@ class ProjectRepositoryTest {
         projectTagsManager.initialize();
         projectEmbeddingsManager.initialize();
         userProjectsManager.initialize();
-//        String databaseName = "refactoredtest.db";
-//
-//        this.userProjectsRepository = new UserProjectsRepository(databaseName);
-//        this.userRepository = new UserRepository(databaseName, userProjectsRepository);
-//        this.projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
-//
-//        this.userProjectsRepository.connect();
-//        this.userRepository.connect();
-//        this.projectRepository.connect();
-//
-//        this.userRepository.initialize();
-//        this.projectRepository.initialize();
-//        this.userProjectsRepository.initialize();
 
         // Clean up any existing user with the test email
         String testEmail = "owner@test.com";
@@ -101,27 +70,13 @@ class ProjectRepositoryTest {
         testProjectId = project.getProjectId();
     }
 
-    /**
-     * Cleans up the test environment after each test.
-     */
     @AfterEach
     void tearDown() {
-//        if (projectRepository != null) {
-//            projectRepository.disconnect();
-//        }
-//        if (userProjectsRepository != null) {
-//            userProjectsRepository.disconnect();
-//        }
-//        if (userRepository != null) {
-//            userRepository.disconnect();
-//        }
+        if (userRepository != null) {
+            deleteUserByEmail("owner@test.com");
+        }
     }
 
-    /**
-     * Deletes a user by email using UserRepository methods.
-     *
-     * @param email the email of the user to delete
-     */
     private void deleteUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email);
         if (user != null) {
@@ -129,9 +84,6 @@ class ProjectRepositoryTest {
         }
     }
 
-    /**
-     * Tests the creation of a project.
-     */
     @Test
     void createProject() {
         HashSet<String> tags = new HashSet<>();
@@ -148,9 +100,6 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("SQL"));
     }
 
-    /**
-     * Tests the deletion of a project.
-     */
     @Test
     void deleteProject() {
         projectRepository.deleteProject(testProjectId);
@@ -159,12 +108,8 @@ class ProjectRepositoryTest {
         assertNull(project);
     }
 
-    /**
-     * Tests the retrieval of a project by its ID.
-     */
     @Test
     void getProjectById() {
-        // Now retrieve the project by its ID
         Project project = projectRepository.getProjectById(testProjectId);
 
         assertNotNull(project);
@@ -175,9 +120,6 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("SQL"));
     }
 
-    /**
-     * Tests adding tags to a project.
-     */
     @Test
     void addTags() {
         HashSet<String> newTags = new HashSet<>();
@@ -193,9 +135,6 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("NewTag2"));
     }
 
-    /**
-     * Tests removing tags from a project.
-     */
     @Test
     void removeTags() {
         HashSet<String> tagsToRemove = new HashSet<>();
@@ -210,9 +149,6 @@ class ProjectRepositoryTest {
         assertTrue(project.getProjectTags().contains("SQL"));
     }
 
-    /**
-     * Tests updating a project's details.
-     */
     @Test
     void update() {
         HashSet<String> newTags = new HashSet<>();
@@ -225,30 +161,20 @@ class ProjectRepositoryTest {
         Project updatedProject = projectRepository.getProjectById(testProjectId);
 
         assertNotNull(updatedProject);
-
         assertEquals("Updated Title", updatedProject.getProjectTitle());
-
         assertEquals(1500.0, updatedProject.getProjectBudget(), 0);
-
         assertEquals("Updated Description", updatedProject.getProjectDescription());
-
         assertTrue(updatedProject.getProjectTags().contains("UpdatedTag"));
-
         assertFalse(updatedProject.getProjectTags().contains("Java"));
-
         assertFalse(updatedProject.getProjectTags().contains("SQL"));
 
         // Validate embeddings
         HashMap<Integer, float[]> embeddingsMap = projectRepository.getAllEmbeddings();
-
         assertTrue(embeddingsMap.containsKey(testProjectId));
         float[] retrievedEmbeddings = embeddingsMap.get(testProjectId);
         assertArrayEquals(newEmbeddings, retrievedEmbeddings);
     }
 
-    /**
-     * Tests the retrieval of all project embeddings.
-     */
     @Test
     void getAllEmbeddings() {
         HashMap<Integer, float[]> embeddingsMap = projectRepository.getAllEmbeddings();
@@ -264,9 +190,6 @@ class ProjectRepositoryTest {
         assertEquals(0.3f, embeddings[2], 0);
     }
 
-    /**
-     * Tests the retrieval of the owner ID of a project.
-     */
     @Test
     void getOwnerId() {
         int ownerId = projectRepository.getOwnerId(testProjectId);

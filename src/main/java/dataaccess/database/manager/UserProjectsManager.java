@@ -3,14 +3,20 @@ package dataaccess.database.manager;
 import dataaccess.database.SQLDatabaseManager;
 import dataaccess.database.UserProjectsRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 
+/**
+ * This class manages the UserProjects table, which handles the many-to-many
+ * relationship between Users and Projects.
+ */
 public class UserProjectsManager extends SQLDatabaseManager {
 
+    /**
+     * Constructs a UserProjectsManager with the specified database manager.
+     *
+     * @param databaseManager the database manager.
+     */
     public UserProjectsManager(String databaseManager) {
         super(databaseManager);
     }
@@ -31,8 +37,17 @@ public class UserProjectsManager extends SQLDatabaseManager {
      * @param projectId The ID of the project.
      */
     public boolean addUserToProject(int userId, int projectId) {
-        String sql = "INSERT INTO UserProjects (UserId, ProjectId) VALUES (?, ?)";
-        return executeUpdate(userId, projectId, sql);
+        Connection conn = super.getConnection();
+        try(PreparedStatement pstmt = conn.prepareStatement(
+                     "INSERT INTO UserProjects (UserId, ProjectId) VALUES (?, ?)")) {
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, projectId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("UserProjectsManager: Error adding user to project - " + e.getMessage());
+            return false;
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ import dataaccess.database.UserProjectsRepository;
 import dataaccess.database.UserRepository;
 import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
+import dataaccess.database.manager.*;
 
 /**
  * Configuration class for setting up data access repositories.
@@ -15,10 +16,25 @@ public class DataAccessConfig {
     public static int USE_LOCAL = 0; // Set this to 1 to use local, 0 to use database
 
     private static final String databaseName = "projectDatabase.db";
-    private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
-    private static final IUserRepository userRepository = new UserRepository(databaseName, userProjectsRepository);
-    private static final IProjectRepository projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
-    private static final IApplicationRepository applicationRepository = new ApplicationRepository(databaseName);
+//    private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(databaseName);
+//    private static final IUserRepository userRepository = new UserRepository(databaseName, userProjectsRepository);
+//    private static final IProjectRepository projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
+//    private static final IApplicationRepository applicationRepository = new ApplicationRepository(databaseName);
+
+    // Database Managers
+    private static final ApplicationManager applicationManager = new ApplicationManager(databaseName);
+    private static final ProjectManager projectManager = new ProjectManager(databaseName);
+    private static final ProjectTagsManager projectTagsManager = new ProjectTagsManager(databaseName);
+    private static final ProjectEmbeddingsManager projectEmbeddingsManager = new ProjectEmbeddingsManager(databaseName);
+    private static final UserProjectsManager userProjectsManager = new UserProjectsManager(databaseName);
+    private static final UserManager userManager = new UserManager(databaseName);
+    private static final UserTagsManager userTagsManager = new UserTagsManager(databaseName);
+
+    // Database Repositories
+    private static final IUserProjectsRepository userProjectsRepository = new UserProjectsRepository(userProjectsManager);
+    private static final IUserRepository userRepository = new UserRepository(userManager, userTagsManager, userProjectsManager);
+    private static final IProjectRepository projectRepository = new ProjectRepository(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
+    private static final IApplicationRepository applicationRepository = new ApplicationRepository(applicationManager);
 
     private final static ILocalEmbedRepository embedDataAccess = new LocalEmbedRepository();
     private final static IProjectRepository projectDataAccess = new LocalProjectRepository();
@@ -43,20 +59,13 @@ public class DataAccessConfig {
      * Initializes the database by connecting to it and creating necessary tables.
      */
     public static void initializeDatabase(){
-        Database init_upr = (Database) userProjectsRepository;
-        Database init_ur = (Database) userRepository;
-        Database init_pr = (Database) projectRepository;
-        Database init_ar = (Database) applicationRepository;
-
-        init_upr.connect();
-        init_ur.connect();
-        init_pr.connect();
-        init_ar.connect();
-
-        init_upr.initialize();
-        init_ur.initialize();
-        init_pr.initialize();
-        init_ar.initialize();
+        userManager.connect();
+        userTagsManager.connect();
+        projectManager.connect();
+        projectTagsManager.connect();
+        projectEmbeddingsManager.connect();
+        userProjectsManager.connect();
+        applicationManager.connect();
     }
 
     /**

@@ -10,17 +10,37 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 
+/**
+ * Manages application-related operations in the database.
+ */
 public class ApplicationManager extends SQLDatabaseManager {
 
+    /**
+     * Constructs an ApplicationManager with the specified database name.
+     *
+     * @param databaseName the name of the database.
+     */
     public ApplicationManager(String databaseName) {
         super(databaseName);
     }
 
+    /**
+     * Initializes the Applications table in the database.
+     */
     public void initialize() {
         String sql = "CREATE TABLE IF NOT EXISTS Applications (SenderUserId INTEGER NOT NULL, ProjectId INTEGER NOT NULL, Text TEXT NOT NULL, PdfBytes VARBINARY(3145728), PRIMARY KEY(SenderUserId, ProjectId), FOREIGN KEY(SenderUserId) REFERENCES Users(Id), FOREIGN KEY(ProjectId) REFERENCES Projects(Id))";
         super.initializeTables(sql);
     }
 
+    /**
+     * Creates a new application in the database.
+     *
+     * @param senderUserId the ID of the sender user.
+     * @param projectId    the ID of the project.
+     * @param text         the application text.
+     * @param pdfBytes     the PDF bytes of the application.
+     * @return the created Application object, or null if the operation fails.
+     */
     public Application createApplication(int senderUserId, int projectId, String text, byte[] pdfBytes) {
         String sql = "INSERT INTO Applications (SenderUserId, ProjectId, Text, PdfBytes) VALUES (?, ?, ?, ?)";
 

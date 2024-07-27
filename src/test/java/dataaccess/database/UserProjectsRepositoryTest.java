@@ -1,8 +1,6 @@
 package dataaccess.database;
 
-import dataaccess.IUserProjectsRepository;
-import dataaccess.IUserRepository;
-import dataaccess.IProjectRepository;
+import dataaccess.database.manager.*;
 import entities.Project;
 import entities.User;
 import org.junit.jupiter.api.AfterEach;
@@ -20,38 +18,55 @@ class UserProjectsRepositoryTest {
     private UserProjectsRepository userProjectsRepository;
     private UserRepository userRepository;
     private ProjectRepository projectRepository;
+
     private int testUserId;
     private int testProjectId;
-    private String testEmail = "testuser@test.com";
+    private final String testEmail = "testuser@test.com";
+    private final String testEmail2 = "testuser2@test.com";
+    private int newUserId; // ID for the new test user
 
     /**
      * Sets up the test environment before each test.
      */
     @BeforeEach
     void setUp() {
-        tearDown();
         String databaseName = "test123.db";
 
-        this.userProjectsRepository = new UserProjectsRepository(databaseName);
-        this.userRepository = new UserRepository(databaseName, userProjectsRepository);
-        this.projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
+        UserTagsManager userTagsManager = new UserTagsManager(databaseName);
+        UserProjectsManager userProjectsManager = new UserProjectsManager(databaseName);
+        UserManager userManager = new UserManager(databaseName);
 
-        this.userProjectsRepository.connect();
-        this.userRepository.connect();
-        this.projectRepository.connect();
+        ProjectManager projectManager = new ProjectManager(databaseName);
+        ProjectTagsManager projectTagsManager = new ProjectTagsManager(databaseName);
+        ProjectEmbeddingsManager projectEmbeddingsManager = new ProjectEmbeddingsManager(databaseName);
 
-        this.userRepository.initialize();
-        this.projectRepository.initialize();
-        this.userProjectsRepository.initialize();
+        // Create facade instances
+        this.userRepository = new UserRepository(userManager, userTagsManager, userProjectsManager);
+        this.projectRepository = new ProjectRepository(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
+        this.userProjectsRepository = new UserProjectsRepository(userProjectsManager);
+
+        userManager.connect();
+        userTagsManager.connect();
+        projectManager.connect();
+        projectTagsManager.connect();
+        projectEmbeddingsManager.connect();
+        userProjectsManager.connect();
 
         // Clean up any existing data
         deleteUserByEmail(testEmail);
+        deleteUserByEmail(testEmail2);
 
         // Create a test user
         HashSet<String> userTags = new HashSet<>();
         userTags.add("Developer");
         User user = userRepository.createUser(testEmail, "Test", "User", userTags, 50000.0, "password");
         testUserId = user.getUserId();
+
+        // Create another test user
+        HashSet<String> userTags2 = new HashSet<>();
+        userTags2.add("Tester");
+        User newUser = userRepository.createUser(testEmail2, "New", "User", userTags2, 60000.0, "password");
+        newUserId = newUser.getUserId();
 
         // Create a test project
         HashSet<String> projectTags = new HashSet<>();
@@ -69,16 +84,7 @@ class UserProjectsRepositoryTest {
         // Clean up any existing data
         if (userRepository != null) {
             deleteUserByEmail(testEmail);
-        }
-
-        if (userRepository != null) {
-            userRepository.disconnect();
-        }
-        if (projectRepository != null) {
-            projectRepository.disconnect();
-        }
-        if (userProjectsRepository != null) {
-            userProjectsRepository.disconnect();
+            deleteUserByEmail(testEmail2);
         }
     }
 
@@ -99,10 +105,11 @@ class UserProjectsRepositoryTest {
      */
     @Test
     void addUserToProject() {
-        boolean result = userProjectsRepository.addUserToProject(testUserId, testProjectId);
+        // Add the new user to the project
+        boolean result = userProjectsRepository.addUserToProject(newUserId, testProjectId);
         assertTrue(result);
 
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(testUserId);
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(newUserId);
         assertTrue(projectIds.contains(testProjectId));
     }
 
@@ -112,13 +119,13 @@ class UserProjectsRepositoryTest {
     @Test
     void removeUserFromProject() {
         // First, add the user to the project
-        userProjectsRepository.addUserToProject(testUserId, testProjectId);
+        userProjectsRepository.addUserToProject(newUserId, testProjectId);
 
         // Now, remove the user from the project
-        boolean result = userProjectsRepository.removeUserFromProject(testUserId, testProjectId);
+        boolean result = userProjectsRepository.removeUserFromProject(newUserId, testProjectId);
         assertTrue(result);
 
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(testUserId);
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(newUserId);
         assertFalse(projectIds.contains(testProjectId));
     }
 
@@ -128,13 +135,13 @@ class UserProjectsRepositoryTest {
     @Test
     void removeUserFromAllProjects() {
         // First, add the user to the project
-        userProjectsRepository.addUserToProject(testUserId, testProjectId);
+        userProjectsRepository.addUserToProject(newUserId, testProjectId);
 
         // Now, remove the user from all projects
-        boolean result = userProjectsRepository.removeUserFromAllProjects(testUserId);
+        boolean result = userProjectsRepository.removeUserFromAllProjects(newUserId);
         assertTrue(result);
 
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(testUserId);
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(newUserId);
         assertFalse(projectIds.contains(testProjectId));
     }
 
@@ -144,14 +151,14 @@ class UserProjectsRepositoryTest {
     @Test
     void removeProjectFromAllUsers() {
         // First, add the user to the project
-        userProjectsRepository.addUserToProject(testUserId, testProjectId);
+        userProjectsRepository.addUserToProject(newUserId, testProjectId);
 
         // Now, remove the project from all users
         boolean result = userProjectsRepository.removeProjectFromAllUsers(testProjectId);
         assertTrue(result);
 
         HashSet<Integer> userIds = userProjectsRepository.getUserIdsForProject(testProjectId);
-        assertFalse(userIds.contains(testUserId));
+        assertFalse(userIds.contains(newUserId));
     }
 
     /**
@@ -160,10 +167,10 @@ class UserProjectsRepositoryTest {
     @Test
     void getProjectIdsForUser() {
         // First, add the user to the project
-        userProjectsRepository.addUserToProject(testUserId, testProjectId);
+        userProjectsRepository.addUserToProject(newUserId, testProjectId);
 
         // Now, retrieve the project IDs for the user
-        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(testUserId);
+        HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(newUserId);
 
         assertNotNull(projectIds);
         assertTrue(projectIds.contains(testProjectId));
@@ -175,12 +182,12 @@ class UserProjectsRepositoryTest {
     @Test
     void getUserIdsForProject() {
         // First, add the user to the project
-        userProjectsRepository.addUserToProject(testUserId, testProjectId);
+        userProjectsRepository.addUserToProject(newUserId, testProjectId);
 
         // Now, retrieve the user IDs for the project
         HashSet<Integer> userIds = userProjectsRepository.getUserIdsForProject(testProjectId);
 
         assertNotNull(userIds);
-        assertTrue(userIds.contains(testUserId));
+        assertTrue(userIds.contains(newUserId));
     }
 }

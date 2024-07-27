@@ -9,8 +9,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Manages project embeddings-related operations in the database.
+ */
 public class ProjectEmbeddingsManager extends SQLDatabaseManager {
 
+    /**
+     * Constructs a ProjectEmbeddingsManager with the specified database name.
+     *
+     * @param databaseName the name of the database.
+     */
     public ProjectEmbeddingsManager(String databaseName) {
         super(databaseName);
     }
@@ -21,6 +29,13 @@ public class ProjectEmbeddingsManager extends SQLDatabaseManager {
         super.initializeTables(projectEmbeddingSql);
     }
 
+    /**
+     * Adds embeddings for a project in the database.
+     *
+     * @param projectId  the ID of the project.
+     * @param embeddings the embeddings to add.
+     * @return true if the embeddings were added successfully, false otherwise.
+     */
     public boolean addEmbeddings(int projectId, float[] embeddings) {
         String embeddingSql = "INSERT INTO ProjectEmbeddings (ProjectId, EmbeddingIndex, EmbeddingValue) VALUES (?, ?, ?)";
         Connection connection = getConnection();
@@ -39,6 +54,12 @@ public class ProjectEmbeddingsManager extends SQLDatabaseManager {
         return false;
     }
 
+    /**
+     * Removes embeddings for a project from the database.
+     *
+     * @param projectId the ID of the project.
+     * @return true if the embeddings were removed successfully, false otherwise.
+     */
     public boolean removeEmbeddings(int projectId) {
         String deleteEmbeddingsSql = "DELETE FROM ProjectEmbeddings WHERE ProjectId = ?";
         Connection connection = getConnection();
@@ -52,6 +73,11 @@ public class ProjectEmbeddingsManager extends SQLDatabaseManager {
         return false;
     }
 
+    /**
+     * Retrieves all project embeddings from the database.
+     *
+     * @return a HashMap where the keys are project IDs and the values are embeddings.
+     */
     public HashMap<Integer, float[]> getAllEmbeddings() {
         String sql = "SELECT ProjectId, EmbeddingIndex, EmbeddingValue FROM ProjectEmbeddings ORDER BY ProjectId, EmbeddingIndex";
         HashMap<Integer, float[]> embeddingsMap = new HashMap<>();
@@ -83,6 +109,13 @@ public class ProjectEmbeddingsManager extends SQLDatabaseManager {
         return embeddingsMap;
     }
 
+    /**
+     * Stores the current project's embeddings in the provided HashMap.
+     *
+     * @param embeddingsMap       the HashMap to store the embeddings.
+     * @param currentProjectId    the current project ID.
+     * @param currentEmbeddingList the list of embeddings for the current project.
+     */
     private void storeEmbedding(HashMap<Integer, float[]> embeddingsMap, int currentProjectId, ArrayList<Float> currentEmbeddingList) {
         if (currentProjectId != -1) {
             // convert ArrayList to float array and store in the map

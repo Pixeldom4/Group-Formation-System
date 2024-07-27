@@ -3,17 +3,29 @@ package dataaccess.database.manager;
 import dataaccess.database.SQLDatabaseManager;
 import entities.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 
+/**
+ * Manages user-related operations in the database.
+ */
 public class UserManager extends SQLDatabaseManager {
 
+    /**
+     * Constructs a UserManager with the specified database name.
+     *
+     * @param databaseName the name of the database.
+     */
     public UserManager(String databaseName) {
         super(databaseName);
     }
 
     /**
-     * Initializes the database with the required tables if they do not already exist.
+     * Initializes the Users table in the database.
      */
     @Override
     public void initialize() {
@@ -21,6 +33,16 @@ public class UserManager extends SQLDatabaseManager {
         super.initializeTables(userSql);
     }
 
+    /**
+     * Creates a new user in the database.
+     *
+     * @param email               the user's email address.
+     * @param firstName           the user's first name.
+     * @param lastName            the user's last name.
+     * @param desiredCompensation the user's desired compensation.
+     * @param password            the user's password.
+     * @return the created User object, or null if the operation fails.
+     */
     public User createUser(String email, String firstName, String lastName, double desiredCompensation, String password) {
         String sql = "INSERT INTO Users (FirstName, LastName, Email, DesiredCompensation, Password) VALUES (?, ?, ?, ?, ?)";
         Connection connection = super.getConnection();
@@ -49,6 +71,12 @@ public class UserManager extends SQLDatabaseManager {
         return null;
     }
 
+    /**
+     * Retrieves a user from the database by their email address.
+     *
+     * @param email the user's email address.
+     * @return the User object if found, or null otherwise.
+     */
     public User getUserByEmail(String email) {
         String sql = "SELECT Id, FirstName, LastName, DesiredCompensation FROM Users WHERE Email = ?";
         Connection connection = super.getConnection();
@@ -70,6 +98,12 @@ public class UserManager extends SQLDatabaseManager {
         return null;
     }
 
+    /**
+     * Retrieves a user from the database by their ID.
+     *
+     * @param userId the user's ID.
+     * @return the User object if found, or null otherwise.
+     */
     public User getUserById(int userId) {
         String sql = "SELECT FirstName, LastName, Email, DesiredCompensation FROM Users WHERE Id = ?";
         Connection connection = super.getConnection();
@@ -91,6 +125,15 @@ public class UserManager extends SQLDatabaseManager {
         return null;
     }
 
+    /**
+     * Updates a user's information in the database.
+     *
+     * @param userId             the user's ID.
+     * @param firstName          the user's first name.
+     * @param lastName           the user's last name.
+     * @param desiredCompensation the user's desired compensation.
+     * @return true if the update was successful, false otherwise.
+     */
     public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation) {
         String sql = "UPDATE Users SET FirstName = ?, LastName = ?, DesiredCompensation = ? WHERE Id = ?";
         Connection connection = super.getConnection();
@@ -108,6 +151,12 @@ public class UserManager extends SQLDatabaseManager {
         return false;
     }
 
+    /**
+     * Deletes a user from the database by their ID.
+     *
+     * @param userId the user's ID.
+     * @return true if the deletion was successful, false otherwise.
+     */
     public boolean deleteUser(int userId) {
         String sql = "DELETE FROM Users WHERE Id = ?";
         Connection connection = super.getConnection();
@@ -122,6 +171,12 @@ public class UserManager extends SQLDatabaseManager {
         return false;
     }
 
+    /**
+     * Retrieves the password for a user by their email address.
+     *
+     * @param email the user's email address.
+     * @return the hashed password if found, or an empty string otherwise.
+     */
     public String getPasswordByEmail(String email) {
         String sql = "SELECT Password FROM Users WHERE Email = ?";
         Connection connection = super.getConnection();
