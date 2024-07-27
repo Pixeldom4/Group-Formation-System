@@ -49,6 +49,13 @@ public class ViewManagerModel {
     }
 
     /**
+     * Fires an event when a project is added
+     */
+    public void addProjectEvent() {
+        support.firePropertyChange("addProject", null, true);
+    }
+
+    /**
      * Fires a property change event indicating the active view has changed.
      */
     public void firePropertyChanged() {

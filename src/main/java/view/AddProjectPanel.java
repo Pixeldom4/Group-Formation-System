@@ -193,6 +193,7 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
             if (success){
                 JOptionPane.showMessageDialog(null, "Project " + projectName + " created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearPanel();
+                viewManagerModel.addProjectEvent();
             }
             else {
                 JOptionPane.showMessageDialog(null, addProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);

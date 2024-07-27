@@ -5,6 +5,9 @@ import dataaccess.IProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;
 
+/**
+ * Class responsible for searching projects by their ID using a local project repository.
+ */
 public class LocalProjectSearchByIdObject implements SearchProjectByIdInterface {
     private IProjectRepository projectDataAccess = DataAccessConfig.getProjectRepository();
 
@@ -28,6 +31,7 @@ public class LocalProjectSearchByIdObject implements SearchProjectByIdInterface 
      * Searches for a project by its ID.
      *
      * @param projectId The ID of the project to search for.
+     * @return The project found, or null if no project with the given ID exists.
      */
     @Override
     public ProjectInterface searchProjectById(int projectId) {

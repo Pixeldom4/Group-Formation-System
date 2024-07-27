@@ -40,18 +40,18 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
         }
 
         HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
-        Object[][] projectData = new Object[projectIds.size()][5];
+        HashSet<ProjectData> projectData = new HashSet<>();
 
-        int count = 0;
         for (int projectId : projectIds) {
             Project project = projectRepository.getProjectById(projectId);
+            boolean isProjectOwner = projectRepository.getOwnerId(projectId) == inputData.getUserId();
 
-            projectData[count][0] = projectId;
-            projectData[count][1] = project.getProjectTitle();
-            projectData[count][2] = project.getProjectDescription();
-            projectData[count][3] = project.getProjectBudget();
-            projectData[count][4] = project.getProjectTags();
-            count++;
+            String projectTitle = project.getProjectTitle();
+            String projectDescription = project.getProjectDescription();
+            double projectBudget = project.getProjectBudget();
+            HashSet<String> projectTags = project.getProjectTags();
+
+            projectData.add(new ProjectData(projectId, projectTitle, projectDescription, projectBudget, projectTags, isProjectOwner));
         }
 
         getProjectsPresenter.prepareSuccessView(new GetProjectsOutputData(projectData));

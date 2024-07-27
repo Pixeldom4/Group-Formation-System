@@ -2,6 +2,7 @@ package viewmodel;
 
 import entities.User;
 import usecase.getloggedinuser.LoggedInDataAccessViewModel;
+import usecase.getprojects.ProjectData;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -12,7 +13,7 @@ import java.util.HashSet;
  */
 public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private Object[][] data;
+    private HashSet<ProjectData> data;
     private String errorMessage;
     private User loggedInUser;
 
@@ -28,7 +29,7 @@ public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataA
      *
      * @param data the project data
      */
-    public void setData(Object[][] data) {
+    public void setData(HashSet<ProjectData> data) {
         this.data = data;
         support.firePropertyChange("dataUpdate", null, data);
     }

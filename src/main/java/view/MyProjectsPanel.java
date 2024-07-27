@@ -3,6 +3,7 @@ package view;
 import usecase.getapplications.GetApplicationsController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
+import usecase.getprojects.ProjectData;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.EditProjectPanelViewModel;
@@ -31,8 +32,8 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final EditProjectPanel editProjectPanel;
     private final GetLoggedInUserController getLoggedInUserController;
     private final JTable infoTable = new JTable();
-    private final int[] columnWidths = {200, 400, 100};
-    private final String[] columnNames = {"Project Title", "Description", "Edit"};
+    private final int[] columnWidths = {200, 400, 100, 100};
+    private final String[] columnNames = {"Project Title", "Description", "Admin",  "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     /**
@@ -61,45 +62,39 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.editProjectPanel = editProjectPanel;
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
+        editProjectPanelViewModel.addPropertyChangeListener(this);
         viewManagerModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(infoPanel);
 
-        JButton refreshButton = new JButton("Refresh");
-        this.add(refreshButton);
-
-        refreshButton.addActionListener(e -> {
-            getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
-        });
     }
 
     /**
      * Adds projects to the table.
      *
-     * @param projectData the data of the projects
+     * @param projectDataSet the data of the projects
      */
-    private void addProjects(Object[][] projectData){
+    private void addProjects(HashSet<ProjectData> projectDataSet) {
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
-        ArrayList<ButtonAction> applicationButtonActions = new ArrayList<>();
-        ArrayList<ButtonAction> deleteButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[projectData.length][3];
-        for (int i = 0; i < projectData.length; i++) {
-            info[i][0] = projectData[i][1];
-            info[i][1] = projectData[i][2];
-            info[i][2] = "Edit";
-            int finalI = i;
+        Object[][] info = new Object[projectDataSet.size()][4];
+        int i = 0;
+        for (ProjectData projectData : projectDataSet) {
+            info[i][0] = projectData.getProjectTitle();
+            info[i][1] = projectData.getProjectDescription();
+            info[i][2] = projectData.isProjectOwner() ? "Yes" : "No";
+            info[i][3] = "Edit";
+            int projectId = projectData.getProjectId();
+            String projectTitle = projectData.getProjectTitle();
+            String projectDescription = projectData.getProjectDescription();
+            double projectBudget = projectData.getProjectBudget();
+            HashSet<String> projectTags = projectData.getProjectTags();
+            int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
+
             editButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
-                    int projectId = (int) projectData[finalI][0];
-                    String projectTitle = (String) projectData[finalI][1];
-                    String projectDescription = (String) projectData[finalI][2];
-                    double projectBudget = (double) projectData[finalI][3];
-                    HashSet<String> projectTags = (HashSet<String>) projectData[finalI][4];
-                    int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
-
                     editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
                             projectDescription, projectTags, editorId);
                     editProjectPanelViewModel.initDetails();
@@ -111,37 +106,34 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                     editFrame.add(editProjectPanel);
 
                     editFrame.setVisible(true);
+
                 }
             });
+            i++;
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Make only the button column editable
-                return column >= 2;
+                return column >= 3;
             }
         };
         infoTable.setModel(infoTableModel);
 
-        ButtonColumn editColumn = new ButtonColumn(infoTable, 2);
+        ButtonColumn editColumn = new ButtonColumn(infoTable, 3);
         editColumn.setActions(editButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
-        for (int i = 0; i < columnWidths.length; i++) {
-            columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
+        for (int j = 0; j < columnWidths.length; j++) {
+            columnModel.getColumn(j).setPreferredWidth(columnWidths[j]);
         }
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        // No implementation needed
-    }
-
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("dataUpdate")){
-            Object[][] data = (Object[][]) evt.getNewValue();
+        if (evt.getPropertyName().equals("dataUpdate")) {
+            HashSet<ProjectData> data = (HashSet<ProjectData>) evt.getNewValue();
             addProjects(data);
         }
         if (evt.getPropertyName().equals("login")) {
@@ -158,5 +150,14 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("deleteProject")) {
             JOptionPane.showMessageDialog(null, "Successfully deleted project");
         }
+        if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {
+            getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
+        }
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // No implementation needed
     }
 }

@@ -3,6 +3,10 @@ package usecase.searchprojectbyid;
 import dataaccess.IProjectRepository;
 import entities.ProjectInterface;
 
+/**
+ * Interactor for the Search Project By ID use case.
+ * Implements the SearchProjectByIdInputBoundary interface to handle the input data.
+ */
 public class SearchProjectByIdInteractor implements SearchProjectByIdInputBoundary {
     private SearchProjectByIdInterface projectDAO = new LocalProjectSearchByIdObject();
     private SearchProjectByIdOutputBoundary presenter;

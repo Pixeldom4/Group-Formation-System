@@ -1,5 +1,8 @@
 package usecase.searchprojectbyid;
 
+/**
+ * Controller for handling the search project by ID use case.
+ */
 public class SearchProjectByIdController {
     private final SearchProjectByIdInputBoundary interactor;
 

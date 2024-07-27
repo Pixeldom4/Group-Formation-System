@@ -6,6 +6,7 @@ import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getloggedinuser.GetLoggedInUserInteractor;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.GetProjectsInteractor;
+import usecase.getprojects.ProjectData;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -82,11 +83,15 @@ public class MyProjectsPanelTest {
         assertNotNull(refreshButton);
 
         // Simulate the getProjectsController updating the ViewModel with new data
-        Object[][] projectData = {
-                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
-                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
-        };
-        myProjectsPanelViewModel.setData(projectData);
+//        Object[][] projectData = {
+//                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
+//                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
+//        };
+//        myProjectsPanelViewModel.setData(projectData); // old
+        HashSet<ProjectData> projectDataSet = new HashSet<>();
+
+        projectDataSet.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<String>(), true));
+        projectDataSet.add(new ProjectData(2, "Project 2", "Description 2", 2000.0, new HashSet<String>(), true));
 
         // Simulate the getLoggedInUserController updating the ViewModel with logged in user
         myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
@@ -138,10 +143,15 @@ public class MyProjectsPanelTest {
         assertEquals("John", myProjectsPanelViewModel.getLoggedInUser().getFirstName());
 
         // Simulate the getProjectsController updating the ViewModel with new data
-        Object[][] projectData = {
-                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
-                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
-        };
+//        Object[][] projectData = {
+//                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
+//                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
+//        }; // old
+        HashSet<ProjectData> projectData = new HashSet<>();
+
+        // Add project data to the set
+        projectData.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<String>(), true));
+        projectData.add(new ProjectData(2, "Project 2", "Description 2", 2000.0, new HashSet<String>(), false));
         myProjectsPanelViewModel.setData(projectData);
 
         JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();

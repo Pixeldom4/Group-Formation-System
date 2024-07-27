@@ -1,23 +1,69 @@
-The software allows project initiators to propose and recruit members for a small project while allowing project supporters to join posted projects that they are interested in.
-It is similar to LinkedIn but except it is for projects.
+# Group Formation System
 
-Creating a project:
-
-[createproject.mp4](..%2F..%2FDocuments%2FCSC207%2Fgifs%2Fcreateproject.mp4)
-
-To create a project, press the "Add Project" button, and it will bring you to a panel to input information about the project. The project creation consist of Name, Budget, Description, and Tags.
-
-Viewing your projects:
-
-Press the "My Projects" button, and it shows you every project that you are currently part of.
-
-Editing a project:
-
-To edit a project, make sure you are in the "My Projects" panel. Select the project you want to edit and press the edit button. Editing a project consist of Title, Budget, Description, and Tags. After editing, press the save button to save your changes.
-
-Viewing applications for your project:
-
-To view applications, make sure you are currently editing your project. Press the "View Applications" button and it will show you every applicant that has applied to your project. View your applicant's info by pressing "View" and decide by either pressing "Accept" or "Reject".
+This repository contains code for our groups CSC207 project, a Project and User Management system. Through our program, a user can
+manage both the user and projects.
+1. __User__ is which has a username, userid, and tags that assist in matching relevant projects.
+2. __Project__ has a projectId, title, description, budget, and tags.
 
 
+# Instructions
 
+Clone the ```main``` branch of the code base. Invoke ```Main.java``` in the ```src/main/java``` directory.
+
+### Put in the API key
+
+![APIKEYSTEP1.png](image/APIKEYSTEP1.png)
+![APIKEYSTEP2.png](image/APIKEYSTEP2.png)
+![APIKEYSTEP3.png](image/APIKEYSTEP3.png)
+
+We have provided the following GIFs, which demonstrate each use case, for the user's convenience.
+
+### Create User
+
+A user can be created with a first name, last name, email, password, and desired compensation.
+Note that there is a basic check of whether the email is in a valid format and the password needs to be at least 5 characters long.
+
+![Create User](image/CreatingUser.gif)
+
+### Login
+
+The user can login using the email and password provided during creation.
+
+![Login User](image/LoginUser.gif)
+
+### Editing user information
+
+All information except user email can be edited here.
+The save button needs to be pressed after editing in order to save the changes.
+
+![Editing User](image/EditingUser.gif)
+
+### Logout
+
+The user can logout using this button.
+
+![Modify Task](image/LogOutUser.gif)
+
+### Create Project
+
+The user can create a project by providing a name, a budget, some description of the project, and some tags.
+The user that created the project will be the owner.
+
+![img.png](img.png)
+
+### View Projects
+
+The user can view their projects, including those they own and those they joined.
+
+![img_1.png](img_1.png)
+
+### Edit Projects
+
+The user can view details and applications of their projects, however only the owner can edit and delete projects.
+
+![img_2.png](img_2.png)
+
+### Search Projects
+
+The user can search projects by typing in keywords or descriptions of projects they want to find. 
+They can also apply to projects by providing a description and a pdf file.
