@@ -1,9 +1,7 @@
 package dataaccess.database.facade;
 
 import dataaccess.IProjectRepository;
-import dataaccess.database.manager.ProjectManager;
-import dataaccess.database.manager.ProjectTagsManager;
-import dataaccess.database.manager.ProjectEmbeddingsManager;
+import dataaccess.database.manager.*;
 import entities.Project;
 
 import java.util.HashMap;
@@ -14,11 +12,21 @@ public class ProjectFacade implements IProjectRepository {
     private final ProjectManager projectManager;
     private final ProjectTagsManager projectTagsManager;
     private final ProjectEmbeddingsManager projectEmbeddingsManager;
+    private final UserProjectsManager userProjectsManager;
 
-    public ProjectFacade(ProjectManager projectManager, ProjectTagsManager projectTagsManager, ProjectEmbeddingsManager projectEmbeddingsManager) {
+    public ProjectFacade(ProjectManager projectManager, ProjectTagsManager projectTagsManager, ProjectEmbeddingsManager projectEmbeddingsManager, UserProjectsManager userProjectsManager) {
         this.projectManager = projectManager;
         this.projectTagsManager = projectTagsManager;
         this.projectEmbeddingsManager = projectEmbeddingsManager;
+        this.userProjectsManager = userProjectsManager;
+        initialize();
+    }
+
+    private void initialize() {
+        projectManager.initialize();
+        projectTagsManager.initialize();
+        projectEmbeddingsManager.initialize();
+        userProjectsManager.initialize();
     }
 
     @Override
@@ -28,6 +36,7 @@ public class ProjectFacade implements IProjectRepository {
             int projectId = project.getProjectId();
             projectTagsManager.addTags(projectId, tags);
             projectEmbeddingsManager.addEmbeddings(projectId, embeddings);
+            userProjectsManager.addUserToProject(ownerId, projectId);
             project.setProjectTags(tags);
         }
         return project;
@@ -35,6 +44,7 @@ public class ProjectFacade implements IProjectRepository {
 
     @Override
     public boolean deleteProject(int projectId) {
+        userProjectsManager.removeProjectFromAllUsers(projectId);
         projectTagsManager.removeTags(projectId, projectTagsManager.getTagsForProject(projectId));
         projectEmbeddingsManager.removeEmbeddings(projectId);
         return projectManager.deleteProject(projectId);
@@ -60,10 +70,9 @@ public class ProjectFacade implements IProjectRepository {
         return projectTagsManager.removeTags(projectId, tags);
     }
 
-    // this method is not necessarily for now
     @Override
     public HashSet<Project> getProjectsByKeyword(String keyword) {
-        return null;
+        return null; // Implementation not necessary for now
     }
 
     @Override

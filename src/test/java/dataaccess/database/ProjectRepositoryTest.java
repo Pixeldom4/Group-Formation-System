@@ -3,6 +3,9 @@ package dataaccess.database;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;
+import dataaccess.database.facade.ProjectFacade;
+import dataaccess.database.facade.UserFacade;
+import dataaccess.database.manager.*;
 import entities.Project;
 import entities.User;
 import org.junit.jupiter.api.AfterEach;
@@ -19,9 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for the ProjectRepository class.
  */
 class ProjectRepositoryTest {
-    private ProjectRepository projectRepository;
-    private UserRepository userRepository;
-    private UserProjectsRepository userProjectsRepository;
+//    private ProjectRepository projectRepository;
+//    private UserRepository userRepository;
+//    private UserProjectsRepository userProjectsRepository;
+    private ProjectFacade projectRepository;
+    private UserFacade userRepository;
+    private UserProjectsManager userProjectsRepository;
     private int testProjectId;
     private int testOwnerId;
 
@@ -30,19 +36,52 @@ class ProjectRepositoryTest {
      */
     @BeforeEach
     void setUp() {
-        String databaseName = "test123.db";
+//        String databaseName = "refactoredtest.db";
 
-        this.userProjectsRepository = new UserProjectsRepository(databaseName);
-        this.userRepository = new UserRepository(databaseName, userProjectsRepository);
-        this.projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
+        // Initialize manager classes
+        String databaseName = "refactoredtest.db";
 
-        this.userProjectsRepository.connect();
-        this.userRepository.connect();
-        this.projectRepository.connect();
+        // Initialize manager classes
+        UserTagsManager userTagsManager = new UserTagsManager(databaseName);
+        UserProjectsManager userProjectsManager = new UserProjectsManager(databaseName);
+        UserManager userManager = new UserManager(databaseName);
 
-        this.userRepository.initialize();
-        this.projectRepository.initialize();
-        this.userProjectsRepository.initialize();
+        ProjectManager projectManager = new ProjectManager(databaseName);
+        ProjectTagsManager projectTagsManager = new ProjectTagsManager(databaseName);
+        ProjectEmbeddingsManager projectEmbeddingsManager = new ProjectEmbeddingsManager(databaseName);
+
+        // Create facade instances
+        this.userRepository = new UserFacade(userManager, userTagsManager, userProjectsManager);
+        this.projectRepository = new ProjectFacade(projectManager, projectTagsManager, projectEmbeddingsManager, userProjectsManager);
+
+        // Connect to the database
+        userManager.connect();
+        userProjectsManager.connect();
+        projectManager.connect();
+        userTagsManager.connect();
+        projectTagsManager.connect();
+        projectEmbeddingsManager.connect();
+
+        // Initialize the database tables
+        userManager.initialize();
+        userTagsManager.initialize();
+        projectManager.initialize();
+        projectTagsManager.initialize();
+        projectEmbeddingsManager.initialize();
+        userProjectsManager.initialize();
+//        String databaseName = "refactoredtest.db";
+//
+//        this.userProjectsRepository = new UserProjectsRepository(databaseName);
+//        this.userRepository = new UserRepository(databaseName, userProjectsRepository);
+//        this.projectRepository = new ProjectRepository(databaseName, userProjectsRepository);
+//
+//        this.userProjectsRepository.connect();
+//        this.userRepository.connect();
+//        this.projectRepository.connect();
+//
+//        this.userRepository.initialize();
+//        this.projectRepository.initialize();
+//        this.userProjectsRepository.initialize();
 
         // Clean up any existing user with the test email
         String testEmail = "owner@test.com";
@@ -67,15 +106,15 @@ class ProjectRepositoryTest {
      */
     @AfterEach
     void tearDown() {
-        if (projectRepository != null) {
-            projectRepository.disconnect();
-        }
-        if (userProjectsRepository != null) {
-            userProjectsRepository.disconnect();
-        }
-        if (userRepository != null) {
-            userRepository.disconnect();
-        }
+//        if (projectRepository != null) {
+//            projectRepository.disconnect();
+//        }
+//        if (userProjectsRepository != null) {
+//            userProjectsRepository.disconnect();
+//        }
+//        if (userRepository != null) {
+//            userRepository.disconnect();
+//        }
     }
 
     /**

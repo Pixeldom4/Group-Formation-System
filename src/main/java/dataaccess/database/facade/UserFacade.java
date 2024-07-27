@@ -1,6 +1,7 @@
 package dataaccess.database.facade;
 
 import dataaccess.IUserRepository;
+import dataaccess.database.manager.ProjectManager;
 import dataaccess.database.manager.UserManager;
 import dataaccess.database.manager.UserTagsManager;
 import dataaccess.database.manager.UserProjectsManager;
@@ -18,6 +19,13 @@ public class UserFacade implements IUserRepository {
         this.userManager = userManager;
         this.userTagsManager = userTagsManager;
         this.userProjectsManager = userProjectsManager;
+        initialize();
+    }
+
+    private void initialize() {
+        userManager.initialize();
+        userTagsManager.initialize();
+        userProjectsManager.initialize();
     }
 
     @Override
