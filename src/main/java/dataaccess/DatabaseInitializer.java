@@ -2,7 +2,8 @@ package dataaccess;
 
 /**
  * Utility class for initializing the database.
- * This class should not be instantiated.
+ * <p>
+ * Provides a method to initialize the database by connecting to it and creating necessary tables.
  */
 public class DatabaseInitializer {
 
@@ -11,23 +12,29 @@ public class DatabaseInitializer {
 
     /**
      * Initializes the database by connecting to it and creating necessary tables.
-     * This method retrieves the repository instances from DataAccessConfig and
-     * performs the connection and initialization steps.
      */
     public static void initializeDatabase() {
-        Database init_upr = (Database) DataAccessConfig.getUserProjectsRepository();
-        Database init_ur = (Database) DataAccessConfig.getUserRepository();
-        Database init_pr = (Database) DataAccessConfig.getProjectRepository();
-        Database init_ar = (Database) DataAccessConfig.getApplicationRepository();
+        initializeManagers();
+    }
 
-        init_upr.connect();
-        init_ur.connect();
-        init_pr.connect();
-        init_ar.connect();
+    /**
+     * Connects to and initializes all the database managers.
+     */
+    private static void initializeManagers() {
+        DataAccessConfig.getUserManager().connect();
+        DataAccessConfig.getUserTagsManager().connect();
+        DataAccessConfig.getProjectManager().connect();
+        DataAccessConfig.getProjectTagsManager().connect();
+        DataAccessConfig.getProjectEmbeddingsManager().connect();
+        DataAccessConfig.getUserProjectsManager().connect();
+        DataAccessConfig.getApplicationManager().connect();
 
-        init_upr.initialize();
-        init_ur.initialize();
-        init_pr.initialize();
-        init_ar.initialize();
+        DataAccessConfig.getUserManager().initialize();
+        DataAccessConfig.getUserTagsManager().initialize();
+        DataAccessConfig.getProjectManager().initialize();
+        DataAccessConfig.getProjectTagsManager().initialize();
+        DataAccessConfig.getProjectEmbeddingsManager().initialize();
+        DataAccessConfig.getUserProjectsManager().initialize();
+        DataAccessConfig.getApplicationManager().initialize();
     }
 }
