@@ -1,8 +1,5 @@
 package dataaccess.database.manager;
 
-import dataaccess.database.SQLDatabaseManager;
-import dataaccess.database.UserProjectsRepository;
-
 import java.sql.*;
 import java.util.HashSet;
 

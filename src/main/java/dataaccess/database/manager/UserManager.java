@@ -1,6 +1,5 @@
 package dataaccess.database.manager;
 
-import dataaccess.database.SQLDatabaseManager;
 import entities.User;
 
 import java.sql.Connection;

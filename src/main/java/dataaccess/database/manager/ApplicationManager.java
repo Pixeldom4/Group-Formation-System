@@ -1,8 +1,6 @@
 package dataaccess.database.manager;
 
-import dataaccess.database.SQLDatabaseManager;
 import entities.Application;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package dataaccess.database;
+package dataaccess.database.manager;
 
 import dataaccess.Database;
 import dataaccess.database.manager.DatabaseConnection;

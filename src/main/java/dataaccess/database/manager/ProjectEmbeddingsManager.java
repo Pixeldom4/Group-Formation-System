@@ -1,7 +1,5 @@
 package dataaccess.database.manager;
 
-import dataaccess.database.SQLDatabaseManager;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
