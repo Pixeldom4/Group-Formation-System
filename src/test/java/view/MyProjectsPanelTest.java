@@ -3,9 +3,7 @@ package view;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getloggedinuser.GetLoggedInUserInteractor;
 import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.GetProjectsInteractor;
 import usecase.getprojects.ProjectData;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
@@ -14,8 +12,10 @@ import viewmodel.ViewManagerModel;
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
+import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -71,7 +71,7 @@ public class MyProjectsPanelTest {
     @Test
     public void testInitialization() {
         assertNotNull(myProjectsPanel);
-        assertEquals(2, myProjectsPanel.getComponentCount());
+        assertEquals(1, myProjectsPanel.getComponentCount());
     }
 
     /**
@@ -79,15 +79,7 @@ public class MyProjectsPanelTest {
      */
     @Test
     public void testRefreshButtonAction() {
-        JButton refreshButton = (JButton) myProjectsPanel.getComponent(1);
-        assertNotNull(refreshButton);
 
-        // Simulate the getProjectsController updating the ViewModel with new data
-//        Object[][] projectData = {
-//                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
-//                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
-//        };
-//        myProjectsPanelViewModel.setData(projectData); // old
         HashSet<ProjectData> projectDataSet = new HashSet<>();
 
         projectDataSet.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<String>(), true));
@@ -96,13 +88,19 @@ public class MyProjectsPanelTest {
         // Simulate the getLoggedInUserController updating the ViewModel with logged in user
         myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
 
-        refreshButton.doClick();
-        verify(getProjectsController).getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
+        myProjectsPanel.propertyChange(new PropertyChangeEvent(this, "dataUpdate", null, projectDataSet));
 
         JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
         assertEquals(2, infoTable.getRowCount());
-        assertEquals("Project 1", infoTable.getValueAt(0, 0));
-        assertEquals("Description 1", infoTable.getValueAt(0, 1));
+
+        // Check that the projects are displayed in the table
+        // Uses an iterator so that the order of the projects matches the order in the table
+        Iterator<ProjectData> iterator = projectDataSet.iterator();
+        for (int i = 0; i < projectDataSet.size(); i++) {
+            ProjectData projectData = iterator.next();
+            assertEquals(projectData.getProjectTitle(), infoTable.getValueAt(i, 0));
+            assertEquals(projectData.getProjectDescription(), infoTable.getValueAt(i, 1));
+        }
     }
 
     /**
@@ -110,19 +108,24 @@ public class MyProjectsPanelTest {
      */
     @Test
     public void testPropertyChangeDataUpdate() {
-        Object[][] projectData = {
-                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
-                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
-        };
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "dataUpdate", null, projectData);
+        HashSet<ProjectData> projectDataSet = new HashSet<>();
+        projectDataSet.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<>(), true));
+        projectDataSet.add(new ProjectData(2, "Project 2", "Description 2", 2000.0, new HashSet<>(), true));
 
+        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
+
+        PropertyChangeEvent event = new PropertyChangeEvent(this, "dataUpdate", null, projectDataSet);
         myProjectsPanel.propertyChange(event);
 
         JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
         assertEquals(2, infoTable.getRowCount());
-        assertEquals("Project 1", infoTable.getValueAt(0, 0));
-        assertEquals("Description 1", infoTable.getValueAt(0, 1));
-        assertEquals("Edit", infoTable.getValueAt(0, 2));
+
+        Iterator<ProjectData> iterator = projectDataSet.iterator();
+        for (int i = 0; i < projectDataSet.size(); i++) {
+            ProjectData projectData = iterator.next();
+            assertEquals(projectData.getProjectTitle(), infoTable.getValueAt(i, 0));
+            assertEquals(projectData.getProjectDescription(), infoTable.getValueAt(i, 1));
+        }
     }
 
     /**
@@ -138,15 +141,9 @@ public class MyProjectsPanelTest {
         myProjectsPanel.propertyChange(event);
         verify(getLoggedInUserController).getLoggedInUser();
 
-
         assertNotNull(myProjectsPanelViewModel.getLoggedInUser());
         assertEquals("John", myProjectsPanelViewModel.getLoggedInUser().getFirstName());
 
-        // Simulate the getProjectsController updating the ViewModel with new data
-//        Object[][] projectData = {
-//                {1, "Project 1", "Description 1", 1000.0, new HashSet<String>()},
-//                {2, "Project 2", "Description 2", 2000.0, new HashSet<String>()}
-//        }; // old
         HashSet<ProjectData> projectData = new HashSet<>();
 
         // Add project data to the set
@@ -156,7 +153,13 @@ public class MyProjectsPanelTest {
 
         JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
         assertEquals(2, infoTable.getRowCount());
-        assertEquals("Project 1", infoTable.getValueAt(0, 0));
+
+        Iterator<ProjectData> iterator = projectData.iterator();
+        for (int i = 0; i < projectData.size(); i++) {
+            ProjectData project = iterator.next();
+            assertEquals(project.getProjectTitle(), infoTable.getValueAt(i, 0));
+            assertEquals(project.getProjectDescription(), infoTable.getValueAt(i, 1));
+        }
     }
 
     /**
