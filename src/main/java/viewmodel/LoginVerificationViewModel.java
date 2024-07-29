@@ -10,6 +10,7 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
     private String verifyImageLocation = "";
     private int imageAngle = 0;
     private int sliderAngle = 0;
+    private final int imageAngleRange = 15;
 
     public LoginVerificationViewModel() {
         super("VerificationView");
@@ -22,6 +23,15 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
     public void setSliderAngle(int angle) {
         this.sliderAngle = angle;
         support.firePropertyChange("imageAngle", null, sliderAngle + imageAngle);
+    }
+
+    public void verifyAngle() {
+        int absAngle = (sliderAngle + imageAngle) % 360;
+        if (absAngle < imageAngleRange || absAngle > 360 - imageAngleRange) {
+            support.firePropertyChange("verificationSuccess", null, null);
+        } else {
+            support.firePropertyChange("verificationFailure", null, null);
+        }
     }
 
     @Override

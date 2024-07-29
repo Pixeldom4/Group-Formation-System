@@ -3,17 +3,12 @@ package view;
 import view.components.ImagePanel;
 import viewmodel.LoginVerificationViewModel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
 
 public class LoginVerificationView extends JFrame implements PropertyChangeListener {
 
@@ -24,7 +19,7 @@ public class LoginVerificationView extends JFrame implements PropertyChangeListe
 
     public LoginVerificationView(LoginVerificationViewModel viewModel) {
         // Set the frame properties
-        setTitle("Test verification view");
+        setTitle("Verify that you are not a robot");
         setSize(450, 500);  // Increased height to accommodate the slider
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -46,6 +41,12 @@ public class LoginVerificationView extends JFrame implements PropertyChangeListe
             public void stateChanged(ChangeEvent e) {
                 int angle = slider.getValue();
                 viewModel.setSliderAngle(angle);
+
+                JSlider source = (JSlider) e.getSource();
+                if (!source.getValueIsAdjusting()) {
+                    // Slider has stopped changing
+                    viewModel.verifyAngle();
+                }
             }
         });
         add(slider, BorderLayout.SOUTH);
