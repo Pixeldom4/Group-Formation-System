@@ -97,15 +97,35 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         }
 
         if (evt.getPropertyName().equals("verificationSuccess")) {
-            loginVerificationView.dispose();
-            JOptionPane.showMessageDialog(this, "Verification successful");
-            loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
+            showVerificationResult(true);
         }
 
         if (evt.getPropertyName().equals("verificationFailure")) {
-            loginVerificationView.dispose();
-            JOptionPane.showMessageDialog(this, "Verification failed");
+            showVerificationResult(false);
         }
+    }
+
+    private void showVerificationResult(boolean success) {
+        loginVerificationView.dispose();
+        JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
+        messageLabel.setOpaque(true);
+        if (success) {
+            messageLabel.setText("Verification successful");
+        } else {
+            messageLabel.setText("Verification failed");
+        }
+        Thread t = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Window window = SwingUtilities.getWindowAncestor(messageLabel);
+            window.dispose();
+        });
+        t.start();
+        JOptionPane.showMessageDialog(this, messageLabel);
+        loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
     }
 
     /**
