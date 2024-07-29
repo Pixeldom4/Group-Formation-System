@@ -1,7 +1,10 @@
 package view;
 
+import usecase.createverification.CreateVerificationController;
+import usecase.createverification.CreateVerificationViewModel;
 import usecase.loginuser.LoginUserController;
 import viewmodel.LoginPanelViewModel;
+import viewmodel.LoginVerificationViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
@@ -18,6 +21,8 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     private final LoginPanelViewModel loginPanelViewModel;
     private final ViewManagerModel viewManagerModel;
     private final LoginUserController loginUserController;
+    private final LoginVerificationViewModel loginVerificationViewModel;
+    private final CreateVerificationController createVerificationController;
 
     private final JPanel loginPanel = new JPanel();
     private final JLabel emailLabel = new JLabel("Email: ");
@@ -33,11 +38,18 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
      * @param loginPanelViewModel the view model for the login panel
      * @param loginUserController the controller for logging in the user
      */
-    public LoginPanel(ViewManagerModel viewManagerModel, LoginPanelViewModel loginPanelViewModel, LoginUserController loginUserController) {
+    public LoginPanel(ViewManagerModel viewManagerModel,
+                      LoginPanelViewModel loginPanelViewModel,
+                      LoginUserController loginUserController,
+                      LoginVerificationViewModel loginVerificationViewModel,
+                      CreateVerificationController createVerificationController) {
         this.loginUserController = loginUserController;
         this.loginPanelViewModel = loginPanelViewModel;
         loginPanelViewModel.addPropertyChangeListener(this);
         this.viewManagerModel = viewManagerModel;
+        this.loginVerificationViewModel = loginVerificationViewModel;
+        loginVerificationViewModel.addPropertyChangeListener(this);
+        this.createVerificationController = createVerificationController;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -49,7 +61,8 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginPanel.add(passwordField);
 
         loginButton.addActionListener(e -> {
-            loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
+            //loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
+            createVerificationController.createVerification();
         });
 
         this.add(loginPanel);
@@ -77,6 +90,10 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
                 JOptionPane.showMessageDialog(this, loginPanelViewModel.getErrorMessage());
                 passwordField.setText("");
             }
+        }
+
+        if (evt.getPropertyName().equals("displayVerify")) {
+            new LoginVerificationView(loginVerificationViewModel);
         }
     }
 
