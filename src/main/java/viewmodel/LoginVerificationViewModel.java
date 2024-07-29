@@ -2,10 +2,11 @@ package viewmodel;
 
 import usecase.createverification.CreateVerificationViewModel;
 
+import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import org.apache.commons.math3.distribution.*;
 
-import static java.lang.Thread.sleep;
 
 public class LoginVerificationViewModel extends ViewModel implements CreateVerificationViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -15,6 +16,10 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
     private final int imageAngleRange = 20;
     private long startTime = 0;
     private boolean started = false;
+
+    private final double mean = 1345;
+    private final double std = 321;
+    private final NormalDistribution timeDistribution = new NormalDistribution(mean, std);
 
     public LoginVerificationViewModel() {
         super("VerificationView");
@@ -41,7 +46,7 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
         Thread t = new Thread(() -> {
             support.firePropertyChange("displayTime", null, currTime - startTime);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(800);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -57,6 +62,23 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
         } else {
             support.firePropertyChange("verificationFailure", null, null);
         }
+    }
+
+    public Color getTimeLabelColor(long time) {
+        return getColorGradient(getProb(time));
+    }
+
+    public double getProb(long time) {
+        return timeDistribution.cumulativeProbability(time);
+    }
+
+    private Color getColorGradient(double prob) {
+        Color startColor = new Color(66, 217, 33);
+        Color endColor = new Color(240, 174, 19);
+        int red = (int) (startColor.getRed() + prob * (endColor.getRed() - startColor.getRed()));
+        int green = (int) (startColor.getGreen() + prob * (endColor.getGreen() - startColor.getGreen()));
+        int blue = (int) (startColor.getBlue() + prob * (endColor.getBlue() - startColor.getBlue()));
+        return new Color(red, green, blue);
     }
 
     @Override

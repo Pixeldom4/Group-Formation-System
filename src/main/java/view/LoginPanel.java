@@ -94,6 +94,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
 
         if (evt.getPropertyName().equals("displayVerify")) {
             loginVerificationView = new LoginVerificationView(loginVerificationViewModel);
+            loginVerificationView.setLocationRelativeTo(this);
         }
 
         if (evt.getPropertyName().equals("verificationSuccess")) {
@@ -106,32 +107,61 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     }
 
     private void showVerificationResult(boolean success) {
-        loginVerificationView.dispose();
-        JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
-        messageLabel.setOpaque(true);
-        if (success) {
-            messageLabel.setText("Verification successful");
-        } else {
-            messageLabel.setText("Verification failed");
-        }
         Thread t = new Thread(() -> {
+            new VerifyResultWindow(this, success);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(750);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Window window = SwingUtilities.getWindowAncestor(messageLabel);
-            window.dispose();
+            loginVerificationView.dispose();
+            loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
         });
         t.start();
-        JOptionPane.showMessageDialog(this, messageLabel);
-        loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
     }
+
 
     /**
      * Handles the login process by updating the view manager model.
      */
     private void login(){
         viewManagerModel.login();
+    }
+
+    private static class VerifyResultWindow extends JFrame {
+        private final Color green = new Color(161, 212, 150);
+        private final Color red = new Color(207, 154, 147);
+
+        public VerifyResultWindow(JPanel parent, boolean success) {
+            setTitle("Verification Result");
+            setSize(200, 100);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(parent);
+
+            JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
+            messageLabel.setOpaque(true);
+            if (success) {
+                messageLabel.setText("Verification successful");
+                messageLabel.setBackground(green);
+                setBackground(Color.GREEN);
+            } else {
+                messageLabel.setText("Verification failed");
+                messageLabel.setBackground(red);
+                setBackground(Color.RED);
+            }
+            add(messageLabel, BorderLayout.CENTER);
+
+            Thread t = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.dispose();
+            });
+
+            setVisible(true);
+            t.start();
+        }
     }
 }

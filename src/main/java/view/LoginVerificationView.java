@@ -9,6 +9,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 
 public class LoginVerificationView extends JFrame implements PropertyChangeListener {
 
@@ -26,6 +27,7 @@ public class LoginVerificationView extends JFrame implements PropertyChangeListe
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        this.viewModel = viewModel;
         this.imagePath = viewModel.getVerifyImageLocation();
         viewModel.addPropertyChangeListener(this);
 
@@ -44,7 +46,7 @@ public class LoginVerificationView extends JFrame implements PropertyChangeListe
         southPanel.add(timeLabel, BorderLayout.CENTER);
 
         // Create and add the slider
-        JSlider slider = new JSlider(0, 360, 0);  // Minimum 0, maximum 360, initial value 0
+        JSlider slider = new JSlider(0, 360, 180);  // Minimum 0, maximum 360, initial value 0
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -67,7 +69,7 @@ public class LoginVerificationView extends JFrame implements PropertyChangeListe
 
         // Make the frame visible
         setVisible(true);
-        viewModel.setSliderAngle(0);
+        viewModel.setSliderAngle(180);
     }
 
     @Override
@@ -79,13 +81,14 @@ public class LoginVerificationView extends JFrame implements PropertyChangeListe
 
         if (evt.getPropertyName().equals("displayTime")) {
             long time = (long) evt.getNewValue();
-            timeLabel.setText("Time taken: " + time + " ms");
+            double prob = (1d - viewModel.getProb(time)) * 100;
+            DecimalFormat df = new DecimalFormat("#.00");
+            timeLabel.setText("Time taken: " + time + " ms, surpassed " + df.format(prob) + "% of users");
             timeLabel.setOpaque(true);
-            timeLabel.setBackground(Color.WHITE);
+            timeLabel.setBackground(viewModel.getTimeLabelColor(time));
             timeLabel.setVisible(true);
             timeLabel.revalidate();
             timeLabel.repaint();
-            System.out.println(timeLabel.getText());
         }
     }
 }
