@@ -6,6 +6,7 @@ import dataaccess.IUserRepository;
 import dataaccess.local.LocalApplicationRepository;
 import dataaccess.local.LocalUserProjectsRepository;
 import dataaccess.local.LocalUserRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import viewmodel.DisplayProjectApplicationViewModel;
@@ -36,6 +37,10 @@ public class AcceptApplicationInteractorTest {
     private AcceptApplicationInputBoundary interactor;
     private AcceptApplicationController controller;
 
+    /**
+     * Sets up the test environment before each test.
+     * @throws IOException if an I/O error occurs when deleting files
+     */
     @BeforeEach
     public void setUp() throws IOException {
         Files.deleteIfExists(userSaveFile.toPath());
@@ -51,6 +56,11 @@ public class AcceptApplicationInteractorTest {
         controller = new AcceptApplicationController(interactor);
     }
 
+    /**
+     * Tests the interactor's ability to accept an applicant.
+     * The interactor is called through the controller.
+     * The interactor should add the user to the project, delete the application, and prepare the success view.
+     */
     @Test
     public void testAcceptApplicant() {
         userRepository.createUser("test@test.com", "first", "last",
@@ -65,6 +75,24 @@ public class AcceptApplicationInteractorTest {
         assertIterableEquals(new HashSet<>(List.of(10)), userProjectsRepository.getProjectIdsForUser(1));
         assertNull(applicationRepository.getApplication(1, 10));
 
+    }
+
+    /**
+     * Cleans up the test environment after all tests have been run to prevent side effects.
+     * @throws IOException if an I/O error occurs when deleting files
+     */
+    @AfterAll
+    public static void cleanUpFile() throws IOException {
+        File folder = new File(SAVE_LOCATION);
+        String[] files = folder.list();
+
+        if (files == null) {
+            return;
+        }
+        for (String file : files) {
+            Files.deleteIfExists(new File(folder.getPath(), file).toPath());
+        }
+        folder.delete();
     }
 
     private static class TestInteractor extends AcceptApplicationInteractor {
