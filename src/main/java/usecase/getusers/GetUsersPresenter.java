@@ -1,5 +1,7 @@
 package usecase.getusers;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 public class GetUsersPresenter implements GetUsersOutputBoundary {
     /**
      * Prepares the success view with the provided output data.
@@ -8,11 +10,7 @@ public class GetUsersPresenter implements GetUsersOutputBoundary {
      */
     @Override
     public void prepareSuccessView(GetUsersOutputData outputData) {
-        // For now, just print the data to the console
-        System.out.println("Success! Retrieved users:");
-        for (UserData userData : outputData.getUsers()) {
-            System.out.println(userData);
-        }
+        throw new NotImplementedException();
     }
 
     /**
@@ -22,7 +20,6 @@ public class GetUsersPresenter implements GetUsersOutputBoundary {
      */
     @Override
     public void prepareFailView(String errorMessage) {
-        // For now, just print the error message to the console
-        System.err.println("Failed to retrieve users: " + errorMessage);
+        throw new NotImplementedException();
     }
 }

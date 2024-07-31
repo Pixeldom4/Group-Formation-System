@@ -1,7 +1,5 @@
 package dataaccess.database.manager;
 
-import dataaccess.IUserProjectsRepository;
-
 import java.sql.*;
 import java.util.HashSet;
 
@@ -9,7 +7,7 @@ import java.util.HashSet;
  * This class manages the UserProjects table, which handles the many-to-many
  * relationship between Users and Projects.
  */
-public class UserProjectsManager extends SQLDatabaseManager implements IUserProjectsRepository {
+public class UserProjectsManager extends SQLDatabaseManager {
 
     /**
      * Constructs a UserProjectsManager with the specified database manager.
