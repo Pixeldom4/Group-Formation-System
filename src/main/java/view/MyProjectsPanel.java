@@ -4,7 +4,6 @@ import usecase.getapplications.GetApplicationsController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.ProjectData;
-import usecase.getusers.GetUsersController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.EditProjectPanelViewModel;
@@ -32,24 +31,21 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final EditProjectPanelViewModel editProjectPanelViewModel;
     private final EditProjectPanel editProjectPanel;
     private final GetLoggedInUserController getLoggedInUserController;
-    private final GetUsersController getUsersController; // Add the GetUsersController
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100, 100};
-    private final String[] columnNames = {"Project Title", "Description", "Admin", "Edit"};
+    private final String[] columnNames = {"Project Title", "Description", "Admin",  "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
-    private final JButton getUsersButton = new JButton("Get Users"); // Add a new button for Get Users
 
     /**
      * Constructs a MyProjectsPanel.
      *
-     * @param myProjectsPanelViewModel   the view model for the user's projects
-     * @param viewManagerModel           the view manager model
-     * @param getLoggedInUserController  the controller for getting the logged-in user
-     * @param getProjectsController      the controller for getting projects
-     * @param getApplicationsController  the controller for getting applications
-     * @param editProjectPanelViewModel  the view model for editing a project
-     * @param editProjectPanel           the panel for editing a project
-     * @param getUsersController         the controller for getting users
+     * @param myProjectsPanelViewModel the view model for the user's projects
+     * @param viewManagerModel the view manager model
+     * @param getLoggedInUserController the controller for getting the logged-in user
+     * @param getProjectsController the controller for getting projects
+     * @param getApplicationsController the controller for getting applications
+     * @param editProjectPanelViewModel the view model for editing a project
+     * @param editProjectPanel the panel for editing a project
      */
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
@@ -57,15 +53,13 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                            GetProjectsController getProjectsController,
                            GetApplicationsController getApplicationsController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
-                           EditProjectPanel editProjectPanel,
-                           GetUsersController getUsersController) {
+                           EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
         this.getProjectsController = getProjectsController;
         this.editProjectPanelViewModel = editProjectPanelViewModel;
         this.editProjectPanel = editProjectPanel;
-        this.getUsersController = getUsersController; // Initialize GetUsersController
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
         editProjectPanelViewModel.addPropertyChangeListener(this);
@@ -74,9 +68,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(infoPanel);
 
-        // Add the Get Users button and its action listener
-        getUsersButton.addActionListener(this);
-        this.add(getUsersButton);
     }
 
     /**
@@ -164,26 +155,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         }
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == getUsersButton) {
-            int projectId = getSelectedProjectId(); // Implement this method to get the selected project ID
-            if (projectId != -1) {
-                getUsersController.getUsers(projectId);
-            } else {
-                JOptionPane.showMessageDialog(this, "Please select a project first.");
-            }
-        }
-    }
-
-    // Implement this method to get the selected project ID from the table
-    private int getSelectedProjectId() {
-        int selectedRow = infoTable.getSelectedRow();
-        if (selectedRow != -1) {
-            // Get the project ID as a String and then convert it to an Integer
-            String projectIdStr = (String) infoTable.getValueAt(selectedRow, 0); // Assuming the ID is in the first column
-            return Integer.parseInt(projectIdStr); // Convert the String to Integer
-        }
-        return -1;
+        // No implementation needed
     }
 }
