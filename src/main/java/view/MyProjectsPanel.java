@@ -35,7 +35,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final GetUsersController getUsersController; // Add the GetUsersController
     private final JTable infoTable = new JTable();
     private final int[] columnWidths = {200, 400, 100, 100};
-    private final String[] columnNames = {"Project ID", "Project Title", "Description", "Admin", "Edit"}; // Added Project ID column
+    private final String[] columnNames = {"Project Title", "Description", "Admin", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
     private final JButton getUsersButton = new JButton("Get Users"); // Add a new button for Get Users
 
@@ -87,14 +87,13 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private void addProjects(HashSet<ProjectData> projectDataSet) {
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[projectDataSet.size()][5]; // Updated to match column count
+        Object[][] info = new Object[projectDataSet.size()][4];
         int i = 0;
         for (ProjectData projectData : projectDataSet) {
-            info[i][0] = projectData.getProjectId(); // Ensure Project ID is stored as Integer
-            info[i][1] = projectData.getProjectTitle();
-            info[i][2] = projectData.getProjectDescription();
-            info[i][3] = projectData.isProjectOwner() ? "Yes" : "No";
-            info[i][4] = "Edit";
+            info[i][0] = projectData.getProjectTitle();
+            info[i][1] = projectData.getProjectDescription();
+            info[i][2] = projectData.isProjectOwner() ? "Yes" : "No";
+            info[i][3] = "Edit";
             int projectId = projectData.getProjectId();
             String projectTitle = projectData.getProjectTitle();
             String projectDescription = projectData.getProjectDescription();
@@ -126,12 +125,12 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Make only the button column editable
-                return column >= 4;
+                return column >= 3;
             }
         };
         infoTable.setModel(infoTableModel);
 
-        ButtonColumn editColumn = new ButtonColumn(infoTable, 4);
+        ButtonColumn editColumn = new ButtonColumn(infoTable, 3);
         editColumn.setActions(editButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
@@ -181,7 +180,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private int getSelectedProjectId() {
         int selectedRow = infoTable.getSelectedRow();
         if (selectedRow != -1) {
-            return (int) infoTable.getValueAt(selectedRow, 0); // Project ID should be stored as an Integer
+            // Get the project ID as a String and then convert it to an Integer
+            String projectIdStr = (String) infoTable.getValueAt(selectedRow, 0); // Assuming the ID is in the first column
+            return Integer.parseInt(projectIdStr); // Convert the String to Integer
         }
         return -1;
     }
