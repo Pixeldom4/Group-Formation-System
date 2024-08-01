@@ -8,6 +8,8 @@ import usecase.createproject.CreateProjectController;
 import usecase.createproject.CreateProjectUseCaseFactory;
 import usecase.createuser.CreateUserController;
 import usecase.createuser.CreateUserUseCaseFactory;
+import usecase.createverification.CreateVerificationController;
+import usecase.createverification.CreateVerificationUseCaseFactory;
 import usecase.deleteproject.DeleteProjectController;
 import usecase.deleteproject.DeleteProjectUseCaseFactory;
 import usecase.editproject.EditProjectController;
@@ -59,7 +61,13 @@ class Main {
         // Login Panel
         LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
         LoginUserController loginUserController = LoginUserUseCaseFactory.create(loginPanelViewModel);
-        LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel, loginUserController);
+        LoginVerificationViewModel loginVerificationViewModel = new LoginVerificationViewModel();
+        CreateVerificationController createVerificationController = CreateVerificationUseCaseFactory.createController(loginVerificationViewModel);
+        LoginPanel loginPanel = new LoginPanel(viewManagerModel,
+                                               loginPanelViewModel,
+                                               loginUserController,
+                                               loginVerificationViewModel,
+                                               createVerificationController);
 
         // Search Project Panel
         SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();

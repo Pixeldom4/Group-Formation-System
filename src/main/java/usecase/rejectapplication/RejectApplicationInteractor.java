@@ -9,8 +9,8 @@ import dataaccess.IUserRepository;
  * Implements the input boundary to handle application rejection logic.
  */
 public class RejectApplicationInteractor implements RejectApplicationInputBoundary {
-    private final IApplicationRepository applicationRepository;
-    private final IUserRepository userRepository;
+    protected IApplicationRepository applicationRepository;
+    protected IUserRepository userRepository;
     private final RejectApplicationOutputBoundary rejectApplicationPresenter;
 
     /**
