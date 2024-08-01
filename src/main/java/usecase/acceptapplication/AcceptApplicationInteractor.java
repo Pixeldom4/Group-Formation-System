@@ -10,10 +10,10 @@ import dataaccess.IUserRepository;
  * Implements the input boundary to handle application acceptance logic.
  */
 public class AcceptApplicationInteractor implements AcceptApplicationInputBoundary {
-    private final IApplicationRepository applicationRepository;
-    private final IUserProjectsRepository userProjectsRepository;
-    private final IUserRepository userRepository;
-    private final AcceptApplicationOutputBoundary acceptApplicationPresenter;
+    protected IApplicationRepository applicationRepository;
+    protected IUserProjectsRepository userProjectsRepository;
+    protected IUserRepository userRepository;
+    protected final AcceptApplicationOutputBoundary acceptApplicationPresenter;
 
     /**
      * Constructs an AcceptApplicationInteractor object with the specified presenter.
