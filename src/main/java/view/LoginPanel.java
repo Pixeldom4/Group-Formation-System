@@ -1,7 +1,10 @@
 package view;
 
+import usecase.createverification.CreateVerificationController;
+import usecase.createverification.CreateVerificationViewModel;
 import usecase.loginuser.LoginUserController;
 import viewmodel.LoginPanelViewModel;
+import viewmodel.LoginVerificationViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
@@ -18,6 +21,9 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     private final LoginPanelViewModel loginPanelViewModel;
     private final ViewManagerModel viewManagerModel;
     private final LoginUserController loginUserController;
+    private final LoginVerificationViewModel loginVerificationViewModel;
+    private final CreateVerificationController createVerificationController;
+    private LoginVerificationView loginVerificationView;
 
     private final JPanel loginPanel = new JPanel();
     private final JLabel emailLabel = new JLabel("Email: ");
@@ -33,11 +39,18 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
      * @param loginPanelViewModel the view model for the login panel
      * @param loginUserController the controller for logging in the user
      */
-    public LoginPanel(ViewManagerModel viewManagerModel, LoginPanelViewModel loginPanelViewModel, LoginUserController loginUserController) {
+    public LoginPanel(ViewManagerModel viewManagerModel,
+                      LoginPanelViewModel loginPanelViewModel,
+                      LoginUserController loginUserController,
+                      LoginVerificationViewModel loginVerificationViewModel,
+                      CreateVerificationController createVerificationController) {
         this.loginUserController = loginUserController;
         this.loginPanelViewModel = loginPanelViewModel;
         loginPanelViewModel.addPropertyChangeListener(this);
         this.viewManagerModel = viewManagerModel;
+        this.loginVerificationViewModel = loginVerificationViewModel;
+        loginVerificationViewModel.addPropertyChangeListener(this);
+        this.createVerificationController = createVerificationController;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -49,7 +62,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginPanel.add(passwordField);
 
         loginButton.addActionListener(e -> {
-            loginUserController.loginUser(emailField.getText(), new String(passwordField.getPassword()));
+            createVerificationController.createVerification();
         });
 
         this.add(loginPanel);
@@ -78,12 +91,77 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
                 passwordField.setText("");
             }
         }
+
+        if (evt.getPropertyName().equals("displayVerify")) {
+            loginVerificationView = new LoginVerificationView(loginVerificationViewModel);
+            loginVerificationView.setLocationRelativeTo(this);
+        }
+
+        if (evt.getPropertyName().equals("verificationSuccess")) {
+            showVerificationResult(true);
+        }
+
+        if (evt.getPropertyName().equals("verificationFailure")) {
+            showVerificationResult(false);
+        }
     }
+
+    private void showVerificationResult(boolean success) {
+        Thread t = new Thread(() -> {
+            new VerifyResultWindow(this, success);
+            try {
+                Thread.sleep(750);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            loginVerificationView.dispose();
+            loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
+        });
+        t.start();
+    }
+
 
     /**
      * Handles the login process by updating the view manager model.
      */
     private void login(){
         viewManagerModel.login();
+    }
+
+    private static class VerifyResultWindow extends JFrame {
+        private final Color green = new Color(161, 212, 150);
+        private final Color red = new Color(207, 154, 147);
+
+        public VerifyResultWindow(JPanel parent, boolean success) {
+            setTitle("Verification Result");
+            setSize(200, 100);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(parent);
+
+            JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
+            messageLabel.setOpaque(true);
+            if (success) {
+                messageLabel.setText("Verification successful");
+                messageLabel.setBackground(green);
+                setBackground(Color.GREEN);
+            } else {
+                messageLabel.setText("Verification failed");
+                messageLabel.setBackground(red);
+                setBackground(Color.RED);
+            }
+            add(messageLabel, BorderLayout.CENTER);
+
+            Thread t = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.dispose();
+            });
+
+            setVisible(true);
+            t.start();
+        }
     }
 }
