@@ -24,6 +24,8 @@ import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.logout.LogoutController;
 import usecase.logout.LogoutUseCaseFactory;
+import usecase.manageapplications.ManageApplicationsController;
+import usecase.manageapplications.ManageApplicationsUseCaseFactory;
 import usecase.rejectapplication.RejectApplicationController;
 import usecase.rejectapplication.RejectApplicationUseCaseFactory;
 import usecase.searchforproject.SearchProjectController;
@@ -82,9 +84,10 @@ class Main {
 
         // Display Project Application View
         DisplayProjectApplicationViewModel displayProjectApplicationViewModel = new DisplayProjectApplicationViewModel();
-        GetApplicationsController getApplicationsController = GetApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
-        AcceptApplicationController acceptApplicationController = AcceptApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
-        RejectApplicationController rejectApplicationController = RejectApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
+        ManageApplicationsController manageApplicationsController = ManageApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
+//        GetApplicationsController getApplicationsController = GetApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
+//        AcceptApplicationController acceptApplicationController = AcceptApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
+//        RejectApplicationController rejectApplicationController = RejectApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
 
         // Edit Project Panel
         EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
@@ -92,11 +95,9 @@ class Main {
         EditProjectPanel editProjectPanel = new EditProjectPanel(
                 editProjectPanelViewModel,
                 editProjectController,
-                getApplicationsController,
+                manageApplicationsController,
                 deleteProjectController,
-                displayProjectApplicationViewModel,
-                acceptApplicationController,
-                rejectApplicationController
+                displayProjectApplicationViewModel
         );
 
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(
@@ -104,7 +105,6 @@ class Main {
                 viewManagerModel,
                 getLoggedInUserController,
                 getProjectsController,
-                getApplicationsController,
                 editProjectPanelViewModel,
                 editProjectPanel);
 

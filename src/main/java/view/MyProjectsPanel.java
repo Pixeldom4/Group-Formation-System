@@ -43,7 +43,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
      * @param viewManagerModel the view manager model
      * @param getLoggedInUserController the controller for getting the logged-in user
      * @param getProjectsController the controller for getting projects
-     * @param getApplicationsController the controller for getting applications
      * @param editProjectPanelViewModel the view model for editing a project
      * @param editProjectPanel the panel for editing a project
      */
@@ -51,7 +50,6 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
                            GetProjectsController getProjectsController,
-                           GetApplicationsController getApplicationsController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
                            EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;
