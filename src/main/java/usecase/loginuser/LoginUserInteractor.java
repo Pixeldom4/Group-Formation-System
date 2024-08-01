@@ -13,7 +13,7 @@ public class LoginUserInteractor implements LoginUserInputBoundary {
     private final IUserRepository userRepository;
     private final LoginUserOutputBoundary loginUserPresenter;
     private final LoginAuthenticator loginAuthenticator;
-    private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
+    protected ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     /**
      * Constructs a LoginUserInteractor with the specified repository, presenter, and authenticator.
