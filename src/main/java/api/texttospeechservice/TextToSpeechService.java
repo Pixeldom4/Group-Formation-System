@@ -15,13 +15,18 @@ public class TextToSpeechService {
     private static SourceDataLine currentLine;
     private static Thread playbackThread;
     private static boolean enablePlayback = true;
+    private static boolean initialized = false;
 
     /**
      * Initializes the TextToSpeechService by creating a TextToSpeechClient and setting the voice and audio configuration.
-     * @throws IOException if an error occurs while creating the TextToSpeechClient
      */
-    public static void initialize() throws IOException {
-        textToSpeechClient = TextToSpeechClient.create();
+    public static void initialize() {
+        try {
+            textToSpeechClient = TextToSpeechClient.create();
+        } catch (IOException e) {
+            System.out.println("Could not create TextToSpeechClient.");
+            return;
+        }
 
         // Build the voice request, select the language code and the ssml voice gender
         voice = VoiceSelectionParams.newBuilder()
@@ -33,6 +38,9 @@ public class TextToSpeechService {
         audioConfig = AudioConfig.newBuilder()
                 .setAudioEncoding(AudioEncoding.LINEAR16) // Use LINEAR16 for playback
                 .build();
+
+        initialized = true;
+        System.out.println("TextToSpeechService initialized.");
     }
 
     /**
@@ -40,10 +48,13 @@ public class TextToSpeechService {
      * @param text the text to generate speech from
      * @return the generated speech as a ByteString
      */
-    public static ByteString generateSpeech(String text) {
+    public static byte[] generateSpeech(String text) {
+        if (!initialized) {
+            return new byte[0];
+        }
         SynthesisInput input = SynthesisInput.newBuilder().setText(text).build();
         SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
-        return response.getAudioContent();
+        return response.getAudioContent().toByteArray();
     }
 
     /**
