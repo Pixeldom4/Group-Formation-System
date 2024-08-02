@@ -51,17 +51,12 @@ class Main {
 
 
         // Initialize text to speech credentials and files
-        try {
-            String serviceAccountKey = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
-            if (serviceAccountKey == null) {
-                throw new IllegalArgumentException("Environment variable GOOGLE_APPLICATION_CREDENTIALS is not set");
-            }
-
-            TextToSpeechService.initialize();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        String serviceAccountKey = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+        if (serviceAccountKey == null) {
+            throw new IllegalArgumentException("Environment variable GOOGLE_APPLICATION_CREDENTIALS is not set");
         }
+
+        TextToSpeechService.initialize();
 
         application.addWindowListener(new WindowAdapter() {
             @Override
