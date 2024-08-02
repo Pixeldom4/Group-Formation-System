@@ -53,7 +53,7 @@ class Main {
         // Initialize text to speech credentials and files
         String serviceAccountKey = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
         if (serviceAccountKey == null) {
-            throw new IllegalArgumentException("Environment variable GOOGLE_APPLICATION_CREDENTIALS is not set");
+            System.err.println("Environment variable GOOGLE_APPLICATION_CREDENTIALS is not set");
         }
 
         TextToSpeechService.initialize();
