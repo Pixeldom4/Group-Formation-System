@@ -165,16 +165,24 @@ class Main {
         views.add(myProjectsPanel, myProjectsViewModel.getViewName());
         views.add(editProfilePanel, editProfileViewModel.getViewName());
 
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(0, 1));
+
         SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel = new SwitchViewButtonPanelViewModel();
         LogoutController logoutController = LogoutUseCaseFactory.create(switchViewButtonPanelViewModel);
         JPanel switchButtons = new SwitchViewButtonPanel(viewManagerModel, switchViewButtonPanelViewModel, logoutController);
+
+        JPanel settingsPanel = new SettingsPanel();
+
+        bottomPanel.add(switchButtons);
+        bottomPanel.add(settingsPanel);
 
         viewManagerModel.setActiveView(createUserPanelViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
         viewManagerModel.logout();
 
         application.getContentPane().add(views, BorderLayout.CENTER);
-        application.getContentPane().add(switchButtons, BorderLayout.SOUTH);
+        application.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
         application.pack();
         application.setVisible(true);

@@ -14,6 +14,7 @@ public class TextToSpeechService {
     private static AudioConfig audioConfig;
     private static SourceDataLine currentLine;
     private static Thread playbackThread;
+    private static boolean enablePlayback = true;
 
     /**
      * Initializes the TextToSpeechService by creating a TextToSpeechClient and setting the voice and audio configuration.
@@ -53,6 +54,10 @@ public class TextToSpeechService {
      * @throws LineUnavailableException if a line is unavailable
      */
     public static void playAudio(byte[] audioData) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+        if (!enablePlayback) {
+            return;
+        }
+
         // Stop any previously playing audio
         stopCurrentAudio();
 
@@ -104,6 +109,14 @@ public class TextToSpeechService {
         playbackThread.start();
     }
 
+    /**
+     * Sets whether voice playback for this service is enabled.
+     * @param enable whether voice playback is enabled
+     */
+    public static void setEnablePlayback(boolean enable) {
+        enablePlayback = enable;
+    }
+
     private static void stopCurrentAudio() {
         if (playbackThread != null && playbackThread.isAlive()) {
             playbackThread.interrupt();
@@ -115,11 +128,6 @@ public class TextToSpeechService {
             playbackThread = null;
         }
 
-        if (currentLine != null) {
-            currentLine.stop();
-            currentLine.close();
-            currentLine = null;
-        }
     }
 
 }
