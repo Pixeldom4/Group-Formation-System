@@ -1,8 +1,8 @@
 package usecase.searchproject;
 
 import entities.ProjectInterface;
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import dataaccess.local.LocalProjectRepository;
 import org.junit.jupiter.api.BeforeAll;

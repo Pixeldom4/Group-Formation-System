@@ -15,3 +15,10 @@
 # Ignore save files
 *.db
 /local_data/
+
+# Ignore environment files
+.env.*
+*.env
+
+# Ignore secrets
+/secrets/

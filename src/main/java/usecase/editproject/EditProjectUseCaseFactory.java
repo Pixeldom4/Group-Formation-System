@@ -1,7 +1,7 @@
 package usecase.editproject;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import viewmodel.EditProjectPanelViewModel;

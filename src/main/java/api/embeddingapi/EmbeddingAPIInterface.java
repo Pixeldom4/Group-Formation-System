@@ -1,4 +1,4 @@
-package api;
+package api.embeddingapi;
 
 /**
  * Interface for generating embeddings for text.

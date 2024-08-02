@@ -1,8 +1,8 @@
 package usecase.searchforproject;
 
 import entities.ProjectInterface;
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 

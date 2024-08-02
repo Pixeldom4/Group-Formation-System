@@ -1,8 +1,10 @@
 package view;
 
 import usecase.createverification.CreateVerificationController;
-import usecase.createverification.CreateVerificationViewModel;
 import usecase.loginuser.LoginUserController;
+import view.services.hovervoice.HoverVoiceService;
+import view.services.hovervoice.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
 import viewmodel.LoginPanelViewModel;
 import viewmodel.LoginVerificationViewModel;
 import viewmodel.ViewManagerModel;
@@ -32,6 +34,8 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     private final JPasswordField passwordField = new JPasswordField();
     private final JButton loginButton = new JButton("Login");
 
+    private final IHoverVoiceService hoverVoiceService;
+
     /**
      * Constructs a LoginPanel.
      *
@@ -52,9 +56,14 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginVerificationViewModel.addPropertyChangeListener(this);
         this.createVerificationController = createVerificationController;
 
+        hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         loginPanel.setLayout(new GridLayout(0, 2));
+
+        hoverVoiceService.addHoverVoice(emailField, "Enter email");
+        hoverVoiceService.addHoverVoice(passwordField, "Enter password");
 
         loginPanel.add(emailLabel);
         loginPanel.add(emailField);
@@ -64,6 +73,8 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginButton.addActionListener(e -> {
             createVerificationController.createVerification();
         });
+
+        hoverVoiceService.addHoverVoice(loginButton, "Press to login");
 
         this.add(loginPanel);
         this.add(loginButton);

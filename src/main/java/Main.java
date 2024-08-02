@@ -1,3 +1,4 @@
+import api.texttospeechservice.TextToSpeechService;
 import dataaccess.DataAccessConfig;
 import dataaccess.DatabaseInitializer;
 import usecase.acceptapplication.AcceptApplicationController;
@@ -35,13 +36,40 @@ import viewmodel.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 class Main {
     public static void main(String[] args) {
 
         JFrame application = new JFrame("A Screen");
-        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        application.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         application.setSize(1200, 1200);
+
+
+        // Initialize text to speech credentials and files
+        try {
+            String serviceAccountKey = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+            if (serviceAccountKey == null) {
+                throw new IllegalArgumentException("Environment variable GOOGLE_APPLICATION_CREDENTIALS is not set");
+            }
+
+            TextToSpeechService.initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        application.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                System.out.println("Closing app");
+                System.exit(0);
+            }
+        });
 
         CardLayout cardLayout = new CardLayout();
         JPanel views = new JPanel(cardLayout);
