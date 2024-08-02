@@ -1,21 +1,27 @@
 package api.texttospeechservice;
 
-import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.cloud.texttospeech.v1.*;
-import com.google.protobuf.ByteString;
 
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TextToSpeechService {
     private static TextToSpeechClient textToSpeechClient;
     private static VoiceSelectionParams voice;
     private static AudioConfig audioConfig;
-    private static SourceDataLine currentLine;
-    private static Thread playbackThread;
     private static boolean enablePlayback = true;
     private static boolean initialized = false;
+    private static final ConcurrentHashMap<Integer, Future<?>> playbackTasks = new ConcurrentHashMap<>();
+    private static final ExecutorService playbackExecutor = Executors.newCachedThreadPool();
+    private static final AtomicInteger threadIdCounter = new AtomicInteger();
+    private static ArrayList<Integer> threadIds = new ArrayList<>();
 
     /**
      * Initializes the TextToSpeechService by creating a TextToSpeechClient and setting the voice and audio configuration.
@@ -44,6 +50,18 @@ public class TextToSpeechService {
     }
 
     /**
+     * Shuts down the TextToSpeechService by closing the TextToSpeechClient.
+     */
+    public static void shutdown() {
+        if (initialized) {
+            textToSpeechClient.close();
+            initialized = false;
+            playbackExecutor.shutdown();
+            System.out.println("TextToSpeechService shut down.");
+        }
+    }
+
+    /**
      * Generates speech from the given text.
      * @param text the text to generate speech from
      * @return the generated speech as a ByteString
@@ -59,65 +77,25 @@ public class TextToSpeechService {
 
     /**
      * Plays the given audio data. Pauses any currently playing audio from this service.
-     * @param audioData the audio data to play
-     * @throws IOException if an error occurs while playing the audio
-     * @throws UnsupportedAudioFileException if the audio file is not supported
-     * @throws LineUnavailableException if a line is unavailable
+     * @param clip the audio data to play
      */
-    public static void playAudio(byte[] audioData) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+    public static void playAudio(Clip clip) {
         if (!enablePlayback) {
             return;
         }
 
-        // Stop any previously playing audio
-        stopCurrentAudio();
-
-        // Start a new thread for playback
-        playbackThread = new Thread(() -> {
-            try {
-                // Convert the byte array to an audio input stream
-                try (ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
-                     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bais)) {
-
-                    // Get the audio format and info
-                    AudioFormat format = audioInputStream.getFormat();
-                    DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-
-                    // Check if the system supports the data line
-                    if (!AudioSystem.isLineSupported(info)) {
-                        throw new LineUnavailableException("The system does not support the specified audio format.");
-                    }
-
-                    // Obtain and open the line
-                    currentLine = (SourceDataLine) AudioSystem.getLine(info);
-                    currentLine.open(format);
-
-                    // Start playing the audio
-                    currentLine.start();
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = audioInputStream.read(buffer)) != -1) {
-                        currentLine.write(buffer, 0, bytesRead);
-                        if (Thread.currentThread().isInterrupted()){
-                            break;
-                        }
-                    }
-
-                    // Drain and close the line
-                    currentLine.stop();
-                }
-            } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-                e.printStackTrace();
-            } finally {
-                if (currentLine != null) {
-                    currentLine.drain();
-                    currentLine.close();
-                    currentLine = null;
-                }
+        final int prevThreadId = threadIdCounter.get();
+        Thread clearThread = new Thread(() -> {
+            if (threadIds.contains(prevThreadId)) {
+                threadIds.remove(Integer.valueOf(prevThreadId));
+                stopAudio(prevThreadId);
             }
         });
+        clearThread.start();
 
-        playbackThread.start();
+        int threadId = playAudioHelper(clip);
+        threadIds.add(threadId);
+
     }
 
     /**
@@ -128,17 +106,78 @@ public class TextToSpeechService {
         enablePlayback = enable;
     }
 
-    private static void stopCurrentAudio() {
-        if (playbackThread != null && playbackThread.isAlive()) {
-            playbackThread.interrupt();
-            try {
-                playbackThread.join();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            playbackThread = null;
-        }
+    /**
+     * Converts the given audio data to a Clip object.
+     * @param audioData the audio data to convert
+     * @return the Clip object
+     */
+    public static Clip convertToClip(byte[] audioData) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
+             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bais)) {
 
+            // Get the audio format and info
+            AudioFormat format = audioInputStream.getFormat();
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+
+            // Check if the system supports the data line
+            if (!AudioSystem.isLineSupported(info)) {
+                throw new LineUnavailableException("The system does not support the specified audio format.");
+            }
+
+            // Obtain and open the clip
+            Clip clip = (Clip) AudioSystem.getLine(info);
+            clip.open(audioInputStream);
+            return clip;
+
+        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static int playAudioHelper(Clip clip) {
+        // Generate a unique thread ID
+        int threadId = threadIdCounter.incrementAndGet();
+
+        // Submit a new playback task to the executor
+        Future<?> playbackTask = playbackExecutor.submit(() -> {
+            try {
+                // Add a listener to notify when playback is done
+                clip.addLineListener(event -> {
+                    if (event.getType() == LineEvent.Type.STOP) {
+                        synchronized (clip) {
+                            clip.notify();
+                        }
+                    }
+                });
+
+                // Start playing the audio
+                clip.start();
+
+                // Wait for the playback to complete
+                synchronized (clip) {
+                    clip.wait();
+                }
+            } catch (InterruptedException e) {
+                clip.stop();
+                Thread.currentThread().interrupt();
+            } finally {
+                playbackTasks.remove(threadId);
+            }
+        });
+
+        // Store the playback task in the map
+        playbackTasks.put(threadId, playbackTask);
+
+        return threadId;
+    }
+
+    private static void stopAudio(int threadId) {
+        Future<?> playbackTask = playbackTasks.get(threadId);
+        if (playbackTask != null) {
+            playbackTask.cancel(true);
+            playbackTasks.remove(threadId);
+        }
     }
 
 }

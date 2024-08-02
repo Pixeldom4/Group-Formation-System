@@ -61,6 +61,7 @@ class Main {
         application.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
+                TextToSpeechService.shutdown();
                 System.out.println("Closing app");
                 System.exit(0);
             }

@@ -2,6 +2,10 @@ package view;
 
 import usecase.createuser.CreateUserController;
 import view.components.NumericTextField;
+import view.services.hovervoice.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import view.services.playvoice.PlayVoiceServiceConfig;
 import viewmodel.CreateUserPanelViewModel;
 
 import javax.swing.*;
@@ -32,6 +36,9 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
     private final NumericTextField compensationField = new NumericTextField();
     private final JButton createUserButton = new JButton("Create User");
 
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
+
     /**
      * Constructs a CreateUserPanel.
      *
@@ -42,6 +49,14 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
         this.createUserPanelViewModel = createUserPanelViewModel;
         createUserPanelViewModel.addPropertyChangeListener(this);
         this.createUserController = createUserController;
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
+        hoverVoiceService.addHoverVoice(firstNameField, "Enter first name here");
+        hoverVoiceService.addHoverVoice(lastNameField, "Enter last name here");
+        hoverVoiceService.addHoverVoice(emailField, "Enter email here");
+        hoverVoiceService.addHoverVoice(passwordField, "Enter password here");
+        hoverVoiceService.addHoverVoice(compensationField, "Enter desired compensation here");
 
         createUserInfo.setLayout(new GridLayout(0,2));
         createUserInfo.add(firstNameLabel);
@@ -64,6 +79,8 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
             createUserController.createUser(firstName, lastName, email, compensation, new HashSet<>(), password);
         });
 
+        hoverVoiceService.addHoverVoice(createUserButton, "Press to create user");
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(createUserInfo);
@@ -80,17 +97,18 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("success")) {
             boolean success = (boolean) evt.getNewValue();
             if (success) {
-                String userName = createUserPanelViewModel.getCreatedUser();
-                String message = "User " + userName + " created successfully";
+                String message = createUserPanelViewModel.getSuccessMessage();
                 firstNameField.setText("");
                 lastNameField.setText("");
                 emailField.setText("");
                 passwordField.setText("");
                 compensationField.clear();
+                playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);
             }
             else {
                 String message = createUserPanelViewModel.getErrorMessage();
+                playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);
             }
         }
