@@ -44,7 +44,7 @@ public class EditProjectInteractorTest {
     private final static EditProjectInteractor editProjectInteractor = new EditProjectInteractor(projectDAO, editPresenter, apiInterface);
     private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(searchPresenter, projectDAO);
 
-    private static String[][] dummyProjects = new String[][]{
+    private final static String[][] dummyProjects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
             {"2", "Python Automation", "1500.5", "A project centered around automating tasks with Python scripts.", "Python;Automation"},
             {"3", "Web Development", "2000.0", "This project involves creating responsive websites using HTML, CSS, and JavaScript.", "Web Design;JavaScript"},

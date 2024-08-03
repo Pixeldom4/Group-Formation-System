@@ -13,17 +13,16 @@ import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashSet;
 
 /**
  * Panel for adding a new project.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class AddProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final AddProjectPanelViewModel addProjectPanelViewModel;
@@ -79,7 +78,7 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         projectInfoPanel.setLayout(new BoxLayout(projectInfoPanel, BoxLayout.Y_AXIS));
 
-        addTagButton.addActionListener(e -> {
+        addTagButton.addActionListener(_ -> {
             String tagText = projectTagsField.getText();
             if (!tagText.isEmpty()) {
                 tagPanel.addTagToPanel(tagText);
@@ -115,7 +114,7 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
         this.add(projectInfoPanel);
 
-        addProjectButton.addActionListener(e -> {
+        addProjectButton.addActionListener(_ -> {
             String title = projectNameField.getText();
             double budget = Double.parseDouble(projectBudgetField.getText());
             String description = projectDescriptionField.getText();

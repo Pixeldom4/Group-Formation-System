@@ -15,6 +15,7 @@ import java.io.*;
 /**
  * A view for creating an application.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class DisplayCreateApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
     private final CreateApplicationController createApplicationController;
 
@@ -52,7 +53,7 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
         panel.add(infoField);
         panel.add(applicationLabel);
 
-        applicationButton.addActionListener(e -> {
+        applicationButton.addActionListener(_ -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
             int result = fileChooser.showOpenDialog(this);
@@ -66,7 +67,7 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
         panel.add(applicationButton);
 
         hoverVoiceService.addHoverVoice(submitButton, "Press to submit application");
-        submitButton.addActionListener(e -> {
+        submitButton.addActionListener(_ -> {
             String infoText = infoLabel.getText();
             try {
                 InputStream input = new FileInputStream(applicationLabel.getText().substring(applicationText.length()));

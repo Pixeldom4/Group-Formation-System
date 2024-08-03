@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * A view for displaying and managing project applications.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class DisplayProjectApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
 
     private JTextField projectTitleField;
@@ -41,7 +42,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
     private final int[] columnWidths = {400, 200, 200, 200};
     private final String[] columnNames = {"Applicant", "view", "Accept", "Decline"};
     private final JTable infoTable = new JTable();
-    private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
 
@@ -120,49 +120,36 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
             int finalI = i;
 
-            viewButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            viewButtonActions.add(() -> {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-                    Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
-                    File downloadsDirectory = downloadsPath.toFile();
-                    if (downloadsDirectory.exists() && downloadsDirectory.isDirectory()) {
-                        fileChooser.setCurrentDirectory(downloadsDirectory);
-                    }
+                Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
+                File downloadsDirectory = downloadsPath.toFile();
+                if (downloadsDirectory.exists() && downloadsDirectory.isDirectory()) {
+                    fileChooser.setCurrentDirectory(downloadsDirectory);
+                }
 
-                    int result = fileChooser.showOpenDialog(temp);
-                    if (result == JFileChooser.APPROVE_OPTION) {
+                int result = fileChooser.showOpenDialog(temp);
+                if (result == JFileChooser.APPROVE_OPTION) {
 
-                        File selectedDirectory = fileChooser.getSelectedFile();
+                    File selectedDirectory = fileChooser.getSelectedFile();
 
-                        String fileName = applicationsData[finalI][0]+" application.pdf";
-                        File outputFile = new File(selectedDirectory, fileName);
+                    String fileName = applicationsData[finalI][0]+" application.pdf";
+                    File outputFile = new File(selectedDirectory, fileName);
 
-                        try(FileOutputStream fos = new FileOutputStream(outputFile)){
-                            fos.write((byte[])applicationsData[finalI][3]);
-                            JOptionPane.showMessageDialog(temp, "Downloaded file: " + fileName);
-                        } catch (IOException ex){
-                            JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
-                        }
+                    try(FileOutputStream fos = new FileOutputStream(outputFile)){
+                        fos.write((byte[])applicationsData[finalI][3]);
+                        JOptionPane.showMessageDialog(temp, "Downloaded file: " + fileName);
+                    } catch (IOException ex){
+                        JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
                     }
                 }
             });
 
-            acceptButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                }
-            });
+            acceptButtonActions.add(() -> acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]));
 
-            declineButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    rejectApplicationController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                }
-            });
+            declineButtonActions.add(() -> rejectApplicationController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]));
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {

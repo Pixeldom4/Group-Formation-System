@@ -12,7 +12,7 @@ public class PlayVoiceService implements IPlayVoiceService {
         try {
             TextToSpeechService.playAudio(audioClip);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error playing audio: " + e.getMessage());
         }
     }
 }

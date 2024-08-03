@@ -1,7 +1,5 @@
 package viewmodel;
 
-import api.texttospeechservice.TextToSpeechService;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 

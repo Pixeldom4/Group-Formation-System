@@ -30,7 +30,7 @@ public class SearchProjectInteractorTest {
     private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(presenter, projectDAO);
     private final static EmbeddingAPIInterface apiInteface = new OpenAPIDataEmbed();
 
-    private static String[][] dummyprojects = new String[][]{
+    private final static String[][] dummyprojects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
             {"2", "Python Automation", "1500.5", "A project centered around automating tasks with Python scripts.", "Python;Automation"},
             {"3", "Web Development", "2000.0", "This project involves creating responsive websites using HTML, CSS, and JavaScript.", "Web Design;JavaScript"},
@@ -55,7 +55,7 @@ public class SearchProjectInteractorTest {
             projectDAO.createProject(project[1],
                     Double.parseDouble(project[2]),
                     project[3],
-                    new HashSet<String>(Arrays.asList(project[4].split(";"))),
+                    new HashSet<>(Arrays.asList(project[4].split(";"))),
                     embedding,
                     1);
         }

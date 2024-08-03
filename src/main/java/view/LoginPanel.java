@@ -2,7 +2,6 @@ package view;
 
 import usecase.createverification.CreateVerificationController;
 import usecase.loginuser.LoginUserController;
-import view.services.hovervoice.HoverVoiceService;
 import view.services.hovervoice.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
@@ -21,6 +20,7 @@ import java.beans.PropertyChangeListener;
 /**
  * A panel for logging in the user.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class LoginPanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final LoginPanelViewModel loginPanelViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -74,9 +74,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);
 
-        loginButton.addActionListener(e -> {
-            createVerificationController.createVerification();
-        });
+        loginButton.addActionListener(e -> createVerificationController.createVerification());
 
         hoverVoiceService.addHoverVoice(loginButton, "Press to login");
 
@@ -130,7 +128,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
             try {
                 Thread.sleep(750);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Verification window thread interrupted");
             }
             loginVerificationView.dispose();
             loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
@@ -173,7 +171,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.err.println("Verification result window thread interrupted");
                 }
                 this.dispose();
             });

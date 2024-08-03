@@ -51,7 +51,11 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
 
         try {
             Response response = client.newCall(request).execute();
-            responseBody = new JSONObject(response.body().string());
+            if (response.body() != null) {
+                responseBody = new JSONObject(response.body().string());
+            } else {
+                throw new RuntimeException("Response body for embedding request is null");
+            }
             JSONObject embedData = (JSONObject) responseBody.getJSONArray("data").get(0);
             float[] data = new float[embedData.getJSONArray("embedding").length()];
             for (int i = 0; i < embedData.getJSONArray("embedding").length(); i++) {

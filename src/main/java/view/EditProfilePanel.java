@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 /**
  * A panel for editing the user's profile.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final EditUserController editUserController;
     private final ViewManagerModel viewManagerModel;
@@ -78,7 +79,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
 
-        addTagButton.addActionListener(e -> {
+        addTagButton.addActionListener(_ -> {
             String tagText = projectTagsField.getText();
             if (!tagText.isEmpty()) {
                 tagPanel.addTagToPanel(tagText);
@@ -118,7 +119,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         this.add(userInfoPanel);
 
         hoverVoiceService.addHoverVoice(saveButton, "Press to save profile");
-        saveButton.addActionListener(e -> {
+        saveButton.addActionListener(_ -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();

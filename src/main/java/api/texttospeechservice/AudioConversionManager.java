@@ -29,7 +29,7 @@ public class AudioConversionManager implements IAudioConversionManager {
             return clip;
 
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-            e.printStackTrace();
+            System.err.println("Error converting audio data to Clip: " + e.getMessage());
         }
         return null;
     }

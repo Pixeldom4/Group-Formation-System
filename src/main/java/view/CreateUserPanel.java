@@ -19,6 +19,7 @@ import java.util.HashSet;
 /**
  * Panel for creating a new user.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class CreateUserPanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final CreateUserPanelViewModel createUserPanelViewModel;
     private final CreateUserController createUserController;
@@ -70,7 +71,7 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
         createUserInfo.add(compensationLabel);
         createUserInfo.add(compensationField);
 
-        createUserButton.addActionListener(e -> {
+        createUserButton.addActionListener(_ -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();

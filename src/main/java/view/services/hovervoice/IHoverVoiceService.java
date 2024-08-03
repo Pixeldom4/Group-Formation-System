@@ -1,9 +1,7 @@
 package view.services.hovervoice;
 
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public interface IHoverVoiceService {

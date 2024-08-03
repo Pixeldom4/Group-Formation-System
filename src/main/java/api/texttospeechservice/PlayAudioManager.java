@@ -12,7 +12,7 @@ public class PlayAudioManager implements IPlayAudioManager {
     private final ConcurrentHashMap<Integer, Future<?>> playbackTasks = new ConcurrentHashMap<>();
     private final ExecutorService playbackExecutor;
     private final AtomicInteger threadIdCounter = new AtomicInteger();
-    private ArrayList<Integer> threadIds = new ArrayList<>();
+    private final ArrayList<Integer> threadIds = new ArrayList<>();
 
     protected PlayAudioManager(ExecutorService executor) {
         playbackExecutor = executor;

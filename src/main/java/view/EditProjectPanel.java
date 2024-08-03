@@ -3,7 +3,6 @@ package view;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.deleteproject.DeleteProjectController;
 import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInputData;
 import usecase.getapplications.GetApplicationsController;
 import usecase.rejectapplication.RejectApplicationController;
 import view.services.hovervoice.HoverVoiceServiceConfig;
@@ -14,7 +13,6 @@ import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -24,6 +22,7 @@ import java.util.HashSet;
 /**
  * A panel for editing project details.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     private final EditProjectPanelViewModel editProjectViewModel;
@@ -33,14 +32,14 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
     private final AcceptApplicationController acceptApplicationController;
     private final RejectApplicationController rejectApplicationController;
-    private JTextField titleField;
-    private JTextField budgetField;
-    private JTextArea descriptionField;
-    private JTextField tagsField;
-    private JButton saveButton;
-    private JButton refreshButton;
-    private JButton viewApplicationButton;
-    private JButton deleteButton;
+    private final JTextField titleField;
+    private final JTextField budgetField;
+    private final JTextArea descriptionField;
+    private final JTextField tagsField;
+    private final JButton saveButton;
+    private final JButton refreshButton;
+    private final JButton viewApplicationButton;
+    private final JButton deleteButton;
     private int projectId;
     private int editorId;
 
@@ -111,39 +110,24 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         add(deleteButton);
         add(refreshButton);
 
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveProject();
+        saveButton.addActionListener(e -> saveProject());
+
+        viewApplicationButton.addActionListener(e -> new DisplayProjectApplicationView(projectId,
+                                                                               displayProjectApplicationViewModel,
+                                                                               getApplicationsController,
+                                                                               acceptApplicationController,
+                                                                               rejectApplicationController));
+
+        deleteButton.addActionListener(e -> {
+
+            int dialogResult = JOptionPane.showConfirmDialog (null,
+                    "Are you sure you would like to delete " + projectId + "?",
+                    "Warning",
+                    JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                deleteProjectController.deleteProject(projectId);
             }
-        });
 
-        viewApplicationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                new DisplayProjectApplicationView(projectId,
-                        displayProjectApplicationViewModel,
-                        getApplicationsController,
-                        acceptApplicationController,
-                        rejectApplicationController);
-
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                int dialogResult = JOptionPane.showConfirmDialog (null,
-                        "Are you sure you would like to delete " + projectId + "?",
-                        "Warning",
-                        JOptionPane.YES_NO_OPTION);
-                if(dialogResult == JOptionPane.YES_OPTION){
-                    deleteProjectController.deleteProject(projectId);
-                }
-
-            }
         });
 
     }

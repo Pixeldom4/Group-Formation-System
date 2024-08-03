@@ -57,7 +57,7 @@ public class TagPanel extends JPanel {
 
         tag.add(removeButton, constraints);
 
-        removeButton.addActionListener(e -> {
+        removeButton.addActionListener(_ -> {
             tags.remove(text);
             this.remove(tag);
             this.revalidate();

@@ -14,12 +14,13 @@ import java.beans.PropertyChangeListener;
 /**
  * A view for displaying the details of an individual project.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class DisplayIndividualProjectView extends JFrame implements ActionListener, PropertyChangeListener {
 
-    private JLabel projectTitleField;
-    private JLabel tagsField;
+    private final JLabel projectTitleField;
+    private final JLabel tagsField;
     private JTextArea projectDescriptionArea;
-    private JLabel projectID;
+    private final JLabel projectID;
 
     private final IHoverVoiceService hoverVoiceService;
 

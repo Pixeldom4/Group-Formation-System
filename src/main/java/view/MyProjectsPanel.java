@@ -6,6 +6,7 @@ import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.ProjectData;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import view.services.SafeCastCollectionService;
 import view.services.hovervoice.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
@@ -30,6 +31,7 @@ import java.util.Map;
 /**
  * A panel for displaying and managing the user's projects.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final GetProjectsController getProjectsController;
@@ -113,22 +115,19 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             HashSet<String> projectTags = projectData.getProjectTags();
             int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
 
-            editButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
-                            projectDescription, projectTags, editorId);
-                    editProjectPanelViewModel.initDetails();
+            editButtonActions.add(() -> {
+                editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
+                        projectDescription, projectTags, editorId);
+                editProjectPanelViewModel.initDetails();
 
-                    // Display editProjectPanel in your application window
-                    JFrame editFrame = new JFrame("Edit Project");
-                    editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    editFrame.setSize(400, 300);
-                    editFrame.add(editProjectPanel);
+                // Display editProjectPanel in your application window
+                JFrame editFrame = new JFrame("Edit Project");
+                editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                editFrame.setSize(400, 300);
+                editFrame.add(editProjectPanel);
 
-                    editFrame.setVisible(true);
+                editFrame.setVisible(true);
 
-                }
             });
             i++;
         }
@@ -156,7 +155,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("dataUpdate")) {
-            HashSet<ProjectData> data = (HashSet<ProjectData>) evt.getNewValue();
+            HashSet<ProjectData> data = SafeCastCollectionService.convertToCollection(evt.getNewValue(), ProjectData.class, HashSet::new);
             addProjects(data);
         }
         if (evt.getPropertyName().equals("login")) {

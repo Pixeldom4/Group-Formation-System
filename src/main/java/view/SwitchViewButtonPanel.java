@@ -18,6 +18,7 @@ import java.beans.PropertyChangeListener;
 /**
  * A panel that contains buttons for switching views in the application.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class SwitchViewButtonPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SwitchViewButtonPanelViewModel switchViewButtonPanelViewModel;
@@ -59,39 +60,37 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        addProjectButton.addActionListener(e -> {
+        addProjectButton.addActionListener(_ -> {
             viewManagerModel.setActiveView("AddProjectView");
             viewManagerModel.firePropertyChanged();
         });
 
-        searchProjectButton.addActionListener(e -> {
+        searchProjectButton.addActionListener(_ -> {
             viewManagerModel.setActiveView("SearchPanelView");
             viewManagerModel.firePropertyChanged();
         });
 
-        getProjectsButton.addActionListener(e -> {
+        getProjectsButton.addActionListener(_ -> {
             viewManagerModel.setActiveView("GetProjectsView");
             viewManagerModel.firePropertyChanged();
         });
 
-        editUserProfileButton.addActionListener(e -> {
+        editUserProfileButton.addActionListener(_ -> {
             viewManagerModel.setActiveView("EditMyProfile");
             viewManagerModel.firePropertyChanged();
         });
 
-        createUserButton.addActionListener(e -> {
+        createUserButton.addActionListener(_ -> {
             viewManagerModel.setActiveView("CreateUserView");
             viewManagerModel.firePropertyChanged();
         });
 
-        loginUserButton.addActionListener(e -> {
+        loginUserButton.addActionListener(_ -> {
             viewManagerModel.setActiveView("LoginView");
             viewManagerModel.firePropertyChanged();
         });
 
-        logoutButton.addActionListener(e -> {
-            logoutController.logout();
-        });
+        logoutButton.addActionListener(_ -> logoutController.logout());
 
         hoverVoiceService.addHoverVoice(createUserButton, "Press to go to create user view");
         hoverVoiceService.addHoverVoice(loginUserButton, "Press to go to login view");

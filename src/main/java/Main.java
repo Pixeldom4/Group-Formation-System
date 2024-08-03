@@ -1,6 +1,5 @@
 import api.texttospeechservice.TextToSpeechService;
 import dataaccess.DataAccessConfig;
-import dataaccess.DatabaseInitializer;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.acceptapplication.AcceptApplicationUseCaseFactory;
 import usecase.createapplication.CreateApplicationController;
@@ -38,10 +37,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
+@SuppressWarnings("FieldCanBeLocal")
 class Main {
     public static void main(String[] args) {
 
