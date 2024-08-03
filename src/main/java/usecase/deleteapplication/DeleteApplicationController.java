@@ -10,9 +10,8 @@ public class DeleteApplicationController {
      * Constructs a new DeleteApplicationController instance.
      *
      * @param deleteApplicationInteractor the interactor to handle the delete application logic
-     * @param deleteApplicationInteractor1 an additional interactor (not used in this constructor)
      */
-    public DeleteApplicationController(DeleteApplicationInputBoundary deleteApplicationInteractor, DeleteApplicationInputData deleteApplicationInteractor1) {
+    public DeleteApplicationController(DeleteApplicationInputBoundary deleteApplicationInteractor) {
         this.deleteApplicationInteractor = deleteApplicationInteractor;
     }
 
