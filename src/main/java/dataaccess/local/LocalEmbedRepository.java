@@ -5,7 +5,7 @@ import api.embeddingapi.OpenAPIDataEmbed;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 
 import java.io.File;
 import java.io.FileReader;

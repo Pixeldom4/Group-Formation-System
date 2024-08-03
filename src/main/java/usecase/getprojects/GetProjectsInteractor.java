@@ -1,7 +1,6 @@
 package usecase.getprojects;
 
-import dataaccess.DataAccessConfig;
-import dataaccess.ILoginUserDetails;
+import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import entities.Project;

@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IUserRepository;
 import entities.User;
 import entities.UserInterface;

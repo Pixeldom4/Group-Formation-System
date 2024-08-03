@@ -1,7 +1,5 @@
 package usecase.deleteuser;
 
-import dataaccess.DataAccessConfig;
-import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;
 
 /**

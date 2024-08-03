@@ -1,7 +1,6 @@
 package usecase.edituser;
 
-import dataaccess.DataAccessConfig;
-import dataaccess.ILoginUserDetails;
+import config.DataAccessConfig;
 import dataaccess.IUserRepository;
 import viewmodel.EditProfileViewModel;
 

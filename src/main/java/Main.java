@@ -1,5 +1,5 @@
 import api.texttospeechservice.TextToSpeechService;
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.acceptapplication.AcceptApplicationUseCaseFactory;
 import usecase.createapplication.CreateApplicationController;

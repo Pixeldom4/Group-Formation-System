@@ -1,6 +1,6 @@
 package dataaccess.local;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import entities.Project;
 import entities.ProjectInterface;

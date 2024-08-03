@@ -2,10 +2,10 @@ package view;
 
 import usecase.createverification.CreateVerificationController;
 import usecase.loginuser.LoginUserController;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import view.services.playvoice.PlayVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import viewmodel.LoginPanelViewModel;
 import viewmodel.LoginVerificationViewModel;
 import viewmodel.ViewManagerModel;

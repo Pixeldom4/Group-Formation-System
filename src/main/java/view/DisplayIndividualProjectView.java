@@ -1,7 +1,7 @@
 package view;
 
 import entities.ProjectInterface;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 
 import javax.swing.*;

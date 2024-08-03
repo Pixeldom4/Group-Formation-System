@@ -5,16 +5,14 @@ import usecase.deleteproject.DeleteProjectController;
 import usecase.editproject.EditProjectController;
 import usecase.getapplications.GetApplicationsController;
 import usecase.rejectapplication.RejectApplicationController;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import view.services.playvoice.PlayVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;

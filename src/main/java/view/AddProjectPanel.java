@@ -5,10 +5,10 @@ import usecase.createproject.CreateProjectController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import view.components.NumericTextField;
 import view.components.TagPanel;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import view.services.playvoice.PlayVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 

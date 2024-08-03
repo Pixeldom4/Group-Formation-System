@@ -1,6 +1,6 @@
 package usecase.createapplication;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserProjectsRepository;
 import viewmodel.SearchPanelViewModel;

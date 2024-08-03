@@ -9,10 +9,10 @@ import usecase.searchprojectbyid.SearchProjectByIdController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import view.services.SafeCastCollectionService;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import view.services.playvoice.PlayVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import viewmodel.SearchPanelViewModel;
 import viewmodel.ViewManagerModel;
 

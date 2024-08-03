@@ -3,7 +3,7 @@ package usecase.searchforproject;
 import entities.ProjectInterface;
 import api.embeddingapi.EmbeddingAPIInterface;
 import api.embeddingapi.OpenAPIDataEmbed;
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 
 import java.util.*;

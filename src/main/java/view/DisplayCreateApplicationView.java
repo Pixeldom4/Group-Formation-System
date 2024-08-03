@@ -1,7 +1,7 @@
 package view;
 
 import usecase.createapplication.CreateApplicationController;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 
 import javax.swing.*;

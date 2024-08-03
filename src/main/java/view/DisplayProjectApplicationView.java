@@ -6,10 +6,10 @@ import usecase.getapplications.GetApplicationsController;
 import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
-import view.services.hovervoice.HoverVoiceServiceConfig;
+import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import view.services.playvoice.PlayVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 import javax.swing.*;

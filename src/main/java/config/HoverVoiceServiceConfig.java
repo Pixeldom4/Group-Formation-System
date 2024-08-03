@@ -1,4 +1,7 @@
-package view.services.hovervoice;
+package config;
+
+import view.services.hovervoice.HoverVoiceService;
+import view.services.hovervoice.IHoverVoiceService;
 
 public class HoverVoiceServiceConfig {
     private HoverVoiceServiceConfig() {
