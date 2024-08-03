@@ -5,6 +5,8 @@ import usecase.loginuser.LoginUserController;
 import view.services.hovervoice.HoverVoiceService;
 import view.services.hovervoice.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import view.services.playvoice.PlayVoiceServiceConfig;
 import viewmodel.LoginPanelViewModel;
 import viewmodel.LoginVerificationViewModel;
 import viewmodel.ViewManagerModel;
@@ -35,6 +37,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     private final JButton loginButton = new JButton("Login");
 
     private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a LoginPanel.
@@ -57,6 +60,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         this.createVerificationController = createVerificationController;
 
         hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -93,11 +97,14 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 login();
-                JOptionPane.showMessageDialog(this, "Login successful as " + loginPanelViewModel.getLoginName());
+                String message = "Login successful as " + loginPanelViewModel.getLoginName();
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(this, message);
                 emailField.setText("");
                 passwordField.setText("");
             }
             else {
+                playVoiceService.playVoice("Login failed, " + loginPanelViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(this, loginPanelViewModel.getErrorMessage());
                 passwordField.setText("");
             }

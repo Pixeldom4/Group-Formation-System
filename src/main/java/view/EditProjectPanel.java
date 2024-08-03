@@ -6,6 +6,10 @@ import usecase.editproject.EditProjectController;
 import usecase.editproject.EditProjectInputData;
 import usecase.getapplications.GetApplicationsController;
 import usecase.rejectapplication.RejectApplicationController;
+import view.services.hovervoice.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import view.services.playvoice.PlayVoiceServiceConfig;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
@@ -40,6 +44,9 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
     private int projectId;
     private int editorId;
 
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
+
     /**
      * Constructs an EditProjectPanel.
      *
@@ -68,6 +75,9 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         this.acceptApplicationController = acceptApplicationController;
         this.rejectApplicationController = rejectApplicationController;
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         titleField = new JTextField();
@@ -78,6 +88,15 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         viewApplicationButton = new JButton("View Applications");
         deleteButton = new JButton("Delete");
         refreshButton = new JButton("Refresh");
+
+        hoverVoiceService.addHoverVoice(titleField, "Enter new project title here");
+        hoverVoiceService.addHoverVoice(budgetField, "Enter new project budget here");
+        hoverVoiceService.addHoverVoice(descriptionField, "Enter new project description here");
+        hoverVoiceService.addHoverVoice(tagsField, "Enter new project tags here");
+        hoverVoiceService.addHoverVoice(saveButton, "Press to save project");
+        hoverVoiceService.addHoverVoice(viewApplicationButton, "Press to view applications");
+        hoverVoiceService.addHoverVoice(deleteButton, "Press to delete project");
+        hoverVoiceService.addHoverVoice(refreshButton, "Press to refresh project");
 
         add(new JLabel("Project Title:"));
         add(titleField);
@@ -184,8 +203,10 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
             refreshProject();
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
+                playVoiceService.playVoice("Project updated successfully!");
                 JOptionPane.showMessageDialog(null, "Project updated successfully!");
             } else {
+                playVoiceService.playVoice("Failed to update project: " + editProjectViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null, "Failed to update project: " + editProjectViewModel.getErrorMessage());
             }
         }

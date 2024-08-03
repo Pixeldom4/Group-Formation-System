@@ -6,6 +6,10 @@ import usecase.getapplications.GetApplicationsController;
 import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import view.services.hovervoice.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import view.services.playvoice.PlayVoiceServiceConfig;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 import javax.swing.*;
@@ -22,6 +26,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A view for displaying and managing project applications.
@@ -42,6 +48,9 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
     private final GetApplicationsController getApplicationsController;
     private final AcceptApplicationController acceptApplicationController;
     private final RejectApplicationController rejectApplicationController;
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a DisplayProjectApplicationView.
@@ -66,6 +75,9 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         this.acceptApplicationController = acceptApplicationController;
 
         this.rejectApplicationController = rejectApplicationController;
+
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
 
         setTitle("Project Applications");
         setSize(400, 600);
@@ -92,6 +104,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         ArrayList<ButtonAction> declineButtonActions = new ArrayList<>();
 
         Object[][] info = new Object[applicationsData.length][4];
+        Map<Point, String> buttonSpeechMap = new HashMap<>();
 
         DisplayProjectApplicationView temp = this;
         for (int i = 0; i < applicationsData.length; i++) {
@@ -99,7 +112,14 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             info[i][1] = "view";
             info[i][2] = "Accept";
             info[i][3] = "Decline";
+
+            buttonSpeechMap.put(new Point(i, 0), "Application info: " + applicationsData[i][0]);
+            buttonSpeechMap.put(new Point(i, 1), "Press to download application");
+            buttonSpeechMap.put(new Point(i, 2), "Press to accept application");
+            buttonSpeechMap.put(new Point(i, 3), "Press to decline application");
+
             int finalI = i;
+
             viewButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
@@ -129,12 +149,14 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                     }
                 }
             });
+
             acceptButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
                     acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
                 }
             });
+
             declineButtonActions.add(new ButtonAction() {
                 @Override
                 public void onClick() {
@@ -166,6 +188,10 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
         }
 
+        hoverVoiceService.addTableHoverVoice(infoTable, buttonSpeechMap);
+
+        add(infoTable);
+
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
 
@@ -182,7 +208,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         // Project Tags
         detailsPanel.add(new JLabel("Tags:"  ));
 
-        add(infoTable);
         this.setVisible(true);
     }
 
@@ -214,10 +239,13 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 String acceptedName = displayProjectApplicationViewModel.getSenderName();
-                JOptionPane.showMessageDialog(null, "Accepted application for: " + acceptedName);
+                String message = "Accepted application for: " + acceptedName;
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(null, message);
                 getApplicationsController.getApplicationsForProject(projectId);
             }
             else {
+                playVoiceService.playVoice("Failed to accept application: " + displayProjectApplicationViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null,
                         displayProjectApplicationViewModel.getErrorMessage());
             }
@@ -227,10 +255,13 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 String acceptedName = displayProjectApplicationViewModel.getSenderName();
-                JOptionPane.showMessageDialog(null, "Rejected application for: " + acceptedName);
+                String message = "Rejected application for: " + acceptedName;
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(null, message);
                 getApplicationsController.getApplicationsForProject(projectId);
             }
             else {
+                playVoiceService.playVoice("Failed to reject application: " + displayProjectApplicationViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null,
                         displayProjectApplicationViewModel.getErrorMessage());
             }

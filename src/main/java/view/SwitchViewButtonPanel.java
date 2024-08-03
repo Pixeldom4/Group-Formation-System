@@ -1,6 +1,10 @@
 package view;
 
 import usecase.logout.LogoutController;
+import view.services.hovervoice.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import view.services.playvoice.PlayVoiceServiceConfig;
 import viewmodel.SwitchViewButtonPanelViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -10,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 /**
  * A panel that contains buttons for switching views in the application.
@@ -31,6 +34,9 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
 
     private final JButton logoutButton = new JButton("Logout");
 
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
+
     /**
      * Constructs a SwitchViewButtonPanel.
      *
@@ -44,6 +50,9 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
         this.logoutController = logoutController;
         this.switchViewButtonPanelViewModel = switchViewButtonPanelViewModel;
         switchViewButtonPanelViewModel.addPropertyChangeListener(this);
+
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
 
         this.viewManagerModel = viewManagerModel;
         viewManagerModel.addPropertyChangeListener(this);
@@ -83,6 +92,14 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
         logoutButton.addActionListener(e -> {
             logoutController.logout();
         });
+
+        hoverVoiceService.addHoverVoice(createUserButton, "Press to go to create user view");
+        hoverVoiceService.addHoverVoice(loginUserButton, "Press to go to login view");
+        hoverVoiceService.addHoverVoice(addProjectButton, "Press to go to add project view");
+        hoverVoiceService.addHoverVoice(searchProjectButton, "Press to go to search project view");
+        hoverVoiceService.addHoverVoice(getProjectsButton, "Press to go to my projects view");
+        hoverVoiceService.addHoverVoice(editUserProfileButton, "Press to go to edit profile view");
+        hoverVoiceService.addHoverVoice(logoutButton, "Press to logout");
 
         this.add(createUserButton);
         this.add(loginUserButton);
@@ -130,9 +147,11 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
                 viewManagerModel.logout();
                 viewManagerModel.setActiveView("LoginView");
                 viewManagerModel.firePropertyChanged();
+                playVoiceService.playVoice("Logged out successfully");
                 JOptionPane.showMessageDialog(this, "Logged out successfully");
             }
             else {
+                playVoiceService.playVoice("Failed to logout");
                 JOptionPane.showMessageDialog(this, "Failed to logout");
             }
         }

@@ -1,6 +1,8 @@
 package view;
 
 import usecase.createapplication.CreateApplicationController;
+import view.services.hovervoice.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +26,8 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
     private final JButton applicationButton = new JButton("Upload file");
     private final JButton submitButton = new JButton("Submit");
 
+    private final IHoverVoiceService hoverVoiceService;
+
     /**
      * Constructs a DisplayCreateApplicationView.
      *
@@ -40,6 +44,10 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2));
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+
+        hoverVoiceService.addHoverVoice(infoField, "Enter info here");
+
         panel.add(infoLabel);
         panel.add(infoField);
         panel.add(applicationLabel);
@@ -54,8 +62,10 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
                 System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             }
         });
+        hoverVoiceService.addHoverVoice(applicationButton, "Press to upload file");
         panel.add(applicationButton);
 
+        hoverVoiceService.addHoverVoice(submitButton, "Press to submit application");
         submitButton.addActionListener(e -> {
             String infoText = infoLabel.getText();
             try {
@@ -66,7 +76,6 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
                 createApplicationController.createApplication(loginUserId, projectId, infoText, new ByteArrayInputStream(new byte[0]));
             }
 
-            System.out.println();
         });
 
         panel.add(new JLabel());
