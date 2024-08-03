@@ -1,10 +1,14 @@
 package viewmodel;
 
+import config.SpecialSettingConfig;
 import usecase.createverification.CreateVerificationViewModel;
 
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.apache.commons.math3.distribution.*;
 
 
@@ -20,6 +24,10 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
     private final double mean = 1345;
     private final double std = 321;
     private final NormalDistribution timeDistribution = new NormalDistribution(mean, std);
+
+    private final boolean challengeVerify = SpecialSettingConfig.challengeVerificationSetting();
+    private Timer timer;
+    private TimerTask timerTask;
 
     public LoginVerificationViewModel() {
         super("VerificationView");
@@ -38,11 +46,30 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
         if (!started) {
             this.startTime = System.currentTimeMillis();
             this.started = true;
+
+            if (challengeVerify) {
+                timer = new Timer();
+                timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        int dist = (sliderAngle + imageAngle) % 360;
+                        dist = Math.min(dist, 360 - dist);
+                        imageAngle += (180 - dist) / 30;
+                        support.firePropertyChange("imageAngle", null, sliderAngle + imageAngle);
+                    }
+                };
+                timer.schedule(timerTask, 0, 40);
+            }
         }
+
     }
 
     public void displayThenVerify() {
         long currTime = System.currentTimeMillis();
+        if (challengeVerify && timer != null) {
+            timer.cancel();
+            timerTask.cancel();
+        }
         Thread t = new Thread(() -> {
             support.firePropertyChange("displayTime", null, currTime - startTime);
             try {

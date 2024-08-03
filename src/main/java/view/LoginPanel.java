@@ -131,7 +131,9 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
                 System.err.println("Verification window thread interrupted");
             }
             loginVerificationView.dispose();
-            loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
+            if (success) {
+                loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
+            }
         });
         t.start();
     }
