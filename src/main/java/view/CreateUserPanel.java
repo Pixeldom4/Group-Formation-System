@@ -1,6 +1,7 @@
 package view;
 
 import usecase.createuser.CreateUserController;
+import usecase.manageusers.ManageUsersController;
 import view.components.NumericTextField;
 import viewmodel.CreateUserPanelViewModel;
 
@@ -17,7 +18,7 @@ import java.util.HashSet;
  */
 public class CreateUserPanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final CreateUserPanelViewModel createUserPanelViewModel;
-    private final CreateUserController createUserController;
+    private final ManageUsersController createUserController;
 
     private final JPanel createUserInfo = new JPanel();
     private final JLabel firstNameLabel = new JLabel("First Name: ");
@@ -38,7 +39,7 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
      * @param createUserPanelViewModel the view model for the create user panel
      * @param createUserController the controller for creating users
      */
-    public CreateUserPanel(CreateUserPanelViewModel createUserPanelViewModel, CreateUserController createUserController) {
+    public CreateUserPanel(CreateUserPanelViewModel createUserPanelViewModel, ManageUsersController createUserController) {
         this.createUserPanelViewModel = createUserPanelViewModel;
         createUserPanelViewModel.addPropertyChangeListener(this);
         this.createUserController = createUserController;

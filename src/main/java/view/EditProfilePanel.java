@@ -3,6 +3,7 @@ package view;
 import entities.User;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.ManageUsersController;
 import viewmodel.EditProfileViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -20,7 +21,7 @@ import java.util.HashSet;
  * A panel for editing the user's profile.
  */
 public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
-    private final EditUserController editUserController;
+    private final ManageUsersController editUserController;
     private final ViewManagerModel viewManagerModel;
     private final GetLoggedInUserController getLoggedInUserController;
     private final EditProfileViewModel editProfileViewModel;
@@ -57,7 +58,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
      * @param getLoggedInUserController the controller for getting the logged-in user
      * @param editProfileViewModel the view model for editing the profile
      */
-    public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
+    public EditProfilePanel(ViewManagerModel viewManagerModel, ManageUsersController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
         this.editProfileViewModel = editProfileViewModel;

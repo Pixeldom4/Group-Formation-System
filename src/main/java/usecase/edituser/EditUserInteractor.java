@@ -19,7 +19,7 @@ public class EditUserInteractor implements EditUserInputBoundary {
      * @param editUserPresenter The presenter for the edit user use case.
      * @param userRepository    The repository for user data.
      */
-    EditUserInteractor(EditUserOutputBoundary editUserPresenter, IUserRepository userRepository) {
+    public EditUserInteractor(EditUserOutputBoundary editUserPresenter, IUserRepository userRepository) {
         this.editUserPresenter = editUserPresenter;
         this.userRepository = userRepository;
     }

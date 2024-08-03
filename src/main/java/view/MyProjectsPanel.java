@@ -1,9 +1,9 @@
 package view;
 
-import usecase.getapplications.GetApplicationsController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.ProjectData;
+import usecase.manageprojects.ManageProjectsController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.EditProjectPanelViewModel;
@@ -25,7 +25,7 @@ import java.util.HashSet;
  */
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final GetProjectsController getProjectsController;
+    private final ManageProjectsController getProjectsController;
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
     private final EditProjectPanelViewModel editProjectPanelViewModel;
@@ -49,7 +49,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
-                           GetProjectsController getProjectsController,
+                           ManageProjectsController getProjectsController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
                            EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;

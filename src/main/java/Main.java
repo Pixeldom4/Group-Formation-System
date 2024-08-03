@@ -26,6 +26,10 @@ import usecase.logout.LogoutController;
 import usecase.logout.LogoutUseCaseFactory;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageapplications.ManageApplicationsUseCaseFactory;
+import usecase.manageprojects.ManageProjectsController;
+import usecase.manageprojects.ManageProjectsUseCaseFactory;
+import usecase.manageusers.ManageUsersController;
+import usecase.manageusers.ManageUsersUseCaseFactory;
 import usecase.rejectapplication.RejectApplicationController;
 import usecase.rejectapplication.RejectApplicationUseCaseFactory;
 import usecase.searchforproject.SearchProjectController;
@@ -53,10 +57,14 @@ class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
-        // Create User Panel
+        // Manage Users
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
+        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
+        ManageUsersController manageUsersUseCaseFactory = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel);
+
+        // Create User Panel
         CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
-        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, createUserController);
+        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, manageUsersUseCaseFactory);
 
         // Login Panel
         LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
@@ -70,14 +78,19 @@ class Main {
         CreateApplicationController createApplicationController = CreateApplicationUseCaseFactory.createController(searchPanelViewModel);
         SearchPanel searchPanel = new SearchPanel(viewManagerModel,searchPanelViewModel, searchProjectController, searchPanelGetLoggedInUserController, createApplicationController);
 
-        // Add Project Panel
+
+        // Manage Projects
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
+        EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
+        MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
+        ManageProjectsController manageProjectsController = ManageProjectsUseCaseFactory.createController(addProjectPanelModel, editProjectPanelViewModel, myProjectsViewModel);
+
+        // Add Project Panel
         CreateProjectController createProjectController = CreateProjectUseCaseFactory.createController(addProjectPanelModel);
         GetLoggedInUserController addProjectGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(addProjectPanelModel);
-        AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, createProjectController, addProjectGetLoggedInUserController);
+        AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, manageProjectsController, addProjectGetLoggedInUserController);
 
         // My Projects Panel
-        MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         GetLoggedInUserController getLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProjectsViewModel);
         GetProjectsController getProjectsController = GetProjectsUseCaseFactory.createGetProjectsController(myProjectsViewModel);
         DeleteProjectController deleteProjectController = DeleteProjectUseCaseFactory.createDeleteProjectController(myProjectsViewModel);
@@ -85,18 +98,13 @@ class Main {
         // Display Project Application View
         DisplayProjectApplicationViewModel displayProjectApplicationViewModel = new DisplayProjectApplicationViewModel();
         ManageApplicationsController manageApplicationsController = ManageApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
-//        GetApplicationsController getApplicationsController = GetApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
-//        AcceptApplicationController acceptApplicationController = AcceptApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
-//        RejectApplicationController rejectApplicationController = RejectApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
-
         // Edit Project Panel
-        EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
         EditProjectController editProjectController = EditProjectUseCaseFactory.createController(editProjectPanelViewModel);
         EditProjectPanel editProjectPanel = new EditProjectPanel(
                 editProjectPanelViewModel,
                 editProjectController,
                 manageApplicationsController,
-                deleteProjectController,
+                manageProjectsController,
                 displayProjectApplicationViewModel
         );
 
@@ -104,19 +112,18 @@ class Main {
                 myProjectsViewModel,
                 viewManagerModel,
                 getLoggedInUserController,
-                getProjectsController,
+                manageProjectsController,
                 editProjectPanelViewModel,
                 editProjectPanel);
 
         // Edit Profile Panel
-        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
 
 
         EditProfilePanel editProfilePanel = new EditProfilePanel(
                 viewManagerModel,
-                editUserController,
+                manageUsersUseCaseFactory,
                 myProfileGetLoggedInUserController,
                 editProfileViewModel
         );

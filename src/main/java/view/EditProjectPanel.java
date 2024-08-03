@@ -1,17 +1,13 @@
 package view;
 
-import usecase.acceptapplication.AcceptApplicationController;
 import usecase.deleteproject.DeleteProjectController;
 import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInputData;
-import usecase.getapplications.GetApplicationsController;
 import usecase.manageapplications.ManageApplicationsController;
-import usecase.rejectapplication.RejectApplicationController;
+import usecase.manageprojects.ManageProjectsController;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -26,7 +22,7 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
     private final EditProjectPanelViewModel editProjectViewModel;
     private final EditProjectController editProjectController;
     private final ManageApplicationsController manageApplicationsController;
-    private final DeleteProjectController deleteProjectController;
+    private final ManageProjectsController deleteProjectController;
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
     private JTextField titleField;
     private JTextField budgetField;
@@ -52,7 +48,7 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
             EditProjectPanelViewModel editProjectViewModel,
             EditProjectController editProjectController,
             ManageApplicationsController manageApplicationsController,
-            DeleteProjectController deleteProjectController,
+            ManageProjectsController deleteProjectController,
             DisplayProjectApplicationViewModel displayProjectApplicationViewModel) {
         this.editProjectViewModel = editProjectViewModel;
         this.editProjectViewModel.addPropertyChangeListener(this);

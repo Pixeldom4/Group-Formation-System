@@ -3,6 +3,7 @@ package view;
 import entities.User;
 import usecase.createproject.CreateProjectController;
 import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.ManageProjectsController;
 import view.components.NumericTextField;
 import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -22,7 +23,7 @@ import java.util.HashSet;
 public class AddProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final AddProjectPanelViewModel addProjectPanelViewModel;
-    private final CreateProjectController createProjectController;
+    private final ManageProjectsController createProjectController;
     private final GetLoggedInUserController getLoggedInUserController;
     private final ViewManagerModel viewManagerModel;
 
@@ -57,7 +58,7 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
      */
     public AddProjectPanel(ViewManagerModel viewManagerModel,
                            AddProjectPanelViewModel addProjectPanelViewModel,
-                           CreateProjectController createProjectController,
+                           ManageProjectsController createProjectController,
                            GetLoggedInUserController getLoggedInUserController) {
         this.viewManagerModel = viewManagerModel;
         viewManagerModel.addPropertyChangeListener(this);
