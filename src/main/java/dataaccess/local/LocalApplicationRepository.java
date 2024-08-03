@@ -70,7 +70,7 @@ public class LocalApplicationRepository implements IApplicationRepository {
             }
         }
         Application application = new Application(senderUserId, projectId, text, pdfBytes);
-        applications.putIfAbsent(projectId, new ArrayList<ApplicationInterface>());
+        applications.putIfAbsent(projectId, new ArrayList<>());
         applications.get(projectId).add(application);
         saveToCSV();
         return application;
@@ -208,17 +208,16 @@ public class LocalApplicationRepository implements IApplicationRepository {
         try {
             reader.readNext();
             while ((line = reader.readNext()) != null) {
-                String[] row = line;
-                int senderUserId = Integer.parseInt(row[0]);
-                int projectId = Integer.parseInt(row[1]);
-                String text = row[2];
-                Byte[] readBytes = Arrays.stream(row[3].replace("[", "").replace("]", "").split(",")).map(Byte::valueOf).toArray(Byte[]::new);
+                int senderUserId = Integer.parseInt(line[0]);
+                int projectId = Integer.parseInt(line[1]);
+                String text = line[2];
+                Byte[] readBytes = Arrays.stream(line[3].replace("[", "").replace("]", "").split(",")).map(Byte::valueOf).toArray(Byte[]::new);
                 byte[] pdfBytes = new byte[readBytes.length];
                 for (int i = 0 ; i < readBytes.length; i++) {
-                    pdfBytes[i] = (byte) readBytes[i];
-                };
+                    pdfBytes[i] = readBytes[i];
+                }
                 ApplicationInterface application = new Application(senderUserId, projectId, text, pdfBytes);
-                applications.put(projectId, new ArrayList<ApplicationInterface>());
+                applications.put(projectId, new ArrayList<>());
                 applications.get(projectId).add(application);
             }
         } catch (IOException | CsvValidationException e) {

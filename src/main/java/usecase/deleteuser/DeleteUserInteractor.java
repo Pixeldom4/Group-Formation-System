@@ -19,7 +19,7 @@ public class DeleteUserInteractor implements DeleteUserInputBoundary {
     public DeleteUserInteractor(IUserRepository userRepository, DeleteUserPresenter deleteUserPresenter) {
         this.userRepository = userRepository;
         this.deleteUserPresenter = deleteUserPresenter;
-    };
+    }
 
     /**
      * Deletes a user with the provided input data.

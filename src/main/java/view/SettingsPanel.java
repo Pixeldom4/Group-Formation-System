@@ -26,12 +26,8 @@ public class SettingsPanel extends JPanel {
         hoverVoiceCheckBox = new JCheckBox("Enable Hover Voice", true);
         reverseVoiceCheckBox = new JCheckBox("Enable Reverse Voice", false);
 
-        hoverVoiceCheckBox.addItemListener(e -> {
-            TextToSpeechService.setEnablePlayback(e.getStateChange() == ItemEvent.SELECTED);
-        });
-        reverseVoiceCheckBox.addItemListener(e -> {
-            SpecialSettingConfig.setUseReverseVoice(e.getStateChange() == ItemEvent.SELECTED);
-        });
+        hoverVoiceCheckBox.addItemListener(e -> TextToSpeechService.setEnablePlayback(e.getStateChange() == ItemEvent.SELECTED));
+        reverseVoiceCheckBox.addItemListener(e -> SpecialSettingConfig.setUseReverseVoice(e.getStateChange() == ItemEvent.SELECTED));
 
 
         add(hoverVoiceCheckBox);

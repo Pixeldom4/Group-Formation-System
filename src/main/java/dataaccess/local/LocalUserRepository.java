@@ -24,8 +24,8 @@ import java.util.HashSet;
 public class LocalUserRepository implements IUserRepository {
     private final String FILE_PATH;
     private final String[] header = {"userID", "userEmail", "userFirstName", "userLastName", "userTags", "userDesiredCompensation", "userPassword"};
-    private final HashMap<Integer, UserInterface> users = new HashMap<Integer, UserInterface>();
-    private final HashMap<Integer, String> userPasswords = new HashMap<Integer, String>();
+    private final HashMap<Integer, UserInterface> users = new HashMap<>();
+    private final HashMap<Integer, String> userPasswords = new HashMap<>();
     private int maxId = 0;
 
     /**
@@ -67,12 +67,12 @@ public class LocalUserRepository implements IUserRepository {
      */
     @Override
     public User createUser(String email, String firstName, String lastName, HashSet<String> tags, double desiredCompensation, String password) {
-        UserInterface user = new User(maxId + 1, firstName, lastName, email, tags, desiredCompensation);
+        User user = new User(maxId + 1, firstName, lastName, email, tags, desiredCompensation);
         users.put(user.getUserId(), user);
         userPasswords.put(user.getUserId(), password);
         saveToCSV();
         maxId++;
-        return (User) user;
+        return user;
     }
 
     /**

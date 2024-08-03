@@ -74,7 +74,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);
 
-        loginButton.addActionListener(e -> createVerificationController.createVerification());
+        loginButton.addActionListener(_ -> createVerificationController.createVerification());
 
         hoverVoiceService.addHoverVoice(loginButton, "Press to login");
 

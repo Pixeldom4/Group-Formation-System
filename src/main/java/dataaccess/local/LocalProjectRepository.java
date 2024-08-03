@@ -25,8 +25,8 @@ public class LocalProjectRepository implements IProjectRepository {
     private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags", "projectOwner"};
-    private HashMap<Integer, ProjectInterface> projects = new HashMap<Integer, ProjectInterface>();
-    private HashMap<Integer, Integer> projectOwners = new HashMap<Integer, Integer>();
+    private final HashMap<Integer, ProjectInterface> projects = new HashMap<>();
+    private final HashMap<Integer, Integer> projectOwners = new HashMap<>();
     private int maxId = 0;
 
     /**
