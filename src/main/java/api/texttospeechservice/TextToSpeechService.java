@@ -102,4 +102,14 @@ public class TextToSpeechService {
         return audioConversionManager.convertTextToAudioClip(audioData);
     }
 
+    /**
+     * Converts the given audio data to a Clip object in reverse.
+     * Used for reverse voice setting.
+     * @param audioData the audio data to convert
+     * @return the Clip object
+     */
+    public static Clip convertToReverseClip(byte[] audioData) {
+        return audioConversionManager.convertTextReverseClip(audioData);
+    }
+
 }
