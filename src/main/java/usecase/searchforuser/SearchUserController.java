@@ -24,4 +24,13 @@ public class SearchUserController {
     public void searchUserByEmail(String email) {
         interactor.searchUserByEmail(email);
     }
+
+    /**
+     * Gets the interactor.
+     *
+     * @return The interactor cast to SearchUserInteractor.
+     */
+    public SearchUserInteractor getInteractor() {
+        return (SearchUserInteractor)this.interactor;
+    }
 }
