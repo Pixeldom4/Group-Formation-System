@@ -78,7 +78,7 @@ public class TextToSpeechService {
      * @param clip the audio data to play
      */
     public static void playAudio(Clip clip) {
-        if (!enablePlayback) {
+        if (!enablePlayback || !initialized) {
             return;
         }
 
@@ -99,6 +99,10 @@ public class TextToSpeechService {
      * @return the Clip object
      */
     public static Clip convertToClip(byte[] audioData) {
+        if (!initialized) {
+            return null;
+        }
+
         return audioConversionManager.convertTextToAudioClip(audioData);
     }
 
@@ -109,6 +113,10 @@ public class TextToSpeechService {
      * @return the Clip object
      */
     public static Clip convertToReverseClip(byte[] audioData) {
+        if (!initialized) {
+            return null;
+        }
+
         return audioConversionManager.convertTextReverseClip(audioData);
     }
 
