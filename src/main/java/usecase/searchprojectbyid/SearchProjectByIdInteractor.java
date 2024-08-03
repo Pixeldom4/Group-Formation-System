@@ -42,4 +42,13 @@ public class SearchProjectByIdInteractor implements SearchProjectByIdInputBounda
         ProjectInterface project = projectDAO.searchProjectById(projectId);
         presenter.presentProject(project);
     }
+
+    /**
+     * Gets the presenter.
+     *
+     * @return The output boundary used by this interactor.
+     */
+    public SearchProjectByIdOutputBoundary getPresenter() {
+        return this.presenter;
+    }
 }
