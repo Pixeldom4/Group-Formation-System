@@ -1,11 +1,16 @@
 package usecase.rejectapplication;
 
+import dataaccess.DataAccessConfig;
+import dataaccess.IApplicationRepository;
+import dataaccess.IUserRepository;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 /**
  * Factory class for creating instances of the RejectApplication use case.
  */
 public class RejectApplicationUseCaseFactory {
+    private final static IApplicationRepository applicationRepository = DataAccessConfig.getApplicationRepository();
+    private final static IUserRepository userRepository = DataAccessConfig.getUserRepository();
 
     // Private constructor to prevent instantiation
     private RejectApplicationUseCaseFactory() {}
@@ -18,7 +23,7 @@ public class RejectApplicationUseCaseFactory {
      */
     public static RejectApplicationController createController(DisplayProjectApplicationViewModel displayProjectApplicationViewModel) {
         RejectApplicationOutputBoundary presenter = new RejectApplicationPresenter(displayProjectApplicationViewModel);
-        RejectApplicationInputBoundary interactor = new RejectApplicationInteractor(presenter);
+        RejectApplicationInputBoundary interactor = new RejectApplicationInteractor(presenter, applicationRepository, userRepository);
         return new RejectApplicationController(interactor);
     }
 }

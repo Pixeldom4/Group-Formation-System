@@ -52,7 +52,8 @@ public class AcceptApplicationInteractorTest {
         userRepository = new LocalUserRepository(SAVE_LOCATION);
         viewModel = mock(DisplayProjectApplicationViewModel.class);
         acceptApplicationPresenter = new AcceptApplicationPresenter(viewModel);
-        interactor = new TestInteractor(acceptApplicationPresenter, userRepository, applicationRepository, userProjectsRepository);
+        interactor = new AcceptApplicationInteractor(acceptApplicationPresenter, applicationRepository,
+                                                     userProjectsRepository, userRepository);
         controller = new AcceptApplicationController(interactor);
     }
 
@@ -95,14 +96,4 @@ public class AcceptApplicationInteractorTest {
         folder.delete();
     }
 
-    private static class TestInteractor extends AcceptApplicationInteractor {
-        public TestInteractor(AcceptApplicationOutputBoundary presenter, IUserRepository userRepository,
-                              IApplicationRepository applicationRepository, IUserProjectsRepository userProjectsRepository) {
-            super(presenter);
-            this.userRepository = userRepository;
-            this.applicationRepository = applicationRepository;
-            this.userProjectsRepository = userProjectsRepository;
-        }
-
-    }
 }

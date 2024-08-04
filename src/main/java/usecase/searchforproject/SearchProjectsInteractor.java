@@ -10,17 +10,8 @@ import java.util.ArrayList;
  * Implements the input boundary to handle project search logic.
  */
 public class SearchProjectsInteractor implements SearchProjectInputBoundary {
-    private ProjectSearchInterface projectDAO = new LocalProjectSearchObject();
+    private final ProjectSearchInterface projectDAO;
     private final SearchProjectOutputBoundary presenter;
-
-    /**
-     * Constructs a SearchProjectsInteractor with the specified presenter.
-     *
-     * @param presenter the output boundary.
-     */
-    public SearchProjectsInteractor(SearchProjectOutputBoundary presenter) {
-        this.presenter = presenter;
-    }
 
     /**
      * Creates a new SearchProjectsInteractor using the given project repository.

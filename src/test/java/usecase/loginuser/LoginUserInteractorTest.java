@@ -39,7 +39,7 @@ public class LoginUserInteractorTest {
         loginUserPresenter = mock(LoginUserPresenter.class);
         loginAuthenticator = new LoginAuthenticatorService(userRepository, passwordHasher);
         loginUserDetails = new LoginUserDetails();
-        loginUserInteractor = new LoginInteractorTestClass(userRepository, loginUserPresenter, loginAuthenticator, loginUserDetails);
+        loginUserInteractor = new LoginUserInteractor(userRepository, loginUserPresenter, loginAuthenticator, loginUserDetails);
         loginUserController = new LoginUserController(loginUserInteractor);
 
         String hashedPassword = passwordHasher.hashPassword("password");
@@ -62,13 +62,6 @@ public class LoginUserInteractorTest {
         assertEquals("first", userRepository.getUserById(userId).getFirstName());
         assertEquals("last", userRepository.getUserById(userId).getLastName());
         assertEquals(1234.5, userRepository.getUserById(userId).getDesiredCompensation());
-    }
-
-    private static class LoginInteractorTestClass extends LoginUserInteractor {
-        public LoginInteractorTestClass(IUserRepository userRepository, LoginUserOutputBoundary loginUserPresenter, LoginAuthenticator loginAuthenticator, ILoginUserDetails loginUserDetails) {
-            super(userRepository, loginUserPresenter, loginAuthenticator);
-            this.loginUserDetails = loginUserDetails;
-        }
     }
 }
 

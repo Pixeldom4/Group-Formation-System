@@ -44,7 +44,7 @@ public class RejectApplicationInteractorTest {
         userRepository = new LocalUserRepository(SAVE_LOCATION);
         viewModel = mock(DisplayProjectApplicationViewModel.class);
         rejectApplicationPresenter = new RejectApplicationPresenter(viewModel);
-        interactor = new TestInteractor(rejectApplicationPresenter, userRepository, applicationRepository);
+        interactor = new RejectApplicationInteractor(rejectApplicationPresenter, applicationRepository, userRepository);
         controller = new RejectApplicationController(interactor);
     }
 
@@ -85,13 +85,4 @@ public class RejectApplicationInteractorTest {
         folder.delete();
     }
 
-    private static class TestInteractor extends RejectApplicationInteractor {
-        public TestInteractor(RejectApplicationOutputBoundary presenter, IUserRepository userRepository,
-                              IApplicationRepository applicationRepository) {
-            super(presenter);
-            this.userRepository = userRepository;
-            this.applicationRepository = applicationRepository;
-        }
-
-    }
 }

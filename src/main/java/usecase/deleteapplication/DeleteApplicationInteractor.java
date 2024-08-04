@@ -15,9 +15,11 @@ public class DeleteApplicationInteractor implements DeleteApplicationInputBounda
      * Constructs a new DeleteApplicationInteractor instance.
      *
      * @param deleteApplicationPresenter the presenter to handle the output data
+     * @param applicationRepository      the repository to handle application data
      */
-    public DeleteApplicationInteractor(DeleteApplicationPresenter deleteApplicationPresenter) {
-        this.applicationRepository = DataAccessConfig.getApplicationRepository();
+    public DeleteApplicationInteractor(DeleteApplicationPresenter deleteApplicationPresenter,
+                                       IApplicationRepository applicationRepository) {
+        this.applicationRepository = applicationRepository;
         this.deleteApplicationPresenter = deleteApplicationPresenter;
     }
 

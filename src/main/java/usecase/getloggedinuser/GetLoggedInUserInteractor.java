@@ -30,15 +30,6 @@ public class GetLoggedInUserInteractor implements GetLoggedInUserInputBoundary {
     }
 
     /**
-     * Constructs a GetLoggedInUserInteractor with the specified presenter.
-     *
-     * @param getLoggedInUserPresenter the presenter to handle output.
-     */
-    public GetLoggedInUserInteractor(GetLoggedInUserOutputBoundary getLoggedInUserPresenter) {
-        this.getLoggedInUserPresenter = getLoggedInUserPresenter;
-    }
-
-    /**
      * Retrieves the logged-in user's information.
      */
     @Override

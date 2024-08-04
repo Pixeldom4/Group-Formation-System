@@ -9,19 +9,23 @@ import dataaccess.IUserRepository;
  * Implements the input boundary to handle application rejection logic.
  */
 public class RejectApplicationInteractor implements RejectApplicationInputBoundary {
-    protected IApplicationRepository applicationRepository;
-    protected IUserRepository userRepository;
+    private final IApplicationRepository applicationRepository;
+    private final IUserRepository userRepository;
     private final RejectApplicationOutputBoundary rejectApplicationPresenter;
 
     /**
      * Constructs a RejectApplicationInteractor with the specified presenter.
      *
      * @param rejectApplicationPresenter the presenter to handle output.
+     * @param applicationRepository      the application repository.
+     * @param userRepository              the user repository.
      */
-    public RejectApplicationInteractor(RejectApplicationOutputBoundary rejectApplicationPresenter) {
+    public RejectApplicationInteractor(RejectApplicationOutputBoundary rejectApplicationPresenter,
+                                       IApplicationRepository applicationRepository,
+                                       IUserRepository userRepository) {
         this.rejectApplicationPresenter = rejectApplicationPresenter;
-        this.applicationRepository = DataAccessConfig.getApplicationRepository();
-        this.userRepository = DataAccessConfig.getUserRepository();
+        this.applicationRepository = applicationRepository;
+        this.userRepository = userRepository;
     }
 
     /**
