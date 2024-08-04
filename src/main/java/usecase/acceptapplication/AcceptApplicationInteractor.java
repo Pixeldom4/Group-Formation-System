@@ -1,6 +1,5 @@
 package usecase.acceptapplication;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;

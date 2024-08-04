@@ -1,6 +1,5 @@
 package usecase.getapplications;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserRepository;
 import entities.Application;

@@ -1,6 +1,5 @@
 package usecase.rejectapplication;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserRepository;
 

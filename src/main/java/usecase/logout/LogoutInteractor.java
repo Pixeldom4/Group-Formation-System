@@ -1,6 +1,5 @@
 package usecase.logout;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 
 /**

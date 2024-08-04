@@ -13,8 +13,8 @@ import java.util.HashSet;
  */
 public class GetLoggedInUserInteractor implements GetLoggedInUserInputBoundary {
     private final GetLoggedInUserOutputBoundary getLoggedInUserPresenter;
-    private ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
-    private IUserRepository userRepository = DataAccessConfig.getUserRepository();
+    private final ILoginUserDetails loginUserDetails;
+    private final IUserRepository userRepository;
 
     /**
      * Constructs a GetLoggedInUserInteractor with the specified presenter, login user details, and user repository.

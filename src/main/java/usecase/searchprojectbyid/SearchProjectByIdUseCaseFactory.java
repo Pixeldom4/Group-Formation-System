@@ -2,7 +2,6 @@ package usecase.searchprojectbyid;
 
 import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
-import view.SearchPanel;
 import viewmodel.SearchPanelViewModel;
 
 /**

@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class LoginUserInteractorTest {
     private final static String SAVE_LOCATION = "local_data/test/usecase/loginuser/";
     private static IUserRepository userRepository;

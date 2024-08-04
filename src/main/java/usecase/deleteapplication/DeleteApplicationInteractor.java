@@ -1,6 +1,5 @@
 package usecase.deleteapplication;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 
 /**

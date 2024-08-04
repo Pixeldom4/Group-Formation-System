@@ -1,6 +1,5 @@
 package usecase.loginuser;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IUserRepository;
 import entities.User;

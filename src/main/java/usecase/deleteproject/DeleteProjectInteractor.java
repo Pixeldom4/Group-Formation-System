@@ -1,6 +1,5 @@
 package usecase.deleteproject;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
 
