@@ -1,6 +1,5 @@
 package usecase.getapplications;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserRepository;
 import entities.Application;
@@ -21,11 +20,15 @@ public class GetApplicationsInteractor implements GetApplicationsInputBoundary {
      * Constructs a GetApplicationsInteractor with the specified presenter.
      *
      * @param manageApplicationsPresenter the presenter to handle output.
+     * @param applicationRepository the repository to handle application data.
+     * @param userRepository the repository to handle user data.
      */
-    public GetApplicationsInteractor(GetApplicationsOutputBoundary manageApplicationsPresenter) {
+    public GetApplicationsInteractor(GetApplicationsOutputBoundary manageApplicationsPresenter,
+                                     IApplicationRepository applicationRepository,
+                                     IUserRepository userRepository) {
         this.manageApplicationsPresenter = manageApplicationsPresenter;
-        this.applicationRepository = DataAccessConfig.getApplicationRepository();
-        this.userRepository = DataAccessConfig.getUserRepository();
+        this.applicationRepository = applicationRepository;
+        this.userRepository = userRepository;
     }
 
     /**

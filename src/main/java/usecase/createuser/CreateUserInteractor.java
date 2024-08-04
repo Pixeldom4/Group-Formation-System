@@ -10,20 +10,9 @@ import usecase.PasswordHasher;
  * Implements the input boundary to handle user creation logic.
  */
 public class CreateUserInteractor implements CreateUserInputBoundary {
-    private IUserRepository userRepository = DataAccessConfig.getUserRepository();
+    private final IUserRepository userRepository;
     private final CreateUserOutputBoundary userPresenter;
     private final PasswordHasher passwordHasher;
-
-    /**
-     * Constructs a CreateUserInteractor with the specified presenter and password hasher.
-     *
-     * @param userPresenter  the presenter to handle output.
-     * @param passwordHasher the password hasher.
-     */
-    public CreateUserInteractor(CreateUserOutputBoundary userPresenter, PasswordHasher passwordHasher) {
-        this.userPresenter = userPresenter;
-        this.passwordHasher = passwordHasher;
-    }
 
     /**
      * Constructs a CreateUserInteractor with the specified user repository, presenter, and password hasher.

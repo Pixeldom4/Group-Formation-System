@@ -1,6 +1,5 @@
 package usecase.acceptapplication;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;
@@ -19,12 +18,18 @@ public class AcceptApplicationInteractor implements AcceptApplicationInputBounda
      * Constructs an AcceptApplicationInteractor object with the specified presenter.
      *
      * @param manageApplicationsPresenter the presenter to handle output.
+     * @param applicationRepository the repository to handle application data.
+     * @param userProjectsRepository the repository to handle user-project associations.
+     * @param userRepository the repository to handle user data.
      */
-    public AcceptApplicationInteractor(AcceptApplicationOutputBoundary manageApplicationsPresenter){
+    public AcceptApplicationInteractor(AcceptApplicationOutputBoundary manageApplicationsPresenter,
+                                       IApplicationRepository applicationRepository,
+                                       IUserProjectsRepository userProjectsRepository,
+                                       IUserRepository userRepository) {
         this.acceptApplicationPresenter = manageApplicationsPresenter;
-        this.applicationRepository = DataAccessConfig.getApplicationRepository();
-        this.userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
-        this.userRepository = DataAccessConfig.getUserRepository();
+        this.applicationRepository = applicationRepository;
+        this.userProjectsRepository = userProjectsRepository;
+        this.userRepository = userRepository;
     }
 
     /**

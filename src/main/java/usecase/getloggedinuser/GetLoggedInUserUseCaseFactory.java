@@ -1,9 +1,15 @@
 package usecase.getloggedinuser;
 
+import dataaccess.DataAccessConfig;
+import dataaccess.ILoginUserDetails;
+import dataaccess.IUserRepository;
+
 /**
  * Factory class for creating instances of the GetLoggedInUser use case.
  */
 public class GetLoggedInUserUseCaseFactory {
+    private static final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
+    private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
 
     // Private constructor to prevent instantiation
     private GetLoggedInUserUseCaseFactory() {
@@ -17,7 +23,7 @@ public class GetLoggedInUserUseCaseFactory {
      */
     public static GetLoggedInUserController create(LoggedInDataAccessViewModel loggedInDataAccessViewModel) {
         GetLoggedInUserOutputBoundary presenter = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
-        GetLoggedInUserInputBoundary interactor = new GetLoggedInUserInteractor(presenter);
+        GetLoggedInUserInputBoundary interactor = new GetLoggedInUserInteractor(presenter, loginUserDetails, userRepository);
         return new GetLoggedInUserController(interactor);
     }
 }

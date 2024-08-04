@@ -1,6 +1,5 @@
 package usecase.deleteproject;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
 
@@ -10,17 +9,22 @@ import dataaccess.IProjectRepository;
  */
 public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
     private final IProjectRepository projectRepository;
-    private final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
+    private final ILoginUserDetails loginUserDetails;
     private final DeleteProjectOutputBoundary deleteProjectPresenter;
 
     /**
      * Constructs a DeleteProjectInteractor with the specified presenter.
      *
      * @param deleteProjectPresenter the presenter to handle output.
+     * @param projectRepository the repository to handle project data.
+     * @param loginUserDetails the login user details.
      */
-    public DeleteProjectInteractor(DeleteProjectOutputBoundary deleteProjectPresenter) {
-        this.projectRepository = DataAccessConfig.getProjectRepository();
+    public DeleteProjectInteractor(DeleteProjectOutputBoundary deleteProjectPresenter,
+                                   IProjectRepository projectRepository,
+                                   ILoginUserDetails loginUserDetails) {
+        this.projectRepository = projectRepository;
         this.deleteProjectPresenter = deleteProjectPresenter;
+        this.loginUserDetails = loginUserDetails;
     }
 
     /**

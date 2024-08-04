@@ -1,7 +1,5 @@
 package usecase.getprojects;
 
-import dataaccess.DataAccessConfig;
-import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import entities.Project;
@@ -13,17 +11,23 @@ import java.util.HashSet;
  * Implements the input boundary to handle project retrieval logic.
  */
 public class GetProjectsInteractor implements GetProjectsInputBoundary {
-    private final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
-    private final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
+    private final IUserProjectsRepository userProjectsRepository;
+    private final IProjectRepository projectRepository;
     private final GetProjectsOutputBoundary getProjectsPresenter;
 
     /**
      * Constructs a GetProjectsInteractor with the specified presenter.
      *
      * @param getProjectsPresenter the presenter to handle output.
+     * @param userProjectsRepository the repository to handle user-project associations.
+     * @param projectRepository the repository to handle project data.
      */
-    public GetProjectsInteractor(GetProjectsOutputBoundary getProjectsPresenter) {
+    public GetProjectsInteractor(GetProjectsOutputBoundary getProjectsPresenter,
+                                 IUserProjectsRepository userProjectsRepository,
+                                 IProjectRepository projectRepository) {
         this.getProjectsPresenter = getProjectsPresenter;
+        this.userProjectsRepository = userProjectsRepository;
+        this.projectRepository = projectRepository;
     }
 
     /**

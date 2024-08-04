@@ -1,5 +1,7 @@
 package usecase.createuser;
 
+import dataaccess.DataAccessConfig;
+import dataaccess.IUserRepository;
 import usecase.BCryptPasswordHasher;
 import usecase.PasswordHasher;
 import viewmodel.CreateUserPanelViewModel;
@@ -8,6 +10,7 @@ import viewmodel.CreateUserPanelViewModel;
  * Factory class for creating instances of the CreateUser use case.
  */
 public class CreateUserUseCaseFactory {
+    private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
 
     // Private constructor to prevent instantiation
     private CreateUserUseCaseFactory() {}
@@ -21,7 +24,7 @@ public class CreateUserUseCaseFactory {
     public static CreateUserController create(CreateUserPanelViewModel createUserViewModel) {
         CreateUserPresenter presenter = new CreateUserPresenter(createUserViewModel);
         PasswordHasher passwordHasher = new BCryptPasswordHasher();
-        CreateUserInputBoundary interactor = new CreateUserInteractor(presenter, passwordHasher);
+        CreateUserInputBoundary interactor = new CreateUserInteractor(userRepository, presenter, passwordHasher);
         return new CreateUserController(interactor);
     }
 }

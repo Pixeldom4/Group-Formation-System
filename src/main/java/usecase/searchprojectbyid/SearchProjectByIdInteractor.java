@@ -8,17 +8,9 @@ import entities.ProjectInterface;
  * Implements the SearchProjectByIdInputBoundary interface to handle the input data.
  */
 public class SearchProjectByIdInteractor implements SearchProjectByIdInputBoundary {
-    private SearchProjectByIdInterface projectDAO = new LocalProjectSearchByIdObject();
-    private SearchProjectByIdOutputBoundary presenter;
+    private final SearchProjectByIdInterface projectDAO;
+    private final SearchProjectByIdOutputBoundary presenter;
 
-    /**
-     * Creates a new SearchProjectByIdInteractor using the given output boundary.
-     *
-     * @param presenter The output boundary.
-     */
-    public SearchProjectByIdInteractor(SearchProjectByIdOutputBoundary presenter) {
-        this.presenter = presenter;
-    }
 
     /**
      * Creates a new SearchProjectByIdInteractor using the given output boundary and project repository.
