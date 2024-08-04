@@ -95,4 +95,14 @@ public class LocalProjectDAOTest {
         assertEquals(10, projectRepository.getOwnerId(1));
     }
 
+    /**
+     * Test reading from the CSV file.
+     */
+    @Test
+    public void testReadFromCSV() {
+        IProjectRepository testRepository = new LocalProjectRepository(SAVE_LOCATION);
+        assertEquals("Test Project", testRepository.getProjectById(1).getProjectTitle());
+        assertEquals(10, testRepository.getOwnerId(1));
+    }
+
 }
