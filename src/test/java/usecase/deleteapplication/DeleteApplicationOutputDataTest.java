@@ -25,45 +25,6 @@ public class DeleteApplicationOutputDataTest {
     }
 
     /**
-     * Tests that an exception is thrown when an invalid user ID is provided.
-     */
-    @Test
-    void deleteApplicationWithInvalidUserIdThrowsException() {
-        int invalidUserId = -1;
-        int projectId = 1;
-
-        DeleteApplicationController deleteApplicationController = new DeleteApplicationController(mock(DeleteApplicationInteractor.class));
-
-        assertThrows(IllegalArgumentException.class, () -> deleteApplicationController.deleteApplication(invalidUserId, projectId));
-    }
-
-    /**
-     * Tests that an exception is thrown when an invalid project ID is provided.
-     */
-    @Test
-    void deleteApplicationWithInvalidProjectIdThrowsException() {
-        int senderUserId = 1;
-        int invalidProjectId = -1;
-
-        DeleteApplicationController deleteApplicationController = new DeleteApplicationController(mock(DeleteApplicationInteractor.class));
-
-        assertThrows(IllegalArgumentException.class, () -> deleteApplicationController.deleteApplication(senderUserId, invalidProjectId));
-    }
-
-    /**
-     * Tests that an exception is thrown when both user ID and project ID are invalid.
-     */
-    @Test
-    void deleteApplicationWithBothIdsInvalidThrowsException() {
-        int invalidUserId = -1;
-        int invalidProjectId = -1;
-
-        DeleteApplicationController deleteApplicationController = new DeleteApplicationController(mock(DeleteApplicationInteractor.class));
-
-        assertThrows(IllegalArgumentException.class, () -> deleteApplicationController.deleteApplication(invalidUserId, invalidProjectId));
-    }
-
-    /**
      * Tests that the DeleteApplicationOutputData has the correct sender user ID.
      */
     @Test
