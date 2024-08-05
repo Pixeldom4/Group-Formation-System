@@ -57,10 +57,12 @@ class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
+        SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
+
         // Manage Users
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
-        ManageUsersController manageUsersUseCaseFactory = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel);
+        ManageUsersController manageUsersUseCaseFactory = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel, searchPanelViewModel);
 
         // Create User Panel
         CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
@@ -72,7 +74,6 @@ class Main {
         LoginPanel loginPanel = new LoginPanel(viewManagerModel, loginPanelViewModel, loginUserController);
 
         // Search Project Panel
-        SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
         SearchProjectController searchProjectController = SearchProjectUseCaseFactory.createSearchProjectController(searchPanelViewModel);
         GetLoggedInUserController searchPanelGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(searchPanelViewModel);
         CreateApplicationController createApplicationController = CreateApplicationUseCaseFactory.createController(searchPanelViewModel);

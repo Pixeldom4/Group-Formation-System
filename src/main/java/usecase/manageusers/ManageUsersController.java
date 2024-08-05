@@ -14,23 +14,23 @@ import java.util.HashSet;
 
 public class ManageUsersController {
     private final CreateUserInputBoundary createUserInteractor;
-//    private final DeleteUserInputBoundary deleteUserInteractor;
+    private final DeleteUserInputBoundary deleteUserInteractor;
     private final EditUserInputBoundary editUserInteractor;
-//    private final GetLoggedInUserInputBoundary getLoggedInUserInteractor;
-//    private final GetUsersInputBoundary getUsersInteractor;
+    private final GetLoggedInUserInputBoundary getLoggedInUserInteractor;
+    private final GetUsersInputBoundary getUsersInteractor;
 
     public ManageUsersController(
             CreateUserInputBoundary createUserInteractor,
-//            DeleteUserInputBoundary deleteUserInteractor,
-            EditUserInputBoundary editUserInteractor
-//            GetLoggedInUserInputBoundary getLoggedInUserInteractor
-//            GetUsersInputBoundary getUsersInteractor
+            DeleteUserInputBoundary deleteUserInteractor,
+            EditUserInputBoundary editUserInteractor,
+            GetLoggedInUserInputBoundary getLoggedInUserInteractor,
+            GetUsersInputBoundary getUsersInteractor
     ) {
         this.createUserInteractor = createUserInteractor;
-//        this.deleteUserInteractor = deleteUserInteractor;
+        this.deleteUserInteractor = deleteUserInteractor;
         this.editUserInteractor = editUserInteractor;
-//        this.getLoggedInUserInteractor = getLoggedInUserInteractor;
-//        this.getUsersInteractor = getUsersInteractor;
+        this.getLoggedInUserInteractor = getLoggedInUserInteractor;
+        this.getUsersInteractor = getUsersInteractor;
     }
 
     /**
@@ -48,15 +48,15 @@ public class ManageUsersController {
         createUserInteractor.createUser(inputData);
     }
 
-//    /**
-//     * Deletes the user with the specific user ID.
-//     *
-//     * @param userId the ID of the user.
-//     */
-//    public void deleteUser(int userId) {
-//        DeleteUserInputData inputData = new DeleteUserInputData(userId);
-//        deleteUserInteractor.deleteUser(inputData);
-//    }
+    /**
+     * Deletes the user with the specific user ID.
+     *
+     * @param userId the ID of the user.
+     */
+    public void deleteUser(int userId) {
+        DeleteUserInputData inputData = new DeleteUserInputData(userId);
+        deleteUserInteractor.deleteUser(inputData);
+    }
 
 
     /**
@@ -75,21 +75,21 @@ public class ManageUsersController {
     }
 
 
-//    /**
-//     * Retrieves the logged-in user's information.
-//     */
-//    public void getLoggedInUser() {
-//        getLoggedInUserInteractor.getLoggedInUser();
-//    }
+    /**
+     * Retrieves the logged-in user's information.
+     */
+    public void getLoggedInUser() {
+        getLoggedInUserInteractor.getLoggedInUser();
+    }
 
 
-//    /**
-//     * Retrieves users based on the provided project ID.
-//     *
-//     * @param projectId the ID of the project.
-//     */
-//    public void getUsers(int projectId) {
-//        GetUsersInputData inputData = new GetUsersInputData(projectId);
-//        getUsersInteractor.getUsers(inputData);
-//    }
+    /**
+     * Retrieves users based on the provided project ID.
+     *
+     * @param projectId the ID of the project.
+     */
+    public void getUsers(int projectId) {
+        GetUsersInputData inputData = new GetUsersInputData(projectId);
+        getUsersInteractor.getUsers(inputData);
+    }
 }

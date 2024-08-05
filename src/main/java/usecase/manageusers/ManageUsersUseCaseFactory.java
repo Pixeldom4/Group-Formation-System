@@ -1,6 +1,8 @@
 package usecase.manageusers;
 
 import dataaccess.DataAccessConfig;
+import dataaccess.IProjectRepository;
+import dataaccess.IUserProjectsRepository;
 import dataaccess.IUserRepository;
 import org.apache.commons.lang3.NotImplementedException;
 import usecase.BCryptPasswordHasher;
@@ -9,37 +11,49 @@ import usecase.createuser.CreateUserController;
 import usecase.createuser.CreateUserInputBoundary;
 import usecase.createuser.CreateUserInteractor;
 import usecase.createuser.CreateUserPresenter;
-import usecase.deleteuser.DeleteUserController;
+import usecase.deleteuser.*;
 import usecase.edituser.*;
 import usecase.getloggedinuser.*;
+import usecase.getusers.GetUsersInputBoundary;
+import usecase.getusers.GetUsersInteractor;
+import usecase.getusers.GetUsersOutputBoundary;
+import usecase.getusers.GetUsersPresenter;
 import viewmodel.CreateUserPanelViewModel;
 import viewmodel.EditProfileViewModel;
 
 public class ManageUsersUseCaseFactory {
     private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
+    private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
+    private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
 
     // Private constructor to prevent instantiation
     private ManageUsersUseCaseFactory() {}
 
     public static ManageUsersController create(
             CreateUserPanelViewModel createUserViewModel,
-            EditProfileViewModel editProfileViewModel
-//            LoggedInDataAccessViewModel loggedInDataAccessViewModel
+            EditProfileViewModel editProfileViewModel,
+            LoggedInDataAccessViewModel loggedInDataAccessViewModel
             ){
         CreateUserPresenter createUserPresenter = new CreateUserPresenter(createUserViewModel);
         PasswordHasher passwordHasher = new BCryptPasswordHasher();
         CreateUserInputBoundary createUserInteractor = new CreateUserInteractor(createUserPresenter, passwordHasher);
 //        return new CreateUserController(interactor);
 
+        DeleteUserPresenter deleteUserPresenter = new DeleteUserPresenter();
+        DeleteUserInputBoundary deleteUserInteractor = new DeleteUserInteractor(userRepository, deleteUserPresenter);
+
         EditUserOutputBoundary editUserPresenter = new EditUserPresenter(editProfileViewModel);
         EditUserInputBoundary editUserInteractor = new EditUserInteractor(editUserPresenter, userRepository);
 //        return new EditUserController(editUserInteractor);
 
-//        GetLoggedInUserOutputBoundary getLoggedInUserPresenter = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
-//        GetLoggedInUserInputBoundary getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserPresenter);
+        GetLoggedInUserOutputBoundary getLoggedInUserPresenter = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
+        GetLoggedInUserInputBoundary getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserPresenter);
 //        return new GetLoggedInUserController(interactor);
 
-        return new ManageUsersController(createUserInteractor, editUserInteractor);
+        GetUsersOutputBoundary getUsersPresenter = new GetUsersPresenter();
+        GetUsersInputBoundary getUsersInteractor = new GetUsersInteractor(userProjectsRepository, userRepository, projectRepository, getUsersPresenter);
+
+        return new ManageUsersController(createUserInteractor, deleteUserInteractor, editUserInteractor, getLoggedInUserInteractor, getUsersInteractor);
     }
 
 //    /**
