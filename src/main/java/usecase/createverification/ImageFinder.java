@@ -20,7 +20,7 @@ public class ImageFinder implements ImageFinderInterface {
                 throw new IOException("No image files found in the folder");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return image;
     }
