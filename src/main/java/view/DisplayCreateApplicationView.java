@@ -1,6 +1,6 @@
 package view;
 
-import usecase.createapplication.CreateApplicationController;
+import usecase.manageapplications.createapplication.CreateApplicationController;
 
 import javax.swing.*;
 import java.awt.*;

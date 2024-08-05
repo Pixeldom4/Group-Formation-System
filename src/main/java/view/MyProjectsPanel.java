@@ -1,9 +1,8 @@
 package view;
 
-import usecase.getapplications.GetApplicationsController;
-import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.ProjectData;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.getprojects.ProjectData;
+import usecase.manageprojects.ManageProjectsController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.EditProjectPanelViewModel;
@@ -25,7 +24,7 @@ import java.util.HashSet;
  */
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final GetProjectsController getProjectsController;
+    private final ManageProjectsController getProjectsController;
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
     private final EditProjectPanelViewModel editProjectPanelViewModel;
@@ -43,15 +42,13 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
      * @param viewManagerModel the view manager model
      * @param getLoggedInUserController the controller for getting the logged-in user
      * @param getProjectsController the controller for getting projects
-     * @param getApplicationsController the controller for getting applications
      * @param editProjectPanelViewModel the view model for editing a project
      * @param editProjectPanel the panel for editing a project
      */
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
-                           GetProjectsController getProjectsController,
-                           GetApplicationsController getApplicationsController,
+                           ManageProjectsController getProjectsController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
                            EditProjectPanel editProjectPanel) {
         this.viewManagerModel = viewManagerModel;

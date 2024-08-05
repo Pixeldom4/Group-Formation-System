@@ -1,6 +1,8 @@
 package usecase.edituser;
 
 import org.junit.jupiter.api.Test;
+import usecase.manageusers.edituser.EditUserInputData;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashSet;
