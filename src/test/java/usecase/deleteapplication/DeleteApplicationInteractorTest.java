@@ -2,6 +2,9 @@ package usecase.deleteapplication;
 
 import dataaccess.IApplicationRepository;
 import org.junit.jupiter.api.Test;
+import usecase.manageapplications.deleteapplication.DeleteApplicationInputData;
+import usecase.manageapplications.deleteapplication.DeleteApplicationInteractor;
+import usecase.manageapplications.deleteapplication.DeleteApplicationPresenter;
 
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -16,8 +19,7 @@ public class DeleteApplicationInteractorTest {
 
         IApplicationRepository mockRepository = mock(IApplicationRepository.class);
         DeleteApplicationPresenter mockPresenter = mock(DeleteApplicationPresenter.class);
-        DeleteApplicationInteractor interactor = new DeleteApplicationInteractor(mockPresenter);
-        interactor.applicationRepository = mockRepository;
+        DeleteApplicationInteractor interactor = new DeleteApplicationInteractor(mockPresenter, mockRepository);
 
         DeleteApplicationInputData inputData = new DeleteApplicationInputData(senderUserId, projectId);
         interactor.deleteApplication(inputData);
@@ -32,8 +34,7 @@ public class DeleteApplicationInteractorTest {
 
         IApplicationRepository mockRepository = mock(IApplicationRepository.class);
         DeleteApplicationPresenter mockPresenter = mock(DeleteApplicationPresenter.class);
-        DeleteApplicationInteractor interactor = new DeleteApplicationInteractor(mockPresenter);
-        interactor.applicationRepository = mockRepository;
+        DeleteApplicationInteractor interactor = new DeleteApplicationInteractor(mockPresenter, mockRepository);
 
         DeleteApplicationInputData inputData = new DeleteApplicationInputData(senderUserId, projectId);
         interactor.deleteApplication(inputData);

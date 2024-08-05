@@ -1,5 +1,9 @@
 package usecase.manageapplications;
 
+import dataaccess.DataAccessConfig;
+import dataaccess.IApplicationRepository;
+import dataaccess.IUserProjectsRepository;
+import dataaccess.IUserRepository;
 import usecase.manageapplications.acceptapplication.AcceptApplicationInputBoundary;
 import usecase.manageapplications.acceptapplication.AcceptApplicationInteractor;
 import usecase.manageapplications.acceptapplication.AcceptApplicationOutputBoundary;
@@ -15,7 +19,9 @@ import usecase.manageapplications.rejectapplication.RejectApplicationPresenter;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 public class ManageApplicationsUseCaseFactory {
-
+    private static final IApplicationRepository applicationRepository = DataAccessConfig.getApplicationRepository();
+    private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
+    private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
 
 
     // Private constructor to prevent instantiation
@@ -23,13 +29,14 @@ public class ManageApplicationsUseCaseFactory {
 
     public static ManageApplicationsController createController(DisplayProjectApplicationViewModel displayProjectApplicationViewModel) {
         GetApplicationsOutputBoundary getApplicationsPresenter = new GetApplicationsPresenter(displayProjectApplicationViewModel);
-        GetApplicationsInputBoundary getApplicationsInteractor = new GetApplicationsInteractor(getApplicationsPresenter);
+        GetApplicationsInputBoundary getApplicationsInteractor = new GetApplicationsInteractor(getApplicationsPresenter, applicationRepository, userRepository);
 
         AcceptApplicationOutputBoundary acceptApplicationPresenter = new AcceptApplicationPresenter(displayProjectApplicationViewModel);
-        AcceptApplicationInputBoundary acceptApplicationsInteractor = new AcceptApplicationInteractor(acceptApplicationPresenter);
+        AcceptApplicationInputBoundary acceptApplicationsInteractor = new AcceptApplicationInteractor(acceptApplicationPresenter, applicationRepository,
+                                                                                                      userProjectsRepository, userRepository);
 
         RejectApplicationOutputBoundary rejectApplicationPresenter = new RejectApplicationPresenter(displayProjectApplicationViewModel);
-        RejectApplicationInputBoundary rejectApplicationsInteractor = new RejectApplicationInteractor(rejectApplicationPresenter);
+        RejectApplicationInputBoundary rejectApplicationsInteractor = new RejectApplicationInteractor(rejectApplicationPresenter, applicationRepository, userRepository);
 
         return new ManageApplicationsController(getApplicationsInteractor, acceptApplicationsInteractor, rejectApplicationsInteractor);
     }

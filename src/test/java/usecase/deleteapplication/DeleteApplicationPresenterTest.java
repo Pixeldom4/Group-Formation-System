@@ -1,6 +1,7 @@
 package usecase.deleteapplication;
 
 import org.junit.jupiter.api.Test;
+import usecase.manageapplications.deleteapplication.DeleteApplicationPresenter;
 
 /**
  * Unit tests for the DeleteApplicationPresenter class.

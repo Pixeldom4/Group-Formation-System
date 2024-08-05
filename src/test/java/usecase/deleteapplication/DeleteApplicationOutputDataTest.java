@@ -1,6 +1,10 @@
 package usecase.deleteapplication;
 
 import org.junit.jupiter.api.Test;
+import usecase.manageapplications.deleteapplication.DeleteApplicationController;
+import usecase.manageapplications.deleteapplication.DeleteApplicationInteractor;
+import usecase.manageapplications.deleteapplication.DeleteApplicationOutputData;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

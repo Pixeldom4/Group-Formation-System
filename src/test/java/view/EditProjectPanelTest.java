@@ -2,6 +2,8 @@ package view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import usecase.manageapplications.ManageApplicationsController;
+import usecase.manageprojects.ManageProjectsController;
 import usecase.manageprojects.editproject.EditProjectController;
 import usecase.manageprojects.editproject.EditProjectInputBoundary;
 import usecase.manageprojects.editproject.EditProjectInputData;
@@ -27,11 +29,9 @@ public class EditProjectPanelTest {
     private EditProjectPanel editProjectPanel;
     private EditProjectPanelViewModel editProjectViewModel;
     private EditProjectController editProjectController;
-    private GetApplicationsController getApplicationsController;
-    private DeleteProjectController deleteProjectController;
     private DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
-    private AcceptApplicationController acceptApplicationController;
-    private RejectApplicationController rejectApplicationController;
+    private ManageProjectsController manageProjectsController;
+    private ManageApplicationsController manageApplicationsController;
     private EditProjectInputBoundary editProjectInteractor;
 
     /**
@@ -44,20 +44,16 @@ public class EditProjectPanelTest {
         // Mock dependencies
         editProjectInteractor = mock(EditProjectInputBoundary.class);
         editProjectController = new EditProjectController(editProjectInteractor);
-        getApplicationsController = mock(GetApplicationsController.class);
-        deleteProjectController = mock(DeleteProjectController.class);
+        manageApplicationsController = mock(ManageApplicationsController.class);
+        manageProjectsController = mock(ManageProjectsController.class);
         displayProjectApplicationViewModel = mock(DisplayProjectApplicationViewModel.class);
-        acceptApplicationController = mock(AcceptApplicationController.class);
-        rejectApplicationController = mock(RejectApplicationController.class);
 
         editProjectPanel = new EditProjectPanel(
                 editProjectViewModel,
                 editProjectController,
-                getApplicationsController,
-                deleteProjectController,
-                displayProjectApplicationViewModel,
-                acceptApplicationController,
-                rejectApplicationController
+                manageApplicationsController,
+                manageProjectsController,
+                displayProjectApplicationViewModel
         );
     }
 

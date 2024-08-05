@@ -5,6 +5,7 @@ import api.OpenAPIDataEmbed;
 import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
+import dataaccess.ILoginUserDetails;
 import usecase.manageprojects.createproject.CreateProjectInputBoundary;
 import usecase.manageprojects.createproject.CreateProjectInteractor;
 import usecase.manageprojects.createproject.CreateProjectOutputBoundary;
@@ -28,6 +29,7 @@ import viewmodel.MyProjectsPanelViewModel;
 public class ManageProjectsUseCaseFactory {
     private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
     private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
+    private static final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
     private static final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
 
     // Private constructor to prevent instantiation
@@ -47,13 +49,13 @@ public class ManageProjectsUseCaseFactory {
             MyProjectsPanelViewModel myProjectsPanelViewModel
     ) {
         GetProjectsOutputBoundary getProjectsPresenter = new GetProjectsPresenter(myProjectsPanelViewModel);
-        GetProjectsInputBoundary getProjectsInteractor = new GetProjectsInteractor(getProjectsPresenter);
+        GetProjectsInputBoundary getProjectsInteractor = new GetProjectsInteractor(getProjectsPresenter, userProjectsRepository, projectRepository);
         CreateProjectOutputBoundary createProjectPresenter = new CreateProjectPresenter(addProjectPanelViewModel);
         CreateProjectInputBoundary createProjectInteractor = new CreateProjectInteractor(projectRepository, userProjectsRepository, createProjectPresenter);
         EditProjectOutputBoundary editProjectPresenter = new EditProjectPresenter(editProjectPanelViewModel);
         EditProjectInputBoundary editProjectInteractor = new EditProjectInteractor(projectRepository, editProjectPresenter, embeddingAPI);
         DeleteProjectOutputBoundary deleteProjectPresenter = new DeleteProjectPresenter(myProjectsPanelViewModel);
-        DeleteProjectInputBoundary deleteProjectInteractor = new DeleteProjectInteractor(deleteProjectPresenter);
+        DeleteProjectInputBoundary deleteProjectInteractor = new DeleteProjectInteractor(deleteProjectPresenter, projectRepository, loginUserDetails);
 
         return new ManageProjectsController(getProjectsInteractor, createProjectInteractor, editProjectInteractor, deleteProjectInteractor);
     }
