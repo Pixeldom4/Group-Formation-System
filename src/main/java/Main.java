@@ -1,41 +1,23 @@
 import api.texttospeechservice.TextToSpeechService;
 import config.DataAccessConfig;
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.acceptapplication.AcceptApplicationUseCaseFactory;
-import usecase.createapplication.CreateApplicationController;
-import usecase.createapplication.CreateApplicationUseCaseFactory;
-import usecase.createproject.CreateProjectController;
-import usecase.createproject.CreateProjectUseCaseFactory;
-import usecase.createuser.CreateUserController;
-import usecase.createuser.CreateUserUseCaseFactory;
 import usecase.createverification.CreateVerificationController;
 import usecase.createverification.CreateVerificationUseCaseFactory;
-import usecase.manageapplications.createapplication.CreateApplicationController;
-import usecase.manageapplications.createapplication.CreateApplicationUseCaseFactory;
-import usecase.manageprojects.createproject.CreateProjectController;
-import usecase.manageprojects.createproject.CreateProjectUseCaseFactory;
-import usecase.manageusers.createuser.CreateUserController;
-import usecase.manageusers.createuser.CreateUserUseCaseFactory;
-import usecase.manageprojects.deleteproject.DeleteProjectController;
-import usecase.manageprojects.deleteproject.DeleteProjectUseCaseFactory;
-import usecase.manageprojects.editproject.EditProjectController;
-import usecase.manageprojects.editproject.EditProjectUseCaseFactory;
-import usecase.manageusers.edituser.EditUserController;
-import usecase.manageusers.edituser.EditUserUseCaseFactory;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserUseCaseFactory;
-import usecase.manageprojects.getprojects.GetProjectsController;
-import usecase.manageprojects.getprojects.GetProjectsUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.logout.LogoutController;
 import usecase.logout.LogoutUseCaseFactory;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageapplications.ManageApplicationsUseCaseFactory;
+import usecase.manageapplications.createapplication.CreateApplicationController;
+import usecase.manageapplications.createapplication.CreateApplicationUseCaseFactory;
 import usecase.manageprojects.ManageProjectsController;
 import usecase.manageprojects.ManageProjectsUseCaseFactory;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectUseCaseFactory;
 import usecase.manageusers.ManageUsersController;
 import usecase.manageusers.ManageUsersUseCaseFactory;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
 import view.*;
@@ -75,7 +57,7 @@ class Main {
         // Print which data access implementation is used
         System.out.println(DataAccessConfig.getImplementation());
 
-        printLoadingBar(70, "Starting app");
+        printLoadingBar(60, "Starting app");
 
         CardLayout cardLayout = new CardLayout();
         JPanel views = new JPanel(cardLayout);
@@ -85,20 +67,17 @@ class Main {
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
         // Create User Panel
-        printLoadingBar(80, "Creating user panel");
-        SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
+        printLoadingBar(70, "Creating user panel");
 
-        // Manage Users
+        SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         ManageUsersController manageUsersController = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel, searchPanelViewModel);
 
-        // Create User Panel
-        CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
         CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, manageUsersController);
 
         // Login Panel
-        printLoadingBar(86, "Creating login panel");
+        printLoadingBar(80, "Creating login panel");
         LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
         LoginUserController loginUserController = LoginUserUseCaseFactory.create(loginPanelViewModel);
         LoginVerificationViewModel loginVerificationViewModel = new LoginVerificationViewModel();
@@ -110,8 +89,7 @@ class Main {
                                                createVerificationController);
 
         // Search Project Panel
-        printLoadingBar(98, "Creating search panel");
-        SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
+        printLoadingBar(92, "Creating search panel");
         SearchProjectController searchProjectController = SearchProjectUseCaseFactory.createSearchProjectController(searchPanelViewModel);
         GetLoggedInUserController searchPanelGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(searchPanelViewModel);
         CreateApplicationController createApplicationController = CreateApplicationUseCaseFactory.createController(searchPanelViewModel);
@@ -119,31 +97,23 @@ class Main {
 
 
         // Manage Projects
-        printLoadingBar(108, "Creating add project panel");
+        printLoadingBar(100, "Creating add project panel");
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
         EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
         MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
         ManageProjectsController manageProjectsController = ManageProjectsUseCaseFactory.createController(addProjectPanelModel, editProjectPanelViewModel, myProjectsViewModel);
 
         // Add Project Panel
-        CreateProjectController createProjectController = CreateProjectUseCaseFactory.createController(addProjectPanelModel);
         GetLoggedInUserController addProjectGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(addProjectPanelModel);
         AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, manageProjectsController, addProjectGetLoggedInUserController);
 
-        // My Projects Panel
-        printLoadingBar(115, "Creating my projects panel");
-        MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
-        GetLoggedInUserController getLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProjectsViewModel);
-        GetProjectsController getProjectsController = GetProjectsUseCaseFactory.createGetProjectsController(myProjectsViewModel);
-        DeleteProjectController deleteProjectController = DeleteProjectUseCaseFactory.createDeleteProjectController(myProjectsViewModel);
-
         // Display Project Application View
-        printLoadingBar(122, "Creating project app view");
+        printLoadingBar(111, "Creating project app view");
         DisplayProjectApplicationViewModel displayProjectApplicationViewModel = new DisplayProjectApplicationViewModel();
         ManageApplicationsController manageApplicationsController = ManageApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
+
         // Edit Project Panel
-        printLoadingBar(130, "Creating edit project panel");
-        EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
+        printLoadingBar(116, "Creating edit project panel");
         EditProjectController editProjectController = EditProjectUseCaseFactory.createController(editProjectPanelViewModel);
         EditProjectPanel editProjectPanel = new EditProjectPanel(
                 editProjectPanelViewModel,
@@ -153,6 +123,9 @@ class Main {
                 displayProjectApplicationViewModel
         );
 
+        // My Projects Panel
+        printLoadingBar(127, "Creating my projects panel");
+        GetLoggedInUserController getLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProjectsViewModel);
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(
                 myProjectsViewModel,
                 viewManagerModel,
@@ -162,11 +135,8 @@ class Main {
                 editProjectPanel);
 
         // Edit Profile Panel
-        printLoadingBar(152, "Creating edit profile panel");
-        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
-        EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
+        printLoadingBar(138, "Creating edit profile panel");
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
-
 
         EditProfilePanel editProfilePanel = new EditProfilePanel(
                 viewManagerModel,
@@ -176,7 +146,7 @@ class Main {
         );
 
         // add views to card layout
-        printLoadingBar(166, "Adding views to card layout");
+        printLoadingBar(149, "Adding views to card layout");
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
@@ -185,7 +155,7 @@ class Main {
         views.add(editProfilePanel, editProfileViewModel.getViewName());
 
         // Bottom panels (switch view and settings)
-        printLoadingBar(175, "Creating bottom panels");
+        printLoadingBar(158, "Creating bottom panels");
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(0, 1));
 
@@ -220,8 +190,8 @@ class Main {
         int width = 50;
 
         // Progress based on line number
-        int start = 70;
-        int end = 197;
+        int start = 60;
+        int end = 180;
         int prog = n - start;
         int total = end - start;
         int i = prog * width / total;

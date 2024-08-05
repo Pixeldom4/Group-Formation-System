@@ -134,22 +134,9 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                     }
                 }
             });
-            acceptButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    manageApplicationsController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                }
-            });
+            acceptButtonActions.add(() -> manageApplicationsController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]));
 
-            acceptButtonActions.add(() -> acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]));
-
-            declineButtonActions.add(() -> rejectApplicationController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]));
-            declineButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    manageApplicationsController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                }
-            });
+            declineButtonActions.add(() -> manageApplicationsController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]));
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
@@ -229,8 +216,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 String message = "Accepted application for: " + acceptedName;
                 playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);
-                getApplicationsController.getApplicationsForProject(projectId);
-                JOptionPane.showMessageDialog(null, "Accepted application for: " + acceptedName);
                 manageApplicationsController.getApplicationsForProject(projectId);
             }
             else {
@@ -244,12 +229,10 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 String acceptedName = displayProjectApplicationViewModel.getSenderName();
-                JOptionPane.showMessageDialog(null, "Rejected application for: " + acceptedName);
-                manageApplicationsController.getApplicationsForProject(projectId);
                 String message = "Rejected application for: " + acceptedName;
                 playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);
-                getApplicationsController.getApplicationsForProject(projectId);
+                manageApplicationsController.getApplicationsForProject(projectId);
             }
             else {
                 playVoiceService.playVoice("Failed to reject application: " + displayProjectApplicationViewModel.getErrorMessage());

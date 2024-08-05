@@ -1,8 +1,8 @@
 package usecase.manageprojects;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
-import dataaccess.DataAccessConfig;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
+import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import dataaccess.ILoginUserDetails;

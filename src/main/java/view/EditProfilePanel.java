@@ -1,15 +1,13 @@
 package view;
 
-import entities.User;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
-import usecase.manageusers.ManageUsersController;
-import usecase.edituser.EditUserController;
-import usecase.getloggedinuser.GetLoggedInUserController;
-import view.components.TagPanel;
 import config.HoverVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
+import entities.User;
+import usecase.manageusers.ManageUsersController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import view.components.TagPanel;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import config.PlayVoiceServiceConfig;
 import viewmodel.EditProfileViewModel;
 import viewmodel.ViewManagerModel;
 

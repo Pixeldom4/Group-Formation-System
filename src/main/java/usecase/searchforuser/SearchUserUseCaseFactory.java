@@ -1,6 +1,6 @@
 package usecase.searchforuser;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IUserRepository;
 import viewmodel.SearchPanelViewModel;
 

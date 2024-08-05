@@ -1,23 +1,16 @@
 package view;
 
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.editproject.EditProjectController;
-import usecase.getapplications.GetApplicationsController;
-import usecase.rejectapplication.RejectApplicationController;
 import config.HoverVoiceServiceConfig;
-import view.services.hovervoice.IHoverVoiceService;
-import view.services.playvoice.IPlayVoiceService;
 import config.PlayVoiceServiceConfig;
-import usecase.manageprojects.editproject.EditProjectController;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
+import usecase.manageprojects.editproject.EditProjectController;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
