@@ -1,5 +1,6 @@
 package view;
 
+import usecase.manageapplications.createapplication.CreateApplicationController;
 import usecase.createapplication.CreateApplicationController;
 import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;

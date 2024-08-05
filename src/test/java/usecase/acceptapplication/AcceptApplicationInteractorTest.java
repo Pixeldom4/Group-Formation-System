@@ -9,6 +9,7 @@ import dataaccess.local.LocalUserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import usecase.manageapplications.acceptapplication.*;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class AcceptApplicationInteractorTest {
 
     private final static String SAVE_LOCATION = "local_data/test/usecase/acceptapplication/";
@@ -52,7 +54,8 @@ public class AcceptApplicationInteractorTest {
         userRepository = new LocalUserRepository(SAVE_LOCATION);
         viewModel = mock(DisplayProjectApplicationViewModel.class);
         acceptApplicationPresenter = new AcceptApplicationPresenter(viewModel);
-        interactor = new TestInteractor(acceptApplicationPresenter, userRepository, applicationRepository, userProjectsRepository);
+        interactor = new AcceptApplicationInteractor(acceptApplicationPresenter, applicationRepository,
+                                                     userProjectsRepository, userRepository);
         controller = new AcceptApplicationController(interactor);
     }
 
@@ -95,14 +98,4 @@ public class AcceptApplicationInteractorTest {
         folder.delete();
     }
 
-    private static class TestInteractor extends AcceptApplicationInteractor {
-        public TestInteractor(AcceptApplicationOutputBoundary presenter, IUserRepository userRepository,
-                              IApplicationRepository applicationRepository, IUserProjectsRepository userProjectsRepository) {
-            super(presenter);
-            this.userRepository = userRepository;
-            this.applicationRepository = applicationRepository;
-            this.userProjectsRepository = userProjectsRepository;
-        }
-
-    }
 }

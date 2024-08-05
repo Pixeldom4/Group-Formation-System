@@ -3,6 +3,8 @@ package usecase.edituser;
 import dataaccess.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import usecase.manageusers.edituser.EditUserController;
+import usecase.manageusers.edituser.EditUserUseCaseFactory;
 import viewmodel.EditProfileViewModel;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -8,17 +8,8 @@ import entities.UserInterface;
  * Implements the input boundary to handle user search logic.
  */
 public class SearchUserInteractor implements SearchUserInputBoundary {
-    private SearchUserInterface userDAO = new LocalUserSearchObject();
+    private final SearchUserInterface userDAO;
     private final SearchUserOutputBoundary presenter;
-
-    /**
-     * Constructs a SearchUserInteractor with the specified presenter.
-     *
-     * @param presenter The output boundary.
-     */
-    public SearchUserInteractor(SearchUserOutputBoundary presenter) {
-        this.presenter = presenter;
-    }
 
     /**
      * Creates a new SearchUserInteractor using the given output boundary and user repository.
@@ -41,5 +32,23 @@ public class SearchUserInteractor implements SearchUserInputBoundary {
     public void searchUserByEmail(String email) {
         UserInterface user = userDAO.searchUserByEmail(email);
         presenter.presentUser(user);
+    }
+
+    /**
+     * Gets the presenter.
+     *
+     * @return The presenter cast to SearchUserPresenter.
+     */
+    public SearchUserPresenter getPresenter() {
+        return (SearchUserPresenter) this.presenter;
+    }
+
+    /**
+     * Gets the user repository.
+     *
+     * @return The user repository cast to SearchUserInterface.
+     */
+    public SearchUserInterface getRepository() {
+        return (SearchUserInterface) this.userDAO;
     }
 }

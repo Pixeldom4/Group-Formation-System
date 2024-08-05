@@ -1,9 +1,7 @@
 package view;
 
 import entities.ProjectInterface;
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.getapplications.GetApplicationsController;
-import usecase.rejectapplication.RejectApplicationController;
+import usecase.manageapplications.ManageApplicationsController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import config.HoverVoiceServiceConfig;
@@ -45,9 +43,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
 
-    private final GetApplicationsController getApplicationsController;
-    private final AcceptApplicationController acceptApplicationController;
-    private final RejectApplicationController rejectApplicationController;
+    private final ManageApplicationsController manageApplicationsController;
 
     private final IHoverVoiceService hoverVoiceService;
     private final IPlayVoiceService playVoiceService;
@@ -57,24 +53,16 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
      *
      * @param projectId the ID of the project
      * @param displayProjectApplicationViewModel the view model for displaying project applications
-     * @param getApplicationsController the controller for getting applications
-     * @param acceptApplicationController the controller for accepting applications
-     * @param rejectApplicationController the controller for rejecting applications
+     * @param manageApplicationsController the controller for manging applications
      */
     public DisplayProjectApplicationView(int projectId,
                                          DisplayProjectApplicationViewModel displayProjectApplicationViewModel,
-                                         GetApplicationsController getApplicationsController,
-                                         AcceptApplicationController acceptApplicationController,
-                                         RejectApplicationController rejectApplicationController) {
+                                         ManageApplicationsController manageApplicationsController) {
         this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
         this.displayProjectApplicationViewModel.addPropertyChangeListener(this);
 
         this.projectId = projectId;
-        this.getApplicationsController = getApplicationsController;
-
-        this.acceptApplicationController = acceptApplicationController;
-
-        this.rejectApplicationController = rejectApplicationController;
+        this.manageApplicationsController = manageApplicationsController;
 
         this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
         this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
@@ -84,7 +72,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        getApplicationsController.getApplicationsForProject(projectId);
+        manageApplicationsController.getApplicationsForProject(projectId);
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -146,10 +134,22 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                     }
                 }
             });
+            acceptButtonActions.add(new ButtonAction() {
+                @Override
+                public void onClick() {
+                    manageApplicationsController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
+                }
+            });
 
             acceptButtonActions.add(() -> acceptApplicationController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]));
 
             declineButtonActions.add(() -> rejectApplicationController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]));
+            declineButtonActions.add(new ButtonAction() {
+                @Override
+                public void onClick() {
+                    manageApplicationsController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]);
+                }
+            });
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
@@ -230,6 +230,8 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
                 playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);
                 getApplicationsController.getApplicationsForProject(projectId);
+                JOptionPane.showMessageDialog(null, "Accepted application for: " + acceptedName);
+                manageApplicationsController.getApplicationsForProject(projectId);
             }
             else {
                 playVoiceService.playVoice("Failed to accept application: " + displayProjectApplicationViewModel.getErrorMessage());
@@ -242,6 +244,8 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 String acceptedName = displayProjectApplicationViewModel.getSenderName();
+                JOptionPane.showMessageDialog(null, "Rejected application for: " + acceptedName);
+                manageApplicationsController.getApplicationsForProject(projectId);
                 String message = "Rejected application for: " + acceptedName;
                 playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);

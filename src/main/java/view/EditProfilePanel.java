@@ -1,6 +1,8 @@
 package view;
 
 import entities.User;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.ManageUsersController;
 import usecase.edituser.EditUserController;
 import usecase.getloggedinuser.GetLoggedInUserController;
 import view.components.TagPanel;
@@ -26,7 +28,7 @@ import java.beans.PropertyChangeListener;
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
-    private final EditUserController editUserController;
+    private final ManageUsersController editUserController;
     private final ViewManagerModel viewManagerModel;
     private final GetLoggedInUserController getLoggedInUserController;
     private final EditProfileViewModel editProfileViewModel;
@@ -65,7 +67,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
      * @param getLoggedInUserController the controller for getting the logged-in user
      * @param editProfileViewModel the view model for editing the profile
      */
-    public EditProfilePanel(ViewManagerModel viewManagerModel, EditUserController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
+    public EditProfilePanel(ViewManagerModel viewManagerModel, ManageUsersController editUserController, GetLoggedInUserController getLoggedInUserController, EditProfileViewModel editProfileViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
         this.editProfileViewModel = editProfileViewModel;

@@ -2,13 +2,15 @@ package view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInputBoundary;
-import usecase.editproject.EditProjectInputData;
-import usecase.getapplications.GetApplicationsController;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.rejectapplication.RejectApplicationController;
+import usecase.manageapplications.ManageApplicationsController;
+import usecase.manageprojects.ManageProjectsController;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectInputBoundary;
+import usecase.manageprojects.editproject.EditProjectInputData;
+import usecase.manageapplications.getapplications.GetApplicationsController;
+import usecase.manageprojects.deleteproject.DeleteProjectController;
+import usecase.manageapplications.acceptapplication.AcceptApplicationController;
+import usecase.manageapplications.rejectapplication.RejectApplicationController;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
@@ -27,11 +29,9 @@ public class EditProjectPanelTest {
     private EditProjectPanel editProjectPanel;
     private EditProjectPanelViewModel editProjectViewModel;
     private EditProjectController editProjectController;
-    private GetApplicationsController getApplicationsController;
-    private DeleteProjectController deleteProjectController;
     private DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
-    private AcceptApplicationController acceptApplicationController;
-    private RejectApplicationController rejectApplicationController;
+    private ManageProjectsController manageProjectsController;
+    private ManageApplicationsController manageApplicationsController;
     private EditProjectInputBoundary editProjectInteractor;
 
     /**
@@ -44,20 +44,16 @@ public class EditProjectPanelTest {
         // Mock dependencies
         editProjectInteractor = mock(EditProjectInputBoundary.class);
         editProjectController = new EditProjectController(editProjectInteractor);
-        getApplicationsController = mock(GetApplicationsController.class);
-        deleteProjectController = mock(DeleteProjectController.class);
+        manageApplicationsController = mock(ManageApplicationsController.class);
+        manageProjectsController = mock(ManageProjectsController.class);
         displayProjectApplicationViewModel = mock(DisplayProjectApplicationViewModel.class);
-        acceptApplicationController = mock(AcceptApplicationController.class);
-        rejectApplicationController = mock(RejectApplicationController.class);
 
         editProjectPanel = new EditProjectPanel(
                 editProjectViewModel,
                 editProjectController,
-                getApplicationsController,
-                deleteProjectController,
-                displayProjectApplicationViewModel,
-                acceptApplicationController,
-                rejectApplicationController
+                manageApplicationsController,
+                manageProjectsController,
+                displayProjectApplicationViewModel
         );
     }
 

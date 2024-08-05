@@ -12,6 +12,9 @@ import usecase.searchforproject.SearchProjectsInteractor;
 import usecase.searchforproject.SearchProjectsPresenter;
 import viewmodel.SearchPanelViewModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,9 +29,11 @@ public class SearchProjectInteractorTest {
     private final static String SAVE_LOCATION = "local_data/test/search_projects_interactor/";
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
-    private final static IProjectRepository projectDAO = new LocalProjectRepository(SAVE_LOCATION);
-    private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(presenter, projectDAO);
+    private static IProjectRepository projectDAO;
+    private static SearchProjectsInteractor searchProjectInteractor;
     private final static EmbeddingAPIInterface apiInteface = new OpenAPIDataEmbed();
+    private final static File projectSaveFile = new File(SAVE_LOCATION + "projects.csv");
+    private final static File embedSaveFile = new File(SAVE_LOCATION + "embeds.csv");
 
     private final static String[][] dummyprojects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
@@ -42,7 +47,11 @@ public class SearchProjectInteractorTest {
      * Sets up the test environment before all tests.
      */
     @BeforeAll
-    public static void setUp() {
+    public static void setUp() throws IOException {
+        Files.deleteIfExists(projectSaveFile.toPath());
+        Files.deleteIfExists(embedSaveFile.toPath());
+        projectDAO = new LocalProjectRepository(SAVE_LOCATION);
+        searchProjectInteractor = new SearchProjectsInteractor(presenter, projectDAO);
         addDummyProjects();
     }
 

@@ -211,7 +211,7 @@ public class LocalApplicationRepository implements IApplicationRepository {
                 int senderUserId = Integer.parseInt(line[0]);
                 int projectId = Integer.parseInt(line[1]);
                 String text = line[2];
-                Byte[] readBytes = Arrays.stream(line[3].replace("[", "").replace("]", "").split(",")).map(Byte::valueOf).toArray(Byte[]::new);
+                Byte[] readBytes = Arrays.stream(trimRow(line[3].replace("[", "").replace("]", "").split(","))).map(Byte::valueOf).toArray(Byte[]::new);
                 byte[] pdfBytes = new byte[readBytes.length];
                 for (int i = 0 ; i < readBytes.length; i++) {
                     pdfBytes[i] = readBytes[i];
@@ -229,5 +229,13 @@ public class LocalApplicationRepository implements IApplicationRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String[] trimRow(String[] row) {
+        String[] trimmedRow = new String[row.length];
+        for (int i = 0; i < row.length; i++) {
+            trimmedRow[i] = row[i].trim();
+        }
+        return trimmedRow;
     }
 }

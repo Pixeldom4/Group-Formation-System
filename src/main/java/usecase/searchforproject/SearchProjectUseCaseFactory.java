@@ -1,11 +1,14 @@
 package usecase.searchforproject;
 
+import dataaccess.DataAccessConfig;
+import dataaccess.IProjectRepository;
 import viewmodel.SearchPanelViewModel;
 
 /**
  * Factory class for creating instances of the SearchProject use case.
  */
 public class SearchProjectUseCaseFactory {
+    private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
 
     // Private constructor to prevent instantiation
     private SearchProjectUseCaseFactory() {}
@@ -18,7 +21,7 @@ public class SearchProjectUseCaseFactory {
      */
     public static SearchProjectController createSearchProjectController(SearchPanelViewModel searchPanelViewModel) {
         SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
-        SearchProjectInputBoundary interactor = new SearchProjectsInteractor(presenter);
+        SearchProjectInputBoundary interactor = new SearchProjectsInteractor(presenter, projectRepository);
         return new SearchProjectController(interactor);
     }
 }

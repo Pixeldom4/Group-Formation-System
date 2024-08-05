@@ -8,11 +8,18 @@ import entities.Project;
 import entities.ProjectInterface;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import usecase.manageprojects.editproject.EditProjectInputData;
+import usecase.manageprojects.editproject.EditProjectInteractor;
+import usecase.manageprojects.editproject.EditProjectOutputBoundary;
+import usecase.manageprojects.editproject.EditProjectOutputData;
 import usecase.searchforproject.SearchProjectOutputBoundary;
 import usecase.searchforproject.SearchProjectsInteractor;
 import usecase.searchforproject.SearchProjectsPresenter;
 import viewmodel.SearchPanelViewModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ArrayList;
@@ -39,10 +46,13 @@ public class EditProjectInteractorTest {
     };
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary searchPresenter = new SearchProjectsPresenter(searchPanelViewModel);
-    private final static IProjectRepository projectDAO = new LocalProjectRepository(SAVE_LOCATION);
+    private static IProjectRepository projectDAO;
     private final static EmbeddingAPIInterface apiInterface = new OpenAPIDataEmbed();
-    private final static EditProjectInteractor editProjectInteractor = new EditProjectInteractor(projectDAO, editPresenter, apiInterface);
-    private final static SearchProjectsInteractor searchProjectInteractor = new SearchProjectsInteractor(searchPresenter, projectDAO);
+    private static EditProjectInteractor editProjectInteractor;
+    private static SearchProjectsInteractor searchProjectInteractor;
+    private final static File projectSaveFile = new File(SAVE_LOCATION + "projects.csv");
+    private final static File embedSaveFile = new File(SAVE_LOCATION + "embeds.csv");
+
 
     private final static String[][] dummyProjects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
@@ -56,7 +66,12 @@ public class EditProjectInteractorTest {
      * Sets up the test environment before all tests.
      */
     @BeforeAll
-    public static void setUp() {
+    public static void setUp() throws IOException {
+        Files.deleteIfExists(projectSaveFile.toPath());
+        Files.deleteIfExists(embedSaveFile.toPath());
+        projectDAO = new LocalProjectRepository(SAVE_LOCATION);
+        editProjectInteractor = new EditProjectInteractor(projectDAO, editPresenter, apiInterface);
+        searchProjectInteractor = new SearchProjectsInteractor(searchPresenter, projectDAO);
         addDummyProjects();
     }
 

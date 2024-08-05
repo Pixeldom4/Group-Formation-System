@@ -23,4 +23,13 @@ public class SearchProjectByIdController {
     public void searchProjectById(int projectId) {
         interactor.searchProjectById(projectId);
     }
+
+    /**
+     * Get the interactor.
+     *
+     * @return The interactor used by this controller.
+     */
+    public SearchProjectByIdInputBoundary getInteractor() {
+        return this.interactor;
+    }
 }

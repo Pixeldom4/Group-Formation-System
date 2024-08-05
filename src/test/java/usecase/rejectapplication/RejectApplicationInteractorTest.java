@@ -7,6 +7,7 @@ import dataaccess.local.LocalUserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import usecase.manageapplications.rejectapplication.*;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 import java.io.File;
@@ -19,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class RejectApplicationInteractorTest {
 
     private final static String SAVE_LOCATION = "local_data/test/usecase/rejectApplication/";
@@ -44,7 +46,7 @@ public class RejectApplicationInteractorTest {
         userRepository = new LocalUserRepository(SAVE_LOCATION);
         viewModel = mock(DisplayProjectApplicationViewModel.class);
         rejectApplicationPresenter = new RejectApplicationPresenter(viewModel);
-        interactor = new TestInteractor(rejectApplicationPresenter, userRepository, applicationRepository);
+        interactor = new RejectApplicationInteractor(rejectApplicationPresenter, applicationRepository, userRepository);
         controller = new RejectApplicationController(interactor);
     }
 
@@ -85,13 +87,4 @@ public class RejectApplicationInteractorTest {
         folder.delete();
     }
 
-    private static class TestInteractor extends RejectApplicationInteractor {
-        public TestInteractor(RejectApplicationOutputBoundary presenter, IUserRepository userRepository,
-                              IApplicationRepository applicationRepository) {
-            super(presenter);
-            this.userRepository = userRepository;
-            this.applicationRepository = applicationRepository;
-        }
-
-    }
 }

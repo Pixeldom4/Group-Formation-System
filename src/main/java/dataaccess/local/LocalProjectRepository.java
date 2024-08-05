@@ -55,7 +55,7 @@ public class LocalProjectRepository implements IProjectRepository {
     public LocalProjectRepository(String path) {
         FILE_PATH = path + "projects.csv";
         embedDataAccess = new LocalEmbedRepository(path + "embeds.csv");
-        File f = new File(path);
+        File f = new File(FILE_PATH);
         File parent = f.getParentFile();
         try {
             Files.createDirectories(parent.toPath());

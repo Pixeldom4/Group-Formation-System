@@ -88,4 +88,13 @@ public class LocalApplicationDAOTest {
         assertTrue(applicationRepository.deleteApplication(30, 2));
         assertNull(applicationRepository.getApplication(30, 2));
     }
+
+    /**
+     * Tests reading from a file.
+     */
+    @Test
+    public void testReadFile(){
+        IApplicationRepository testRepository = new LocalApplicationRepository(SAVE_LOCATION);
+        assertNotNull(testRepository.getApplication(20, 1));
+    }
 }

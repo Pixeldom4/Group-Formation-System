@@ -1,21 +1,20 @@
 package view;
 
-import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.createproject.CreateProjectController;
-import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.ManageProjectsController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import view.components.NumericTextField;
 import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the AddProjectPanel class.
@@ -24,7 +23,7 @@ public class AddProjectPanelTest {
 
     private AddProjectPanel addProjectPanel;
     private AddProjectPanelViewModel addProjectPanelViewModel;
-    private CreateProjectController createProjectController;
+    private ManageProjectsController manageProjectsController;
     private GetLoggedInUserController getLoggedInUserController;
     private ViewManagerModel viewManagerModel;
     private JPanel projectInfoPanel;
@@ -41,14 +40,14 @@ public class AddProjectPanelTest {
     @BeforeEach
     public void setUp() {
         addProjectPanelViewModel = new AddProjectPanelViewModel();
-        createProjectController = mock(CreateProjectController.class);
+        manageProjectsController = mock(ManageProjectsController.class);
         getLoggedInUserController = mock(GetLoggedInUserController.class);
         viewManagerModel = new ViewManagerModel();
 
         addProjectPanel = new AddProjectPanel(
                 viewManagerModel,
                 addProjectPanelViewModel,
-                createProjectController,
+                manageProjectsController,
                 getLoggedInUserController
         );
 
@@ -114,7 +113,7 @@ public class AddProjectPanelTest {
         JButton addProjectButton = (JButton) addProjectPanel.getComponent(1);
         addProjectButton.doClick();
 
-        verify(createProjectController).createProject("Test Project", 1000.0, "Test Description", new HashSet<>(), userId);
+        verify(manageProjectsController).createProject("Test Project", 1000.0, "Test Description", new HashSet<>(), userId);
     }
 
     /**

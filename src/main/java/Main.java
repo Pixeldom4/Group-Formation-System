@@ -10,24 +10,32 @@ import usecase.createuser.CreateUserController;
 import usecase.createuser.CreateUserUseCaseFactory;
 import usecase.createverification.CreateVerificationController;
 import usecase.createverification.CreateVerificationUseCaseFactory;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.deleteproject.DeleteProjectUseCaseFactory;
-import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectUseCaseFactory;
-import usecase.edituser.EditUserController;
-import usecase.edituser.EditUserUseCaseFactory;
-import usecase.getapplications.GetApplicationsController;
-import usecase.getapplications.GetApplicationsUseCaseFactory;
-import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
-import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.GetProjectsUseCaseFactory;
+import usecase.manageapplications.createapplication.CreateApplicationController;
+import usecase.manageapplications.createapplication.CreateApplicationUseCaseFactory;
+import usecase.manageprojects.createproject.CreateProjectController;
+import usecase.manageprojects.createproject.CreateProjectUseCaseFactory;
+import usecase.manageusers.createuser.CreateUserController;
+import usecase.manageusers.createuser.CreateUserUseCaseFactory;
+import usecase.manageprojects.deleteproject.DeleteProjectController;
+import usecase.manageprojects.deleteproject.DeleteProjectUseCaseFactory;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectUseCaseFactory;
+import usecase.manageusers.edituser.EditUserController;
+import usecase.manageusers.edituser.EditUserUseCaseFactory;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserUseCaseFactory;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.GetProjectsUseCaseFactory;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.logout.LogoutController;
 import usecase.logout.LogoutUseCaseFactory;
-import usecase.rejectapplication.RejectApplicationController;
-import usecase.rejectapplication.RejectApplicationUseCaseFactory;
+import usecase.manageapplications.ManageApplicationsController;
+import usecase.manageapplications.ManageApplicationsUseCaseFactory;
+import usecase.manageprojects.ManageProjectsController;
+import usecase.manageprojects.ManageProjectsUseCaseFactory;
+import usecase.manageusers.ManageUsersController;
+import usecase.manageusers.ManageUsersUseCaseFactory;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
 import view.*;
@@ -78,9 +86,16 @@ class Main {
 
         // Create User Panel
         printLoadingBar(80, "Creating user panel");
+        SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
+
+        // Manage Users
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
+        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
+        ManageUsersController manageUsersController = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel, searchPanelViewModel);
+
+        // Create User Panel
         CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
-        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, createUserController);
+        CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, manageUsersController);
 
         // Login Panel
         printLoadingBar(86, "Creating login panel");
@@ -103,13 +118,17 @@ class Main {
         SearchPanel searchPanel = new SearchPanel(viewManagerModel,searchPanelViewModel, searchProjectController, searchPanelGetLoggedInUserController, createApplicationController);
 
 
-
-        // Add Project Panel
+        // Manage Projects
         printLoadingBar(108, "Creating add project panel");
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
+        EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
+        MyProjectsPanelViewModel myProjectsViewModel = new MyProjectsPanelViewModel();
+        ManageProjectsController manageProjectsController = ManageProjectsUseCaseFactory.createController(addProjectPanelModel, editProjectPanelViewModel, myProjectsViewModel);
+
+        // Add Project Panel
         CreateProjectController createProjectController = CreateProjectUseCaseFactory.createController(addProjectPanelModel);
         GetLoggedInUserController addProjectGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(addProjectPanelModel);
-        AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, createProjectController, addProjectGetLoggedInUserController);
+        AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, manageProjectsController, addProjectGetLoggedInUserController);
 
         // My Projects Panel
         printLoadingBar(115, "Creating my projects panel");
@@ -121,10 +140,7 @@ class Main {
         // Display Project Application View
         printLoadingBar(122, "Creating project app view");
         DisplayProjectApplicationViewModel displayProjectApplicationViewModel = new DisplayProjectApplicationViewModel();
-        GetApplicationsController getApplicationsController = GetApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
-        AcceptApplicationController acceptApplicationController = AcceptApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
-        RejectApplicationController rejectApplicationController = RejectApplicationUseCaseFactory.createController(displayProjectApplicationViewModel);
-
+        ManageApplicationsController manageApplicationsController = ManageApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
         // Edit Project Panel
         printLoadingBar(130, "Creating edit project panel");
         EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
@@ -132,19 +148,16 @@ class Main {
         EditProjectPanel editProjectPanel = new EditProjectPanel(
                 editProjectPanelViewModel,
                 editProjectController,
-                getApplicationsController,
-                deleteProjectController,
-                displayProjectApplicationViewModel,
-                acceptApplicationController,
-                rejectApplicationController
+                manageApplicationsController,
+                manageProjectsController,
+                displayProjectApplicationViewModel
         );
 
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(
                 myProjectsViewModel,
                 viewManagerModel,
                 getLoggedInUserController,
-                getProjectsController,
-                getApplicationsController,
+                manageProjectsController,
                 editProjectPanelViewModel,
                 editProjectPanel);
 
@@ -157,7 +170,7 @@ class Main {
 
         EditProfilePanel editProfilePanel = new EditProfilePanel(
                 viewManagerModel,
-                editUserController,
+                manageUsersController,
                 myProfileGetLoggedInUserController,
                 editProfileViewModel
         );
