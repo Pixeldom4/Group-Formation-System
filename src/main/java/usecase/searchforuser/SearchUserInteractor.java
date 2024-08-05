@@ -33,4 +33,22 @@ public class SearchUserInteractor implements SearchUserInputBoundary {
         UserInterface user = userDAO.searchUserByEmail(email);
         presenter.presentUser(user);
     }
+
+    /**
+     * Gets the presenter.
+     *
+     * @return The presenter cast to SearchUserPresenter.
+     */
+    public SearchUserPresenter getPresenter() {
+        return (SearchUserPresenter) this.presenter;
+    }
+
+    /**
+     * Gets the user repository.
+     *
+     * @return The user repository cast to SearchUserInterface.
+     */
+    public SearchUserInterface getRepository() {
+        return (SearchUserInterface) this.userDAO;
+    }
 }

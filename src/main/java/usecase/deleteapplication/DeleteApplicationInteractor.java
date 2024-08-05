@@ -7,7 +7,7 @@ import dataaccess.IApplicationRepository;
  * Implements the DeleteApplicationInputBoundary interface.
  */
 public class DeleteApplicationInteractor implements DeleteApplicationInputBoundary {
-    private final IApplicationRepository applicationRepository;
+    IApplicationRepository applicationRepository;
     private final DeleteApplicationPresenter deleteApplicationPresenter;
 
     /**
