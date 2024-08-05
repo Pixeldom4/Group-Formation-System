@@ -3,6 +3,7 @@ package usecase.createuser;
 import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import usecase.manageusers.createuser.CreateUserInputData;
 
 /**
  * Unit tests for the CreateUserInputData class.

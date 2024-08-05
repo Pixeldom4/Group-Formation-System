@@ -1,8 +1,8 @@
 package viewmodel;
 
 import entities.User;
-import usecase.getloggedinuser.LoggedInDataAccessViewModel;
-import usecase.getprojects.ProjectData;
+import usecase.manageusers.getloggedinuser.LoggedInDataAccessViewModel;
+import usecase.manageprojects.getprojects.ProjectData;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

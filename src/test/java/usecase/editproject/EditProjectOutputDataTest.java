@@ -1,6 +1,7 @@
 package usecase.editproject;
 
 import org.junit.jupiter.api.Test;
+import usecase.manageprojects.editproject.EditProjectOutputData;
 
 import java.util.HashSet;
 

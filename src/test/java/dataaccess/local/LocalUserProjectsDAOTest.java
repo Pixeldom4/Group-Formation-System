@@ -100,4 +100,17 @@ public class LocalUserProjectsDAOTest {
         assertNull(userIds);
         assertFalse(projectIds.contains(101));
     }
+
+    /**
+     * Tests reading from a csv file.
+     */
+    @Test
+    public void testReadFromCSV() {
+        IUserProjectsRepository testRepository = new LocalUserProjectsRepository(SAVE_LOCATION);
+        HashSet<Integer> projectIds = testRepository.getProjectIdsForUser(1000);
+        assertEquals(3, projectIds.size());
+        assertTrue(projectIds.contains(100));
+        assertTrue(projectIds.contains(101));
+        assertTrue(projectIds.contains(102));
+    }
 }

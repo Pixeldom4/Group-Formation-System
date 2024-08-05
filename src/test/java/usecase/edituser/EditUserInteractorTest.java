@@ -4,7 +4,10 @@ import dataaccess.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import usecase.manageusers.edituser.EditUserInputData;
+import usecase.manageusers.edituser.EditUserInteractor;
+import usecase.manageusers.edituser.EditUserOutputBoundary;
+import usecase.manageusers.edituser.EditUserOutputData;
 
 import java.util.HashSet;
 

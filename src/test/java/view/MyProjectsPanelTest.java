@@ -2,9 +2,14 @@ package view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.ProjectData;
+import usecase.manageapplications.ManageApplicationsController;
+import usecase.manageprojects.ManageProjectsController;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectInputBoundary;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.ProjectData;
+import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -28,9 +33,14 @@ public class MyProjectsPanelTest {
     private MyProjectsPanelViewModel myProjectsPanelViewModel;
     private ViewManagerModel viewManagerModel;
     private GetLoggedInUserController getLoggedInUserController;
-    private GetProjectsController getProjectsController;
     private EditProjectPanelViewModel editProjectPanelViewModel;
     private EditProjectPanel editProjectPanel;
+    private EditProjectController editProjectController;
+    private DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
+    private ManageProjectsController manageProjectsController;
+    private ManageApplicationsController manageApplicationsController;
+    private EditProjectInputBoundary editProjectInteractor;
+    private EditProjectPanelViewModel editProjectViewModel;
 
     /**
      * Sets up the test environment before each test.
@@ -40,26 +50,29 @@ public class MyProjectsPanelTest {
         myProjectsPanelViewModel = new MyProjectsPanelViewModel();
         viewManagerModel = new ViewManagerModel();
         getLoggedInUserController = mock(GetLoggedInUserController.class);
-        getProjectsController = mock(GetProjectsController.class);
         editProjectPanelViewModel = new EditProjectPanelViewModel();
+
+        editProjectInteractor = mock(EditProjectInputBoundary.class);
+        editProjectController = new EditProjectController(editProjectInteractor);
+        manageApplicationsController = mock(ManageApplicationsController.class);
+        manageProjectsController = mock(ManageProjectsController.class);
+        displayProjectApplicationViewModel = mock(DisplayProjectApplicationViewModel.class);
+        editProjectViewModel = mock(EditProjectPanelViewModel.class);
 
         // Initialize EditProjectPanel with mock controllers and view models
         editProjectPanel = new EditProjectPanel(
-                editProjectPanelViewModel,
-                null, // Add appropriate EditProjectController
-                null, // Add appropriate GetApplicationsController
-                null, // Add appropriate DeleteProjectController
-                null, // Add appropriate DisplayProjectApplicationViewModel
-                null, // Add appropriate AcceptApplicationController
-                null  // Add appropriate RejectApplicationController
+                editProjectViewModel,
+                editProjectController,
+                manageApplicationsController,
+                manageProjectsController,
+                displayProjectApplicationViewModel
         );
 
         myProjectsPanel = new MyProjectsPanel(
                 myProjectsPanelViewModel,
                 viewManagerModel,
                 getLoggedInUserController,
-                getProjectsController,
-                null,
+                manageProjectsController,
                 editProjectPanelViewModel,
                 editProjectPanel
         );

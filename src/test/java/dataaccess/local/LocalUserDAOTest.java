@@ -123,4 +123,16 @@ public class LocalUserDAOTest {
         assertNull(userRepository.getUserById(2));
     }
 
+    /**
+     * Tests retrieving from a csv file.
+     */
+    @Test
+    public void testReadFromFile() {
+        IUserRepository testRepository = new LocalUserRepository(SAVE_LOCATION);
+        UserInterface user = testRepository.getUserById(1);
+        assertEquals(user.getUserId(), 1);
+        assertEquals(user.getUserEmail(), "test@test.com");
+        assertEquals(user.getLastName(), "Doe");
+    }
+
 }

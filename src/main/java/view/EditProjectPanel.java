@@ -1,16 +1,12 @@
 package view;
 
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInputData;
-import usecase.getapplications.GetApplicationsController;
-import usecase.rejectapplication.RejectApplicationController;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageapplications.ManageApplicationsController;
+import usecase.manageprojects.ManageProjectsController;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -24,11 +20,9 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     private final EditProjectPanelViewModel editProjectViewModel;
     private final EditProjectController editProjectController;
-    private final GetApplicationsController getApplicationsController;
-    private final DeleteProjectController deleteProjectController;
+    private final ManageApplicationsController manageApplicationsController;
+    private final ManageProjectsController deleteProjectController;
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
-    private final AcceptApplicationController acceptApplicationController;
-    private final RejectApplicationController rejectApplicationController;
     private JTextField titleField;
     private JTextField budgetField;
     private JTextArea descriptionField;
@@ -45,28 +39,22 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
      *
      * @param editProjectViewModel the view model for editing the project
      * @param editProjectController the controller for editing the project
-     * @param getApplicationsController the controller for getting applications
+     * @param manageApplicationsController the controller for manging applications
      * @param deleteProjectController the controller for deleting the project
      * @param displayProjectApplicationViewModel the view model for displaying project applications
-     * @param acceptApplicationController the controller for accepting applications
-     * @param rejectApplicationController the controller for rejecting applications
      */
     public EditProjectPanel(
             EditProjectPanelViewModel editProjectViewModel,
             EditProjectController editProjectController,
-            GetApplicationsController getApplicationsController,
-            DeleteProjectController deleteProjectController,
-            DisplayProjectApplicationViewModel displayProjectApplicationViewModel,
-            AcceptApplicationController acceptApplicationController,
-            RejectApplicationController rejectApplicationController) {
+            ManageApplicationsController manageApplicationsController,
+            ManageProjectsController deleteProjectController,
+            DisplayProjectApplicationViewModel displayProjectApplicationViewModel) {
         this.editProjectViewModel = editProjectViewModel;
         this.editProjectViewModel.addPropertyChangeListener(this);
         this.editProjectController = editProjectController;
-        this.getApplicationsController = getApplicationsController;
+        this.manageApplicationsController = manageApplicationsController;
         this.deleteProjectController = deleteProjectController;
         this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
-        this.acceptApplicationController = acceptApplicationController;
-        this.rejectApplicationController = rejectApplicationController;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -105,9 +93,7 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
                 new DisplayProjectApplicationView(projectId,
                         displayProjectApplicationViewModel,
-                        getApplicationsController,
-                        acceptApplicationController,
-                        rejectApplicationController);
+                        manageApplicationsController);
 
             }
         });

@@ -5,8 +5,7 @@ import dataaccess.local.LocalUserRepository;
 import org.junit.jupiter.api.Test;
 import usecase.BCryptPasswordHasher;
 import usecase.PasswordHasher;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.deleteproject.DeleteProjectInputBoundary;
+import usecase.manageusers.deleteuser.*;
 
 import java.io.File;
 import java.io.IOException;
