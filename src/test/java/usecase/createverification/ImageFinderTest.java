@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ImageFinderTest {
     @Test
-    public void findImage_withValidFolderPath_returnsImagePath() {
+    public void checkWithValidFolderPathReturnsImagePath() {
         ImageFinder imageFinder = new ImageFinder();
         String imagePath = imageFinder.findImage("src/test/resources/imagefindertest/validimages/");
         assertNotNull(imagePath);
@@ -16,21 +16,21 @@ public class ImageFinderTest {
     }
 
     @Test
-    public void findImage_withEmptyFolder_returnsEmptyString() {
+    public void checkWithEmptyFolderReturnsEmptyString() {
         ImageFinder imageFinder = new ImageFinder();
         String imagePath = imageFinder.findImage("src/test/resources/emptyfolder/");
         assertEquals("", imagePath);
     }
 
     @Test
-    public void findImage_withNonExistentFolder_returnsEmptyString() {
+    public void checkWithNonExistentFolderReturnsEmptyString() {
         ImageFinder imageFinder = new ImageFinder();
         String imagePath = imageFinder.findImage("src/test/resources/nonexistentfolder/");
         assertEquals("", imagePath);
     }
 
     @Test
-    public void findImage_withFolderContainingNoImages_returnsEmptyString() {
+    public void checkWithNoImagesReturnsEmptyString() {
         ImageFinder imageFinder = new ImageFinder();
         String imagePath = imageFinder.findImage("src/test/resources/imagefindertest/noimages/");
         assertEquals("", imagePath);

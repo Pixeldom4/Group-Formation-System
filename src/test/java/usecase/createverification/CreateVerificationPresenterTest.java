@@ -18,21 +18,21 @@ public class CreateVerificationPresenterTest {
     }
 
     @Test
-    public void verificationCreated_withValidOutputData_callsDisplayVerificationImage() {
+    public void checkWithValidOutputDataCallsViewModel() {
         CreateVerificationOutputData outputData = new CreateVerificationOutputData("validImageLocation");
         presenter.verificationCreated(outputData);
         verify(viewModel).displayVerificationImage("validImageLocation");
     }
 
     @Test
-    public void verificationCreated_withNullOutputData_callsDisplayVerificationImageWithNull() {
+    public void checkWithNullOutputDataCallsViewModelWithNull() {
         CreateVerificationOutputData outputData = new CreateVerificationOutputData(null);
         presenter.verificationCreated(outputData);
         verify(viewModel).displayVerificationImage(null);
     }
 
     @Test
-    public void verificationCreated_withEmptyImageLocation_callsDisplayVerificationImageWithEmptyString() {
+    public void checkWithEmptyImageLocationCallsViewModelWithEmptyString() {
         CreateVerificationOutputData outputData = new CreateVerificationOutputData("");
         presenter.verificationCreated(outputData);
         verify(viewModel).displayVerificationImage("");

@@ -10,7 +10,7 @@ public class CreateVerificationControllerTest {
 
 
     @Test
-    public void createVerification_callsInputBoundaryCreateVerification() {
+    public void checkCallsInputBoundaryCreateVerification() {
         CreateVerificationInputBoundary inputBoundary = mock(CreateVerificationInputBoundary.class);
         CreateVerificationController controller = new CreateVerificationController(inputBoundary);
         controller.createVerification();

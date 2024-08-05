@@ -23,7 +23,7 @@ public class CreateVerificationInteractorTest {
 
 
     @Test
-    public void createVerification_withValidImageFinder_callsVerificationCreated() {
+    public void checkValidImageFinderCallsPresenter() {
         when(imageFinder.findImage("verifyimages/")).thenReturn("image");
         interactor.createVerification();
         ArgumentCaptor<CreateVerificationOutputData> captor = ArgumentCaptor.forClass(CreateVerificationOutputData.class);
@@ -32,7 +32,7 @@ public class CreateVerificationInteractorTest {
     }
 
     @Test
-    public void createVerification_withNoImageFound_callsVerificationCreatedWithNull() {
+    public void checkNoImageFoundCallsPresenterWithNull() {
         when(imageFinder.findImage("verifyimages/")).thenReturn(null);
         interactor.createVerification();
         ArgumentCaptor<CreateVerificationOutputData> captor = ArgumentCaptor.forClass(CreateVerificationOutputData.class);
@@ -41,7 +41,7 @@ public class CreateVerificationInteractorTest {
     }
 
     @Test
-    public void createVerification_withEmptyImageLocation_callsVerificationCreatedWithEmptyString() {
+    public void checkEmptyImageLocationCallsPresenterWithEmptyString() {
         when(imageFinder.findImage("verifyimages/")).thenReturn("");
         interactor.createVerification();
         ArgumentCaptor<CreateVerificationOutputData> captor = ArgumentCaptor.forClass(CreateVerificationOutputData.class);

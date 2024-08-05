@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 public class CreateVerificationUseCaseFactoryTest {
 
     @Test
-    public void createController_withValidViewModel_returnsController() {
+    public void checkFactoryReturnsController() {
         CreateVerificationViewModel viewModel = mock(CreateVerificationViewModel.class);
         CreateVerificationController controller = CreateVerificationUseCaseFactory.createController(viewModel);
         assertNotNull(controller);
