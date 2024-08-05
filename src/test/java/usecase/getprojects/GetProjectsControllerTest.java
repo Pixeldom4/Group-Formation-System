@@ -3,6 +3,9 @@ package usecase.getprojects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.GetProjectsInputBoundary;
+import usecase.manageprojects.getprojects.GetProjectsInputData;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

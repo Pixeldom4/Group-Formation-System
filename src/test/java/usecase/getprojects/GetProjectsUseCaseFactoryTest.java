@@ -2,6 +2,8 @@ package usecase.getprojects;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.GetProjectsUseCaseFactory;
 import viewmodel.MyProjectsPanelViewModel;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +24,5 @@ public class GetProjectsUseCaseFactoryTest {
         GetProjectsController controller = GetProjectsUseCaseFactory.createGetProjectsController(myProjectsPanelViewModel);
 
         assertNotNull(controller);
-        assertTrue(controller instanceof GetProjectsController);
     }
 }

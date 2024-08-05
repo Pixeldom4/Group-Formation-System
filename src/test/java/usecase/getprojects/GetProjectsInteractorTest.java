@@ -6,6 +6,11 @@ import entities.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import usecase.manageprojects.getprojects.GetProjectsInputData;
+import usecase.manageprojects.getprojects.GetProjectsInteractor;
+import usecase.manageprojects.getprojects.GetProjectsOutputBoundary;
+import usecase.manageprojects.getprojects.GetProjectsOutputData;
+
 import java.util.HashSet;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -29,7 +34,8 @@ public class GetProjectsInteractorTest {
         mockUserProjectsRepository = mock(IUserProjectsRepository.class);
         mockProjectRepository = mock(IProjectRepository.class);
         mockGetProjectsPresenter = mock(GetProjectsOutputBoundary.class);
-        interactor = new GetProjectsInteractor(mockGetProjectsPresenter);
+        interactor = new GetProjectsInteractor(mockGetProjectsPresenter,
+                                               mockUserProjectsRepository, mockProjectRepository);
 
     }
 
@@ -69,6 +75,7 @@ public class GetProjectsInteractorTest {
 
     /**
      * Tests the getProjects method when the project repository fails to retrieve projects.
+     * Should ignore the failed project and continue.
      */
     @Test
     public void testGetProjectsRepositoryFailure() {
@@ -82,6 +89,6 @@ public class GetProjectsInteractorTest {
         GetProjectsInputData inputData = new GetProjectsInputData(userId);
         interactor.getProjects(inputData);
 
-        verify(mockGetProjectsPresenter).prepareFailView(anyString());
+        verify(mockGetProjectsPresenter).prepareSuccessView(any(GetProjectsOutputData.class));
     }
 }
