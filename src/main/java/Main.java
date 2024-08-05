@@ -1,4 +1,6 @@
 import dataaccess.DataAccessConfig;
+import usecase.createverification.CreateVerificationController;
+import usecase.createverification.CreateVerificationUseCaseFactory;
 import usecase.manageapplications.createapplication.CreateApplicationController;
 import usecase.manageapplications.createapplication.CreateApplicationUseCaseFactory;
 import usecase.manageprojects.createproject.CreateProjectController;
