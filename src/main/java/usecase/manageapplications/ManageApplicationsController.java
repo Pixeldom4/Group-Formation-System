@@ -1,11 +1,11 @@
 package usecase.manageapplications;
 
-import usecase.acceptapplication.AcceptApplicationInputBoundary;
-import usecase.acceptapplication.AcceptApplicationInputData;
-import usecase.getapplications.GetApplicationsInputBoundary;
-import usecase.getapplications.GetApplicationsInputData;
-import usecase.rejectapplication.RejectApplicationInputBoundary;
-import usecase.rejectapplication.RejectApplicationInputData;
+import usecase.manageapplications.acceptapplication.AcceptApplicationInputBoundary;
+import usecase.manageapplications.acceptapplication.AcceptApplicationInputData;
+import usecase.manageapplications.getapplications.GetApplicationsInputBoundary;
+import usecase.manageapplications.getapplications.GetApplicationsInputData;
+import usecase.manageapplications.rejectapplication.RejectApplicationInputBoundary;
+import usecase.manageapplications.rejectapplication.RejectApplicationInputData;
 
 public class ManageApplicationsController {
     private final GetApplicationsInputBoundary getApplicationsInteractor;

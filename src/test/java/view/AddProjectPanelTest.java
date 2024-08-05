@@ -1,17 +1,15 @@
 package view;
 
-import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.createproject.CreateProjectController;
-import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.createproject.CreateProjectController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import view.components.NumericTextField;
 import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;

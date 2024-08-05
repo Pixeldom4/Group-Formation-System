@@ -1,8 +1,8 @@
 package view;
 
 import entities.ProjectInterface;
-import usecase.createapplication.CreateApplicationController;
-import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageapplications.createapplication.CreateApplicationController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchforuser.SearchUserController;
 import usecase.searchprojectbyid.SearchProjectByIdController;

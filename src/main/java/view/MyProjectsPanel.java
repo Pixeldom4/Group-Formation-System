@@ -1,8 +1,7 @@
 package view;
 
-import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.ProjectData;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.getprojects.ProjectData;
 import usecase.manageprojects.ManageProjectsController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;

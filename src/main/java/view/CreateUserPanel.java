@@ -1,6 +1,5 @@
 package view;
 
-import usecase.createuser.CreateUserController;
 import usecase.manageusers.ManageUsersController;
 import view.components.NumericTextField;
 import viewmodel.CreateUserPanelViewModel;

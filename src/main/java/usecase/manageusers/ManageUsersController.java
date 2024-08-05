@@ -1,14 +1,14 @@
 package usecase.manageusers;
 
-import usecase.createuser.CreateUserInputBoundary;
-import usecase.createuser.CreateUserInputData;
-import usecase.deleteuser.DeleteUserInputBoundary;
-import usecase.deleteuser.DeleteUserInputData;
-import usecase.edituser.EditUserInputBoundary;
-import usecase.edituser.EditUserInputData;
-import usecase.getloggedinuser.GetLoggedInUserInputBoundary;
-import usecase.getusers.GetUsersInputBoundary;
-import usecase.getusers.GetUsersInputData;
+import usecase.manageusers.createuser.CreateUserInputBoundary;
+import usecase.manageusers.createuser.CreateUserInputData;
+import usecase.manageusers.deleteuser.DeleteUserInputBoundary;
+import usecase.manageusers.deleteuser.DeleteUserInputData;
+import usecase.manageusers.edituser.EditUserInputBoundary;
+import usecase.manageusers.edituser.EditUserInputData;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserInputBoundary;
+import usecase.manageusers.getusers.GetUsersInputBoundary;
+import usecase.manageusers.getusers.GetUsersInputData;
 
 import java.util.HashSet;
 

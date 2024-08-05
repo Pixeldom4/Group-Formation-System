@@ -1,8 +1,7 @@
 package view;
 
 import entities.User;
-import usecase.edituser.EditUserController;
-import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageusers.ManageUsersController;
 import viewmodel.EditProfileViewModel;
 import viewmodel.ViewManagerModel;

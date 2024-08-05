@@ -1,7 +1,6 @@
 package view;
 
-import usecase.deleteproject.DeleteProjectController;
-import usecase.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectController;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
 import viewmodel.DisplayProjectApplicationViewModel;

@@ -13,7 +13,7 @@ class DeleteApplicationInteractor {
      *
      * @param inputData the input data containing the sender user ID and project ID
      */
-    void deleteApplication(DeleteApplicationInputData inputData) {
+    void deleteApplication(usecase.manageapplications.deleteapplication.DeleteApplicationInputData inputData) {
         // Implementation here
     }
 }
@@ -22,14 +22,14 @@ class DeleteApplicationInteractor {
  * Controller class for handling delete application requests.
  */
 class DeleteApplicationController {
-    private final DeleteApplicationInteractor interactor;
+    private final usecase.manageapplications.deleteapplication.DeleteApplicationInteractor interactor;
 
     /**
      * Constructs a DeleteApplicationController with the specified interactor.
      *
      * @param interactor the interactor to handle the deletion logic
      */
-    DeleteApplicationController(DeleteApplicationInteractor interactor) {
+    DeleteApplicationController(usecase.manageapplications.deleteapplication.DeleteApplicationInteractor interactor) {
         this.interactor = interactor;
     }
 
@@ -44,7 +44,7 @@ class DeleteApplicationController {
         if (senderUserId <= 0 || projectId <= 0) {
             throw new IllegalArgumentException("Invalid IDs");
         }
-        DeleteApplicationInputData inputData = new DeleteApplicationInputData(senderUserId, projectId);
+        usecase.manageapplications.deleteapplication.DeleteApplicationInputData inputData = new usecase.manageapplications.deleteapplication.DeleteApplicationInputData(senderUserId, projectId);
         interactor.deleteApplication(inputData);
     }
 }
@@ -75,14 +75,14 @@ class DeleteApplicationInputData {
  */
 class DeleteApplicationControllerTest {
 
-    private final DeleteApplicationInteractor deleteApplicationInteractor = new DeleteApplicationInteractor();
-    private final DeleteApplicationController deleteApplicationController = new DeleteApplicationController(deleteApplicationInteractor);
+    private final usecase.manageapplications.deleteapplication.DeleteApplicationInteractor deleteApplicationInteractor = new usecase.manageapplications.deleteapplication.DeleteApplicationInteractor();
+    private final usecase.manageapplications.deleteapplication.DeleteApplicationController deleteApplicationController = new usecase.manageapplications.deleteapplication.DeleteApplicationController(deleteApplicationInteractor);
 
     @Test
     void deleteApplicationSuccessfully() {
         int senderUserId = 1;
         int projectId = 1;
-        DeleteApplicationInputData inputData = new DeleteApplicationInputData(senderUserId, projectId);
+        usecase.manageapplications.deleteapplication.DeleteApplicationInputData inputData = new usecase.manageapplications.deleteapplication.DeleteApplicationInputData(senderUserId, projectId);
 
         deleteApplicationController.deleteApplication(senderUserId, projectId);
 

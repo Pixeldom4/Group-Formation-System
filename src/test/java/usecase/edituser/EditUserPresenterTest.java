@@ -3,6 +3,8 @@ package usecase.edituser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import usecase.manageusers.edituser.EditUserOutputData;
+import usecase.manageusers.edituser.EditUserPresenter;
 import viewmodel.EditProfileViewModel;
 
 import java.util.HashSet;

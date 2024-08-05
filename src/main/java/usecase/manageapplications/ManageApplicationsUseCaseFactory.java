@@ -1,14 +1,17 @@
 package usecase.manageapplications;
 
-import usecase.acceptapplication.AcceptApplicationInputBoundary;
-import usecase.acceptapplication.AcceptApplicationInteractor;
-import usecase.acceptapplication.AcceptApplicationOutputBoundary;
-import usecase.acceptapplication.AcceptApplicationPresenter;
-import usecase.getapplications.*;
-import usecase.rejectapplication.RejectApplicationInputBoundary;
-import usecase.rejectapplication.RejectApplicationInteractor;
-import usecase.rejectapplication.RejectApplicationOutputBoundary;
-import usecase.rejectapplication.RejectApplicationPresenter;
+import usecase.manageapplications.acceptapplication.AcceptApplicationInputBoundary;
+import usecase.manageapplications.acceptapplication.AcceptApplicationInteractor;
+import usecase.manageapplications.acceptapplication.AcceptApplicationOutputBoundary;
+import usecase.manageapplications.acceptapplication.AcceptApplicationPresenter;
+import usecase.manageapplications.getapplications.GetApplicationsInputBoundary;
+import usecase.manageapplications.getapplications.GetApplicationsInteractor;
+import usecase.manageapplications.getapplications.GetApplicationsOutputBoundary;
+import usecase.manageapplications.getapplications.GetApplicationsPresenter;
+import usecase.manageapplications.rejectapplication.RejectApplicationInputBoundary;
+import usecase.manageapplications.rejectapplication.RejectApplicationInteractor;
+import usecase.manageapplications.rejectapplication.RejectApplicationOutputBoundary;
+import usecase.manageapplications.rejectapplication.RejectApplicationPresenter;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 public class ManageApplicationsUseCaseFactory {

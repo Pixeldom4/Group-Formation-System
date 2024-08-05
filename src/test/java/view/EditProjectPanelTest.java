@@ -2,13 +2,13 @@ package view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInputBoundary;
-import usecase.editproject.EditProjectInputData;
-import usecase.getapplications.GetApplicationsController;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.rejectapplication.RejectApplicationController;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectInputBoundary;
+import usecase.manageprojects.editproject.EditProjectInputData;
+import usecase.manageapplications.getapplications.GetApplicationsController;
+import usecase.manageprojects.deleteproject.DeleteProjectController;
+import usecase.manageapplications.acceptapplication.AcceptApplicationController;
+import usecase.manageapplications.rejectapplication.RejectApplicationController;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 

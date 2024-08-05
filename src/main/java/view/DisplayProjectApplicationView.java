@@ -1,10 +1,7 @@
 package view;
 
 import entities.ProjectInterface;
-import usecase.acceptapplication.AcceptApplicationController;
-import usecase.getapplications.GetApplicationsController;
 import usecase.manageapplications.ManageApplicationsController;
-import usecase.rejectapplication.RejectApplicationController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.DisplayProjectApplicationViewModel;

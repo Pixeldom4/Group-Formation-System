@@ -1,17 +1,13 @@
 package usecase.manageprojects;
 
-import usecase.createproject.CreateProjectController;
-import usecase.createproject.CreateProjectInputBoundary;
-import usecase.createproject.CreateProjectInputData;
-import usecase.deleteproject.DeleteProjectController;
-import usecase.deleteproject.DeleteProjectInputBoundary;
-import usecase.deleteproject.DeleteProjectInputData;
-import usecase.editproject.EditProjectController;
-import usecase.editproject.EditProjectInputBoundary;
-import usecase.editproject.EditProjectInputData;
-import usecase.getprojects.GetProjectsInputBoundary;
-import usecase.getprojects.GetProjectsInputData;
-import usecase.getprojects.GetProjectsOutputBoundary;
+import usecase.manageprojects.createproject.CreateProjectInputBoundary;
+import usecase.manageprojects.createproject.CreateProjectInputData;
+import usecase.manageprojects.deleteproject.DeleteProjectInputBoundary;
+import usecase.manageprojects.deleteproject.DeleteProjectInputData;
+import usecase.manageprojects.editproject.EditProjectInputBoundary;
+import usecase.manageprojects.editproject.EditProjectInputData;
+import usecase.manageprojects.getprojects.GetProjectsInputBoundary;
+import usecase.manageprojects.getprojects.GetProjectsInputData;
 
 import java.util.HashSet;
 

@@ -1,8 +1,7 @@
 package view;
 
 import entities.User;
-import usecase.createproject.CreateProjectController;
-import usecase.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageprojects.ManageProjectsController;
 import view.components.NumericTextField;
 import viewmodel.AddProjectPanelViewModel;

@@ -1,6 +1,8 @@
 package usecase.createuser;
 
 import org.junit.jupiter.api.Test;
+import usecase.manageusers.createuser.CreateUserOutputData;
+
 import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
 

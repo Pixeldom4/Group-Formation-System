@@ -2,9 +2,9 @@ package view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.getloggedinuser.GetLoggedInUserController;
-import usecase.getprojects.GetProjectsController;
-import usecase.getprojects.ProjectData;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.ProjectData;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
