@@ -1,5 +1,4 @@
 import dataaccess.DataAccessConfig;
-import dataaccess.DatabaseInitializer;
 import usecase.acceptapplication.AcceptApplicationController;
 import usecase.acceptapplication.AcceptApplicationUseCaseFactory;
 import usecase.createapplication.CreateApplicationController;
@@ -22,6 +21,9 @@ import usecase.getloggedinuser.GetLoggedInUserController;
 import usecase.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.getprojects.GetProjectsController;
 import usecase.getprojects.GetProjectsUseCaseFactory;
+import usecase.getusers.GetUsersController;
+import usecase.getusers.GetUsersInteractor;
+import usecase.getusers.GetUsersPresenter;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.logout.LogoutController;
@@ -64,10 +66,10 @@ class Main {
         LoginVerificationViewModel loginVerificationViewModel = new LoginVerificationViewModel();
         CreateVerificationController createVerificationController = CreateVerificationUseCaseFactory.createController(loginVerificationViewModel);
         LoginPanel loginPanel = new LoginPanel(viewManagerModel,
-                                               loginPanelViewModel,
-                                               loginUserController,
-                                               loginVerificationViewModel,
-                                               createVerificationController);
+                loginPanelViewModel,
+                loginUserController,
+                loginVerificationViewModel,
+                createVerificationController);
 
         // Search Project Panel
         SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
@@ -107,6 +109,18 @@ class Main {
                 rejectApplicationController
         );
 
+        // Instantiate GetUsersPresenter and GetUsersInteractor
+        GetUsersPresenter getUsersPresenter = new GetUsersPresenter(myProjectsViewModel);
+        GetUsersInteractor getUsersInteractor = new GetUsersInteractor(
+                DataAccessConfig.getUserProjectsRepository(),
+                DataAccessConfig.getUserRepository(),
+                DataAccessConfig.getProjectRepository(),
+                getUsersPresenter
+        );
+
+        // Create GetUsersController
+        GetUsersController getUsersController = new GetUsersController(getUsersInteractor);
+
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(
                 myProjectsViewModel,
                 viewManagerModel,
@@ -114,13 +128,13 @@ class Main {
                 getProjectsController,
                 getApplicationsController,
                 editProjectPanelViewModel,
-                editProjectPanel);
+                editProjectPanel,
+                getUsersController);
 
         // Edit Profile Panel
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         EditUserController editUserController = EditUserUseCaseFactory.create(editProfileViewModel);
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
-
 
         EditProfilePanel editProfilePanel = new EditProfilePanel(
                 viewManagerModel,
