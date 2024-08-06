@@ -71,26 +71,6 @@ class Main {
         EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
         ManageUsersController manageUsersController = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel, searchPanelViewModel);
 
-//        // Manage Users Dennis
-//        CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
-//        EditProfileViewModel editProfileViewModel = new EditProfileViewModel();
-//        LoggedInDataAccessViewModel loggedInDataAccessViewModel = new LoggedInDataAccessViewModel() {
-//
-//            // These lines should not be here
-//            @Override
-//            public void setLoggedInUser(int userId, String firstName, String lastName, String userEmail, double desiredCompensation, HashSet<String> tags) {
-//
-//            }
-//
-//            @Override
-//            public void notLoggedIn() {
-//
-//            }
-//        };
-//
-//        MyProjectsPanelViewModel myProjectsPanelViewModel = new MyProjectsPanelViewModel();
-//        ManageUsersController manageUsersController = ManageUsersUseCaseFactory.create(createUserPanelViewModel, editProfileViewModel, loggedInDataAccessViewModel, myProjectsPanelViewModel);
-
         // Create User Panel
         CreateUserController createUserController = CreateUserUseCaseFactory.create(createUserPanelViewModel);
         CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, manageUsersController);
