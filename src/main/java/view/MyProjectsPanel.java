@@ -3,6 +3,13 @@ package view;
 import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageprojects.getprojects.ProjectData;
 import usecase.manageprojects.ManageProjectsController;
+
+import usecase.manageapplications.getapplications.GetApplicationsController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.ProjectData;
+import usecase.manageusers.getusers.GetUsersController;
+import usecase.manageusers.getusers.UserData;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
 import viewmodel.EditProjectPanelViewModel;
@@ -10,6 +17,8 @@ import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
@@ -24,16 +33,19 @@ import java.util.HashSet;
  */
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final ManageProjectsController getProjectsController;
+    private final GetProjectsController getProjectsController;
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
     private final EditProjectPanelViewModel editProjectPanelViewModel;
     private final EditProjectPanel editProjectPanel;
     private final GetLoggedInUserController getLoggedInUserController;
     private final JTable infoTable = new JTable();
-    private final int[] columnWidths = {200, 400, 100, 100};
-    private final String[] columnNames = {"Project Title", "Description", "Admin",  "Edit"};
+    private final int[] columnWidths = {50, 400, 100, 100, 50};
+    private final String[] columnNames = {"Project ID", "Project Title", "Description", "Admin", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
+    private final GetUsersController getUsersController;
+    private JButton getUsersButton;
+    private UsersPanel usersPanel;
 
     /**
      * Constructs a MyProjectsPanel.
@@ -42,21 +54,26 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
      * @param viewManagerModel the view manager model
      * @param getLoggedInUserController the controller for getting the logged-in user
      * @param getProjectsController the controller for getting projects
+     * @param getApplicationsController the controller for getting applications
      * @param editProjectPanelViewModel the view model for editing a project
      * @param editProjectPanel the panel for editing a project
+     * @param getUsersController the controller for getting users
      */
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
-                           ManageProjectsController getProjectsController,
+                           GetProjectsController getProjectsController,
+                           GetApplicationsController getApplicationsController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
-                           EditProjectPanel editProjectPanel) {
+                           EditProjectPanel editProjectPanel,
+                           GetUsersController getUsersController) {
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
         this.getProjectsController = getProjectsController;
         this.editProjectPanelViewModel = editProjectPanelViewModel;
         this.editProjectPanel = editProjectPanel;
+        this.getUsersController = getUsersController;
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
         editProjectPanelViewModel.addPropertyChangeListener(this);
@@ -65,6 +82,25 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(infoPanel);
 
+        // Initialize and add the Get Users button
+        getUsersButton = new JButton("Get Users");
+        getUsersButton.addActionListener(this);
+        this.add(getUsersButton);
+
+        // Initialize UsersPanel
+        usersPanel = new UsersPanel();
+
+        // Add a selection listener to the table to update the selected project ID
+        infoTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int selectedRow = infoTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    int projectId = (int) infoTable.getValueAt(selectedRow, 0);
+                    myProjectsPanelViewModel.setSelectedProjectId(projectId);
+                }
+            }
+        });
     }
 
     /**
@@ -75,13 +111,14 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private void addProjects(HashSet<ProjectData> projectDataSet) {
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
 
-        Object[][] info = new Object[projectDataSet.size()][4];
+        Object[][] info = new Object[projectDataSet.size()][5];
         int i = 0;
         for (ProjectData projectData : projectDataSet) {
-            info[i][0] = projectData.getProjectTitle();
-            info[i][1] = projectData.getProjectDescription();
-            info[i][2] = projectData.isProjectOwner() ? "Yes" : "No";
-            info[i][3] = "Edit";
+            info[i][0] = projectData.getProjectId();
+            info[i][1] = projectData.getProjectTitle();
+            info[i][2] = projectData.getProjectDescription();
+            info[i][3] = projectData.isProjectOwner() ? "Yes" : "No";
+            info[i][4] = "Edit";
             int projectId = projectData.getProjectId();
             String projectTitle = projectData.getProjectTitle();
             String projectDescription = projectData.getProjectDescription();
@@ -113,18 +150,21 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Make only the button column editable
-                return column >= 3;
+                return column >= 4;
             }
         };
         infoTable.setModel(infoTableModel);
 
-        ButtonColumn editColumn = new ButtonColumn(infoTable, 3);
+        ButtonColumn editColumn = new ButtonColumn(infoTable, 4);
         editColumn.setActions(editButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
         for (int j = 0; j < columnWidths.length; j++) {
             columnModel.getColumn(j).setPreferredWidth(columnWidths[j]);
         }
+        // Set table width to 0 to hide the column. Column existence is necessary for other methods
+        columnModel.getColumn(0).setMinWidth(0);
+        columnModel.getColumn(0).setMaxWidth(0);
     }
 
     @Override
@@ -150,11 +190,29 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {
             getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
         }
+        if (evt.getPropertyName().equals("usersDataUpdate")) {
+            HashSet<UserData> usersData = (HashSet<UserData>) evt.getNewValue();
+            usersPanel.displayUsers(usersData);
+        }
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // No implementation needed
+        if (e.getSource() == getUsersButton) {
+            // Retrieve the selected project ID
+            int projectId = myProjectsPanelViewModel.getSelectedProjectId();
+            getUsersController.getUsers(projectId);
+
+            // Display usersPanel in a new JFrame. Note that table size is large to accommodate large names/ groups of ppl
+            JFrame usersFrame = new JFrame("Users");
+            usersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            usersFrame.setSize(800, 600);
+            usersFrame.add(usersPanel);
+            usersFrame.setVisible(true);
+        }
+    }
+
+    public UsersPanel getUsersPanel() {
+        return usersPanel;
     }
 }

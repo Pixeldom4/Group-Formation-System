@@ -3,6 +3,7 @@ package viewmodel;
 import entities.User;
 import usecase.manageusers.getloggedinuser.LoggedInDataAccessViewModel;
 import usecase.manageprojects.getprojects.ProjectData;
+import usecase.manageusers.getusers.UserData;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,8 +15,10 @@ import java.util.HashSet;
 public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataAccessViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private HashSet<ProjectData> data;
+    private HashSet<UserData> usersData;
     private String errorMessage;
     private User loggedInUser;
+    private int selectedProjectId; // New field to store the selected project ID
 
     /**
      * Constructs a MyProjectsPanelViewModel.
@@ -32,6 +35,16 @@ public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataA
     public void setData(HashSet<ProjectData> data) {
         this.data = data;
         support.firePropertyChange("dataUpdate", null, data);
+    }
+
+    /**
+     * Sets the user data.
+     *
+     * @param usersData the user data
+     */
+    public void setUsersData(HashSet<UserData> usersData) {
+        this.usersData = usersData;
+        support.firePropertyChange("usersDataUpdate", null, usersData);
     }
 
     /**
@@ -114,5 +127,23 @@ public class MyProjectsPanelViewModel extends ViewModel implements LoggedInDataA
     @Override
     public void notLoggedIn() {
         loggedInUser = null;
+    }
+
+    /**
+     * Sets the selected project ID.
+     *
+     * @param projectId the project ID
+     */
+    public void setSelectedProjectId(int projectId) {
+        this.selectedProjectId = projectId;
+    }
+
+    /**
+     * Gets the selected project ID.
+     *
+     * @return the selected project ID
+     */
+    public int getSelectedProjectId() {
+        return selectedProjectId;
     }
 }
