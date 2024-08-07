@@ -1,7 +1,6 @@
 package usecase.manageprojects.editproject;
 
 import api.embeddingapi.EmbeddingAPIInterface;
-import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 
 import java.util.HashSet;

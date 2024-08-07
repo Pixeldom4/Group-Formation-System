@@ -1,10 +1,8 @@
 package usecase.searchforproject;
 
-import entities.ProjectInterface;
 import api.embeddingapi.EmbeddingAPIInterface;
-import api.embeddingapi.OpenAPIDataEmbed;
-import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
+import entities.ProjectInterface;
 
 import java.util.*;
 
@@ -14,8 +12,8 @@ import java.util.*;
  */
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
-    private EmbeddingAPIInterface embeddingAPI;
-    private IProjectRepository projectDataAccess;
+    private final EmbeddingAPIInterface embeddingAPI;
+    private final IProjectRepository projectDataAccess;
 
     /**
      * Constructs a LocalProjectSearchObject using the given project repository.

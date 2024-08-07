@@ -30,8 +30,6 @@ import static org.mockito.Mockito.*;
 public class EditProjectInteractorTest {
 
     private static EditProjectOutputBoundary editPresenter;
-    private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
-    private final static SearchProjectOutputBoundary searchPresenter = new SearchProjectsPresenter(searchPanelViewModel);
     private static IProjectRepository projectDAO;
     private static EmbeddingAPIInterface apiInterface;
     private static EditProjectInteractor editProjectInteractor;

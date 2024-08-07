@@ -1,11 +1,11 @@
 package usecase.searchproject;
 
-import entities.Project;
-import entities.ProjectInterface;
 import api.embeddingapi.EmbeddingAPIInterface;
 import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import dataaccess.local.LocalProjectRepository;
+import entities.Project;
+import entities.ProjectInterface;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import usecase.searchforproject.SearchProjectOutputBoundary;
@@ -13,21 +13,21 @@ import usecase.searchforproject.SearchProjectsInteractor;
 import usecase.searchforproject.SearchProjectsPresenter;
 import viewmodel.SearchPanelViewModel;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the SearchProjectInteractor class.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class SearchProjectInteractorTest {
 
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
