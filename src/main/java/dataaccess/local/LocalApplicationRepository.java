@@ -3,7 +3,6 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import config.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import entities.Application;
 import entities.ApplicationInterface;
@@ -13,7 +12,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Local implementation of the IApplicationRepository interface.
@@ -24,13 +26,6 @@ public class LocalApplicationRepository implements IApplicationRepository {
     private final String FILE_PATH;
     private final String[] header = {"sender", "projectId", "text", "pdfBytes"};
     private final HashMap<Integer, ArrayList<ApplicationInterface>> applications = new HashMap<>();
-
-    /**
-     * Constructs a LocalApplicationRepository with the default file path.
-     */
-    public LocalApplicationRepository() {
-        this(DataAccessConfig.getProjectCSVPath());
-    }
 
     /**
      * Constructs a LocalApplicationRepository with the specified file path.
