@@ -1,5 +1,6 @@
 package usecase.searchforproject;
 
+import api.embeddingapi.EmbeddingAPIInterface;
 import entities.ProjectInterface;
 import dataaccess.IProjectRepository;
 
@@ -20,9 +21,10 @@ public class SearchProjectsInteractor implements SearchProjectInputBoundary {
      * @param presenter the output boundary.
      * @param projectRepository the project repository to use.
      */
-    public SearchProjectsInteractor(SearchProjectOutputBoundary presenter, IProjectRepository projectRepository) {
+    public SearchProjectsInteractor(SearchProjectOutputBoundary presenter, IProjectRepository projectRepository,
+                                    EmbeddingAPIInterface embeddingAPI) {
         this.presenter = presenter;
-        this.projectDAO = new LocalProjectSearchObject(projectRepository);
+        this.projectDAO = new LocalProjectSearchObject(projectRepository, embeddingAPI);
     }
 
     /**
