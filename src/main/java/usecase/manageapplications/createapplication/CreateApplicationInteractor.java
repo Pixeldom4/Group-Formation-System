@@ -63,4 +63,8 @@ public class CreateApplicationInteractor implements CreateApplicationInputBounda
             applicationPresenter.prepareFailView("Failed to create application.");
         }
     }
+
+    public CreateApplicationOutputBoundary getPresenter() {
+        return this.applicationPresenter;
+    }
 }

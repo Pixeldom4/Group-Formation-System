@@ -36,4 +36,8 @@ public class CreateApplicationController {
             System.err.println("Error reading the file: " + e.getMessage());
         }
     }
+
+    public CreateApplicationInputBoundary getInteractor() {
+        return this.createApplicationInteractor;
+    }
 }
