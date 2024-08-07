@@ -206,7 +206,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             // Display usersPanel in a new JFrame. Note that table size is large to accommodate large names/ groups of ppl
             JFrame usersFrame = new JFrame("Users");
             usersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            usersFrame.setSize(800, 600);
+            usersFrame.setSize(800, 300);
             usersFrame.add(usersPanel);
             usersFrame.setVisible(true);
         }
