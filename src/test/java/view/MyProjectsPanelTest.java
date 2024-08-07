@@ -55,27 +55,6 @@ class MyProjectsPanelTest {
         verify(getUsersController, times(1)).getUsers(1);
     }
 
-//    @Test
-//    void propertyChange_DataUpdate_UpdatesTable() {
-//        // Arrange
-//        HashSet<ProjectData> projectDataSet = new HashSet<>();
-//        ProjectData project1 = new ProjectData(1, "Title1", "Description1", true, 100.0, new HashSet<>());
-//        ProjectData project2 = new ProjectData(2, "Title2", "Description2", false, 200.0, new HashSet<>());
-//        projectDataSet.add(project1);
-//        projectDataSet.add(project2);
-//
-//        // Act
-//        myProjectsPanel.propertyChange(new PropertyChangeEvent(this, "dataUpdate", null, projectDataSet));
-//        JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
-//
-//        // Assert
-//        assertEquals(2, infoTable.getRowCount());
-//        assertEquals("Title1", infoTable.getValueAt(0, 1));
-//        assertEquals("Description1", infoTable.getValueAt(0, 2));
-//        assertEquals("Yes", infoTable.getValueAt(0, 3));
-//        assertEquals("Edit", infoTable.getValueAt(0, 4));
-//    }
-
     @Test
     void propertyChange_ErrorPropertySet_UpdatesErrorLabel() {
         // Act
