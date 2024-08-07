@@ -5,53 +5,37 @@ import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import dataaccess.local.LocalProjectRepository;
 import entities.Project;
-import entities.ProjectInterface;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import usecase.manageprojects.editproject.EditProjectInputData;
 import usecase.manageprojects.editproject.EditProjectInteractor;
 import usecase.manageprojects.editproject.EditProjectOutputBoundary;
-import usecase.manageprojects.editproject.EditProjectOutputData;
 import usecase.searchforproject.SearchProjectOutputBoundary;
-import usecase.searchforproject.SearchProjectsInteractor;
 import usecase.searchforproject.SearchProjectsPresenter;
 import viewmodel.SearchPanelViewModel;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for the EditProjectInteractor class.
  */
 public class EditProjectInteractorTest {
 
-    private final static String SAVE_LOCATION = "local_data/test/edit_projects_interactor/";
-    private final static EditProjectOutputBoundary editPresenter = new EditProjectOutputBoundary() {
-        @Override
-        public void prepareSuccessView(EditProjectOutputData outputData) {
-            assertNotNull(outputData);
-            System.out.println("Success: " + outputData.getTitle());
-        }
-
-        @Override
-        public void prepareFailView(String error) {
-            fail("Edit project failed: " + error);
-        }
-    };
+    private static EditProjectOutputBoundary editPresenter;
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary searchPresenter = new SearchProjectsPresenter(searchPanelViewModel);
     private static IProjectRepository projectDAO;
-    private final static EmbeddingAPIInterface apiInterface = new OpenAPIDataEmbed();
+    private static EmbeddingAPIInterface apiInterface;
     private static EditProjectInteractor editProjectInteractor;
-    private static SearchProjectsInteractor searchProjectInteractor;
-    private final static File projectSaveFile = new File(SAVE_LOCATION + "projects.csv");
-    private final static File embedSaveFile = new File(SAVE_LOCATION + "embeds.csv");
+    private static final HashMap<Integer, float[]> embeddings = new HashMap<>();
 
 
     private final static String[][] dummyProjects = new String[][]{
@@ -65,64 +49,101 @@ public class EditProjectInteractorTest {
     /**
      * Sets up the test environment before all tests.
      */
-    @BeforeAll
-    public static void setUp() throws IOException {
-        Files.deleteIfExists(projectSaveFile.toPath());
-        Files.deleteIfExists(embedSaveFile.toPath());
-        projectDAO = new LocalProjectRepository(SAVE_LOCATION);
+    @BeforeEach
+    public void setUp() throws IOException {
+        projectDAO = mock(LocalProjectRepository.class);
+        apiInterface = mock(OpenAPIDataEmbed.class);
+        editPresenter = mock(EditProjectOutputBoundary.class);
         editProjectInteractor = new EditProjectInteractor(projectDAO, editPresenter, apiInterface);
-        searchProjectInteractor = new SearchProjectsInteractor(searchPresenter, projectDAO);
-        addDummyProjects();
-    }
-
-    /**
-     * Adds dummy projects to the repository for testing.
-     */
-    private static void addDummyProjects() {
         for (String[] project : dummyProjects) {
-            float[] embedding = apiInterface.getEmbedData(project[3]);
-            int editorId = 0; // MAKE THIS THE EDITOR ID
-            projectDAO.createProject(project[1],
-                    Double.parseDouble(project[2]),
-                    project[3],
-                    new HashSet<>(Arrays.asList(project[4].split(";"))),
-                    embedding, editorId);
+            float[] embedding = randomEmbedding();
+            when(apiInterface.getEmbedData(project[3])).thenReturn(embedding);
+            embeddings.put(Integer.parseInt(project[0]), embedding);
+
+            Project newProject = new Project(Integer.parseInt(project[0]),
+                                             project[1],
+                                             Double.parseDouble(project[2]),
+                                             project[3],
+                                             new HashSet<>(Arrays.asList(project[4].split(";"))));
+            when(projectDAO.getProjectById(Integer.parseInt(project[0]))).thenReturn(newProject);
         }
+
+        when(projectDAO.getAllEmbeddings()).thenReturn(embeddings);
     }
 
     /**
-     * Tests editing and searching for projects.
+     * Tests editing projects.
      */
     @Test
-    public void testEditAndSearchProjects() {
+    public void testEditProjects() {
         // Edit the project with ID 1
         int projectId = 1;
+
+        int ownerId = 0;
+        when(projectDAO.getOwnerId(projectId)).thenReturn(ownerId);
+        EditProjectInputData inputData = createMockData(projectId);
+        when(apiInterface.getEmbedData(ArgumentMatchers.anyString())).thenReturn(randomEmbedding());
+        when(projectDAO.update(anyInt(), any(), anyDouble(), any(), any(), any())).thenReturn(true);
+        editProjectInteractor.editProject(inputData);
+
+        // capture the output data
+        verify(editPresenter).prepareSuccessView(argThat(outputData -> {
+            assertEquals(projectId, outputData.getProjectId());
+            return true;
+        }));
+    }
+
+    /**
+     * Tests editing projects with insufficient permissions.
+     */
+    @Test
+    public void testEditProjectsWithInsufficientPermissions() {
+        // Edit the project with ID 1
+        int projectId = 1;
+
+        int ownerId = 1;
+        when(projectDAO.getOwnerId(projectId)).thenReturn(ownerId);
+        EditProjectInputData inputData = createMockData(projectId);
+        editProjectInteractor.editProject(inputData);
+
+        // verify that the presenter prepares a fail view
+        verify(editPresenter).prepareFailView(notNull());
+    }
+
+    /**
+     * Tests editing projects that do not exist.
+     */
+    @Test
+    public void testEditUpdateFail() {
+        // Edit the project with ID 1
+        int projectId = 1;
+
+        int ownerId = 0;
+        when(projectDAO.getOwnerId(projectId)).thenReturn(ownerId);
+        EditProjectInputData inputData = createMockData(projectId);
+        when(apiInterface.getEmbedData(ArgumentMatchers.anyString())).thenReturn(randomEmbedding());
+        when(projectDAO.update(anyInt(), any(), anyDouble(), any(), any(), any())).thenReturn(false);
+        editProjectInteractor.editProject(inputData);
+
+        // verify that the presenter prepares a fail view
+        verify(editPresenter).prepareFailView(notNull());
+    }
+
+    private static float[] randomEmbedding() {
+        int size = 6;
+        float[] embedding = new float[size];
+        for (int i = 0; i < size; i++) {
+            embedding[i] = (float) Math.random();
+        }
+        return embedding;
+    }
+
+    private EditProjectInputData createMockData(int projectId) {
         String newTitle = "Updated Java Project";
         double newBudget = 1100.0;
         String newDescription = "An updated project about Java development, focusing on new features.";
         HashSet<String> newTags = new HashSet<>(Arrays.asList("Java", "Programming", "Updated"));
-
-        int editorId = 0; // MAKE THIS THE PROJECT OWNER ID
-        EditProjectInputData inputData = new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags, editorId);
-        editProjectInteractor.editProject(inputData);
-
-        Project editedProject = projectDAO.getProjectById(projectId);
-        assertNotNull(editedProject);
-        assertEquals(newTitle, editedProject.getProjectTitle());
-        assertEquals(newBudget, editedProject.getProjectBudget());
-        assertEquals(newDescription, editedProject.getProjectDescription());
-        assertEquals(newTags, editedProject.getProjectTags());
-
-        // Search for projects and verify the modified project is correctly listed
-        searchProjectInteractor.searchProjects("development projects");
-        ArrayList<ProjectInterface> projectsRanking = searchPanelViewModel.getProject();
-
-        assertEquals(5, projectsRanking.size());
-        assertTrue(projectsRanking.stream().anyMatch(project -> "Updated Java Project".equals(project.getProjectTitle())));
-
-        for (ProjectInterface project : projectsRanking) {
-            assertNotNull(project);
-            System.out.println(project.getProjectTitle());
-        }
+        int editorId = 0;
+        return new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags, editorId);
     }
 }

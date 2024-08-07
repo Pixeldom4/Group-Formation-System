@@ -14,14 +14,8 @@ import java.util.*;
  */
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
-    private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private IProjectRepository projectDataAccess = DataAccessConfig.getProjectRepository();
-
-    /**
-     * Constructs a LocalProjectSearchObject with the default project repository.
-     */
-    public LocalProjectSearchObject() {
-    }
+    private EmbeddingAPIInterface embeddingAPI;
+    private IProjectRepository projectDataAccess;
 
     /**
      * Constructs a LocalProjectSearchObject using the given project repository.
@@ -29,8 +23,9 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
      *
      * @param projectRepository the project repository to use.
      */
-    public LocalProjectSearchObject(IProjectRepository projectRepository) {
-        projectDataAccess = projectRepository;
+    public LocalProjectSearchObject(IProjectRepository projectRepository, EmbeddingAPIInterface embeddingAPI) {
+        this.embeddingAPI = embeddingAPI;
+        this.projectDataAccess = projectRepository;
     }
 
     /**
