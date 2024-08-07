@@ -12,6 +12,11 @@ import usecase.manageusers.getusers.GetUsersController;
 import usecase.manageusers.getusers.UserData;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import view.services.SafeCastCollectionService;
+import config.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import config.PlayVoiceServiceConfig;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -21,16 +26,20 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * A panel for displaying and managing the user's projects.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final GetProjectsController getProjectsController;
@@ -46,6 +55,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final GetUsersController getUsersController;
     private JButton getUsersButton;
     private UsersPanel usersPanel;
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a MyProjectsPanel.
@@ -74,6 +86,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.editProjectPanelViewModel = editProjectPanelViewModel;
         this.editProjectPanel = editProjectPanel;
         this.getUsersController = getUsersController;
+
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
 
         myProjectsPanelViewModel.addPropertyChangeListener(this);
         editProjectPanelViewModel.addPropertyChangeListener(this);
@@ -119,6 +134,21 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             info[i][2] = projectData.getProjectDescription();
             info[i][3] = projectData.isProjectOwner() ? "Yes" : "No";
             info[i][4] = "Edit";
+        Object[][] info = new Object[projectDataSet.size()][4];
+        Map<Point, String> hoverSpeechMap = new HashMap<>();
+
+        int i = 0;
+        for (ProjectData projectData : projectDataSet) {
+            info[i][0] = projectData.getProjectTitle();
+            info[i][1] = projectData.getProjectDescription();
+            info[i][2] = projectData.isProjectOwner() ? "Yes" : "No";
+            info[i][3] = "Edit";
+
+            hoverSpeechMap.put(new Point(i, 0), "Project title: " + projectData.getProjectTitle());
+            hoverSpeechMap.put(new Point(i, 1), "Project description: " + projectData.getProjectDescription());
+            hoverSpeechMap.put(new Point(i, 2), projectData.isProjectOwner() ? "Is admin" : "Not admin");
+            hoverSpeechMap.put(new Point(i, 3), "Press to edit project");
+
             int projectId = projectData.getProjectId();
             String projectTitle = projectData.getProjectTitle();
             String projectDescription = projectData.getProjectDescription();
@@ -126,22 +156,19 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             HashSet<String> projectTags = projectData.getProjectTags();
             int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
 
-            editButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
-                            projectDescription, projectTags, editorId);
-                    editProjectPanelViewModel.initDetails();
+            editButtonActions.add(() -> {
+                editProjectPanelViewModel.setProjectDetails(projectId, projectTitle, projectBudget,
+                        projectDescription, projectTags, editorId);
+                editProjectPanelViewModel.initDetails();
 
-                    // Display editProjectPanel in your application window
-                    JFrame editFrame = new JFrame("Edit Project");
-                    editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    editFrame.setSize(400, 300);
-                    editFrame.add(editProjectPanel);
+                // Display editProjectPanel in your application window
+                JFrame editFrame = new JFrame("Edit Project");
+                editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                editFrame.setSize(400, 300);
+                editFrame.add(editProjectPanel);
 
-                    editFrame.setVisible(true);
+                editFrame.setVisible(true);
 
-                }
             });
             i++;
         }
@@ -156,6 +183,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         infoTable.setModel(infoTableModel);
 
         ButtonColumn editColumn = new ButtonColumn(infoTable, 4);
+        hoverVoiceService.addTableHoverVoice(infoTable, hoverSpeechMap);
+
+        ButtonColumn editColumn = new ButtonColumn(infoTable, 3);
         editColumn.setActions(editButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
@@ -170,7 +200,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("dataUpdate")) {
-            HashSet<ProjectData> data = (HashSet<ProjectData>) evt.getNewValue();
+            HashSet<ProjectData> data = SafeCastCollectionService.convertToCollection(evt.getNewValue(), ProjectData.class, HashSet::new);
             addProjects(data);
         }
         if (evt.getPropertyName().equals("login")) {
@@ -185,6 +215,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             JOptionPane.showMessageDialog(this, errorMessage);
         }
         if (evt.getPropertyName().equals("deleteProject")) {
+            playVoiceService.playVoice("Successfully deleted project");
             JOptionPane.showMessageDialog(null, "Successfully deleted project");
         }
         if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {

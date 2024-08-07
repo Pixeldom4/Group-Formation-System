@@ -4,6 +4,10 @@ import entities.ProjectInterface;
 import usecase.manageapplications.ManageApplicationsController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import config.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import config.PlayVoiceServiceConfig;
 import viewmodel.DisplayProjectApplicationViewModel;
 
 import javax.swing.*;
@@ -20,10 +24,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A view for displaying and managing project applications.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class DisplayProjectApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
 
     private JTextField projectTitleField;
@@ -33,11 +40,13 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
     private final int[] columnWidths = {400, 200, 200, 200};
     private final String[] columnNames = {"Applicant", "view", "Accept", "Decline"};
     private final JTable infoTable = new JTable();
-    private final JScrollPane infoPanel = new JScrollPane(infoTable);
 
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
 
     private final ManageApplicationsController manageApplicationsController;
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a DisplayProjectApplicationView.
@@ -54,6 +63,9 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
         this.projectId = projectId;
         this.manageApplicationsController = manageApplicationsController;
+
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
 
         setTitle("Project Applications");
         setSize(400, 600);
@@ -80,6 +92,7 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         ArrayList<ButtonAction> declineButtonActions = new ArrayList<>();
 
         Object[][] info = new Object[applicationsData.length][4];
+        Map<Point, String> buttonSpeechMap = new HashMap<>();
 
         DisplayProjectApplicationView temp = this;
         for (int i = 0; i < applicationsData.length; i++) {
@@ -87,48 +100,43 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             info[i][1] = "view";
             info[i][2] = "Accept";
             info[i][3] = "Decline";
+
+            buttonSpeechMap.put(new Point(i, 0), "Application info: " + applicationsData[i][0]);
+            buttonSpeechMap.put(new Point(i, 1), "Press to download application");
+            buttonSpeechMap.put(new Point(i, 2), "Press to accept application");
+            buttonSpeechMap.put(new Point(i, 3), "Press to decline application");
+
             int finalI = i;
-            viewButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-                    Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
-                    File downloadsDirectory = downloadsPath.toFile();
-                    if (downloadsDirectory.exists() && downloadsDirectory.isDirectory()) {
-                        fileChooser.setCurrentDirectory(downloadsDirectory);
-                    }
+            viewButtonActions.add(() -> {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-                    int result = fileChooser.showOpenDialog(temp);
-                    if (result == JFileChooser.APPROVE_OPTION) {
+                Path downloadsPath = Paths.get(System.getProperty("user.home"), "Downloads");
+                File downloadsDirectory = downloadsPath.toFile();
+                if (downloadsDirectory.exists() && downloadsDirectory.isDirectory()) {
+                    fileChooser.setCurrentDirectory(downloadsDirectory);
+                }
 
-                        File selectedDirectory = fileChooser.getSelectedFile();
+                int result = fileChooser.showOpenDialog(temp);
+                if (result == JFileChooser.APPROVE_OPTION) {
 
-                        String fileName = applicationsData[finalI][0]+" application.pdf";
-                        File outputFile = new File(selectedDirectory, fileName);
+                    File selectedDirectory = fileChooser.getSelectedFile();
 
-                        try(FileOutputStream fos = new FileOutputStream(outputFile)){
-                            fos.write((byte[])applicationsData[finalI][3]);
-                            JOptionPane.showMessageDialog(temp, "Downloaded file: " + fileName);
-                        } catch (IOException ex){
-                            JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
-                        }
+                    String fileName = applicationsData[finalI][0]+" application.pdf";
+                    File outputFile = new File(selectedDirectory, fileName);
+
+                    try(FileOutputStream fos = new FileOutputStream(outputFile)){
+                        fos.write((byte[])applicationsData[finalI][3]);
+                        JOptionPane.showMessageDialog(temp, "Downloaded file: " + fileName);
+                    } catch (IOException ex){
+                        JOptionPane.showMessageDialog(temp, "Error saving file: " + ex.getMessage());
                     }
                 }
             });
-            acceptButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    manageApplicationsController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                }
-            });
-            declineButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    manageApplicationsController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]);
-                }
-            });
+            acceptButtonActions.add(() -> manageApplicationsController.acceptApplicant(projectId, (Integer) applicationsData[finalI][1]));
+
+            declineButtonActions.add(() -> manageApplicationsController.rejectApplicant(projectId, (Integer) applicationsData[finalI][1]));
         }
 
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
@@ -154,6 +162,10 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             columnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
         }
 
+        hoverVoiceService.addTableHoverVoice(infoTable, buttonSpeechMap);
+
+        add(infoTable);
+
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
 
@@ -170,7 +182,6 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
         // Project Tags
         detailsPanel.add(new JLabel("Tags:"  ));
 
-        add(infoTable);
         this.setVisible(true);
     }
 
@@ -202,10 +213,13 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 String acceptedName = displayProjectApplicationViewModel.getSenderName();
-                JOptionPane.showMessageDialog(null, "Accepted application for: " + acceptedName);
+                String message = "Accepted application for: " + acceptedName;
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(null, message);
                 manageApplicationsController.getApplicationsForProject(projectId);
             }
             else {
+                playVoiceService.playVoice("Failed to accept application: " + displayProjectApplicationViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null,
                         displayProjectApplicationViewModel.getErrorMessage());
             }
@@ -215,10 +229,13 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 String acceptedName = displayProjectApplicationViewModel.getSenderName();
-                JOptionPane.showMessageDialog(null, "Rejected application for: " + acceptedName);
+                String message = "Rejected application for: " + acceptedName;
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(null, message);
                 manageApplicationsController.getApplicationsForProject(projectId);
             }
             else {
+                playVoiceService.playVoice("Failed to reject application: " + displayProjectApplicationViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null,
                         displayProjectApplicationViewModel.getErrorMessage());
             }

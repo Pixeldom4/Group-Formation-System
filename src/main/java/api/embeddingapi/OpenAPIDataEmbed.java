@@ -1,4 +1,4 @@
-package api;
+package api.embeddingapi;
 
 import okhttp3.*;
 import org.json.JSONException;
@@ -13,12 +13,16 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
 
     private static final String API_URL = "https://api.openai.com/v1/embeddings";
     private static final String API_MODEL = "text-embedding-3-small";
-    private static final String API_TOKEN = System.getenv("API_KEY"); // Note: This should typically be fetched from environment variables.
+    private static String API_TOKEN = null;
 
     /**
      * Constructs an OpenAPIDataEmbed object.
      */
     public OpenAPIDataEmbed() {
+        API_TOKEN = System.getenv("API_KEY");
+        if (API_TOKEN == null) {
+            throw new RuntimeException("API_KEY environment variable not set");
+        }
     }
 
     /**
@@ -47,7 +51,11 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
 
         try {
             Response response = client.newCall(request).execute();
-            responseBody = new JSONObject(response.body().string());
+            if (response.body() != null) {
+                responseBody = new JSONObject(response.body().string());
+            } else {
+                throw new RuntimeException("Response body for embedding request is null");
+            }
             JSONObject embedData = (JSONObject) responseBody.getJSONArray("data").get(0);
             float[] data = new float[embedData.getJSONArray("embedding").length()];
             for (int i = 0; i < embedData.getJSONArray("embedding").length(); i++) {

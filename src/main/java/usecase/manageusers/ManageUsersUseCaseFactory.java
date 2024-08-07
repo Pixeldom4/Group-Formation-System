@@ -1,6 +1,11 @@
 package usecase.manageusers;
 
 import dataaccess.*;
+import config.DataAccessConfig;
+import dataaccess.ILoginUserDetails;
+import dataaccess.IProjectRepository;
+import dataaccess.IUserProjectsRepository;
+import dataaccess.IUserRepository;
 import usecase.BCryptPasswordHasher;
 import usecase.PasswordHasher;
 import usecase.manageusers.createuser.CreateUserInputBoundary;

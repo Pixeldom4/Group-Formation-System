@@ -1,7 +1,7 @@
 package usecase.loginuser;
 
-import dataaccess.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
+import config.DataAccessConfig;
 import dataaccess.IUserRepository;
 import usecase.BCryptPasswordHasher;
 import usecase.PasswordHasher;

@@ -1,6 +1,6 @@
 package usecase.manageprojects.createproject;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import viewmodel.AddProjectPanelViewModel;
