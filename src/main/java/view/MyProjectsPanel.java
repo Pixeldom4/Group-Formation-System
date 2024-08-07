@@ -1,5 +1,6 @@
 package view;
 
+import usecase.manageusers.ManageUsersController;
 import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageprojects.getprojects.ProjectData;
 import usecase.manageprojects.ManageProjectsController;
@@ -42,17 +43,17 @@ import java.util.Map;
 @SuppressWarnings("FieldCanBeLocal")
 public class MyProjectsPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final GetProjectsController getProjectsController;
     private final MyProjectsPanelViewModel myProjectsPanelViewModel;
     private final ViewManagerModel viewManagerModel;
     private final EditProjectPanelViewModel editProjectPanelViewModel;
     private final EditProjectPanel editProjectPanel;
     private final GetLoggedInUserController getLoggedInUserController;
+    private final ManageProjectsController manageProjectsController;
+    private final ManageUsersController manageUsersController;
     private final JTable infoTable = new JTable();
-    private final int[] columnWidths = {50, 400, 100, 100, 50};
-    private final String[] columnNames = {"Project ID", "Project Title", "Description", "Admin", "Edit"};
+    private final int[] columnWidths = {0, 400, 100, 100, 50};
+    private final String[] columnNames = {"id", "Project Title", "Description", "Admin", "Edit"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
-    private final GetUsersController getUsersController;
     private JButton getUsersButton;
     private UsersPanel usersPanel;
 
@@ -65,27 +66,26 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
      * @param myProjectsPanelViewModel the view model for the user's projects
      * @param viewManagerModel the view manager model
      * @param getLoggedInUserController the controller for getting the logged-in user
-     * @param getProjectsController the controller for getting projects
-     * @param getApplicationsController the controller for getting applications
+     * @param manageProjectsController the controller for getting projects
+     * @param manageUsersController the controller for getting users
      * @param editProjectPanelViewModel the view model for editing a project
      * @param editProjectPanel the panel for editing a project
-     * @param getUsersController the controller for getting users
      */
     public MyProjectsPanel(MyProjectsPanelViewModel myProjectsPanelViewModel,
                            ViewManagerModel viewManagerModel,
                            GetLoggedInUserController getLoggedInUserController,
-                           GetProjectsController getProjectsController,
-                           GetApplicationsController getApplicationsController,
+                           ManageProjectsController manageProjectsController,
+                           ManageUsersController manageUsersController,
                            EditProjectPanelViewModel editProjectPanelViewModel,
                            EditProjectPanel editProjectPanel,
-                           GetUsersController getUsersController) {
+                           UsersPanel usersPanel) {
         this.viewManagerModel = viewManagerModel;
         this.getLoggedInUserController = getLoggedInUserController;
         this.myProjectsPanelViewModel = myProjectsPanelViewModel;
-        this.getProjectsController = getProjectsController;
         this.editProjectPanelViewModel = editProjectPanelViewModel;
         this.editProjectPanel = editProjectPanel;
-        this.getUsersController = getUsersController;
+        this.manageProjectsController = manageProjectsController;
+        this.manageUsersController = manageUsersController;
 
         this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
         this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
@@ -103,7 +103,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         this.add(getUsersButton);
 
         // Initialize UsersPanel
-        usersPanel = new UsersPanel();
+        this.usersPanel = usersPanel;
 
         // Add a selection listener to the table to update the selected project ID
         infoTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -127,6 +127,8 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         ArrayList<ButtonAction> editButtonActions = new ArrayList<>();
 
         Object[][] info = new Object[projectDataSet.size()][5];
+        Map<Point, String> hoverSpeechMap = new HashMap<>();
+
         int i = 0;
         for (ProjectData projectData : projectDataSet) {
             info[i][0] = projectData.getProjectId();
@@ -134,20 +136,11 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             info[i][2] = projectData.getProjectDescription();
             info[i][3] = projectData.isProjectOwner() ? "Yes" : "No";
             info[i][4] = "Edit";
-        Object[][] info = new Object[projectDataSet.size()][4];
-        Map<Point, String> hoverSpeechMap = new HashMap<>();
 
-        int i = 0;
-        for (ProjectData projectData : projectDataSet) {
-            info[i][0] = projectData.getProjectTitle();
-            info[i][1] = projectData.getProjectDescription();
-            info[i][2] = projectData.isProjectOwner() ? "Yes" : "No";
-            info[i][3] = "Edit";
-
-            hoverSpeechMap.put(new Point(i, 0), "Project title: " + projectData.getProjectTitle());
-            hoverSpeechMap.put(new Point(i, 1), "Project description: " + projectData.getProjectDescription());
-            hoverSpeechMap.put(new Point(i, 2), projectData.isProjectOwner() ? "Is admin" : "Not admin");
-            hoverSpeechMap.put(new Point(i, 3), "Press to edit project");
+            hoverSpeechMap.put(new Point(i, 1), "Project title: " + projectData.getProjectTitle());
+            hoverSpeechMap.put(new Point(i, 2), "Project description: " + projectData.getProjectDescription());
+            hoverSpeechMap.put(new Point(i, 3), projectData.isProjectOwner() ? "Is admin" : "Not admin");
+            hoverSpeechMap.put(new Point(i, 4), "Press to edit project");
 
             int projectId = projectData.getProjectId();
             String projectTitle = projectData.getProjectTitle();
@@ -182,10 +175,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         };
         infoTable.setModel(infoTableModel);
 
-        ButtonColumn editColumn = new ButtonColumn(infoTable, 4);
         hoverVoiceService.addTableHoverVoice(infoTable, hoverSpeechMap);
 
-        ButtonColumn editColumn = new ButtonColumn(infoTable, 3);
+        ButtonColumn editColumn = new ButtonColumn(infoTable, 4);
         editColumn.setActions(editButtonActions);
 
         TableColumnModel columnModel = infoTable.getColumnModel();
@@ -207,7 +199,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             getLoggedInUserController.getLoggedInUser();
             boolean login = (boolean) evt.getNewValue();
             if (login) {
-                getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
+                manageProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
             }
         }
         if (evt.getPropertyName().equals("error")) {
@@ -219,7 +211,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             JOptionPane.showMessageDialog(null, "Successfully deleted project");
         }
         if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {
-            getProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
+            manageProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
         }
         if (evt.getPropertyName().equals("usersDataUpdate")) {
             HashSet<UserData> usersData = (HashSet<UserData>) evt.getNewValue();
@@ -232,7 +224,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         if (e.getSource() == getUsersButton) {
             // Retrieve the selected project ID
             int projectId = myProjectsPanelViewModel.getSelectedProjectId();
-            getUsersController.getUsers(projectId);
+            manageUsersController.getUsers(projectId);
 
             // Display usersPanel in a new JFrame. Note that table size is large to accommodate large names/ groups of ppl
             JFrame usersFrame = new JFrame("Users");
@@ -243,7 +235,4 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         }
     }
 
-    public UsersPanel getUsersPanel() {
-        return usersPanel;
-    }
 }
