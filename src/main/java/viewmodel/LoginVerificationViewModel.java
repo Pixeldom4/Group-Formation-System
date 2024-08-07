@@ -1,6 +1,7 @@
 package viewmodel;
 
 import config.SpecialSettingConfig;
+import org.apache.commons.math3.distribution.NormalDistribution;
 import usecase.createverification.CreateVerificationViewModel;
 
 import java.awt.*;
@@ -9,7 +10,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.commons.math3.distribution.*;
+import static java.lang.Math.max;
 
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -18,7 +19,7 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
     private String verifyImageLocation = "";
     private int imageAngle = 0;
     private int sliderAngle = 0;
-    private final int imageAngleRange = 20;
+    private int imageAngleRange = 20;
     private long startTime = 0;
     private boolean started = false;
 
@@ -27,11 +28,13 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
     private final NormalDistribution timeDistribution = new NormalDistribution(mean, std);
 
     private final boolean challengeVerify = SpecialSettingConfig.challengeVerificationSetting();
+    private final int verifyLevel = SpecialSettingConfig.getVerificationLevel();
     private Timer timer;
     private TimerTask timerTask;
 
     public LoginVerificationViewModel() {
         super("VerificationView");
+        imageAngleRange = max(imageAngleRange - verifyLevel, 1);
     }
 
     /**
@@ -47,7 +50,7 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
      * @param angle the angle of the slider
      */
     public void setSliderAngle(int angle) {
-        this.sliderAngle = angle;
+        this.sliderAngle = (int) (angle * (1 + verifyLevel * 0.03));
         support.firePropertyChange("imageAngle", null, sliderAngle + imageAngle);
     }
 
@@ -64,9 +67,8 @@ public class LoginVerificationViewModel extends ViewModel implements CreateVerif
                 timerTask = new TimerTask() {
                     @Override
                     public void run() {
-                        int dist = (sliderAngle + imageAngle) % 360;
-                        dist = Math.min(dist, 360 - dist);
-                        imageAngle += (180 - dist) / 30;
+                        double dist = (sliderAngle + imageAngle) % 360;
+                        imageAngle += (int) ((180d - dist) / (180d / verifyLevel));
                         support.firePropertyChange("imageAngle", null, sliderAngle + imageAngle);
                     }
                 };
