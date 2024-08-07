@@ -219,11 +219,13 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private void displaySearchResult(ArrayList<ProjectInterface> projectRankingList) {
         ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> requestToJoinButtonActions = new ArrayList<>();
-
-        Object[][] info = new Object[projectRankingList.size()][columnNames.length];
+        int pause = Math.min(projectRankingList.size(), 5);
+        Object[][] info = new Object[pause][columnNames.length];
         Map<Point, String> hoverSpeechMap = new HashMap<>();
 
-        for (int i = 0; i < projectRankingList.size(); i++) {
+
+
+        for (int i = 0; i < pause; i++) {
             info[i][0] = projectRankingList.get(i).getProjectTitle();
             info[i][1] = cutString(projectRankingList.get(i).getProjectDescription());
             info[i][2] = "View Details";

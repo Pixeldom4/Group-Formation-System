@@ -1,5 +1,7 @@
 package usecase.searchforproject;
 
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import viewmodel.SearchPanelViewModel;
@@ -9,6 +11,7 @@ import viewmodel.SearchPanelViewModel;
  */
 public class SearchProjectUseCaseFactory {
     private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
+    private static final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
 
     // Private constructor to prevent instantiation
     private SearchProjectUseCaseFactory() {}
@@ -21,7 +24,7 @@ public class SearchProjectUseCaseFactory {
      */
     public static SearchProjectController createSearchProjectController(SearchPanelViewModel searchPanelViewModel) {
         SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
-        SearchProjectInputBoundary interactor = new SearchProjectsInteractor(presenter, projectRepository);
+        SearchProjectInputBoundary interactor = new SearchProjectsInteractor(presenter, projectRepository, embeddingAPI);
         return new SearchProjectController(interactor);
     }
 }

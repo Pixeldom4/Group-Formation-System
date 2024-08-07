@@ -1,10 +1,11 @@
 package usecase.searchproject;
 
-import entities.ProjectInterface;
 import api.embeddingapi.EmbeddingAPIInterface;
 import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import dataaccess.local.LocalProjectRepository;
+import entities.Project;
+import entities.ProjectInterface;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import usecase.searchforproject.SearchProjectOutputBoundary;
@@ -12,28 +13,29 @@ import usecase.searchforproject.SearchProjectsInteractor;
 import usecase.searchforproject.SearchProjectsPresenter;
 import viewmodel.SearchPanelViewModel;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the SearchProjectInteractor class.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class SearchProjectInteractorTest {
 
-    private final static String SAVE_LOCATION = "local_data/test/search_projects_interactor/";
     private final static SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
     private final static SearchProjectOutputBoundary presenter = new SearchProjectsPresenter(searchPanelViewModel);
     private static IProjectRepository projectDAO;
     private static SearchProjectsInteractor searchProjectInteractor;
-    private final static EmbeddingAPIInterface apiInteface = new OpenAPIDataEmbed();
-    private final static File projectSaveFile = new File(SAVE_LOCATION + "projects.csv");
-    private final static File embedSaveFile = new File(SAVE_LOCATION + "embeds.csv");
+    private static EmbeddingAPIInterface apiInteface;
+    private static final HashMap<Integer, float[]> embeddings = new HashMap<>();
 
     private final static String[][] dummyprojects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
@@ -48,26 +50,23 @@ public class SearchProjectInteractorTest {
      */
     @BeforeAll
     public static void setUp() throws IOException {
-        Files.deleteIfExists(projectSaveFile.toPath());
-        Files.deleteIfExists(embedSaveFile.toPath());
-        projectDAO = new LocalProjectRepository(SAVE_LOCATION);
-        searchProjectInteractor = new SearchProjectsInteractor(presenter, projectDAO);
-        addDummyProjects();
-    }
-
-    /**
-     * Adds dummy projects to the repository for testing.
-     */
-    private static void addDummyProjects(){
+        projectDAO = mock(LocalProjectRepository.class);
+        apiInteface = mock(OpenAPIDataEmbed.class);
+        searchProjectInteractor = new SearchProjectsInteractor(presenter, projectDAO, apiInteface);
         for (String[] project : dummyprojects) {
-            float[] embedding = apiInteface.getEmbedData(project[3]);
-            projectDAO.createProject(project[1],
-                    Double.parseDouble(project[2]),
-                    project[3],
-                    new HashSet<>(Arrays.asList(project[4].split(";"))),
-                    embedding,
-                    1);
+            float[] embedding = randomEmbedding();
+            when(apiInteface.getEmbedData(project[3])).thenReturn(embedding);
+            embeddings.put(Integer.parseInt(project[0]), embedding);
+
+            Project newProject = new Project(Integer.parseInt(project[0]),
+                                             project[1],
+                                             Double.parseDouble(project[2]),
+                                             project[3],
+                                             new HashSet<>(Arrays.asList(project[4].split(";"))));
+            when(projectDAO.getProjectById(Integer.parseInt(project[0]))).thenReturn(newProject);
         }
+
+        when(projectDAO.getAllEmbeddings()).thenReturn(embeddings);
     }
 
     /**
@@ -75,15 +74,22 @@ public class SearchProjectInteractorTest {
      */
     @Test
     public void testSearchProjects() {
-        searchProjectInteractor.searchProjects("Frontend development projects");
+        String searchQuery = "Frontend development projects";
+        when(apiInteface.getEmbedData(searchQuery)).thenReturn(randomEmbedding());
+        searchProjectInteractor.searchProjects(searchQuery);
         ArrayList<ProjectInterface> projectsRanking = searchPanelViewModel.getProject();
         assertEquals(projectsRanking.size(), 5);
         for (ProjectInterface project : projectsRanking) {
             assertNotNull(project);
-
-            // Since it could be hard to determine which projects get ranked first given a keyword search,
-            // we will just check if the projects seems to be in the correct order.
-            System.out.println(project.getProjectTitle());
         }
+    }
+
+    private static float[] randomEmbedding() {
+        int size = 6;
+        float[] embedding = new float[size];
+        for (int i = 0; i < size; i++) {
+            embedding[i] = (float) Math.random();
+        }
+        return embedding;
     }
 }

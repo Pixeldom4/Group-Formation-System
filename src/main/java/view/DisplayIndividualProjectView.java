@@ -44,7 +44,6 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
         projectID = new JLabel("Project ID:" + project.getProjectId());
         tagsField = new JLabel("Tags:" + project.getProjectTags());
         projectDescriptionArea = new JTextArea(project.getProjectDescription());
-        projectDescriptionArea.setEditable(false);
 
         hoverVoiceService.addHoverVoice(projectTitleField, "Project title: " + project.getProjectTitle());
         hoverVoiceService.addHoverVoice(projectID, "Project ID: " + project.getProjectId());
@@ -65,7 +64,8 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
         projectDescriptionArea.setEditable(false);
         projectDescriptionArea.setLineWrap(true); // Enables line wrapping
         projectDescriptionArea.setWrapStyleWord(true); // Wraps at word boundaries
-        projectDescriptionArea.setEnabled(false);
+        projectDescriptionArea.setEditable(false);
+        projectDescriptionArea.setForeground(Color.BLACK);
         hoverVoiceService.addHoverVoice(projectDescriptionArea, "Project description: " + project.getProjectDescription());
 
         JScrollPane scrollPane = new JScrollPane(projectDescriptionArea);

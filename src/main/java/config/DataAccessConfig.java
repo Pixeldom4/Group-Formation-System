@@ -1,13 +1,15 @@
 package config;
 
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.*;
 import dataaccess.database.ApplicationRepository;
 import dataaccess.database.ProjectRepository;
 import dataaccess.database.UserProjectsRepository;
 import dataaccess.database.UserRepository;
+import dataaccess.database.manager.*;
 import dataaccess.inmemory.LoginUserDetails;
 import dataaccess.local.*;
-import dataaccess.database.manager.*;
 
 /**
  * Configuration class for setting up data access repositories.
@@ -34,11 +36,13 @@ public class DataAccessConfig {
     private static final IApplicationRepository applicationRepository = new ApplicationRepository(applicationManager);
 
     // Local Repositories
-    private final static ILocalEmbedRepository embedDataAccess = new LocalEmbedRepository();
-    private final static IProjectRepository projectDataAccess = new LocalProjectRepository();
-    private final static IUserRepository userDataAccess = new LocalUserRepository();
-    private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository();
-    private final static IApplicationRepository applicationDataAccess = new LocalApplicationRepository();
+    private final static String csvPath = "local_data/projects/";
+    private final static EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
+    private final static ILocalEmbedRepository embedDataAccess = new LocalEmbedRepository(csvPath, embeddingAPI);
+    private final static IProjectRepository projectDataAccess = new LocalProjectRepository(csvPath, embedDataAccess);
+    private final static IUserRepository userDataAccess = new LocalUserRepository(csvPath);
+    private final static IUserProjectsRepository userProjectsDataAccess = new LocalUserProjectsRepository(csvPath);
+    private final static IApplicationRepository applicationDataAccess = new LocalApplicationRepository(csvPath);
 
     // Login Details
     private final static ILoginUserDetails loginUserDetails = new LoginUserDetails();
@@ -120,7 +124,7 @@ public class DataAccessConfig {
      * @return the path to the CSV files
      */
     public static String getProjectCSVPath() {
-        return "local_data/projects/";
+        return csvPath;
     }
 
     /**

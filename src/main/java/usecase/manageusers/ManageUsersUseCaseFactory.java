@@ -1,6 +1,5 @@
 package usecase.manageusers;
 
-import dataaccess.*;
 import config.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
@@ -26,7 +25,6 @@ import usecase.manageusers.getusers.GetUsersPresenter;
 import viewmodel.CreateUserPanelViewModel;
 import viewmodel.EditProfileViewModel;
 import viewmodel.MyProjectsPanelViewModel;
-import viewmodel.SearchPanelViewModel;
 
 public class ManageUsersUseCaseFactory {
     private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
@@ -62,7 +60,4 @@ public class ManageUsersUseCaseFactory {
         return new ManageUsersController(createUserInteractor, deleteUserInteractor, editUserInteractor, getLoggedInUserInteractor, getUsersInteractor);
     }
 
-    public static ManageUsersController create(CreateUserPanelViewModel createUserPanelViewModel, EditProfileViewModel editProfileViewModel, SearchPanelViewModel searchPanelViewModel) {
-        return null;
-    }
 }
