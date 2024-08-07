@@ -11,6 +11,7 @@ public class CreateUserPanelViewModel extends ViewModel {
     private boolean success;
     private String errorMessage;
     private String createdUser;
+    private String successMessage;
 
     /**
      * Constructs a CreateUserPanelViewModel.
@@ -62,6 +63,7 @@ public class CreateUserPanelViewModel extends ViewModel {
      */
     public void setCreatedUser(String createdUser) {
         this.createdUser = createdUser;
+        this.successMessage = "User " + createdUser + " created successfully";
     }
 
     /**
@@ -71,6 +73,13 @@ public class CreateUserPanelViewModel extends ViewModel {
      */
     public String getCreatedUser() {
         return createdUser;
+    }
+
+    /**
+     * Gets the success message.
+     */
+    public String getSuccessMessage() {
+        return successMessage;
     }
 
     /**

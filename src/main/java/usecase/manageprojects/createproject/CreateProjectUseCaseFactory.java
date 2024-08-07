@@ -2,10 +2,10 @@ package usecase.manageprojects.createproject;
 
 import api.EmbeddingAPIInterface;
 import api.OpenAPIDataEmbed;
-import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import viewmodel.AddProjectPanelViewModel;
+import config.DataAccessConfig;
 
 /**
  * Factory class for creating instances of the CreateProject use case.

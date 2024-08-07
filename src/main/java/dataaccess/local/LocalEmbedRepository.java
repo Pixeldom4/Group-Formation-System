@@ -1,11 +1,11 @@
 package dataaccess.local;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,8 +22,8 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
 
     private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "embeds.csv";
     private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private HashMap<Integer, float[]> embeddings = new HashMap<Integer, float[]>();
-    private String[] header = {"projectId", "embedding"};
+    private final HashMap<Integer, float[]> embeddings = new HashMap<>();
+    private final String[] header = {"projectId", "embedding"};
 
     /**
      * Creates a new LocalEmbedRepository.
@@ -162,7 +162,7 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
                 Float[] embedding = Arrays.stream(line[1].replace("[", "").replace("]", "").split(",")).map(Float::valueOf).toArray(Float[]::new);
                 float[] floatArray = new float[embedding.length];
                 for (int i = 0; i < embedding.length; i++) {
-                    floatArray[i] = (float) embedding[i];
+                    floatArray[i] = embedding[i];
                 }
                 embeddings.put(projectId, floatArray);
             }

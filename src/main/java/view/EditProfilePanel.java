@@ -1,24 +1,30 @@
 package view;
 
+import config.HoverVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import entities.User;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageusers.ManageUsersController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import view.components.TagPanel;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
 import viewmodel.EditProfileViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashSet;
 
 /**
  * A panel for editing the user's profile.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EditProfilePanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final ManageUsersController editUserController;
     private final ViewManagerModel viewManagerModel;
@@ -43,11 +49,13 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
 
     private final JButton addTagButton = new JButton("Add Tag");
     private final GridLayout tagPanelLayout = new GridLayout(0, 1);
-    private final JPanel tagPanel = new JPanel();
+    private final TagPanel tagPanel = new TagPanel();
 
     private final JLabel tagPanelLabel = new JLabel("User tags (Press add tag to add): ");
-    private final HashSet<String> tags = new HashSet<>();
     private final JButton saveButton = new JButton("Save");
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs an EditProfilePanel.
@@ -65,19 +73,28 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         editProfileViewModel.addPropertyChangeListener(this);
         this.editUserController = editUserController;
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
 
-        addTagButton.addActionListener(e -> {
+        addTagButton.addActionListener(_ -> {
             String tagText = projectTagsField.getText();
             if (!tagText.isEmpty()) {
-                addTagToPanel(tagText);
-                tags.add(tagText);
+                tagPanel.addTagToPanel(tagText);
                 projectTagsField.setText("");
             }
         });
 
         userDataPanel.setLayout(userDataGridLayout);
+
+        hoverVoiceService.addHoverVoice(firstNameField, "Enter new first name here");
+        hoverVoiceService.addHoverVoice(lastNameField, "Enter new last name here");
+        hoverVoiceService.addHoverVoice(emailField, "Enter new email here");
+        hoverVoiceService.addHoverVoice(desiredCompensationField, "Enter new desired compensation here");
+        hoverVoiceService.addHoverVoice(projectTagsField, "Enter new tags here");
+        hoverVoiceService.addHoverVoice(addTagButton, "Press to add tag");
 
         userDataPanel.add(firstNameLabel);
         userDataPanel.add(firstNameField);
@@ -101,64 +118,18 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
 
         this.add(userInfoPanel);
 
-        saveButton.addActionListener(e -> {
+        hoverVoiceService.addHoverVoice(saveButton, "Press to save profile");
+        saveButton.addActionListener(_ -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();
             double desiredCompensation = Double.parseDouble(desiredCompensationField.getText());
 
             // Call the EditUserController to save the user information
-            editUserController.editUser(editProfileViewModel.getUserId(), firstName, lastName, email, desiredCompensation, tags);
+            editUserController.editUser(editProfileViewModel.getUserId(), firstName, lastName, email, desiredCompensation, tagPanel.getTags());
         });
 
         this.add(saveButton);
-    }
-
-    /**
-     * Adds a tag to the tag panel.
-     *
-     * @param text the text of the tag to add
-     */
-    private void addTagToPanel(String text) {
-        if (text.isEmpty()) {
-            return;
-        }
-        if (tags.contains(text)) {
-            return;
-        }
-
-        JLabel label = new JLabel(text);
-        label.setOpaque(true);
-        label.setBackground(Color.LIGHT_GRAY);
-        label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        JButton removeButton = new JButton("x");
-
-        JPanel tag = new JPanel();
-        tag.setBorder(new EmptyBorder(0, 10, 0, 10));
-        tag.setLayout(new GridBagLayout());
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridy = 0;
-
-        constraints.gridx = 0;
-        constraints.weightx = 0.8;
-        tag.add(label, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 0.2;
-        tag.add(removeButton, constraints);
-
-        removeButton.addActionListener(e -> {
-            tags.remove(text);
-            tagPanel.remove(tag);
-            tagPanel.revalidate();
-            tagPanel.repaint();
-        });
-
-        tagPanel.add(tag);
-        tagPanel.revalidate();
-        tagPanel.repaint();
     }
 
     @Override
@@ -180,8 +151,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
                 emailField.setText(loggedInUser.getUserEmail());
                 desiredCompensationField.setText(String.valueOf(loggedInUser.getDesiredCompensation()));
                 for (String tag : loggedInUser.getTags()) {
-                    addTagToPanel(tag);
-                    tags.add(tag);
+                    tagPanel.addTagToPanel(tag);
                 }
             } else {
                 firstNameField.setText("");
@@ -189,10 +159,7 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
                 emailField.setText("");
                 desiredCompensationField.setText("");
                 projectTagsField.setText("");
-                tags.clear();
-                tagPanel.removeAll();
-                tagPanel.revalidate();
-                tagPanel.repaint();
+                tagPanel.clearPanel();
             }
         }
 
@@ -200,8 +167,10 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 getLoggedInUserController.getLoggedInUser();
+                playVoiceService.playVoice("Profile updated successfully!");
                 JOptionPane.showMessageDialog(null, "Profile updated successfully!");
             } else {
+                playVoiceService.playVoice("Failed to update profile: " + editProfileViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null, "Failed to update profile: " + editProfileViewModel.getErrorMessage());
             }
         }

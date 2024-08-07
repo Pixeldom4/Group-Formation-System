@@ -1,5 +1,7 @@
 package dataaccess;
 
+import config.DataAccessConfig;
+
 /**
  * Utility class for initializing the database.
  * <p>

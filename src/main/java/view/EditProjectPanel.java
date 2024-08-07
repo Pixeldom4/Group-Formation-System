@@ -1,14 +1,16 @@
 package view;
 
-import usecase.manageprojects.editproject.EditProjectController;
+import config.HoverVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
+import usecase.manageprojects.editproject.EditProjectController;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import java.util.HashSet;
 /**
  * A panel for editing project details.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     private final EditProjectPanelViewModel editProjectViewModel;
@@ -23,16 +26,19 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
     private final ManageApplicationsController manageApplicationsController;
     private final ManageProjectsController deleteProjectController;
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
-    private JTextField titleField;
-    private JTextField budgetField;
-    private JTextArea descriptionField;
-    private JTextField tagsField;
-    private JButton saveButton;
-    private JButton refreshButton;
-    private JButton viewApplicationButton;
-    private JButton deleteButton;
+    private final JTextField titleField;
+    private final JTextField budgetField;
+    private final JTextArea descriptionField;
+    private final JTextField tagsField;
+    private final JButton saveButton;
+    private final JButton refreshButton;
+    private final JButton viewApplicationButton;
+    private final JButton deleteButton;
     private int projectId;
     private int editorId;
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs an EditProjectPanel.
@@ -56,6 +62,9 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         this.deleteProjectController = deleteProjectController;
         this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         titleField = new JTextField();
@@ -66,6 +75,15 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         viewApplicationButton = new JButton("View Applications");
         deleteButton = new JButton("Delete");
         refreshButton = new JButton("Refresh");
+
+        hoverVoiceService.addHoverVoice(titleField, "Enter new project title here");
+        hoverVoiceService.addHoverVoice(budgetField, "Enter new project budget here");
+        hoverVoiceService.addHoverVoice(descriptionField, "Enter new project description here");
+        hoverVoiceService.addHoverVoice(tagsField, "Enter new project tags here");
+        hoverVoiceService.addHoverVoice(saveButton, "Press to save project");
+        hoverVoiceService.addHoverVoice(viewApplicationButton, "Press to view applications");
+        hoverVoiceService.addHoverVoice(deleteButton, "Press to delete project");
+        hoverVoiceService.addHoverVoice(refreshButton, "Press to refresh project");
 
         add(new JLabel("Project Title:"));
         add(titleField);
@@ -80,37 +98,22 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         add(deleteButton);
         add(refreshButton);
 
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveProject();
+        saveButton.addActionListener(e -> saveProject());
+
+        viewApplicationButton.addActionListener(e -> new DisplayProjectApplicationView(projectId,
+                                                                               displayProjectApplicationViewModel,
+                                                                               manageApplicationsController));
+
+        deleteButton.addActionListener(e -> {
+
+            int dialogResult = JOptionPane.showConfirmDialog (null,
+                    "Are you sure you would like to delete " + projectId + "?",
+                    "Warning",
+                    JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                deleteProjectController.deleteProject(projectId);
             }
-        });
 
-        viewApplicationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                new DisplayProjectApplicationView(projectId,
-                        displayProjectApplicationViewModel,
-                        manageApplicationsController);
-
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                int dialogResult = JOptionPane.showConfirmDialog (null,
-                        "Are you sure you would like to delete " + projectId + "?",
-                        "Warning",
-                        JOptionPane.YES_NO_OPTION);
-                if(dialogResult == JOptionPane.YES_OPTION){
-                    deleteProjectController.deleteProject(projectId);
-                }
-
-            }
         });
 
     }
@@ -170,8 +173,10 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
             refreshProject();
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
+                playVoiceService.playVoice("Project updated successfully!");
                 JOptionPane.showMessageDialog(null, "Project updated successfully!");
             } else {
+                playVoiceService.playVoice("Failed to update project: " + editProjectViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null, "Failed to update project: " + editProjectViewModel.getErrorMessage());
             }
         }

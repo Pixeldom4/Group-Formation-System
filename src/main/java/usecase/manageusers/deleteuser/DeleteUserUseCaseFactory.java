@@ -1,6 +1,6 @@
 package usecase.manageusers.deleteuser;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IUserRepository;
 import org.apache.commons.lang3.NotImplementedException;
 

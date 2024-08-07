@@ -1,6 +1,6 @@
 package usecase.manageusers.createuser;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import entities.User;
 import dataaccess.IUserRepository;
 import usecase.PasswordHasher;
