@@ -3,6 +3,7 @@ package usecase.createproject;
 import api.EmbeddingAPIInterface;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
+import entities.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.manageprojects.createproject.*;
@@ -34,7 +35,8 @@ public class CreateProjectInteractorTest {
         mockUserProjectsRepository = mock(IUserProjectsRepository.class);
         mockProjectPresenter = mock(CreateProjectOutputBoundary.class);
         mockEmbeddingAPI = mock(EmbeddingAPIInterface.class);
-        interactor = new CreateProjectInteractor(mockProjectRepository, mockUserProjectsRepository, mockProjectPresenter);
+        interactor = new CreateProjectInteractor(mockProjectRepository, mockUserProjectsRepository,
+                                                 mockProjectPresenter, mockEmbeddingAPI);
     }
 
     /**
@@ -52,5 +54,29 @@ public class CreateProjectInteractorTest {
         interactor.createProject(inputData);
 
         verify(mockProjectPresenter).prepareFailView("Failed to create project.");
+    }
+
+    /**
+     * Tests the scenario where the project creation is successful.
+     * Verifies that the success view is prepared with the appropriate output data.
+     */
+    @Test
+    void createProjectSucceeds() {
+        CreateProjectInputData inputData = new CreateProjectInputData("Title", 1000.0, "Description", new HashSet<>(Arrays.asList("tag1", "tag2")), 1);
+        float[] embeddings = new float[]{0.1f, 0.2f, 0.3f};
+        Project project = new Project(1, "Title", 1000.0, "Description", new HashSet<>(Arrays.asList("tag1", "tag2")));
+
+        when(mockEmbeddingAPI.getEmbedData("Description")).thenReturn(embeddings);
+        when(mockProjectRepository.createProject("Title", 1000.0, "Description", new HashSet<>(Arrays.asList("tag1", "tag2")), embeddings, 1)).thenReturn(project);
+
+        interactor.createProject(inputData);
+
+        verify(mockUserProjectsRepository).addUserToProject(1, 1);
+        //capture the argument passed to the prepareSuccessView method
+        verify(mockProjectPresenter).prepareSuccessView(argThat(outputData -> outputData.getProjectId() == 1 &&
+                outputData.getTitle().equals("Title") &&
+                outputData.getBudget() == 1000.0 &&
+                outputData.getDescription().equals("Description") &&
+                outputData.getTags().equals(new HashSet<>(Arrays.asList("tag1", "tag2")))));
     }
 }

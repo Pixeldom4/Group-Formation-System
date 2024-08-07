@@ -51,7 +51,8 @@ public class ManageProjectsUseCaseFactory {
         GetProjectsOutputBoundary getProjectsPresenter = new GetProjectsPresenter(myProjectsPanelViewModel);
         GetProjectsInputBoundary getProjectsInteractor = new GetProjectsInteractor(getProjectsPresenter, userProjectsRepository, projectRepository);
         CreateProjectOutputBoundary createProjectPresenter = new CreateProjectPresenter(addProjectPanelViewModel);
-        CreateProjectInputBoundary createProjectInteractor = new CreateProjectInteractor(projectRepository, userProjectsRepository, createProjectPresenter);
+        CreateProjectInputBoundary createProjectInteractor = new CreateProjectInteractor(projectRepository, userProjectsRepository,
+                                                                                         createProjectPresenter, embeddingAPI);
         EditProjectOutputBoundary editProjectPresenter = new EditProjectPresenter(editProjectPanelViewModel);
         EditProjectInputBoundary editProjectInteractor = new EditProjectInteractor(projectRepository, editProjectPresenter, embeddingAPI);
         DeleteProjectOutputBoundary deleteProjectPresenter = new DeleteProjectPresenter(myProjectsPanelViewModel);

@@ -1,5 +1,7 @@
 package usecase.manageprojects.createproject;
 
+import api.EmbeddingAPIInterface;
+import api.OpenAPIDataEmbed;
 import dataaccess.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
@@ -11,6 +13,7 @@ import viewmodel.AddProjectPanelViewModel;
 public class CreateProjectUseCaseFactory {
     private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
     private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
+    private static final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
 
     // Private constructor to prevent instantiation
     private CreateProjectUseCaseFactory() {}
@@ -23,7 +26,8 @@ public class CreateProjectUseCaseFactory {
      */
     public static CreateProjectController createController(AddProjectPanelViewModel addProjectPanelViewModel) {
         CreateProjectOutputBoundary outputBoundary = new CreateProjectPresenter(addProjectPanelViewModel);
-        CreateProjectInputBoundary inputBoundary = new CreateProjectInteractor(projectRepository, userProjectsRepository, outputBoundary);
+        CreateProjectInputBoundary inputBoundary = new CreateProjectInteractor(projectRepository, userProjectsRepository,
+                                                                               outputBoundary, embeddingAPI);
         return new CreateProjectController(inputBoundary);
     }
 }
