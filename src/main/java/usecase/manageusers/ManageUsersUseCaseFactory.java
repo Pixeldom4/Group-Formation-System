@@ -1,5 +1,6 @@
 package usecase.manageusers;
 
+import dataaccess.*;
 import config.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import dataaccess.IProjectRepository;
@@ -24,6 +25,8 @@ import usecase.manageusers.getusers.GetUsersOutputBoundary;
 import usecase.manageusers.getusers.GetUsersPresenter;
 import viewmodel.CreateUserPanelViewModel;
 import viewmodel.EditProfileViewModel;
+import viewmodel.MyProjectsPanelViewModel;
+import viewmodel.SearchPanelViewModel;
 
 public class ManageUsersUseCaseFactory {
     private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
@@ -37,8 +40,9 @@ public class ManageUsersUseCaseFactory {
     public static ManageUsersController create(
             CreateUserPanelViewModel createUserViewModel,
             EditProfileViewModel editProfileViewModel,
-            LoggedInDataAccessViewModel loggedInDataAccessViewModel
-            ){
+            LoggedInDataAccessViewModel loggedInDataAccessViewModel,
+            MyProjectsPanelViewModel myProjectsPanelViewModel
+    ){
         CreateUserPresenter createUserPresenter = new CreateUserPresenter(createUserViewModel);
         PasswordHasher passwordHasher = new BCryptPasswordHasher();
         CreateUserInputBoundary createUserInteractor = new CreateUserInteractor(userRepository, createUserPresenter, passwordHasher);
@@ -52,10 +56,13 @@ public class ManageUsersUseCaseFactory {
         GetLoggedInUserOutputBoundary getLoggedInUserPresenter = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
         GetLoggedInUserInputBoundary getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserPresenter, loginUserDetails, userRepository);
 
-        GetUsersOutputBoundary getUsersPresenter = new GetUsersPresenter();
+        GetUsersOutputBoundary getUsersPresenter = new GetUsersPresenter(myProjectsPanelViewModel);
         GetUsersInputBoundary getUsersInteractor = new GetUsersInteractor(userProjectsRepository, userRepository, projectRepository, getUsersPresenter);
 
         return new ManageUsersController(createUserInteractor, deleteUserInteractor, editUserInteractor, getLoggedInUserInteractor, getUsersInteractor);
     }
 
+    public static ManageUsersController create(CreateUserPanelViewModel createUserPanelViewModel, EditProfileViewModel editProfileViewModel, SearchPanelViewModel searchPanelViewModel) {
+        return null;
+    }
 }

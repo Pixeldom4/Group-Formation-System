@@ -2,6 +2,30 @@ import api.texttospeechservice.TextToSpeechService;
 import config.DataAccessConfig;
 import usecase.createverification.CreateVerificationController;
 import usecase.createverification.CreateVerificationUseCaseFactory;
+import usecase.manageapplications.createapplication.CreateApplicationController;
+import usecase.manageapplications.createapplication.CreateApplicationUseCaseFactory;
+import usecase.manageprojects.createproject.CreateProjectController;
+import usecase.manageprojects.createproject.CreateProjectUseCaseFactory;
+import usecase.manageusers.createuser.CreateUserController;
+import usecase.manageusers.createuser.CreateUserUseCaseFactory;
+import usecase.manageprojects.deleteproject.DeleteProjectController;
+import usecase.manageprojects.deleteproject.DeleteProjectUseCaseFactory;
+import usecase.manageprojects.editproject.EditProjectController;
+import usecase.manageprojects.editproject.EditProjectUseCaseFactory;
+import usecase.manageusers.edituser.EditUserController;
+import usecase.manageusers.edituser.EditUserUseCaseFactory;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserUseCaseFactory;
+import usecase.manageprojects.getprojects.GetProjectsController;
+import usecase.manageprojects.getprojects.GetProjectsUseCaseFactory;
+import usecase.manageapplications.getapplications.GetApplicationsController;
+import usecase.manageapplications.getapplications.GetApplicationsUseCaseFactory;
+import usecase.manageusers.getloggedinuser.LoggedInDataAccessViewModel;
+import usecase.manageusers.getusers.GetUsersController;
+import usecase.manageusers.getusers.GetUsersInteractor;
+import usecase.manageusers.getusers.GetUsersPresenter;
+import usecase.manageusers.getusers.GetUsersOutputBoundary;
+import usecase.manageusers.getusers.GetUsersInputBoundary;
 import usecase.loginuser.LoginUserController;
 import usecase.loginuser.LoginUserUseCaseFactory;
 import usecase.logout.LogoutController;
@@ -16,15 +40,21 @@ import usecase.manageprojects.editproject.EditProjectController;
 import usecase.manageprojects.editproject.EditProjectUseCaseFactory;
 import usecase.manageusers.ManageUsersController;
 import usecase.manageusers.ManageUsersUseCaseFactory;
+import usecase.manageusers.getusers.GetUsersInteractor;
+import usecase.manageusers.getusers.GetUsersPresenter;
+=======
 import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageusers.getloggedinuser.GetLoggedInUserUseCaseFactory;
 import usecase.searchforproject.SearchProjectController;
 import usecase.searchforproject.SearchProjectUseCaseFactory;
+import usecase.manageusers.getusers.GetUsersController;
 import view.*;
 import viewmodel.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashSet;
+=======
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -83,17 +113,17 @@ class Main {
         LoginVerificationViewModel loginVerificationViewModel = new LoginVerificationViewModel();
         CreateVerificationController createVerificationController = CreateVerificationUseCaseFactory.createController(loginVerificationViewModel);
         LoginPanel loginPanel = new LoginPanel(viewManagerModel,
-                                               loginPanelViewModel,
-                                               loginUserController,
-                                               loginVerificationViewModel,
-                                               createVerificationController);
+                loginPanelViewModel,
+                loginUserController,
+                loginVerificationViewModel,
+                createVerificationController);
 
         // Search Project Panel
         printLoadingBar(92, "Creating search panel");
         SearchProjectController searchProjectController = SearchProjectUseCaseFactory.createSearchProjectController(searchPanelViewModel);
         GetLoggedInUserController searchPanelGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(searchPanelViewModel);
         CreateApplicationController createApplicationController = CreateApplicationUseCaseFactory.createController(searchPanelViewModel);
-        SearchPanel searchPanel = new SearchPanel(viewManagerModel,searchPanelViewModel, searchProjectController, searchPanelGetLoggedInUserController, createApplicationController);
+        SearchPanel searchPanel = new SearchPanel(viewManagerModel, searchPanelViewModel, searchProjectController, searchPanelGetLoggedInUserController, createApplicationController);
 
 
         // Manage Projects
@@ -110,6 +140,7 @@ class Main {
         // Display Project Application View
         printLoadingBar(111, "Creating project app view");
         DisplayProjectApplicationViewModel displayProjectApplicationViewModel = new DisplayProjectApplicationViewModel();
+        GetApplicationsController getApplicationsController = GetApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
         ManageApplicationsController manageApplicationsController = ManageApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
 
         // Edit Project Panel
@@ -123,6 +154,17 @@ class Main {
                 displayProjectApplicationViewModel
         );
 
+        // Instantiate GetUsersPresenter and GetUsersInteractor
+        GetUsersPresenter getUsersPresenter = new GetUsersPresenter(myProjectsViewModel);
+        GetUsersInteractor getUsersInteractor = new GetUsersInteractor(
+                DataAccessConfig.getUserProjectsRepository(),
+                DataAccessConfig.getUserRepository(),
+                DataAccessConfig.getProjectRepository(),
+                getUsersPresenter
+        );
+
+        GetUsersController getUsersController = new GetUsersController(getUsersInteractor);
+
         // My Projects Panel
         printLoadingBar(127, "Creating my projects panel");
         GetLoggedInUserController getLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProjectsViewModel);
@@ -130,9 +172,11 @@ class Main {
                 myProjectsViewModel,
                 viewManagerModel,
                 getLoggedInUserController,
-                manageProjectsController,
+                getProjectsController,
+                getApplicationsController,
                 editProjectPanelViewModel,
-                editProjectPanel);
+                editProjectPanel,
+                getUsersController);
 
         // Edit Profile Panel
         printLoadingBar(138, "Creating edit profile panel");

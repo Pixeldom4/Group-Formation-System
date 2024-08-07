@@ -1,25 +1,22 @@
 package usecase.manageusers.getusers;
 
-import org.apache.commons.lang3.NotImplementedException;
+import viewmodel.MyProjectsPanelViewModel;
 
 public class GetUsersPresenter implements GetUsersOutputBoundary {
-    /**
-     * Prepares the success view with the provided output data.
-     *
-     * @param outputData the output data to present in case of success.
-     */
-    @Override
-    public void prepareSuccessView(GetUsersOutputData outputData) {
-        throw new NotImplementedException();
+    private final MyProjectsPanelViewModel viewModel;
+
+    public GetUsersPresenter(MyProjectsPanelViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
-    /**
-     * Prepares the failure view with the provided error message.
-     *
-     * @param errorMessage the error message to present in case of failure.
-     */
+    @Override
+    public void prepareSuccessView(GetUsersOutputData outputData) {
+        viewModel.setUsersData(outputData.getUsers());
+    }
+
     @Override
     public void prepareFailView(String errorMessage) {
-        throw new NotImplementedException();
+        viewModel.setErrorMessage(errorMessage);
+        viewModel.showError();
     }
 }
