@@ -49,6 +49,9 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
 
         for (int projectId : projectIds) {
             Project project = projectRepository.getProjectById(projectId);
+            if (project == null) {
+                continue;
+            }
             boolean isProjectOwner = projectRepository.getOwnerId(projectId) == inputData.getUserId();
 
             String projectTitle = project.getProjectTitle();
