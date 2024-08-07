@@ -1,23 +1,21 @@
 package view;
 
-import static org.mockito.Mockito.*;
-
+import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.manageprojects.ManageProjectsController;
-import usecase.manageprojects.getprojects.GetProjectsController;
 import usecase.manageusers.ManageUsersController;
 import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
-import usecase.manageusers.getusers.GetUsersController;
 import usecase.manageusers.getusers.UserData;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
-import entities.User;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
+
+import static org.mockito.Mockito.*;
 
 class MyProjectsPanelTest {
 

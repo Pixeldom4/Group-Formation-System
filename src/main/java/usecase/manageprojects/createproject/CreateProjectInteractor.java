@@ -13,7 +13,7 @@ import dataaccess.IProjectRepository;
 public class CreateProjectInteractor implements CreateProjectInputBoundary {
     private final IProjectRepository projectRepository;
     private final CreateProjectOutputBoundary projectPresenter;
-    private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
+    private final EmbeddingAPIInterface embeddingAPI;
     private final IUserProjectsRepository userProjectsRepository;
 
     /**
@@ -24,10 +24,12 @@ public class CreateProjectInteractor implements CreateProjectInputBoundary {
      */
     public CreateProjectInteractor(IProjectRepository projectRepository,
                                    IUserProjectsRepository userProjectsRepository,
-                                   CreateProjectOutputBoundary projectPresenter) {
+                                   CreateProjectOutputBoundary projectPresenter,
+                                   EmbeddingAPIInterface embeddingAPI) {
         this.projectRepository = projectRepository;
         this.projectPresenter = projectPresenter;
         this.userProjectsRepository = userProjectsRepository;
+        this.embeddingAPI = embeddingAPI;
     }
 
     /**
