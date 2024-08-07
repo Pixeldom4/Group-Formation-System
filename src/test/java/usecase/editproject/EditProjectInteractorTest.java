@@ -1,7 +1,7 @@
 package usecase.editproject;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import dataaccess.local.LocalProjectRepository;
 import entities.Project;
@@ -54,7 +54,7 @@ public class EditProjectInteractorTest {
     private final static File embedSaveFile = new File(SAVE_LOCATION + "embeds.csv");
 
 
-    private static String[][] dummyProjects = new String[][]{
+    private final static String[][] dummyProjects = new String[][]{
             {"1", "Java Project", "1000.0", "A project about Java development, focusing on building robust applications.", "Java;Programming"},
             {"2", "Python Automation", "1500.5", "A project centered around automating tasks with Python scripts.", "Python;Automation"},
             {"3", "Web Development", "2000.0", "This project involves creating responsive websites using HTML, CSS, and JavaScript.", "Web Design;JavaScript"},

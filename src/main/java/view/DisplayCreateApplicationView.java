@@ -1,6 +1,8 @@
 package view;
 
 import usecase.manageapplications.createapplication.CreateApplicationController;
+import config.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,7 @@ import java.io.*;
 /**
  * A view for creating an application.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class DisplayCreateApplicationView extends JFrame implements ActionListener, PropertyChangeListener {
     private final CreateApplicationController createApplicationController;
 
@@ -23,6 +26,8 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
     private final JLabel applicationLabel = new JLabel(applicationText);
     private final JButton applicationButton = new JButton("Upload file");
     private final JButton submitButton = new JButton("Submit");
+
+    private final IHoverVoiceService hoverVoiceService;
 
     /**
      * Constructs a DisplayCreateApplicationView.
@@ -40,11 +45,15 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2));
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+
+        hoverVoiceService.addHoverVoice(infoField, "Enter info here");
+
         panel.add(infoLabel);
         panel.add(infoField);
         panel.add(applicationLabel);
 
-        applicationButton.addActionListener(e -> {
+        applicationButton.addActionListener(_ -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
             int result = fileChooser.showOpenDialog(this);
@@ -54,9 +63,11 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
                 System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             }
         });
+        hoverVoiceService.addHoverVoice(applicationButton, "Press to upload file");
         panel.add(applicationButton);
 
-        submitButton.addActionListener(e -> {
+        hoverVoiceService.addHoverVoice(submitButton, "Press to submit application");
+        submitButton.addActionListener(_ -> {
             String infoText = infoLabel.getText();
             try {
                 InputStream input = new FileInputStream(applicationLabel.getText().substring(applicationText.length()));
@@ -66,7 +77,6 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
                 createApplicationController.createApplication(loginUserId, projectId, infoText, new ByteArrayInputStream(new byte[0]));
             }
 
-            System.out.println();
         });
 
         panel.add(new JLabel());

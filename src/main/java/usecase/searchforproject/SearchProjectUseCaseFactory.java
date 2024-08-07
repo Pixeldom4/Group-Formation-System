@@ -1,6 +1,6 @@
 package usecase.searchforproject;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import viewmodel.SearchPanelViewModel;
 

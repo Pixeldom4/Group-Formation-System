@@ -1,6 +1,8 @@
 package view;
 
 import entities.ProjectInterface;
+import config.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,12 +14,15 @@ import java.beans.PropertyChangeListener;
 /**
  * A view for displaying the details of an individual project.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class DisplayIndividualProjectView extends JFrame implements ActionListener, PropertyChangeListener {
 
-    private JTextField projectTitleField;
-    private JTextField tagsField;
+    private final JLabel projectTitleField;
+    private final JLabel tagsField;
     private JTextArea projectDescriptionArea;
-    private JTextField projectID;
+    private final JLabel projectID;
+
+    private final IHoverVoiceService hoverVoiceService;
 
     /**
      * Constructs a DisplayIndividualProjectView.
@@ -33,23 +38,26 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
 
-        projectTitleField = new JTextField(project.getProjectTitle());
-        projectTitleField.setEditable(false);
-        projectID = new JTextField(project.getProjectId());
-        projectID.setEditable(false);
-        tagsField = new JTextField(project.getProjectTags().toString());
-        tagsField.setEditable(false);
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+
+        projectTitleField = new JLabel("Project Title:" + project.getProjectTitle());
+        projectID = new JLabel("Project ID:" + project.getProjectId());
+        tagsField = new JLabel("Tags:" + project.getProjectTags());
         projectDescriptionArea = new JTextArea(project.getProjectDescription());
         projectDescriptionArea.setEditable(false);
 
+        hoverVoiceService.addHoverVoice(projectTitleField, "Project title: " + project.getProjectTitle());
+        hoverVoiceService.addHoverVoice(projectID, "Project ID: " + project.getProjectId());
+        hoverVoiceService.addHoverVoice(tagsField, "Project tags: " + project.getProjectTags());
+
         // Project Title
-        detailsPanel.add(new JLabel("Project Title:" + project.getProjectTitle()));
+        detailsPanel.add(projectTitleField);
 
         // Project ID
-        detailsPanel.add(new JLabel("Project ID:" + project.getProjectId()));
+        detailsPanel.add(projectID);
 
         // Project Tags
-        detailsPanel.add(new JLabel("Tags:" + project.getProjectTags()));
+        detailsPanel.add(tagsField);
 
         // Project Description
         JLabel projectDescriptionLabel = new JLabel("Project Description:");
@@ -58,6 +66,8 @@ public class DisplayIndividualProjectView extends JFrame implements ActionListen
         projectDescriptionArea.setLineWrap(true); // Enables line wrapping
         projectDescriptionArea.setWrapStyleWord(true); // Wraps at word boundaries
         projectDescriptionArea.setEnabled(false);
+        hoverVoiceService.addHoverVoice(projectDescriptionArea, "Project description: " + project.getProjectDescription());
+
         JScrollPane scrollPane = new JScrollPane(projectDescriptionArea);
         detailsPanel.add(projectDescriptionLabel);
         detailsPanel.add(scrollPane);

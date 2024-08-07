@@ -8,6 +8,11 @@ import usecase.searchforuser.SearchUserController;
 import usecase.searchprojectbyid.SearchProjectByIdController;
 import view.components.ButtonAction;
 import view.components.ButtonColumn;
+import view.services.SafeCastCollectionService;
+import config.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import config.PlayVoiceServiceConfig;
 import viewmodel.SearchPanelViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -19,19 +24,22 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A panel for searching and displaying projects.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class SearchPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final SearchPanelViewModel searchPanelModel;
     private SearchUserController searchUserController;
     private SearchProjectController searchProjectController;
     private SearchProjectByIdController searchProjectByIdController;
-    private GetLoggedInUserController getLoggedInUserController;
-    private ViewManagerModel viewManagerModel;
-    private CreateApplicationController createApplicationController;
+    private final GetLoggedInUserController getLoggedInUserController;
+    private final ViewManagerModel viewManagerModel;
+    private final CreateApplicationController createApplicationController;
 
     private DisplayCreateApplicationView displayView;
 
@@ -43,6 +51,9 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private final int[] columnWidths = {200, 400, 100};
     private final String[] columnNames = {"Project Title", "Description", "View Details", "Request joining"};
     private final JScrollPane infoPanel = new JScrollPane(infoTable);
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a SearchPanel for searching users.
@@ -127,12 +138,18 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         this.getLoggedInUserController = getLoggedInUserController;
         this.createApplicationController = createApplicationController;
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
         this.setLayout(new BorderLayout());
 
         searchBar.setPreferredSize(new Dimension(600, 40));
 
         searchButton.setPreferredSize(new Dimension(100, 40));
         searchButton.setIcon(new ImageIcon("path/to/search-icon.png")); // Use a suitable search icon image
+
+        hoverVoiceService.addHoverVoice(searchBar, "Enter search text here");
+        hoverVoiceService.addHoverVoice(searchButton, "Press to search");
 
         searchPanel.setLayout(new BorderLayout());
         searchPanel.add(searchBar, BorderLayout.CENTER);
@@ -152,23 +169,29 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("rankProjects")) {
-            ArrayList<ProjectInterface> projectRankingList = (ArrayList<ProjectInterface>) evt.getNewValue();
-            displaySearchResult(projectRankingList);
+            if (evt.getNewValue() instanceof ArrayList<?>){
+                ArrayList<ProjectInterface> projectRankingList = SafeCastCollectionService.convertToCollection(evt.getNewValue(),
+                                                                                                               ProjectInterface.class,
+                                                                                                               ArrayList::new);
+                displaySearchResult(projectRankingList);
+            }
 
         }
         if (evt.getPropertyName().equals("login")) {
             getLoggedInUserController.getLoggedInUser();
             searchBar.setText("");
-            searchPanelModel.setProjects(new ArrayList<ProjectInterface>());
-            displaySearchResult(new ArrayList<ProjectInterface>());
+            searchPanelModel.setProjects(new ArrayList<>());
+            displaySearchResult(new ArrayList<>());
         }
         if (evt.getPropertyName().equals("application")) {
             boolean success = (boolean) evt.getNewValue();
             if (success) {
+                playVoiceService.playVoice("Application submitted");
                 JOptionPane.showMessageDialog(null, "Application submitted");
                 displayView.dispose();
             }
             else {
+                playVoiceService.playVoice("Error submitting application : " + searchPanelModel.getErrorApplicationMessage());
                 JOptionPane.showMessageDialog(null, searchPanelModel.getErrorApplicationMessage());
             }
         }
@@ -198,27 +221,28 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         ArrayList<ButtonAction> requestToJoinButtonActions = new ArrayList<>();
 
         Object[][] info = new Object[projectRankingList.size()][columnNames.length];
+        Map<Point, String> hoverSpeechMap = new HashMap<>();
+
         for (int i = 0; i < projectRankingList.size(); i++) {
             info[i][0] = projectRankingList.get(i).getProjectTitle();
             info[i][1] = cutString(projectRankingList.get(i).getProjectDescription());
             info[i][2] = "View Details";
             info[i][3] = "Request to join";
+
+            hoverSpeechMap.put(new Point(i, 0), "Project title: " + projectRankingList.get(i).getProjectTitle());
+            hoverSpeechMap.put(new Point(i, 1), "Project description: " + cutString(projectRankingList.get(i).getProjectDescription()));
+            hoverSpeechMap.put(new Point(i, 2), "Press to view project details");
+            hoverSpeechMap.put(new Point(i, 3), "Press to request to join project");
+
             int finalI = i;
-            detailButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    DisplayIndividualProjectView projectView = new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
-                }
+            detailButtonActions.add(() -> {
+                new DisplayIndividualProjectView(projectRankingList.get(finalI)); // Use this line when want to display project
             });
-            requestToJoinButtonActions.add(new ButtonAction() {
-                @Override
-                public void onClick() {
-                    int projectId = projectRankingList.get(finalI).getProjectId();
-                    System.out.println("Requesting to join project: " + projectId);
-                    displayView = new DisplayCreateApplicationView(searchPanelModel.getLoggedInUser().getUserId(),
-                            projectId,
-                            createApplicationController);
-                }
+            requestToJoinButtonActions.add(() -> {
+                int projectId = projectRankingList.get(finalI).getProjectId();
+                displayView = new DisplayCreateApplicationView(searchPanelModel.getLoggedInUser().getUserId(),
+                        projectId,
+                        createApplicationController);
             });
         }
         DefaultTableModel infoTableModel = new DefaultTableModel(info, columnNames) {
@@ -229,6 +253,8 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
             }
         };
         infoTable.setModel(infoTableModel);
+        hoverVoiceService.addTableHoverVoice(infoTable, hoverSpeechMap);
+
         ButtonColumn detailColumn = new ButtonColumn(infoTable, 2);
         detailColumn.setActions(detailButtonActions);
         ButtonColumn requestToJoinColumn = new ButtonColumn(infoTable, 3);

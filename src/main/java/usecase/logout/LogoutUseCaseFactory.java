@@ -1,6 +1,6 @@
 package usecase.logout;
 
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.ILoginUserDetails;
 import viewmodel.SwitchViewButtonPanelViewModel;
 

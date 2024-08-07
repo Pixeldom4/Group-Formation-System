@@ -1,5 +1,6 @@
-package dataaccess;
+package config;
 
+import dataaccess.*;
 import dataaccess.database.ApplicationRepository;
 import dataaccess.database.ProjectRepository;
 import dataaccess.database.UserProjectsRepository;
