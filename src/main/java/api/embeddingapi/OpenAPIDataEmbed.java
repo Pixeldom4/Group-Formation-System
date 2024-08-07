@@ -14,6 +14,7 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
     private static final String API_URL = "https://api.openai.com/v1/embeddings";
     private static final String API_MODEL = "text-embedding-3-small";
     private static String API_TOKEN = null;
+    private boolean hasToken = false;
 
     /**
      * Constructs an OpenAPIDataEmbed object.
@@ -21,18 +22,25 @@ public class OpenAPIDataEmbed implements EmbeddingAPIInterface {
     public OpenAPIDataEmbed() {
         API_TOKEN = System.getenv("API_KEY");
         if (API_TOKEN == null) {
-            throw new RuntimeException("API_KEY environment variable not set");
+            System.err.println("API_KEY environment variable not set (ignore when testing)");
+        }
+        else {
+            hasToken = true;
         }
     }
 
     /**
      * Returns an embedding for the given text by calling the OpenAI API.
+     * Returns an empty array if the API token is not set.m
      *
      * @param text the text to be used for embedding
      * @return an array of floats representing the embedding
      */
     @Override
     public float[] getEmbedData(String text) {
+        if (!hasToken) {
+            return new float[0];
+        }
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");

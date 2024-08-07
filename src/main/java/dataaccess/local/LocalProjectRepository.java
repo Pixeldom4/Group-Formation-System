@@ -1,19 +1,20 @@
 package dataaccess.local;
 
-import config.DataAccessConfig;
-import dataaccess.IProjectRepository;
-import entities.Project;
-import entities.ProjectInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import dataaccess.IProjectRepository;
+import entities.Project;
+import entities.ProjectInterface;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -22,29 +23,12 @@ import java.util.stream.Collectors;
  */
 public class LocalProjectRepository implements IProjectRepository {
 
-    private ILocalEmbedRepository embedDataAccess = DataAccessConfig.getEmbedDataAccess();
-    private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "projects.csv";
+    private final ILocalEmbedRepository embedDataAccess;
+    private final String FILE_PATH;
     private final String[] header = {"projectId", "projectTitle", "projectBudget", "projectDescription", "projectTags", "projectOwner"};
     private final HashMap<Integer, ProjectInterface> projects = new HashMap<>();
     private final HashMap<Integer, Integer> projectOwners = new HashMap<>();
     private int maxId = 0;
-
-    /**
-     * Constructs a LocalProjectRepository with the default file path.
-     * Reads the projects from the CSV file if it exists.
-     */
-    public LocalProjectRepository() {
-        File f = new File(FILE_PATH);
-        try {
-            Files.createDirectories(f.getParentFile().toPath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if(f.exists() && !f.isDirectory()) {
-            readFromCSV();
-            System.out.println("Loaded projects from " + FILE_PATH);
-        }
-    }
 
     /**
      * Creates a new LocalProjectDataAccessObject with the given path as the save location.
@@ -52,9 +36,9 @@ public class LocalProjectRepository implements IProjectRepository {
      *
      * @param path the path to the folder of the CSV file
      */
-    public LocalProjectRepository(String path) {
+    public LocalProjectRepository(String path, ILocalEmbedRepository embedDataAccess) {
         FILE_PATH = path + "projects.csv";
-        embedDataAccess = new LocalEmbedRepository(path + "embeds.csv");
+        this.embedDataAccess = embedDataAccess;
         File f = new File(FILE_PATH);
         File parent = f.getParentFile();
         try {

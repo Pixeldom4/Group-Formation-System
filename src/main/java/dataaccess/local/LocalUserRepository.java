@@ -29,13 +29,6 @@ public class LocalUserRepository implements IUserRepository {
     private int maxId = 0;
 
     /**
-     * Constructs a LocalUserRepository with the default file path.
-     */
-    public LocalUserRepository() {
-        this(DataAccessConfig.getProjectCSVPath());
-    }
-
-    /**
      * Constructs a LocalUserRepository with the specified file path.
      *
      * @param path the path to the directory where the CSV file is stored
