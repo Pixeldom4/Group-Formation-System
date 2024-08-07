@@ -1,7 +1,7 @@
 package usecase.manageprojects.createproject;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import viewmodel.AddProjectPanelViewModel;

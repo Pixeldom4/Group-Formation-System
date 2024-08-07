@@ -1,18 +1,19 @@
 package usecase.createproject;
 
-import api.EmbeddingAPIInterface;
+import api.embeddingapi.EmbeddingAPIInterface;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import entities.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.createproject.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import usecase.manageprojects.createproject.CreateProjectInputData;
+import usecase.manageprojects.createproject.CreateProjectInteractor;
+import usecase.manageprojects.createproject.CreateProjectOutputBoundary;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
+import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for the CreateProjectInteractor class.
