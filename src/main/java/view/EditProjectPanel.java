@@ -124,11 +124,12 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         deleteButton.addActionListener(_ -> {
 
             int dialogResult = JOptionPane.showConfirmDialog (null,
-                    "Are you sure you would like to delete " + projectId + "?",
+                    "Are you sure you would like to delete this project?",
                     "Warning",
                     JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
                 manageProjectsController.deleteProject(projectId);
+                SwingUtilities.getWindowAncestor(this).dispose();
             }
 
         });

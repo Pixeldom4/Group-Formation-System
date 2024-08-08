@@ -6,6 +6,9 @@ import entities.ProjectInterface;
 
 import java.util.*;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * Local implementation for searching projects.
  * Uses an embedding API to search for projects based on cosine similarity.
@@ -16,7 +19,7 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
     private final EmbeddingAPIInterface embeddingAPI;
     private final IProjectRepository projectDataAccess;
 
-    private final float threshold = 0.5f;
+    private float threshold = 0f;
 
     /**
      * Constructs a LocalProjectSearchObject using the given project repository.
@@ -38,15 +41,24 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
     @Override
     public ArrayList<ProjectInterface> searchProjects(String query) {
         float[] queryEmbedding = embeddingAPI.getEmbedData(query);
+        float maxSimilarity = 1;
+        float minSimilarity = -1;
 
         Map<Integer, Float> cosineSimilarityMap = new LinkedHashMap<>();
         HashMap<Integer, float[]> dataVector = projectDataAccess.getAllEmbeddings(); //<projectId, embedding>
         for (Map.Entry<Integer, float[]> data : dataVector.entrySet()) {
-            cosineSimilarityMap.put(data.getKey(), calcCosineSimilarity(queryEmbedding, data.getValue()));
+            System.out.println("data: " + data.getKey() + " " + Arrays.toString(data.getValue()));
+            float thisSim = calcCosineSimilarity(queryEmbedding, data.getValue());
+            cosineSimilarityMap.put(data.getKey(), thisSim);
+            maxSimilarity = min(maxSimilarity, thisSim);
+            minSimilarity = max(minSimilarity, thisSim);
         }
         cosineSimilarityMap = sortByValue(cosineSimilarityMap);
 
         ArrayList<ProjectInterface> result = new ArrayList<>();
+
+        System.out.println("values: " + cosineSimilarityMap.values());
+        threshold = (maxSimilarity + minSimilarity) / 2;
 
         while (!cosineSimilarityMap.isEmpty()) {
             int projectId = cosineSimilarityMap.keySet().iterator().next();

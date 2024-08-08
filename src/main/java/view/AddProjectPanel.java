@@ -1,14 +1,14 @@
 package view;
 
+import config.HoverVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import entities.User;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageprojects.ManageProjectsController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import view.components.NumericTextField;
 import view.components.TagPanel;
-import config.HoverVoiceServiceConfig;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
-import config.PlayVoiceServiceConfig;
 import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 
@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashSet;
 
 /**
  * Panel for adding a new project.
@@ -119,11 +120,12 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
             double budget = Double.parseDouble(projectBudgetField.getText());
             String description = projectDescriptionField.getText();
             User loggedInUser = addProjectPanelViewModel.getLoggedInUser();
+            HashSet<String> tags = new HashSet<>(tagPanel.getTags());
             if (loggedInUser == null) {
                 JOptionPane.showMessageDialog(null, "You must be logged in to create a project.");
                 return;
             }
-            createProjectController.createProject(title, budget, description, tagPanel.getTags(), loggedInUser.getUserId());
+            createProjectController.createProject(title, budget, description, tags, loggedInUser.getUserId());
         });
 
         hoverVoiceService.addHoverVoice(addProjectButton, "Press to create project");

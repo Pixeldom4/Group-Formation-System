@@ -56,7 +56,8 @@ public class ManageProjectsUseCaseFactory {
         EditProjectOutputBoundary editProjectPresenter = new EditProjectPresenter(editProjectPanelViewModel);
         EditProjectInputBoundary editProjectInteractor = new EditProjectInteractor(projectRepository, editProjectPresenter, embeddingAPI);
         DeleteProjectOutputBoundary deleteProjectPresenter = new DeleteProjectPresenter(myProjectsPanelViewModel);
-        DeleteProjectInputBoundary deleteProjectInteractor = new DeleteProjectInteractor(deleteProjectPresenter, projectRepository, loginUserDetails);
+        DeleteProjectInputBoundary deleteProjectInteractor = new DeleteProjectInteractor(deleteProjectPresenter, projectRepository,
+                                                                                         loginUserDetails, userProjectsRepository);
 
         return new ManageProjectsController(getProjectsInteractor, createProjectInteractor, editProjectInteractor, deleteProjectInteractor);
     }

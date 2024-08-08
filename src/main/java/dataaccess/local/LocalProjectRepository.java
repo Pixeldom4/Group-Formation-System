@@ -96,7 +96,7 @@ public class LocalProjectRepository implements IProjectRepository {
                 String projectTitle = line[1];
                 double projectBudget = Double.parseDouble(line[2]);
                 String projectDescription = line[3];
-                HashSet<String> projectTags = Arrays.stream(line[4].replace("[", "").replace("]", "").split(",")).collect(Collectors.toCollection(HashSet::new));
+                HashSet<String> projectTags = Arrays.stream(line[4].replace("[", "").replace("]", "").replace("\"", "").split(",")).collect(Collectors.toCollection(HashSet::new));
                 ProjectInterface project = new Project(projectId, projectTitle, projectBudget, projectDescription, projectTags);
                 projectOwners.put(projectId, Integer.valueOf(line[5]));
                 projects.put(projectId, project);
