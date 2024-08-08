@@ -1,4 +1,4 @@
-package usecase.manageapplication.createapplication.createapplication;
+package usecase.manageapplication.createapplication;
 
 import org.junit.jupiter.api.Test;
 import usecase.manageapplications.createapplication.CreateApplicationOutputData;
