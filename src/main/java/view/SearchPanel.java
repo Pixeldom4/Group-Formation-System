@@ -216,8 +216,6 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
         Object[][] info = new Object[projectRankingList.size()][columnNames.length];
         Map<Point, String> hoverSpeechMap = new HashMap<>();
 
-
-
         for (int i = 0; i < projectRankingList.size(); i++) {
             info[i][0] = projectRankingList.get(i).getProjectTitle();
             info[i][1] = cutString(projectRankingList.get(i).getProjectDescription());
