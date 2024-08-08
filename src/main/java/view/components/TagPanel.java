@@ -65,6 +65,7 @@ public class TagPanel extends JPanel {
         });
 
         this.add(tag);
+        tags.add(text);
         this.revalidate();
         this.repaint();
     }

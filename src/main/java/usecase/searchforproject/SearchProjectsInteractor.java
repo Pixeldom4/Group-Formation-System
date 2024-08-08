@@ -34,17 +34,7 @@ public class SearchProjectsInteractor implements SearchProjectInputBoundary {
      */
     @Override
     public void searchProjects(String keywords) {
-        searchProjects(keywords, 10);
-    }
-
-    /**
-     * Searches for projects based on the given keywords with a limit.
-     *
-     * @param keywords the keywords to search for.
-     * @param limit the maximum number of projects to return.
-     */
-    private void searchProjects(String keywords, int limit) {
-        ArrayList<ProjectInterface> projects = projectDAO.searchProjects(keywords, limit);
+        ArrayList<ProjectInterface> projects = projectDAO.searchProjects(keywords);
         presenter.presentProjects(projects);
     }
 }

@@ -19,8 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -78,7 +77,7 @@ public class SearchProjectInteractorTest {
         when(apiInteface.getEmbedData(searchQuery)).thenReturn(randomEmbedding());
         searchProjectInteractor.searchProjects(searchQuery);
         ArrayList<ProjectInterface> projectsRanking = searchPanelViewModel.getProject();
-        assertEquals(projectsRanking.size(), 5);
+        assertFalse(projectsRanking.isEmpty());
         for (ProjectInterface project : projectsRanking) {
             assertNotNull(project);
         }

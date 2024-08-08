@@ -71,9 +71,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                        CreateApplicationController createApplicationController) {
         this(viewManagerModel, searchPanelModel, getLoggedInUserController, createApplicationController);
         this.searchUserController = searchUserController;
-        searchButton.addActionListener(e -> {
-            searchUserController.searchUserByEmail(searchBar.getText());
-        });
+        searchButton.addActionListener(_ -> searchUserController.searchUserByEmail(searchBar.getText()));
     }
 
     /**
@@ -92,9 +90,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                        CreateApplicationController createApplicationController) {
         this(viewManagerModel, searchPanelModel, getLoggedInUserController, createApplicationController);
         this.searchProjectController = searchProjectController;
-        searchButton.addActionListener(e -> {
-            searchProjectController.searchProjects(searchBar.getText());
-        });
+        searchButton.addActionListener(_ -> searchProjectController.searchProjects(searchBar.getText()));
     }
 
     /**
@@ -113,9 +109,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                        CreateApplicationController createApplicationController) {
         this(viewManagerModel,searchPanelModel, getLoggedInUserController, createApplicationController);
         this.searchProjectByIdController = searchProjectByIdController;
-        searchButton.addActionListener(e -> {
-            searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText()));
-        });
+        searchButton.addActionListener(_ -> searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText())));
     }
 
     /**
@@ -219,13 +213,12 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
     private void displaySearchResult(ArrayList<ProjectInterface> projectRankingList) {
         ArrayList<ButtonAction> detailButtonActions = new ArrayList<>();
         ArrayList<ButtonAction> requestToJoinButtonActions = new ArrayList<>();
-        int pause = Math.min(projectRankingList.size(), 5);
-        Object[][] info = new Object[pause][columnNames.length];
+        Object[][] info = new Object[projectRankingList.size()][columnNames.length];
         Map<Point, String> hoverSpeechMap = new HashMap<>();
 
 
 
-        for (int i = 0; i < pause; i++) {
+        for (int i = 0; i < projectRankingList.size(); i++) {
             info[i][0] = projectRankingList.get(i).getProjectTitle();
             info[i][1] = cutString(projectRankingList.get(i).getProjectDescription());
             info[i][2] = "View Details";

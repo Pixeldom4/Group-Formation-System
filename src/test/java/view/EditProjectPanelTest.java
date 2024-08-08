@@ -4,13 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
-import usecase.manageprojects.editproject.EditProjectController;
 import usecase.manageprojects.editproject.EditProjectInputBoundary;
 import usecase.manageprojects.editproject.EditProjectInputData;
-import usecase.manageapplications.getapplications.GetApplicationsController;
-import usecase.manageprojects.deleteproject.DeleteProjectController;
-import usecase.manageapplications.acceptapplication.AcceptApplicationController;
-import usecase.manageapplications.rejectapplication.RejectApplicationController;
 import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
@@ -18,17 +13,18 @@ import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for the EditProjectPanel class.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EditProjectPanelTest {
 
     private EditProjectPanel editProjectPanel;
     private EditProjectPanelViewModel editProjectViewModel;
-    private EditProjectController editProjectController;
     private DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
     private ManageProjectsController manageProjectsController;
     private ManageApplicationsController manageApplicationsController;
@@ -43,14 +39,13 @@ public class EditProjectPanelTest {
 
         // Mock dependencies
         editProjectInteractor = mock(EditProjectInputBoundary.class);
-        editProjectController = new EditProjectController(editProjectInteractor);
         manageApplicationsController = mock(ManageApplicationsController.class);
-        manageProjectsController = mock(ManageProjectsController.class);
+        manageProjectsController = new ManageProjectsController(null, null,
+                                                                editProjectInteractor, null);
         displayProjectApplicationViewModel = mock(DisplayProjectApplicationViewModel.class);
 
         editProjectPanel = new EditProjectPanel(
                 editProjectViewModel,
-                editProjectController,
                 manageApplicationsController,
                 manageProjectsController,
                 displayProjectApplicationViewModel
@@ -85,7 +80,7 @@ public class EditProjectPanelTest {
         assertEquals(title, ((JTextField) editProjectPanel.getComponent(1)).getText());
         assertEquals(String.valueOf(budget), ((JTextField) editProjectPanel.getComponent(3)).getText());
         assertEquals(description, ((JTextArea) ((JScrollPane) editProjectPanel.getComponent(5)).getViewport().getView()).getText());
-        assertEquals("tag1, tag2", ((JTextField) editProjectPanel.getComponent(7)).getText());
+        assertEquals("tag1, tag2", ((JTextArea) ((JScrollPane) editProjectPanel.getComponent(7)).getViewport().getView()).getText());
     }
 
     /**
@@ -109,7 +104,7 @@ public class EditProjectPanelTest {
         ((JTextField) editProjectPanel.getComponent(1)).setText("Updated Title");
         ((JTextField) editProjectPanel.getComponent(3)).setText("6000.0");
         ((JTextArea) ((JScrollPane) editProjectPanel.getComponent(5)).getViewport().getView()).setText("Updated Description");
-        ((JTextField) editProjectPanel.getComponent(7)).setText("tag1, tag2, tag3");
+        ((JTextArea) ((JScrollPane) editProjectPanel.getComponent(7)).getViewport().getView()).setText("tag1, tag2, tag3");
 
         // Simulate save button click
         ((JButton) editProjectPanel.getComponent(8)).doClick();

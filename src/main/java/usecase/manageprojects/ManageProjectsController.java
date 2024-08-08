@@ -12,21 +12,21 @@ import usecase.manageprojects.getprojects.GetProjectsInputData;
 import java.util.HashSet;
 
 public class ManageProjectsController {
-    private final GetProjectsInputBoundary getProjectsController;
-    private final CreateProjectInputBoundary createProjectController;
-    private final EditProjectInputBoundary editProjectController;
-    private final DeleteProjectInputBoundary deleteProjectController;
+    private final GetProjectsInputBoundary getProjectsInteractor;
+    private final CreateProjectInputBoundary createProjectInteractor;
+    private final EditProjectInputBoundary editProjectInteractor;
+    private final DeleteProjectInputBoundary deleteProjectInteractor;
 
 
     public ManageProjectsController(
-            GetProjectsInputBoundary getProjectsController,
-            CreateProjectInputBoundary createProjectController,
-            EditProjectInputBoundary editProjectController,
-            DeleteProjectInputBoundary deleteProjectController){
-        this.getProjectsController = getProjectsController;
-        this.createProjectController = createProjectController;
-        this.editProjectController = editProjectController;
-        this.deleteProjectController = deleteProjectController;
+            GetProjectsInputBoundary getProjectsInteractor,
+            CreateProjectInputBoundary createProjectInteractor,
+            EditProjectInputBoundary editProjectInteractor,
+            DeleteProjectInputBoundary deleteProjectInteractor){
+        this.getProjectsInteractor = getProjectsInteractor;
+        this.createProjectInteractor = createProjectInteractor;
+        this.editProjectInteractor = editProjectInteractor;
+        this.deleteProjectInteractor = deleteProjectInteractor;
 
 
     }
@@ -36,7 +36,7 @@ public class ManageProjectsController {
      */
     public void getProjects(int userId) {
         GetProjectsInputData inputData = new GetProjectsInputData(userId);
-        getProjectsController.getProjects(inputData);
+        getProjectsInteractor.getProjects(inputData);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ManageProjectsController {
      */
     public void createProject(String title, double budget, String description, HashSet<String> tags, int creatorUserId) {
         CreateProjectInputData inputData = new CreateProjectInputData(title, budget, description, tags, creatorUserId);
-        createProjectController.createProject(inputData);
+        createProjectInteractor.createProject(inputData);
     }
 
     /**
@@ -65,7 +65,7 @@ public class ManageProjectsController {
      */
     public void editProject(int projectId, String newTitle, double newBudget, String newDescription, HashSet<String> newTags, int editorId) {
         EditProjectInputData inputData = new EditProjectInputData(projectId, newTitle, newBudget, newDescription, newTags, editorId);
-        editProjectController.editProject(inputData);
+        editProjectInteractor.editProject(inputData);
     }
 
     /**
@@ -75,7 +75,7 @@ public class ManageProjectsController {
      */
     public void deleteProject(int projectId) {
         DeleteProjectInputData inputData = new DeleteProjectInputData(projectId);
-        deleteProjectController.deleteProject(inputData);
+        deleteProjectInteractor.deleteProject(inputData);
     }
 
 }
