@@ -25,7 +25,7 @@ public class GetApplicationsPresenter implements GetApplicationsOutputBoundary {
      */
     @Override
     public void prepareSuccessView(GetApplicationsOutputData outputData) {
-        applicationViewModel.setApplicationData(outputData.getApplications());
+        applicationViewModel.setApplicationData(outputData.applications());
         applicationViewModel.applicationResult(true);
     }
 

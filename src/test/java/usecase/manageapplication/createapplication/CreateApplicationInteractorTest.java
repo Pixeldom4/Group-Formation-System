@@ -1,4 +1,4 @@
-package usecase.manageapplication.createapplication.createapplication;
+package usecase.manageapplication.createapplication;
 
 import dataaccess.IApplicationRepository;
 import dataaccess.IUserProjectsRepository;

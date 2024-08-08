@@ -47,7 +47,6 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
         Map<Integer, Float> cosineSimilarityMap = new LinkedHashMap<>();
         HashMap<Integer, float[]> dataVector = projectDataAccess.getAllEmbeddings(); //<projectId, embedding>
         for (Map.Entry<Integer, float[]> data : dataVector.entrySet()) {
-            System.out.println("data: " + data.getKey() + " " + Arrays.toString(data.getValue()));
             float thisSim = calcCosineSimilarity(queryEmbedding, data.getValue());
             cosineSimilarityMap.put(data.getKey(), thisSim);
             maxSimilarity = min(maxSimilarity, thisSim);
