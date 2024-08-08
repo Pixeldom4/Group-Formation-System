@@ -11,6 +11,7 @@ import viewmodel.DisplayProjectApplicationViewModel;
 import viewmodel.EditProjectPanelViewModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
@@ -67,10 +68,14 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        titleField = new JTextField();
-        budgetField = new JTextField();
-        descriptionField = new JTextArea();
-        tagsField = new JTextField();
+        titleField = new JTextField(20);
+        budgetField = new JTextField(20);
+        descriptionField = new JTextArea(5, 20);
+        tagsField = new JTextField(20);
+
+        descriptionField.setLineWrap(true);
+        descriptionField.setWrapStyleWord(true);
+
         saveButton = new JButton("Save");
         viewApplicationButton = new JButton("View Applications");
         deleteButton = new JButton("Delete");
@@ -101,11 +106,10 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         saveButton.addActionListener(e -> saveProject());
 
         viewApplicationButton.addActionListener(e -> new DisplayProjectApplicationView(projectId,
-                                                                               displayProjectApplicationViewModel,
-                                                                               manageApplicationsController));
+                displayProjectApplicationViewModel,
+                manageApplicationsController));
 
         deleteButton.addActionListener(e -> {
-
             int dialogResult = JOptionPane.showConfirmDialog (null,
                     "Are you sure you would like to delete " + projectId + "?",
                     "Warning",
@@ -113,9 +117,10 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
             if(dialogResult == JOptionPane.YES_OPTION){
                 deleteProjectController.deleteProject(projectId);
             }
-
         });
 
+        // Set preferred size for the panel
+        setPreferredSize(new Dimension(800, 800));
     }
 
     /**
