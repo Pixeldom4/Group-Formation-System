@@ -16,20 +16,17 @@ public class ManageUsersController {
     private final CreateUserInputBoundary createUserInteractor;
     private final DeleteUserInputBoundary deleteUserInteractor;
     private final EditUserInputBoundary editUserInteractor;
-    private final GetLoggedInUserInputBoundary getLoggedInUserInteractor;
     private final GetUsersInputBoundary getUsersInteractor;
 
     public ManageUsersController(
             CreateUserInputBoundary createUserInteractor,
             DeleteUserInputBoundary deleteUserInteractor,
             EditUserInputBoundary editUserInteractor,
-            GetLoggedInUserInputBoundary getLoggedInUserInteractor,
             GetUsersInputBoundary getUsersInteractor
     ) {
         this.createUserInteractor = createUserInteractor;
         this.deleteUserInteractor = deleteUserInteractor;
         this.editUserInteractor = editUserInteractor;
-        this.getLoggedInUserInteractor = getLoggedInUserInteractor;
         this.getUsersInteractor = getUsersInteractor;
     }
 
@@ -72,14 +69,6 @@ public class ManageUsersController {
     public void editUser(int userId, String firstName, String lastName, String email, double desiredCompensation, HashSet<String> tags) {
         EditUserInputData inputData = new EditUserInputData(userId, firstName, lastName, desiredCompensation, tags);
         editUserInteractor.editUser(inputData);
-    }
-
-
-    /**
-     * Retrieves the logged-in user's information.
-     */
-    public void getLoggedInUser() {
-        getLoggedInUserInteractor.getLoggedInUser();
     }
 
 

@@ -4,7 +4,6 @@ import config.HoverVoiceServiceConfig;
 import config.PlayVoiceServiceConfig;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
-import usecase.manageprojects.editproject.EditProjectController;
 import view.services.hovervoice.IHoverVoiceService;
 import view.services.playvoice.IPlayVoiceService;
 import viewmodel.DisplayProjectApplicationViewModel;
@@ -23,9 +22,8 @@ import java.util.HashSet;
 public class EditProjectPanel extends JPanel implements PropertyChangeListener {
 
     private final EditProjectPanelViewModel editProjectViewModel;
-    private final EditProjectController editProjectController;
     private final ManageApplicationsController manageApplicationsController;
-    private final ManageProjectsController deleteProjectController;
+    private final ManageProjectsController manageProjectsController;
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
     private final JTextField titleField;
     private final JTextField budgetField;
@@ -46,22 +44,19 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
      * Constructs an EditProjectPanel.
      *
      * @param editProjectViewModel the view model for editing the project
-     * @param editProjectController the controller for editing the project
      * @param manageApplicationsController the controller for manging applications
-     * @param deleteProjectController the controller for deleting the project
+     * @param manageProjectsController the controller for deleting the project
      * @param displayProjectApplicationViewModel the view model for displaying project applications
      */
     public EditProjectPanel(
             EditProjectPanelViewModel editProjectViewModel,
-            EditProjectController editProjectController,
             ManageApplicationsController manageApplicationsController,
-            ManageProjectsController deleteProjectController,
+            ManageProjectsController manageProjectsController,
             DisplayProjectApplicationViewModel displayProjectApplicationViewModel) {
         this.editProjectViewModel = editProjectViewModel;
         this.editProjectViewModel.addPropertyChangeListener(this);
-        this.editProjectController = editProjectController;
         this.manageApplicationsController = manageApplicationsController;
-        this.deleteProjectController = deleteProjectController;
+        this.manageProjectsController = manageProjectsController;
         this.displayProjectApplicationViewModel = displayProjectApplicationViewModel;
 
         this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
@@ -133,7 +128,7 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
                     "Warning",
                     JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
-                deleteProjectController.deleteProject(projectId);
+                manageProjectsController.deleteProject(projectId);
             }
 
         });
@@ -170,7 +165,7 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         for (String tag : tagsField.getText().split(",")) {
             newTags.add(tag.trim());
         }
-        editProjectController.editProject(projectId, newTitle, newBudget, newDescription, newTags, editorId);
+        manageProjectsController.editProject(projectId, newTitle, newBudget, newDescription, newTags, editorId);
     }
 
     /**

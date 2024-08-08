@@ -38,7 +38,6 @@ public class ManageUsersUseCaseFactory {
     public static ManageUsersController create(
             CreateUserPanelViewModel createUserViewModel,
             EditProfileViewModel editProfileViewModel,
-            LoggedInDataAccessViewModel loggedInDataAccessViewModel,
             MyProjectsPanelViewModel myProjectsPanelViewModel
     ){
         CreateUserPresenter createUserPresenter = new CreateUserPresenter(createUserViewModel);
@@ -51,13 +50,10 @@ public class ManageUsersUseCaseFactory {
         EditUserOutputBoundary editUserPresenter = new EditUserPresenter(editProfileViewModel);
         EditUserInputBoundary editUserInteractor = new EditUserInteractor(editUserPresenter, userRepository);
 
-        GetLoggedInUserOutputBoundary getLoggedInUserPresenter = new GetLoggedInUserPresenter(loggedInDataAccessViewModel);
-        GetLoggedInUserInputBoundary getLoggedInUserInteractor = new GetLoggedInUserInteractor(getLoggedInUserPresenter, loginUserDetails, userRepository);
-
         GetUsersOutputBoundary getUsersPresenter = new GetUsersPresenter(myProjectsPanelViewModel);
         GetUsersInputBoundary getUsersInteractor = new GetUsersInteractor(userProjectsRepository, userRepository, projectRepository, getUsersPresenter);
 
-        return new ManageUsersController(createUserInteractor, deleteUserInteractor, editUserInteractor, getLoggedInUserInteractor, getUsersInteractor);
+        return new ManageUsersController(createUserInteractor, deleteUserInteractor, editUserInteractor, getUsersInteractor);
     }
 
 }

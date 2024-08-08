@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
-import usecase.manageprojects.editproject.EditProjectController;
 import usecase.manageprojects.editproject.EditProjectInputBoundary;
 import usecase.manageprojects.editproject.EditProjectInputData;
 import viewmodel.DisplayProjectApplicationViewModel;
@@ -26,7 +25,6 @@ public class EditProjectPanelTest {
 
     private EditProjectPanel editProjectPanel;
     private EditProjectPanelViewModel editProjectViewModel;
-    private EditProjectController editProjectController;
     private DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
     private ManageProjectsController manageProjectsController;
     private ManageApplicationsController manageApplicationsController;
@@ -41,14 +39,13 @@ public class EditProjectPanelTest {
 
         // Mock dependencies
         editProjectInteractor = mock(EditProjectInputBoundary.class);
-        editProjectController = new EditProjectController(editProjectInteractor);
         manageApplicationsController = mock(ManageApplicationsController.class);
-        manageProjectsController = mock(ManageProjectsController.class);
+        manageProjectsController = new ManageProjectsController(null, null,
+                                                                editProjectInteractor, null);
         displayProjectApplicationViewModel = mock(DisplayProjectApplicationViewModel.class);
 
         editProjectPanel = new EditProjectPanel(
                 editProjectViewModel,
-                editProjectController,
                 manageApplicationsController,
                 manageProjectsController,
                 displayProjectApplicationViewModel
