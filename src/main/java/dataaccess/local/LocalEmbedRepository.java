@@ -34,7 +34,7 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
     public LocalEmbedRepository(String path, EmbeddingAPIInterface embeddingAPI) {
         this.embeddingAPI = embeddingAPI;
         FILE_PATH = path + "embeds.csv";
-        File f = new File(path);
+        File f = new File(FILE_PATH);
         File parent = f.getParentFile();
         try {
             Files.createDirectories(parent.toPath());
@@ -144,7 +144,7 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
             reader.readNext();
             while ((line = reader.readNext()) != null) {
                 int projectId = Integer.parseInt(line[0]);
-                Float[] embedding = Arrays.stream(line[1].replace("[", "").replace("]", "").split(",")).map(Float::valueOf).toArray(Float[]::new);
+                Float[] embedding = Arrays.stream(line[1].replace("[", "").replace("]", "").replace("\"","").split(",")).map(Float::valueOf).toArray(Float[]::new);
                 float[] floatArray = new float[embedding.length];
                 for (int i = 0; i < embedding.length; i++) {
                     floatArray[i] = embedding[i];

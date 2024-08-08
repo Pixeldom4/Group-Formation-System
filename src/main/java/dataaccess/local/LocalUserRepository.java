@@ -110,7 +110,12 @@ public class LocalUserRepository implements IUserRepository {
      */
     @Override
     public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
-        return false;
+        UserInterface changeUser = users.get(userId);
+        User user = new User(userId, firstName, lastName, changeUser.getUserEmail(), new HashSet<>(tags), desiredCompensation);
+        users.remove(userId);
+        users.put(userId, user);
+        saveToCSV();
+        return true;
     }
 
     /**
