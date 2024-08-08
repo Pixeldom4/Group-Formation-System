@@ -55,7 +55,7 @@ public class GetUsersInteractor implements GetUsersInputBoundary {
             String firstName = user.getFirstName();
             String lastName = user.getLastName();
             String email = user.getUserEmail();
-            HashSet<String> tags = user.getTags();
+            HashSet<String> tags = new HashSet<>(user.getTags());
             double desiredCompensation = user.getDesiredCompensation();
 
             userData.add(new UserData(userId, firstName, lastName, email, tags, desiredCompensation, isOwner));

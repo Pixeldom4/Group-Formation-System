@@ -23,11 +23,11 @@ public class UsersPanel extends JPanel {
         tableModel.setRowCount(0); // Clear existing rows
         for (UserData user : users) {
             Object[] row = new Object[]{
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getUserEmail(),
-                    String.join(", ", user.getTags()), // Convert tags set to a comma-separated string
-                    user.getDesiredCompensation(),
+                    user.firstName(),
+                    user.lastName(),
+                    user.userEmail(),
+                    String.join(", ", user.tags()), // Convert tags set to a comma-separated string
+                    user.desiredCompensation(),
                     user.isOwner()
             };
             tableModel.addRow(row);
