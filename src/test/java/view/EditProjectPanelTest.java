@@ -21,6 +21,7 @@ import static org.mockito.Mockito.*;
 /**
  * Unit tests for the EditProjectPanel class.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class EditProjectPanelTest {
 
     private EditProjectPanel editProjectPanel;

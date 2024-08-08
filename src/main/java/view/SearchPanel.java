@@ -71,9 +71,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                        CreateApplicationController createApplicationController) {
         this(viewManagerModel, searchPanelModel, getLoggedInUserController, createApplicationController);
         this.searchUserController = searchUserController;
-        searchButton.addActionListener(e -> {
-            searchUserController.searchUserByEmail(searchBar.getText());
-        });
+        searchButton.addActionListener(_ -> searchUserController.searchUserByEmail(searchBar.getText()));
     }
 
     /**
@@ -92,9 +90,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                        CreateApplicationController createApplicationController) {
         this(viewManagerModel, searchPanelModel, getLoggedInUserController, createApplicationController);
         this.searchProjectController = searchProjectController;
-        searchButton.addActionListener(e -> {
-            searchProjectController.searchProjects(searchBar.getText());
-        });
+        searchButton.addActionListener(_ -> searchProjectController.searchProjects(searchBar.getText()));
     }
 
     /**
@@ -113,9 +109,7 @@ public class SearchPanel extends JPanel implements ActionListener, PropertyChang
                        CreateApplicationController createApplicationController) {
         this(viewManagerModel,searchPanelModel, getLoggedInUserController, createApplicationController);
         this.searchProjectByIdController = searchProjectByIdController;
-        searchButton.addActionListener(e -> {
-            searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText()));
-        });
+        searchButton.addActionListener(_ -> searchProjectByIdController.searchProjectById(Integer.parseInt(searchBar.getText())));
     }
 
     /**
