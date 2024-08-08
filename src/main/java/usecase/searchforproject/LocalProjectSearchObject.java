@@ -10,10 +10,13 @@ import java.util.*;
  * Local implementation for searching projects.
  * Uses an embedding API to search for projects based on cosine similarity.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class LocalProjectSearchObject implements ProjectSearchInterface {
 
     private final EmbeddingAPIInterface embeddingAPI;
     private final IProjectRepository projectDataAccess;
+
+    private final float threshold = 0.5f;
 
     /**
      * Constructs a LocalProjectSearchObject using the given project repository.
@@ -30,11 +33,10 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
      * Searches for projects based on the given query.
      *
      * @param query  the query to search for.
-     * @param amount the amount of projects to return.
      * @return the list of projects that match the query.
      */
     @Override
-    public ArrayList<ProjectInterface> searchProjects(String query, int amount) {
+    public ArrayList<ProjectInterface> searchProjects(String query) {
         float[] queryEmbedding = embeddingAPI.getEmbedData(query);
 
         Map<Integer, Float> cosineSimilarityMap = new LinkedHashMap<>();
@@ -46,11 +48,11 @@ public class LocalProjectSearchObject implements ProjectSearchInterface {
 
         ArrayList<ProjectInterface> result = new ArrayList<>();
 
-        for (int i = 0; i < amount; i++) {
-            if (cosineSimilarityMap.isEmpty()) {
+        while (!cosineSimilarityMap.isEmpty()) {
+            int projectId = cosineSimilarityMap.keySet().iterator().next();
+            if (cosineSimilarityMap.get(projectId) < threshold) {
                 break;
             }
-            int projectId = cosineSimilarityMap.keySet().iterator().next();
             result.add(projectDataAccess.getProjectById(projectId));
             cosineSimilarityMap.remove(projectId);
         }
