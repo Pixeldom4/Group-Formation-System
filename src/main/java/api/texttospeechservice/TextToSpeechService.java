@@ -18,10 +18,17 @@ public class TextToSpeechService {
     private static IPlayAudioManager playAudioManager;
     private static IAudioConversionManager audioConversionManager;
 
+    private static boolean enableService = true;
+
     /**
      * Initializes the TextToSpeechService by creating a TextToSpeechClient and setting the voice and audio configuration.
      */
     public static void initialize() {
+        if (!enableService) {
+            System.out.println("TextToSpeechService is disabled.");
+            return;
+        }
+
         try {
             textToSpeechClient = TextToSpeechClient.create();
         } catch (IOException e) {
@@ -118,6 +125,22 @@ public class TextToSpeechService {
         }
 
         return audioConversionManager.convertTextReverseClip(audioData);
+    }
+
+    /**
+     * Sets whether the TextToSpeechService is enabled.
+     * @param enable whether the service is enabled
+     */
+    public static void setEnableService(boolean enable) {
+        enableService = enable;
+    }
+
+    /**
+     * Returns whether the TextToSpeechService is enabled.
+     * @return whether the service is enabled
+     */
+    public static boolean isServiceEnabled() {
+        return enableService;
     }
 
 }

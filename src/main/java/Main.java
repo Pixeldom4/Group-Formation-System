@@ -32,6 +32,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.concurrent.CountDownLatch;
 
 @SuppressWarnings("FieldCanBeLocal")
 class Main {
@@ -41,6 +42,16 @@ class Main {
         application.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         application.setSize(1200, 1200);
 
+        CountDownLatch latch = new CountDownLatch(1);
+        AppLaunchSettingView appLaunchSettingView = new AppLaunchSettingView(latch);
+
+        try {
+            latch.await();  // Wait for the settings to be confirmed
+        } catch (InterruptedException e) {
+            System.err.println("Interrupted while waiting for settings");
+        }
+
+        appLaunchSettingView.dispose();
 
         // Initialize text to speech credentials and files
         String serviceAccountKey = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
@@ -62,7 +73,7 @@ class Main {
         // Print which data access implementation is used
         System.out.println(DataAccessConfig.getImplementation());
 
-        printLoadingBar(60, "Starting app");
+        printLoadingBar(76, "Starting app");
 
         CardLayout cardLayout = new CardLayout();
         JPanel views = new JPanel(cardLayout);
@@ -72,7 +83,7 @@ class Main {
         ViewManager viewManager = new ViewManager(views, cardLayout, viewManagerModel);
 
         // Create User Panel
-        printLoadingBar(70, "Creating user panel");
+        printLoadingBar(86, "Creating user panel");
 
         SearchPanelViewModel searchPanelViewModel = new SearchPanelViewModel();
         CreateUserPanelViewModel createUserPanelViewModel = new CreateUserPanelViewModel();
@@ -84,7 +95,7 @@ class Main {
         CreateUserPanel createUserPanel = new CreateUserPanel(createUserPanelViewModel, manageUsersController);
 
         // Login Panel
-        printLoadingBar(80, "Creating login panel");
+        printLoadingBar(98, "Creating login panel");
         LoginPanelViewModel loginPanelViewModel = new LoginPanelViewModel();
         LoginUserController loginUserController = LoginUserUseCaseFactory.create(loginPanelViewModel);
         LoginVerificationViewModel loginVerificationViewModel = new LoginVerificationViewModel();
@@ -96,7 +107,7 @@ class Main {
                 createVerificationController);
 
         // Search Project Panel
-        printLoadingBar(92, "Creating search panel");
+        printLoadingBar(110, "Creating search panel");
         SearchProjectController searchProjectController = SearchProjectUseCaseFactory.createSearchProjectController(searchPanelViewModel);
         GetLoggedInUserController searchPanelGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(searchPanelViewModel);
         CreateApplicationController createApplicationController = CreateApplicationUseCaseFactory.createController(searchPanelViewModel);
@@ -104,7 +115,7 @@ class Main {
 
 
         // Manage Projects
-        printLoadingBar(100, "Creating add project panel");
+        printLoadingBar(118, "Creating add project panel");
         AddProjectPanelViewModel addProjectPanelModel = new AddProjectPanelViewModel();
         EditProjectPanelViewModel editProjectPanelViewModel = new EditProjectPanelViewModel();
         ManageProjectsController manageProjectsController = ManageProjectsUseCaseFactory.createController(addProjectPanelModel, editProjectPanelViewModel, myProjectsViewModel);
@@ -114,13 +125,13 @@ class Main {
         AddProjectPanel addProjectPanel = new AddProjectPanel(viewManagerModel, addProjectPanelModel, manageProjectsController, addProjectGetLoggedInUserController);
 
         // Display Project Application View
-        printLoadingBar(111, "Creating project app view");
+        printLoadingBar(128, "Creating project app view");
         DisplayProjectApplicationViewModel displayProjectApplicationViewModel = new DisplayProjectApplicationViewModel();
         GetApplicationsController getApplicationsController = GetApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
         ManageApplicationsController manageApplicationsController = ManageApplicationsUseCaseFactory.createController(displayProjectApplicationViewModel);
 
         // Edit Project Panel
-        printLoadingBar(116, "Creating edit project panel");
+        printLoadingBar(134, "Creating edit project panel");
         EditProjectController editProjectController = EditProjectUseCaseFactory.createController(editProjectPanelViewModel);
         EditProjectPanel editProjectPanel = new EditProjectPanel(
                 editProjectPanelViewModel,
@@ -142,7 +153,7 @@ class Main {
         GetUsersController getUsersController = new GetUsersController(getUsersInteractor);
 
         // My Projects Panel
-        printLoadingBar(127, "Creating my projects panel");
+        printLoadingBar(156, "Creating my projects panel");
         GetLoggedInUserController getLoggedInUserController = GetLoggedInUserUseCaseFactory.create(myProjectsViewModel);
         UsersPanel usersPanel = new UsersPanel();
         MyProjectsPanel myProjectsPanel = new MyProjectsPanel(
@@ -157,7 +168,7 @@ class Main {
         );
 
         // Edit Profile Panel
-        printLoadingBar(138, "Creating edit profile panel");
+        printLoadingBar(171, "Creating edit profile panel");
         GetLoggedInUserController myProfileGetLoggedInUserController = GetLoggedInUserUseCaseFactory.create(editProfileViewModel);
 
         EditProfilePanel editProfilePanel = new EditProfilePanel(
@@ -168,7 +179,7 @@ class Main {
         );
 
         // add views to card layout
-        printLoadingBar(149, "Adding views to card layout");
+        printLoadingBar(182, "Adding views to card layout");
         views.add(createUserPanel, createUserPanelViewModel.getViewName());
         views.add(loginPanel, loginPanelViewModel.getViewName());
         views.add(searchPanel, searchPanelViewModel.getViewName());
@@ -177,7 +188,7 @@ class Main {
         views.add(editProfilePanel, editProfileViewModel.getViewName());
 
         // Bottom panels (switch view and settings)
-        printLoadingBar(158, "Creating bottom panels");
+        printLoadingBar(191, "Creating bottom panels");
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(0, 1));
 
@@ -212,8 +223,8 @@ class Main {
         int width = 50;
 
         // Progress based on line number
-        int start = 60;
-        int end = 180;
+        int start = 76;
+        int end = 213;
         int prog = n - start;
         int total = end - start;
         int i = prog * width / total;
@@ -221,7 +232,7 @@ class Main {
         System.out.print("\r" + "Loading app" + ": [");
         System.out.print("=".repeat(i));
         System.out.print(" ".repeat(width - i));
-        System.out.print("] " + prog * 100 / total + "% ");
+        System.out.print("] " + prog * 100 / total + "% (Remaining time: Very soon)");
         System.out.print(taskMessage + "\r");
     }
 }
