@@ -31,9 +31,9 @@ public class RemoveUserFromProjectInteractor implements RemoveUserFromProjectInp
      */
     @Override
     public void removeUserFromProject(RemoveUserFromProjectInputData inputData) {
-        int userId = inputData.getUserId();
-        int projectId = inputData.getProjectId();
-        int editorId = inputData.getEditorId();
+        int userId = inputData.userId();
+        int projectId = inputData.projectId();
+        int editorId = inputData.editorId();
 
         if (projectRepository.getOwnerId(projectId) != editorId) {
             removeUserFromProjectPresenter.prepareFailView("Insufficient Permissions.");
