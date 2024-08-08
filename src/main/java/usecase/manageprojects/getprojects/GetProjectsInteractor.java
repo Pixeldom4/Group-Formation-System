@@ -1,6 +1,5 @@
 package usecase.manageprojects.getprojects;
 
-import config.DataAccessConfig;
 import dataaccess.IProjectRepository;
 import dataaccess.IUserProjectsRepository;
 import entities.Project;
@@ -46,6 +45,11 @@ public class GetProjectsInteractor implements GetProjectsInputBoundary {
 
         HashSet<Integer> projectIds = userProjectsRepository.getProjectIdsForUser(loginUserId);
         HashSet<ProjectData> projectData = new HashSet<>();
+
+        if (projectIds == null) {
+            getProjectsPresenter.prepareSuccessView(new GetProjectsOutputData(projectData));
+            return;
+        }
 
         for (int projectId : projectIds) {
             Project project = projectRepository.getProjectById(projectId);

@@ -1,6 +1,7 @@
 package view;
 
 import api.texttospeechservice.TextToSpeechService;
+import config.DataAccessConfig;
 import config.SpecialSettingConfig;
 
 import javax.swing.*;
@@ -14,6 +15,8 @@ import java.util.concurrent.CountDownLatch;
 public class AppLaunchSettingView extends JFrame {
     private JLabel commonSettingsLabel;
     private JCheckBox enableVoiceCheckBox;
+    private JLabel repositoryImplementationLabel;
+    private JComboBox<String> repositoryImplementationComboBox;
     private JLabel specialSettingsLabel;
     private JCheckBox reverseVoiceCheckBox;
     private JCheckBox challengeVerifyCheckBox;
@@ -28,7 +31,7 @@ public class AppLaunchSettingView extends JFrame {
 
         this.setLayout(new GridBagLayout());
         initComponents();
-        this.setSize(450, 330);
+        this.setSize(550, 380);
         this.setTitle("App Launch Settings");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -43,20 +46,28 @@ public class AppLaunchSettingView extends JFrame {
         GridBagConstraints enableVoiceCheckBoxGbc = createGbc(0, 1);
         this.add(enableVoiceCheckBox, enableVoiceCheckBoxGbc);
 
+        repositoryImplementationLabel = new JLabel("Repository Implementation");
+        GridBagConstraints repositoryImplementationLabelGbc = createGbc(0, 2);
+        this.add(repositoryImplementationLabel, repositoryImplementationLabelGbc);
+
+        repositoryImplementationComboBox = new JComboBox<>(new String[]{"Local", "Database"});
+        GridBagConstraints repositoryImplementationComboBoxGbc = createGbc(1, 2);
+        this.add(repositoryImplementationComboBox, repositoryImplementationComboBoxGbc);
+
         specialSettingsLabel = new JLabel("Special Settings");
-        GridBagConstraints specialSettingsLabelGbc = createGbc(0, 2);
+        GridBagConstraints specialSettingsLabelGbc = createGbc(0, 3);
         this.add(specialSettingsLabel, specialSettingsLabelGbc);
 
         reverseVoiceCheckBox = new JCheckBox("Reverse voice");
-        GridBagConstraints reverseVoiceCheckBoxGbc = createGbc(0, 3);
+        GridBagConstraints reverseVoiceCheckBoxGbc = createGbc(0, 4);
         this.add(reverseVoiceCheckBox, reverseVoiceCheckBoxGbc);
 
         challengeVerifyCheckBox = new JCheckBox("Challenge verify system");
-        GridBagConstraints challengeVerifyCheckBoxGbc = createGbc(0, 4);
+        GridBagConstraints challengeVerifyCheckBoxGbc = createGbc(0, 5);
         this.add(challengeVerifyCheckBox, challengeVerifyCheckBoxGbc);
 
         verificationLevelSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
-        GridBagConstraints verificationLevelSpinnerGbc = createGbc(1, 4);
+        GridBagConstraints verificationLevelSpinnerGbc = createGbc(1, 5);
         this.add(verificationLevelSpinner, verificationLevelSpinnerGbc);
 
         startAppButton = new JButton("Start App");
@@ -65,6 +76,7 @@ public class AppLaunchSettingView extends JFrame {
             boolean reverseVoice = reverseVoiceCheckBox.isSelected();
             boolean challengeVerify = challengeVerifyCheckBox.isSelected();
             int verificationLevel = (int) verificationLevelSpinner.getValue();
+            String repositoryImplementation = (String) repositoryImplementationComboBox.getSelectedItem();
 
             TextToSpeechService.setEnableService(enableVoice);
             SpecialSettingConfig.setReverseVoiceSetting(reverseVoice);
@@ -73,10 +85,16 @@ public class AppLaunchSettingView extends JFrame {
                 SpecialSettingConfig.setVerificationLevel(verificationLevel);
             }
 
+            if (repositoryImplementation.equals("Local")) {
+                DataAccessConfig.USE_LOCAL = 1;
+            } else {
+                DataAccessConfig.USE_LOCAL = 0;
+            }
+
             latch.countDown();
             this.setVisible(false);
         });
-        GridBagConstraints startAppButtonGbc = createGbc(0, 5);
+        GridBagConstraints startAppButtonGbc = createGbc(0, 6);
         this.add(startAppButton, startAppButtonGbc);
     }
 

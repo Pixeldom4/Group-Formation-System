@@ -196,6 +196,7 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         }
         if (evt.getPropertyName().equals("deleteProject")) {
             playVoiceService.playVoice("Successfully deleted project");
+            manageProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
             JOptionPane.showMessageDialog(null, "Successfully deleted project");
         }
         if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {
