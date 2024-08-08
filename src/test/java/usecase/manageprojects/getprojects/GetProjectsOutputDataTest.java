@@ -1,11 +1,10 @@
 package usecase.manageprojects.getprojects;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.getprojects.GetProjectsOutputData;
-import usecase.manageprojects.getprojects.ProjectData;
+
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.HashSet;
 
 /**
  * Tests for the GetProjectsOutputData class.

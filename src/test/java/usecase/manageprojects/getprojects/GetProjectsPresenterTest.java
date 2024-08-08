@@ -2,9 +2,6 @@ package usecase.manageprojects.getprojects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import usecase.manageprojects.getprojects.GetProjectsOutputData;
-import usecase.manageprojects.getprojects.GetProjectsPresenter;
 import viewmodel.MyProjectsPanelViewModel;
 
 import static org.mockito.Mockito.*;

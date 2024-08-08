@@ -2,13 +2,8 @@ package usecase.manageapplication.createapplication.createapplication;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import usecase.manageapplications.createapplication.*;
 import viewmodel.SearchPanelViewModel;
-import usecase.manageapplications.createapplication.CreateApplicationController;
-import usecase.manageapplications.createapplication.CreateApplicationInteractor;
-import usecase.manageapplications.createapplication.CreateApplicationOutputBoundary;
-import usecase.manageapplications.createapplication.CreateApplicationPresenter;
-import usecase.manageapplications.createapplication.CreateApplicationUseCaseFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;

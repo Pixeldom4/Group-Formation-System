@@ -6,7 +6,6 @@ import usecase.manageusers.deleteuser.DeleteUserInputBoundary;
 import usecase.manageusers.deleteuser.DeleteUserInputData;
 import usecase.manageusers.edituser.EditUserInputBoundary;
 import usecase.manageusers.edituser.EditUserInputData;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserInputBoundary;
 import usecase.manageusers.getusers.GetUsersInputBoundary;
 import usecase.manageusers.getusers.GetUsersInputData;
 

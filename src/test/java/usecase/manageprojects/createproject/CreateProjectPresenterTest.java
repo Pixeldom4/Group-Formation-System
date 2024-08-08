@@ -2,15 +2,13 @@ package usecase.manageprojects.createproject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import usecase.manageprojects.createproject.CreateProjectOutputData;
-import usecase.manageprojects.createproject.CreateProjectPresenter;
 import viewmodel.AddProjectPanelViewModel;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the CreateProjectPresenter class.

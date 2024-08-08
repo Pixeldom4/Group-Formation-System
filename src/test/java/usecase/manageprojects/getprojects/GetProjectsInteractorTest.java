@@ -5,16 +5,11 @@ import dataaccess.IUserProjectsRepository;
 import entities.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import usecase.manageprojects.getprojects.GetProjectsInputData;
-import usecase.manageprojects.getprojects.GetProjectsInteractor;
-import usecase.manageprojects.getprojects.GetProjectsOutputBoundary;
-import usecase.manageprojects.getprojects.GetProjectsOutputData;
 
 import java.util.HashSet;
+
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the GetProjectsInteractor class.

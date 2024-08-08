@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import usecase.BCryptPasswordHasher;
 import usecase.PasswordHasher;
 import usecase.manageusers.ManageUsersController;
-import usecase.manageusers.deleteuser.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,11 +13,12 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class DeleteUserInteractorTest {
     private final static String SAVE_LOCATION = "local_data/test/usecase/deleteuser/";
     private static IUserRepository userRepository;

@@ -8,12 +8,6 @@ import entities.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import usecase.manageprojects.editproject.EditProjectInputData;
-import usecase.manageprojects.editproject.EditProjectInteractor;
-import usecase.manageprojects.editproject.EditProjectOutputBoundary;
-import usecase.searchforproject.SearchProjectOutputBoundary;
-import usecase.searchforproject.SearchProjectsPresenter;
-import viewmodel.SearchPanelViewModel;
 
 import java.io.IOException;
 import java.util.Arrays;

@@ -6,9 +6,6 @@ import dataaccess.IUserProjectsRepository;
 import entities.Project;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.createproject.CreateProjectInputData;
-import usecase.manageprojects.createproject.CreateProjectInteractor;
-import usecase.manageprojects.createproject.CreateProjectOutputBoundary;
 
 import java.util.Arrays;
 import java.util.HashSet;

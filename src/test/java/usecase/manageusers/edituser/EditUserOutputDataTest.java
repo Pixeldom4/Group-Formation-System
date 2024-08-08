@@ -1,11 +1,10 @@
 package usecase.manageusers.edituser;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageusers.edituser.EditUserOutputData;
 
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for the EditUserOutputData class.

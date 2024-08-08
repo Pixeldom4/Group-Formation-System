@@ -1,7 +1,6 @@
 package usecase.manageprojects.getprojects;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.getprojects.GetProjectsInputData;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

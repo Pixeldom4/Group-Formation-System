@@ -1,10 +1,11 @@
 package usecase.manageprojects.createproject;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.createproject.CreateProjectInputData;
 
 import java.util.HashSet;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Unit tests for the CreateProjectInputData class.

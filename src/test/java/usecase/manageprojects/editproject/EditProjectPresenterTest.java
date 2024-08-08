@@ -2,8 +2,6 @@ package usecase.manageprojects.editproject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.editproject.EditProjectOutputData;
-import usecase.manageprojects.editproject.EditProjectPresenter;
 import viewmodel.EditProjectPanelViewModel;
 
 import java.util.HashSet;

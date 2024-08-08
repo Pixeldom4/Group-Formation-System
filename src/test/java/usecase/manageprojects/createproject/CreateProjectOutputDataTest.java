@@ -1,9 +1,9 @@
 package usecase.manageprojects.createproject;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.createproject.CreateProjectOutputData;
 
 import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

@@ -19,10 +19,9 @@ public class CreateApplicationControllerTest {
     /**
      * Tests that the interactor is called with valid data.
      *
-     * @throws IOException if an I/O error occurs
      */
     @Test
-    void createApplicationWithValidDataCallsInteractor() throws IOException {
+    void createApplicationWithValidDataCallsInteractor() {
         int senderUserId = 1;
         int projectId = 1;
         String text = "Application text";

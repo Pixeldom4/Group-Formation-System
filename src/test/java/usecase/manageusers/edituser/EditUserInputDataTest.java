@@ -1,11 +1,10 @@
 package usecase.manageusers.edituser;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageusers.edituser.EditUserInputData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class contains unit tests for the EditUserInputData class.

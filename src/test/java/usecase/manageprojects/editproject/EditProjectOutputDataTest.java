@@ -1,13 +1,10 @@
 package usecase.manageprojects.editproject;
 
 import org.junit.jupiter.api.Test;
-import usecase.manageprojects.editproject.EditProjectOutputData;
 
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the EditProjectOutputData class.
@@ -56,6 +53,6 @@ public class EditProjectOutputDataTest {
         assertEquals(2, outputData.getTags().size());
         assertTrue(outputData.getTags().contains("tag1"));
         assertTrue(outputData.getTags().contains("tag2"));
-        assertTrue(!outputData.getTags().contains("tag3"));
+        assertFalse(outputData.getTags().contains("tag3"));
     }
 }

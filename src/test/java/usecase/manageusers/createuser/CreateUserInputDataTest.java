@@ -1,9 +1,11 @@
 package usecase.manageusers.createuser;
 
-import java.util.HashSet;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import usecase.manageusers.createuser.CreateUserInputData;
+
+import java.util.HashSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit tests for the CreateUserInputData class.

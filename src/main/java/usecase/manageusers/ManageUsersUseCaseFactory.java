@@ -17,7 +17,6 @@ import usecase.manageusers.edituser.EditUserInputBoundary;
 import usecase.manageusers.edituser.EditUserInteractor;
 import usecase.manageusers.edituser.EditUserOutputBoundary;
 import usecase.manageusers.edituser.EditUserPresenter;
-import usecase.manageusers.getloggedinuser.*;
 import usecase.manageusers.getusers.GetUsersInputBoundary;
 import usecase.manageusers.getusers.GetUsersInteractor;
 import usecase.manageusers.getusers.GetUsersOutputBoundary;
@@ -30,7 +29,6 @@ public class ManageUsersUseCaseFactory {
     private static final IUserRepository userRepository = DataAccessConfig.getUserRepository();
     private static final IUserProjectsRepository userProjectsRepository = DataAccessConfig.getUserProjectsRepository();
     private static final IProjectRepository projectRepository = DataAccessConfig.getProjectRepository();
-    private static final ILoginUserDetails loginUserDetails = DataAccessConfig.getLoginUserDetails();
 
     // Private constructor to prevent instantiation
     private ManageUsersUseCaseFactory() {}
