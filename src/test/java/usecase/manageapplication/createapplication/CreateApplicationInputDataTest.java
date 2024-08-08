@@ -1,4 +1,4 @@
-package usecase.manageapplication.createapplication.createapplication;
+package usecase.manageapplication.createapplication;
 
 import org.junit.jupiter.api.Test;
 import usecase.manageapplications.createapplication.CreateApplicationInputData;
@@ -50,10 +50,9 @@ public class CreateApplicationInputDataTest {
     void createApplicationInputDataHandlesNullText() {
         int senderUserId = 1;
         int projectId = 2;
-        String text = null;
         byte[] pdfBytes = new byte[]{1, 2, 3};
 
-        CreateApplicationInputData inputData = new CreateApplicationInputData(senderUserId, projectId, text, pdfBytes);
+        CreateApplicationInputData inputData = new CreateApplicationInputData(senderUserId, projectId, null, pdfBytes);
 
         assertNull(inputData.getText());
     }
@@ -81,9 +80,8 @@ public class CreateApplicationInputDataTest {
         int senderUserId = 1;
         int projectId = 2;
         String text = "Application text";
-        byte[] pdfBytes = null;
 
-        CreateApplicationInputData inputData = new CreateApplicationInputData(senderUserId, projectId, text, pdfBytes);
+        CreateApplicationInputData inputData = new CreateApplicationInputData(senderUserId, projectId, text, null);
 
         assertNull(inputData.getPdfBytes());
     }
