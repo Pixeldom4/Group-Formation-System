@@ -28,7 +28,7 @@ public class LoginUserPresenter implements LoginUserOutputBoundary {
     public void prepareSuccessView(LoginUserOutputData outputData) {
         loginPanelViewModel.setLoginUser(outputData.getUserId());
         loginPanelViewModel.setLoginName(outputData.getFirstName() + " " + outputData.getLastName());
-        loginPanelViewModel.setSuccess(true);
+        loginPanelViewModel.setSuccess(outputData.isSuccess());
         loginPanelViewModel.firePropertyChanged();
     }
 

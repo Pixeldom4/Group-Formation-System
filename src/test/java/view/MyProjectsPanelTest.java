@@ -1,15 +1,12 @@
 package view;
 
+import entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import usecase.manageapplications.ManageApplicationsController;
 import usecase.manageprojects.ManageProjectsController;
-import usecase.manageprojects.editproject.EditProjectController;
-import usecase.manageprojects.editproject.EditProjectInputBoundary;
+import usecase.manageusers.ManageUsersController;
 import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
-import usecase.manageprojects.getprojects.GetProjectsController;
-import usecase.manageprojects.getprojects.ProjectData;
-import viewmodel.DisplayProjectApplicationViewModel;
+import usecase.manageusers.getusers.UserData;
 import viewmodel.EditProjectPanelViewModel;
 import viewmodel.MyProjectsPanelViewModel;
 import viewmodel.ViewManagerModel;
@@ -17,175 +14,79 @@ import viewmodel.ViewManagerModel;
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.HashSet;
-import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-/**
- * Unit tests for the MyProjectsPanel class.
- */
-public class MyProjectsPanelTest {
+class MyProjectsPanelTest {
 
     private MyProjectsPanel myProjectsPanel;
     private MyProjectsPanelViewModel myProjectsPanelViewModel;
     private ViewManagerModel viewManagerModel;
     private GetLoggedInUserController getLoggedInUserController;
+    private ManageProjectsController getProjectsController;
+    private ManageUsersController getUsersController;
     private EditProjectPanelViewModel editProjectPanelViewModel;
     private EditProjectPanel editProjectPanel;
-    private EditProjectController editProjectController;
-    private DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
-    private ManageProjectsController manageProjectsController;
-    private ManageApplicationsController manageApplicationsController;
-    private EditProjectInputBoundary editProjectInteractor;
-    private EditProjectPanelViewModel editProjectViewModel;
+    private UsersPanel usersPanel;
 
-    /**
-     * Sets up the test environment before each test.
-     */
     @BeforeEach
     public void setUp() {
-        myProjectsPanelViewModel = new MyProjectsPanelViewModel();
-        viewManagerModel = new ViewManagerModel();
+        myProjectsPanelViewModel = mock(MyProjectsPanelViewModel.class);
+        viewManagerModel = mock(ViewManagerModel.class);
         getLoggedInUserController = mock(GetLoggedInUserController.class);
-        editProjectPanelViewModel = new EditProjectPanelViewModel();
+        getProjectsController = mock(ManageProjectsController.class);
+        getUsersController = mock(ManageUsersController.class);
+        editProjectPanelViewModel = mock(EditProjectPanelViewModel.class);
+        editProjectPanel = mock(EditProjectPanel.class);
+        usersPanel = mock(UsersPanel.class);
 
-        editProjectInteractor = mock(EditProjectInputBoundary.class);
-        editProjectController = new EditProjectController(editProjectInteractor);
-        manageApplicationsController = mock(ManageApplicationsController.class);
-        manageProjectsController = mock(ManageProjectsController.class);
-        displayProjectApplicationViewModel = mock(DisplayProjectApplicationViewModel.class);
-        editProjectViewModel = mock(EditProjectPanelViewModel.class);
-
-        // Initialize EditProjectPanel with mock controllers and view models
-        editProjectPanel = new EditProjectPanel(
-                editProjectViewModel,
-                editProjectController,
-                manageApplicationsController,
-                manageProjectsController,
-                displayProjectApplicationViewModel
-        );
-
-        myProjectsPanel = new MyProjectsPanel(
-                myProjectsPanelViewModel,
-                viewManagerModel,
-                getLoggedInUserController,
-                manageProjectsController,
-                editProjectPanelViewModel,
-                editProjectPanel
-        );
+        myProjectsPanel = new MyProjectsPanel(myProjectsPanelViewModel, viewManagerModel, getLoggedInUserController,
+                getProjectsController, getUsersController, editProjectPanelViewModel, editProjectPanel, new UsersPanel());
     }
 
-    /**
-     * Tests the initialization of the MyProjectsPanel.
-     */
     @Test
-    public void testInitialization() {
-        assertNotNull(myProjectsPanel);
-        assertEquals(1, myProjectsPanel.getComponentCount());
+    void actionPerformed_GetUsersButtonClicked_ExecutesControllerAndChangesActiveView() {
+        // Arrange
+        JButton getUsersButton = (JButton) myProjectsPanel.getComponent(1);
+        when(myProjectsPanelViewModel.getSelectedProjectId()).thenReturn(1);
+
+        // Act
+        getUsersButton.doClick();
+
+        // Assert
+        verify(getUsersController, times(1)).getUsers(1);
     }
 
-    /**
-     * Tests the action of the refresh button in the MyProjectsPanel.
-     */
     @Test
-    public void testRefreshButtonAction() {
+    void propertyChange_AddOrEditProject_RequestsProjects() {
+        // Arrange
+        User loggedInUser = new User(1, "First", "Last", "email@test.com", new HashSet<>(), 50000);
+        when(myProjectsPanelViewModel.getLoggedInUser()).thenReturn(loggedInUser);
 
-        HashSet<ProjectData> projectDataSet = new HashSet<>();
+        // Act
+        myProjectsPanel.propertyChange(new PropertyChangeEvent(this, "addProject", null, null));
+        myProjectsPanel.propertyChange(new PropertyChangeEvent(this, "editSuccess", null, null));
 
-        projectDataSet.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<String>(), true));
-        projectDataSet.add(new ProjectData(2, "Project 2", "Description 2", 2000.0, new HashSet<String>(), true));
-
-        // Simulate the getLoggedInUserController updating the ViewModel with logged in user
-        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
-
-        myProjectsPanel.propertyChange(new PropertyChangeEvent(this, "dataUpdate", null, projectDataSet));
-
-        JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
-        assertEquals(2, infoTable.getRowCount());
-
-        // Check that the projects are displayed in the table
-        // Uses an iterator so that the order of the projects matches the order in the table
-        Iterator<ProjectData> iterator = projectDataSet.iterator();
-        for (int i = 0; i < projectDataSet.size(); i++) {
-            ProjectData projectData = iterator.next();
-            assertEquals(projectData.getProjectTitle(), infoTable.getValueAt(i, 0));
-            assertEquals(projectData.getProjectDescription(), infoTable.getValueAt(i, 1));
-        }
+        // Assert
+        verify(getProjectsController, times(2)).getProjects(loggedInUser.getUserId());
     }
 
-    /**
-     * Tests handling of data update property change in the MyProjectsPanel.
-     */
     @Test
-    public void testPropertyChangeDataUpdate() {
-        HashSet<ProjectData> projectDataSet = new HashSet<>();
-        projectDataSet.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<>(), true));
-        projectDataSet.add(new ProjectData(2, "Project 2", "Description 2", 2000.0, new HashSet<>(), true));
+    void propertyChange_UsersDataUpdate_DisplaysUsers() {
+        // Arrange
+        HashSet<UserData> usersData = new HashSet<>();
+        UserData user1 = new UserData(1, "First1", "Last1", "email1@test.com", new HashSet<>(), 50000, true);
+        UserData user2 = new UserData(2, "First2", "Last2", "email2@test.com", new HashSet<>(), 60000, false);
+        usersData.add(user1);
+        usersData.add(user2);
 
-        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
+        myProjectsPanel = new MyProjectsPanel(myProjectsPanelViewModel, viewManagerModel, getLoggedInUserController,
+                                              getProjectsController, getUsersController, editProjectPanelViewModel, editProjectPanel, usersPanel);
 
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "dataUpdate", null, projectDataSet);
-        myProjectsPanel.propertyChange(event);
+        // Act
+        myProjectsPanel.propertyChange(new PropertyChangeEvent(this, "usersDataUpdate", null, usersData));
 
-        JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
-        assertEquals(2, infoTable.getRowCount());
-
-        Iterator<ProjectData> iterator = projectDataSet.iterator();
-        for (int i = 0; i < projectDataSet.size(); i++) {
-            ProjectData projectData = iterator.next();
-            assertEquals(projectData.getProjectTitle(), infoTable.getValueAt(i, 0));
-            assertEquals(projectData.getProjectDescription(), infoTable.getValueAt(i, 1));
-        }
-    }
-
-    /**
-     * Tests handling of login property change in the MyProjectsPanel.
-     */
-    @Test
-    public void testPropertyChangeLogin() {
-        PropertyChangeEvent event = new PropertyChangeEvent(this, "login", null, true);
-
-        // Simulate the getLoggedInUserController updating the ViewModel with logged in user
-        myProjectsPanelViewModel.setLoggedInUser(1, "John", "Doe", "john.doe@example.com", 5000.0, new HashSet<>());
-
-        myProjectsPanel.propertyChange(event);
-        verify(getLoggedInUserController).getLoggedInUser();
-
-        assertNotNull(myProjectsPanelViewModel.getLoggedInUser());
-        assertEquals("John", myProjectsPanelViewModel.getLoggedInUser().getFirstName());
-
-        HashSet<ProjectData> projectData = new HashSet<>();
-
-        // Add project data to the set
-        projectData.add(new ProjectData(1, "Project 1", "Description 1", 1000.0, new HashSet<String>(), true));
-        projectData.add(new ProjectData(2, "Project 2", "Description 2", 2000.0, new HashSet<String>(), false));
-        myProjectsPanelViewModel.setData(projectData);
-
-        JTable infoTable = (JTable) ((JScrollPane) myProjectsPanel.getComponent(0)).getViewport().getView();
-        assertEquals(2, infoTable.getRowCount());
-
-        Iterator<ProjectData> iterator = projectData.iterator();
-        for (int i = 0; i < projectData.size(); i++) {
-            ProjectData project = iterator.next();
-            assertEquals(project.getProjectTitle(), infoTable.getValueAt(i, 0));
-            assertEquals(project.getProjectDescription(), infoTable.getValueAt(i, 1));
-        }
-    }
-
-    /**
-     * Tests handling of error property change in the MyProjectsPanel.
-     */
-    @Test
-    public void testPropertyChangeError() {
-        String errorMessage = "An error occurred";
-
-        myProjectsPanelViewModel.setErrorMessage(errorMessage);
-
-        // Check that the error message is displayed in a dialog
-        // Assuming setErrorMessage updates a public errorMessage field for this test
-        assertEquals(errorMessage, myProjectsPanelViewModel.getErrorMessage());
+        // Assert
+        verify(usersPanel, times(1)).displayUsers(usersData);
     }
 }

@@ -3,7 +3,6 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
 import dataaccess.IUserProjectsRepository;
 
 import java.io.File;
@@ -25,13 +24,6 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
     private final String[] header = {"userID", "projectID"};
     private final HashMap<Integer, HashSet<Integer>> userProjects = new HashMap<>();
     private final HashMap<Integer, HashSet<Integer>> projectUsers = new HashMap<>();
-
-    /**
-     * Constructs a LocalUserProjectsRepository with the default file path.
-     */
-    public LocalUserProjectsRepository() {
-        this(DataAccessConfig.getProjectCSVPath());
-    }
 
     /**
      * Constructs a LocalUserProjectsRepository with the specified file path.
@@ -94,10 +86,10 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
             while ((line = reader.readNext()) != null) {
                 int userId = Integer.parseInt(line[0]);
                 String[] projectIds = line[1].replace("[", "").replace("]", "").split(",");
-                HashSet<Integer> projects = new HashSet<Integer>();
+                HashSet<Integer> projects = new HashSet<>();
                 for (String projectId : projectIds) {
                     projects.add(Integer.parseInt(projectId));
-                    projectUsers.putIfAbsent(Integer.parseInt(projectId), new HashSet<Integer>());
+                    projectUsers.putIfAbsent(Integer.parseInt(projectId), new HashSet<>());
                     projectUsers.get(Integer.parseInt(projectId)).add(userId);
                 }
                 userProjects.put(userId, projects);
@@ -122,9 +114,9 @@ public class LocalUserProjectsRepository implements IUserProjectsRepository {
      */
     @Override
     public boolean addUserToProject(int userId, int projectId) {
-        userProjects.putIfAbsent(userId, new HashSet<Integer>());
+        userProjects.putIfAbsent(userId, new HashSet<>());
         userProjects.get(userId).add(projectId);
-        projectUsers.putIfAbsent(projectId, new HashSet<Integer>());
+        projectUsers.putIfAbsent(projectId, new HashSet<>());
         projectUsers.get(projectId).add(userId);
         saveToCSV();
 

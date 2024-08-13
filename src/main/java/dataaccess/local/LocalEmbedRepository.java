@@ -1,18 +1,18 @@
 package dataaccess.local;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Local implementation of the ILocalEmbedRepository interface.
@@ -20,36 +20,21 @@ import java.util.*;
  */
 public class LocalEmbedRepository implements ILocalEmbedRepository {
 
-    private String FILE_PATH = DataAccessConfig.getProjectCSVPath() + "embeds.csv";
-    private final EmbeddingAPIInterface embeddingAPI = new OpenAPIDataEmbed();
-    private HashMap<Integer, float[]> embeddings = new HashMap<Integer, float[]>();
-    private String[] header = {"projectId", "embedding"};
-
-    /**
-     * Creates a new LocalEmbedRepository.
-     * Reads the embeddings from a CSV file if it exists.
-     */
-    public LocalEmbedRepository() {
-        File f = new File(FILE_PATH);
-        try {
-            Files.createDirectories(f.getParentFile().toPath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (f.exists() && !f.isDirectory()) {
-            readFromCSV();
-        }
-    }
+    private final String FILE_PATH;
+    private final EmbeddingAPIInterface embeddingAPI;
+    private final HashMap<Integer, float[]> embeddings = new HashMap<>();
+    private final String[] header = {"projectId", "embedding"};
 
     /**
      * Creates a new LocalEmbedRepository with the given path as the save location.
      * Reads the embeddings from the CSV file if it exists.
      *
-     * @param path the path to the CSV file
+     * @param path the folder of the CSV file
      */
-    public LocalEmbedRepository(String path) {
-        FILE_PATH = path;
-        File f = new File(path);
+    public LocalEmbedRepository(String path, EmbeddingAPIInterface embeddingAPI) {
+        this.embeddingAPI = embeddingAPI;
+        FILE_PATH = path + "embeds.csv";
+        File f = new File(FILE_PATH);
         File parent = f.getParentFile();
         try {
             Files.createDirectories(parent.toPath());
@@ -159,10 +144,10 @@ public class LocalEmbedRepository implements ILocalEmbedRepository {
             reader.readNext();
             while ((line = reader.readNext()) != null) {
                 int projectId = Integer.parseInt(line[0]);
-                Float[] embedding = Arrays.stream(line[1].replace("[", "").replace("]", "").split(",")).map(Float::valueOf).toArray(Float[]::new);
+                Float[] embedding = Arrays.stream(line[1].replace("[", "").replace("]", "").replace("\"","").split(",")).map(Float::valueOf).toArray(Float[]::new);
                 float[] floatArray = new float[embedding.length];
                 for (int i = 0; i < embedding.length; i++) {
-                    floatArray[i] = (float) embedding[i];
+                    floatArray[i] = embedding[i];
                 }
                 embeddings.put(projectId, floatArray);
             }

@@ -3,7 +3,7 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
+import config.DataAccessConfig;
 import dataaccess.IUserRepository;
 import entities.User;
 import entities.UserInterface;
@@ -24,16 +24,9 @@ import java.util.HashSet;
 public class LocalUserRepository implements IUserRepository {
     private final String FILE_PATH;
     private final String[] header = {"userID", "userEmail", "userFirstName", "userLastName", "userTags", "userDesiredCompensation", "userPassword"};
-    private final HashMap<Integer, UserInterface> users = new HashMap<Integer, UserInterface>();
-    private final HashMap<Integer, String> userPasswords = new HashMap<Integer, String>();
+    private final HashMap<Integer, UserInterface> users = new HashMap<>();
+    private final HashMap<Integer, String> userPasswords = new HashMap<>();
     private int maxId = 0;
-
-    /**
-     * Constructs a LocalUserRepository with the default file path.
-     */
-    public LocalUserRepository() {
-        this(DataAccessConfig.getProjectCSVPath());
-    }
 
     /**
      * Constructs a LocalUserRepository with the specified file path.
@@ -67,12 +60,12 @@ public class LocalUserRepository implements IUserRepository {
      */
     @Override
     public User createUser(String email, String firstName, String lastName, HashSet<String> tags, double desiredCompensation, String password) {
-        UserInterface user = new User(maxId + 1, firstName, lastName, email, tags, desiredCompensation);
+        User user = new User(maxId + 1, firstName, lastName, email, tags, desiredCompensation);
         users.put(user.getUserId(), user);
         userPasswords.put(user.getUserId(), password);
         saveToCSV();
         maxId++;
-        return (User) user;
+        return user;
     }
 
     /**
@@ -117,7 +110,12 @@ public class LocalUserRepository implements IUserRepository {
      */
     @Override
     public boolean updateUser(int userId, String firstName, String lastName, double desiredCompensation, HashSet<String> tags) {
-        return false;
+        UserInterface changeUser = users.get(userId);
+        User user = new User(userId, firstName, lastName, changeUser.getUserEmail(), new HashSet<>(tags), desiredCompensation);
+        users.remove(userId);
+        users.put(userId, user);
+        saveToCSV();
+        return true;
     }
 
     /**

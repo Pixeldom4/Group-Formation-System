@@ -1,14 +1,18 @@
 package view;
 
+import config.HoverVoiceServiceConfig;
+import config.PlayVoiceServiceConfig;
 import entities.User;
-import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import usecase.manageprojects.ManageProjectsController;
+import usecase.manageusers.getloggedinuser.GetLoggedInUserController;
 import view.components.NumericTextField;
+import view.components.TagPanel;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
 import viewmodel.AddProjectPanelViewModel;
 import viewmodel.ViewManagerModel;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +23,7 @@ import java.util.HashSet;
 /**
  * Panel for adding a new project.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class AddProjectPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final AddProjectPanelViewModel addProjectPanelViewModel;
@@ -40,12 +45,13 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
     private final JTextField projectTagsField = new JTextField();
     private final JButton addTagButton = new JButton("Add Tag");
     private final GridLayout tagPanelLayout = new GridLayout(0, 1);
-    private final JPanel tagPanel = new JPanel();
+    private final TagPanel tagPanel = new TagPanel();
     private final JLabel tagPanelLabel = new JLabel("Project tags (Press add tag to add): ");
 
     private final JButton addProjectButton = new JButton("Create project");
 
-    private final HashSet<String> tags = new HashSet<>();
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs an AddProjectPanel.
@@ -67,19 +73,27 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
         addProjectPanelViewModel.addPropertyChangeListener(this);
         this.createProjectController = createProjectController;
 
+        this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         projectInfoPanel.setLayout(new BoxLayout(projectInfoPanel, BoxLayout.Y_AXIS));
 
-        addTagButton.addActionListener(e -> {
+        addTagButton.addActionListener(_ -> {
             String tagText = projectTagsField.getText();
             if (!tagText.isEmpty()) {
-                addTagToPanel(tagText);
-                tags.add(tagText);
+                tagPanel.addTagToPanel(tagText);
                 projectTagsField.setText("");
             }
         });
 
         projectDataPanel.setLayout(projectDataGridLayout);
+
+        hoverVoiceService.addHoverVoice(projectNameField, "Enter project name here");
+        hoverVoiceService.addHoverVoice(projectBudgetField, "Enter project budget here");
+        hoverVoiceService.addHoverVoice(projectDescriptionField, "Enter project description here");
+        hoverVoiceService.addHoverVoice(projectTagsField, "Enter project tags here");
+        hoverVoiceService.addHoverVoice(addTagButton, "Press to add tag");
 
         projectDataPanel.add(projectNameLabel);
         projectDataPanel.add(projectNameField);
@@ -101,11 +115,12 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
 
         this.add(projectInfoPanel);
 
-        addProjectButton.addActionListener(e -> {
+        addProjectButton.addActionListener(_ -> {
             String title = projectNameField.getText();
             double budget = Double.parseDouble(projectBudgetField.getText());
             String description = projectDescriptionField.getText();
             User loggedInUser = addProjectPanelViewModel.getLoggedInUser();
+            HashSet<String> tags = new HashSet<>(tagPanel.getTags());
             if (loggedInUser == null) {
                 JOptionPane.showMessageDialog(null, "You must be logged in to create a project.");
                 return;
@@ -113,57 +128,10 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
             createProjectController.createProject(title, budget, description, tags, loggedInUser.getUserId());
         });
 
+        hoverVoiceService.addHoverVoice(addProjectButton, "Press to create project");
+
         this.add(addProjectButton);
 
-    }
-
-    /**
-     * Adds a tag to the panel.
-     *
-     * @param text the tag text
-     */
-    private void addTagToPanel(String text) {
-
-        if (text.isEmpty()) {
-            return;
-        }
-
-        if (tags.contains(text)) {
-            return;
-        }
-
-        JLabel label = new JLabel(text);
-        label.setOpaque(true);
-        label.setBackground(Color.LIGHT_GRAY);
-        label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        JButton removeButton = new JButton("x");
-
-        JPanel tag = new JPanel();
-        tag.setBorder(new EmptyBorder(0, 10, 0, 10));
-        tag.setLayout(new GridBagLayout());
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridy = 0;
-
-        constraints.gridx = 0;
-        constraints.weightx = 0.8;
-        tag.add(label, constraints);
-
-        constraints.gridx = 1;
-        constraints.weightx = 0.2;
-        tag.add(removeButton, constraints);
-
-        removeButton.addActionListener(e -> {
-            tags.remove(text);
-            tagPanel.remove(tag);
-            tagPanel.revalidate();
-            tagPanel.repaint();
-        });
-
-        tagPanel.add(tag);
-        tagPanel.revalidate();
-        tagPanel.repaint();
     }
 
     @Override
@@ -179,10 +147,7 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
         projectBudgetField.clear();
         projectDescriptionField.setText("");
         projectTagsField.setText("");
-        tags.clear();
-        tagPanel.removeAll();
-        tagPanel.revalidate();
-        tagPanel.repaint();
+        tagPanel.clearPanel();
     }
 
     @Override
@@ -191,11 +156,14 @@ public class AddProjectPanel extends JPanel implements ActionListener, PropertyC
             boolean success = (boolean) evt.getNewValue();
             String projectName = addProjectPanelViewModel.getProjectName();
             if (success){
-                JOptionPane.showMessageDialog(null, "Project " + projectName + " created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                String message = "Project " + projectName + " created successfully";
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(null, message, "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearPanel();
                 viewManagerModel.addProjectEvent();
             }
             else {
+                playVoiceService.playVoice("Project creation failed: " + addProjectPanelViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(null, addProjectPanelViewModel.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }

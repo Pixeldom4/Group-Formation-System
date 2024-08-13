@@ -38,7 +38,7 @@ public class GetApplicationsInteractor implements GetApplicationsInputBoundary {
      */
     @Override
     public void getApplicationsForProject(GetApplicationsInputData inputData) {
-        HashSet<Application> applications = applicationRepository.getApplicationsForProject(inputData.getProjectId());
+        HashSet<Application> applications = applicationRepository.getApplicationsForProject(inputData.projectId());
         Object[][] applicationsData = new Object[applications.size()][4];
         int count = 0;
         for (Application application : applications) {

@@ -20,16 +20,6 @@ public class AcceptApplicationInputData {
     }
 
     /**
-     * Constructs an AcceptApplicationInputData object with the specified project ID.
-     *
-     * @param projectId the ID of the project.
-     */
-    public AcceptApplicationInputData(int projectId){
-        this.projectId = projectId;
-        this.userId = -1; // Default value indicating no user ID provided
-    }
-
-    /**
      * Gets the user ID.
      *
      * @return the user ID.

@@ -1,8 +1,11 @@
 package view;
 
 import usecase.createverification.CreateVerificationController;
-import usecase.createverification.CreateVerificationViewModel;
 import usecase.loginuser.LoginUserController;
+import config.HoverVoiceServiceConfig;
+import view.services.hovervoice.IHoverVoiceService;
+import view.services.playvoice.IPlayVoiceService;
+import config.PlayVoiceServiceConfig;
 import viewmodel.LoginPanelViewModel;
 import viewmodel.LoginVerificationViewModel;
 import viewmodel.ViewManagerModel;
@@ -17,6 +20,7 @@ import java.beans.PropertyChangeListener;
 /**
  * A panel for logging in the user.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class LoginPanel extends JPanel implements ActionListener, PropertyChangeListener {
     private final LoginPanelViewModel loginPanelViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -31,6 +35,9 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
     private final JTextField emailField = new JTextField();
     private final JPasswordField passwordField = new JPasswordField();
     private final JButton loginButton = new JButton("Login");
+
+    private final IHoverVoiceService hoverVoiceService;
+    private final IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a LoginPanel.
@@ -52,18 +59,24 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
         loginVerificationViewModel.addPropertyChangeListener(this);
         this.createVerificationController = createVerificationController;
 
+        hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
+        playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         loginPanel.setLayout(new GridLayout(0, 2));
+
+        hoverVoiceService.addHoverVoice(emailField, "Enter email");
+        hoverVoiceService.addHoverVoice(passwordField, "Enter password");
 
         loginPanel.add(emailLabel);
         loginPanel.add(emailField);
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);
 
-        loginButton.addActionListener(e -> {
-            createVerificationController.createVerification();
-        });
+        loginButton.addActionListener(_ -> createVerificationController.createVerification());
+
+        hoverVoiceService.addHoverVoice(loginButton, "Press to login");
 
         this.add(loginPanel);
         this.add(loginButton);
@@ -82,11 +95,14 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
             Boolean success = (Boolean) evt.getNewValue();
             if (success) {
                 login();
-                JOptionPane.showMessageDialog(this, "Login successful as " + loginPanelViewModel.getLoginName());
+                String message = "Login successful as " + loginPanelViewModel.getLoginName();
+                playVoiceService.playVoice(message);
+                JOptionPane.showMessageDialog(this, message);
                 emailField.setText("");
                 passwordField.setText("");
             }
             else {
+                playVoiceService.playVoice("Login failed, " + loginPanelViewModel.getErrorMessage());
                 JOptionPane.showMessageDialog(this, loginPanelViewModel.getErrorMessage());
                 passwordField.setText("");
             }
@@ -112,10 +128,12 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
             try {
                 Thread.sleep(750);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Verification window thread interrupted");
             }
             loginVerificationView.dispose();
-            loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
+            if (success) {
+                loginUserController.loginUser(emailField.getText(), String.valueOf(passwordField.getPassword()));
+            }
         });
         t.start();
     }
@@ -155,7 +173,7 @@ public class LoginPanel extends JPanel implements ActionListener, PropertyChange
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.err.println("Verification result window thread interrupted");
                 }
                 this.dispose();
             });

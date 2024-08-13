@@ -2,43 +2,50 @@ package usecase.createverification;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
-/**
- * Unit tests for the CreateVerificationInteractor class.
- */
 public class CreateVerificationInteractorTest {
 
-    private CreateVerificationOutputBoundary outputBoundary;
     private ImageFinderInterface imageFinder;
+    private CreateVerificationOutputBoundary createVerificationPresenter;
     private CreateVerificationInteractor interactor;
 
-    /**
-     * Sets up the test environment before each test.
-     */
     @BeforeEach
     public void setUp() {
-        outputBoundary = mock(CreateVerificationOutputBoundary.class);
-        imageFinder = mock(ImageFinderInterface.class);
-        interactor = new CreateVerificationInteractor(outputBoundary, imageFinder);
+        imageFinder = mock(ImageFinder.class);
+        createVerificationPresenter = mock(CreateVerificationPresenter.class);
+        interactor = new CreateVerificationInteractor(createVerificationPresenter, imageFinder);
     }
 
-    /**
-     * Tests that the createVerification method correctly interacts with the outputBoundary and imageFinder.
-     */
+
     @Test
-    public void testCreateVerification() {
-        // Arrange
-        String expectedImageLocation = "verifyimages/testImage.png";
-        when(imageFinder.findImage("verifyimages/")).thenReturn(expectedImageLocation);
-
-        // Act
+    public void checkValidImageFinderCallsPresenter() {
+        when(imageFinder.findImage("verifyimages/")).thenReturn("image");
         interactor.createVerification();
+        ArgumentCaptor<CreateVerificationOutputData> captor = ArgumentCaptor.forClass(CreateVerificationOutputData.class);
+        verify(createVerificationPresenter).verificationCreated(captor.capture());
+        assertEquals("image", captor.getValue().getVerificationImageLocation());
+    }
 
-        // Assert
-        verify(imageFinder).findImage("verifyimages/");
-        verify(outputBoundary).verificationCreated(argThat(outputData ->
-                expectedImageLocation.equals(outputData.getVerificationImageLocation())
-        ));
+    @Test
+    public void checkNoImageFoundCallsPresenterWithNull() {
+        when(imageFinder.findImage("verifyimages/")).thenReturn(null);
+        interactor.createVerification();
+        ArgumentCaptor<CreateVerificationOutputData> captor = ArgumentCaptor.forClass(CreateVerificationOutputData.class);
+        verify(createVerificationPresenter).verificationCreated(captor.capture());
+        assertNull(captor.getValue().getVerificationImageLocation());
+    }
+
+    @Test
+    public void checkEmptyImageLocationCallsPresenterWithEmptyString() {
+        when(imageFinder.findImage("verifyimages/")).thenReturn("");
+        interactor.createVerification();
+        ArgumentCaptor<CreateVerificationOutputData> captor = ArgumentCaptor.forClass(CreateVerificationOutputData.class);
+        verify(createVerificationPresenter).verificationCreated(captor.capture());
+        assertEquals("", captor.getValue().getVerificationImageLocation());
     }
 }

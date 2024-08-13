@@ -1,7 +1,6 @@
 package usecase.manageprojects.editproject;
 
-import api.EmbeddingAPIInterface;
-import api.OpenAPIDataEmbed;
+import api.embeddingapi.EmbeddingAPIInterface;
 import dataaccess.IProjectRepository;
 
 import java.util.HashSet;
@@ -25,7 +24,7 @@ public class EditProjectInteractor implements EditProjectInputBoundary {
     public EditProjectInteractor(IProjectRepository projectRepository, EditProjectOutputBoundary projectPresenter, EmbeddingAPIInterface apiInterface) {
         this.projectRepository = projectRepository;
         this.projectPresenter = projectPresenter;
-        this.embeddingAPI = new OpenAPIDataEmbed();
+        this.embeddingAPI = apiInterface;
     }
 
     /**

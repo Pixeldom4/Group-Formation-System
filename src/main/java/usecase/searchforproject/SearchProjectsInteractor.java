@@ -1,5 +1,6 @@
 package usecase.searchforproject;
 
+import api.embeddingapi.EmbeddingAPIInterface;
 import entities.ProjectInterface;
 import dataaccess.IProjectRepository;
 
@@ -20,9 +21,10 @@ public class SearchProjectsInteractor implements SearchProjectInputBoundary {
      * @param presenter the output boundary.
      * @param projectRepository the project repository to use.
      */
-    public SearchProjectsInteractor(SearchProjectOutputBoundary presenter, IProjectRepository projectRepository) {
+    public SearchProjectsInteractor(SearchProjectOutputBoundary presenter, IProjectRepository projectRepository,
+                                    EmbeddingAPIInterface embeddingAPI) {
         this.presenter = presenter;
-        this.projectDAO = new LocalProjectSearchObject(projectRepository);
+        this.projectDAO = new LocalProjectSearchObject(projectRepository, embeddingAPI);
     }
 
     /**
@@ -32,17 +34,7 @@ public class SearchProjectsInteractor implements SearchProjectInputBoundary {
      */
     @Override
     public void searchProjects(String keywords) {
-        searchProjects(keywords, 10);
-    }
-
-    /**
-     * Searches for projects based on the given keywords with a limit.
-     *
-     * @param keywords the keywords to search for.
-     * @param limit the maximum number of projects to return.
-     */
-    private void searchProjects(String keywords, int limit) {
-        ArrayList<ProjectInterface> projects = projectDAO.searchProjects(keywords, limit);
+        ArrayList<ProjectInterface> projects = projectDAO.searchProjects(keywords);
         presenter.presentProjects(projects);
     }
 }

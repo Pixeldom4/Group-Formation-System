@@ -16,6 +16,7 @@ public class EditProjectPanelViewModel {
     private double budget;
     private String description;
     private HashSet<String> tags;
+    private boolean isOwner;
     private boolean success;
     private String errorMessage;
 
@@ -24,19 +25,6 @@ public class EditProjectPanelViewModel {
      */
     public EditProjectPanelViewModel() {}
 
-    /**
-     * Constructs an EditProjectPanelViewModel with the specified project details.
-     *
-     * @param projectId the project ID
-     * @param title the project title
-     * @param budget the project budget
-     * @param description the project description
-     * @param tags the tags associated with the project
-     * @param editorId the ID of the editor
-     */
-    public EditProjectPanelViewModel(int projectId, String title, double budget, String description, HashSet<String> tags, int editorId) {
-        setProjectDetails(projectId, title, budget, description, tags, editorId);
-    }
 
     /**
      * Returns the project ID.
@@ -147,6 +135,24 @@ public class EditProjectPanelViewModel {
     }
 
     /**
+     * Returns whether the user is the owner of the project.
+     *
+     * @return the owner status
+     */
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    /**
+     * Sets the owner status of the project.
+     *
+     * @param isOwner the owner status
+     */
+    public void setOwner(boolean isOwner) {
+        this.isOwner = isOwner;
+    }
+
+    /**
      * Returns whether the operation was successful.
      *
      * @return the success status
@@ -192,13 +198,15 @@ public class EditProjectPanelViewModel {
      * @param tags the tags associated with the project
      * @param editorId the ID of the editor
      */
-    public void setProjectDetails(int projectId, String title, double budget, String description, HashSet<String> tags, int editorId) {
+    public void setProjectDetails(int projectId, String title, double budget, String description,
+                                  HashSet<String> tags, int editorId, boolean isOwner) {
         this.projectId = projectId;
         this.title = title;
         this.budget = budget;
         this.description = description;
         this.tags = tags;
         this.editorId = editorId;
+        this.isOwner = isOwner;
     }
 
     /**

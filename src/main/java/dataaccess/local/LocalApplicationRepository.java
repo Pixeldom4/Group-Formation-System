@@ -3,7 +3,6 @@ package dataaccess.local;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import dataaccess.DataAccessConfig;
 import dataaccess.IApplicationRepository;
 import entities.Application;
 import entities.ApplicationInterface;
@@ -13,7 +12,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Local implementation of the IApplicationRepository interface.
@@ -24,13 +26,6 @@ public class LocalApplicationRepository implements IApplicationRepository {
     private final String FILE_PATH;
     private final String[] header = {"sender", "projectId", "text", "pdfBytes"};
     private final HashMap<Integer, ArrayList<ApplicationInterface>> applications = new HashMap<>();
-
-    /**
-     * Constructs a LocalApplicationRepository with the default file path.
-     */
-    public LocalApplicationRepository() {
-        this(DataAccessConfig.getProjectCSVPath());
-    }
 
     /**
      * Constructs a LocalApplicationRepository with the specified file path.
@@ -70,7 +65,7 @@ public class LocalApplicationRepository implements IApplicationRepository {
             }
         }
         Application application = new Application(senderUserId, projectId, text, pdfBytes);
-        applications.putIfAbsent(projectId, new ArrayList<ApplicationInterface>());
+        applications.putIfAbsent(projectId, new ArrayList<>());
         applications.get(projectId).add(application);
         saveToCSV();
         return application;
@@ -208,17 +203,16 @@ public class LocalApplicationRepository implements IApplicationRepository {
         try {
             reader.readNext();
             while ((line = reader.readNext()) != null) {
-                String[] row = line;
-                int senderUserId = Integer.parseInt(row[0]);
-                int projectId = Integer.parseInt(row[1]);
-                String text = row[2];
-                Byte[] readBytes = Arrays.stream(trimRow(row[3].replace("[", "").replace("]", "").split(","))).map(Byte::valueOf).toArray(Byte[]::new);
+                int senderUserId = Integer.parseInt(line[0]);
+                int projectId = Integer.parseInt(line[1]);
+                String text = line[2];
+                Byte[] readBytes = Arrays.stream(trimRow(line[3].replace("[", "").replace("]", "").split(","))).map(Byte::valueOf).toArray(Byte[]::new);
                 byte[] pdfBytes = new byte[readBytes.length];
                 for (int i = 0 ; i < readBytes.length; i++) {
-                    pdfBytes[i] = (byte) readBytes[i];
-                };
+                    pdfBytes[i] = readBytes[i];
+                }
                 ApplicationInterface application = new Application(senderUserId, projectId, text, pdfBytes);
-                applications.put(projectId, new ArrayList<ApplicationInterface>());
+                applications.put(projectId, new ArrayList<>());
                 applications.get(projectId).add(application);
             }
         } catch (IOException | CsvValidationException e) {

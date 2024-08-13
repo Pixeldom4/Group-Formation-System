@@ -1,5 +1,7 @@
 package dataaccess.local;
 
+import api.embeddingapi.EmbeddingAPIInterface;
+import api.embeddingapi.OpenAPIDataEmbed;
 import dataaccess.IProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,14 +14,18 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Unit tests for the LocalProjectDAO class.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class LocalProjectDAOTest {
     private final static String SAVE_LOCATION = "local_data/test/data_access/local_dao/";
     private static IProjectRepository projectRepository;
     private final static File saveFile = new File(SAVE_LOCATION + "projects.csv");
+    private static ILocalEmbedRepository embedRepository;
+    private static EmbeddingAPIInterface apiInterface;
 
     /**
      * Sets up the test environment before each test.
@@ -29,7 +35,9 @@ public class LocalProjectDAOTest {
     @BeforeEach
     public void setUpEach() throws IOException {
         Files.deleteIfExists(saveFile.toPath());
-        projectRepository = new LocalProjectRepository(SAVE_LOCATION);
+        apiInterface = mock(OpenAPIDataEmbed.class);
+        embedRepository = new LocalEmbedRepository(SAVE_LOCATION, apiInterface);
+        projectRepository = new LocalProjectRepository(SAVE_LOCATION, embedRepository);
         projectRepository.createProject("Test Project",
                 1000.0, "This is a test project.",
                 new HashSet<>(Arrays.asList("Java", "Programming")),
@@ -100,9 +108,18 @@ public class LocalProjectDAOTest {
      */
     @Test
     public void testReadFromCSV() {
-        IProjectRepository testRepository = new LocalProjectRepository(SAVE_LOCATION);
+        IProjectRepository testRepository = new LocalProjectRepository(SAVE_LOCATION, embedRepository);
         assertEquals("Test Project", testRepository.getProjectById(1).getProjectTitle());
         assertEquals(10, testRepository.getOwnerId(1));
+    }
+
+    /**
+     * Test get projects by keyword.
+     */
+    @Test
+    public void testGetProjectsByKeyword() {
+        assertEquals(1, projectRepository.getProjectsByKeyword("Test Project").size());
+        assertEquals(0, projectRepository.getProjectsByKeyword("Cool Project").size());
     }
 
 }
