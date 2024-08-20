@@ -19,21 +19,25 @@ class UserProjectsRepositoryTest {
     private UserRepository userRepository;
     private ProjectRepository projectRepository;
 
+    private UserProjectsManager userProjectsManager;
+
     private int testUserId;
     private int testProjectId;
     private final String testEmail = "testuser@test.com";
     private final String testEmail2 = "testuser2@test.com";
     private int newUserId; // ID for the new test user
 
+    private String databaseName;
+
     /**
      * Sets up the test environment before each test.
      */
     @BeforeEach
     void setUp() {
-        String databaseName = "test123.db";
+        this.databaseName = "testing.db";
 
         UserTagsManager userTagsManager = new UserTagsManager(databaseName);
-        UserProjectsManager userProjectsManager = new UserProjectsManager(databaseName);
+        this.userProjectsManager = new UserProjectsManager(databaseName);
         UserManager userManager = new UserManager(databaseName);
 
         ProjectManager projectManager = new ProjectManager(databaseName);
@@ -51,6 +55,14 @@ class UserProjectsRepositoryTest {
         projectTagsManager.connect();
         projectEmbeddingsManager.connect();
         userProjectsManager.connect();
+
+        // Initialize the database tables
+        userManager.initialize();
+        userTagsManager.initialize();
+        userProjectsManager.initialize();
+        projectManager.initialize();
+        projectTagsManager.initialize();
+        projectEmbeddingsManager.initialize();
 
         // Clean up any existing data
         deleteUserByEmail(testEmail);
@@ -86,6 +98,9 @@ class UserProjectsRepositoryTest {
             deleteUserByEmail(testEmail);
             deleteUserByEmail(testEmail2);
         }
+
+        DatabaseConnection.disconnect();
+        DatabaseHelper.deleteDatabaseFile(databaseName);
     }
 
     /**

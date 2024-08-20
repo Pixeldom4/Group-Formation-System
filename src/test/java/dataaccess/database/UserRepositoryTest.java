@@ -16,10 +16,11 @@ class UserRepositoryTest {
     private int testUserId;
     private String testEmail = "testuser@test.com";
 
+    private String databaseName;
+
     @BeforeEach
     void setUp() {
-        tearDown();
-        String databaseName = "letstryagain.db";
+        this.databaseName = "testing.db";
 
         UserTagsManager userTagsManager = new UserTagsManager(databaseName);
         userProjectsManager = new UserProjectsManager(databaseName);
@@ -55,6 +56,9 @@ class UserRepositoryTest {
         // Create a test user
         HashSet<String> userTags = new HashSet<>();
         userTags.add("Developer");
+        if (userRepository.getUserByEmail(testEmail) != null) {
+            System.out.println("User already exists\n\n");
+        }
         User user = userRepository.createUser(testEmail, "Test", "User", userTags, 50000.0, "password");
         testUserId = user.getUserId();
     }
@@ -64,6 +68,9 @@ class UserRepositoryTest {
         if (userRepository != null) {
             deleteUserByEmail(testEmail);
         }
+
+        DatabaseConnection.disconnect();
+        DatabaseHelper.deleteDatabaseFile(databaseName);
     }
 
     private void deleteUserByEmail(String email) {
