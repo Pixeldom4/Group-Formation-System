@@ -39,14 +39,14 @@ public class DisplayProjectApplicationView extends JFrame implements ActionListe
 
     private final int[] columnWidths = {400, 200, 200, 200};
     private final String[] columnNames = {"Applicant", "view", "Accept", "Decline"};
-    private final JTable infoTable = new JTable();
+    final JTable infoTable = new JTable();
 
     private final DisplayProjectApplicationViewModel displayProjectApplicationViewModel;
 
     private final ManageApplicationsController manageApplicationsController;
 
-    private final IHoverVoiceService hoverVoiceService;
-    private final IPlayVoiceService playVoiceService;
+    IHoverVoiceService hoverVoiceService;
+    IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a DisplayProjectApplicationView.
