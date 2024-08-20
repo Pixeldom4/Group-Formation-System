@@ -216,6 +216,10 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             int projectId = myProjectsPanelViewModel.getSelectedProjectId();
             manageUsersController.getUsers(projectId);
 
+            if (projectId == 0) { // No project ID was selected
+                return;
+            }
+
             // Display usersPanel in a new JFrame. Note that table size is large to accommodate large names/ groups of ppl
             JFrame usersFrame = new JFrame("Users");
             usersFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

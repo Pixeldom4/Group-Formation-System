@@ -38,7 +38,7 @@ public class GetUsersInteractorTest {
     public void testNoInputProject() {
         GetUsersInputData inputData = new GetUsersInputData(0);
         interactor.getUsers(inputData);
-        verify(presenter, times(1)).prepareFailView("Project ID not provided");
+        verify(presenter, times(1)).prepareFailView("Please select a project.");
     }
 
     @Test

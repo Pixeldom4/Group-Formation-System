@@ -16,7 +16,7 @@ import dataaccess.local.*;
  * Provides methods to get the appropriate repositories based on configuration.
  */
 public class DataAccessConfig {
-    public static int USE_LOCAL = 0; // Set this to 1 to use local, 0 to use database
+    public static int USE_LOCAL = 1; // Set this to 1 to use local, 0 to use database
 
     private static final String databaseName = "projectDatabase.db";
 
@@ -49,7 +49,9 @@ public class DataAccessConfig {
 
     // Static block to initialize the database when the class is loaded
     static {
-        DatabaseInitializer.initializeDatabase();
+        if (USE_LOCAL == 0) {
+            DatabaseInitializer.initializeDatabase();
+        }
     }
 
     // This class should not be instantiated

@@ -41,7 +41,7 @@ public class GetUsersInteractor implements GetUsersInputBoundary {
     public void getUsers(GetUsersInputData inputData) {
         int projectId = inputData.getProjectId();
         if (projectId == 0) {
-            getUsersPresenter.prepareFailView("Project ID not provided");
+            getUsersPresenter.prepareFailView("Please select a project.");
             return;
         }
 
