@@ -30,15 +30,15 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
     private final JLabel emailLabel = new JLabel("Email: ");
     private final JLabel passwordLabel = new JLabel("Password: ");
     private final JLabel compensationLabel = new JLabel("Desired compensation: ");
-    private final JTextField firstNameField = new JTextField();
-    private final JTextField lastNameField = new JTextField();
-    private final JTextField emailField = new JTextField();
-    private final JPasswordField passwordField = new JPasswordField();
-    private final NumericTextField compensationField = new NumericTextField();
-    private final JButton createUserButton = new JButton("Create User");
+    public final JTextField firstNameField = new JTextField();
+    public final JTextField lastNameField = new JTextField();
+    public final JTextField emailField = new JTextField();
+    public final JPasswordField passwordField = new JPasswordField();
+    public final NumericTextField compensationField = new NumericTextField();
+    public final JButton createUserButton = new JButton("Create User");
 
-    private final IHoverVoiceService hoverVoiceService;
-    private final IPlayVoiceService playVoiceService;
+    public IHoverVoiceService hoverVoiceService;
+    public IPlayVoiceService playVoiceService;
 
     /**
      * Constructs a CreateUserPanel.
@@ -53,13 +53,21 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
         this.hoverVoiceService = HoverVoiceServiceConfig.getHoverVoiceService();
         this.playVoiceService = PlayVoiceServiceConfig.getPlayVoiceService();
 
+        // Set name property for components
+        firstNameField.setName("firstNameField");
+        lastNameField.setName("lastNameField");
+        emailField.setName("emailField");
+        passwordField.setName("passwordField");
+        compensationField.setName("compensationField");
+        createUserButton.setName("createUserButton");
+
         hoverVoiceService.addHoverVoice(firstNameField, "Enter first name here");
         hoverVoiceService.addHoverVoice(lastNameField, "Enter last name here");
         hoverVoiceService.addHoverVoice(emailField, "Enter email here");
         hoverVoiceService.addHoverVoice(passwordField, "Enter password here");
         hoverVoiceService.addHoverVoice(compensationField, "Enter desired compensation here");
 
-        createUserInfo.setLayout(new GridLayout(0,2));
+        createUserInfo.setLayout(new GridLayout(0, 2));
         createUserInfo.add(firstNameLabel);
         createUserInfo.add(firstNameField);
         createUserInfo.add(lastNameLabel);
@@ -106,8 +114,7 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
                 compensationField.clear();
                 playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);
-            }
-            else {
+            } else {
                 String message = createUserPanelViewModel.getErrorMessage();
                 playVoiceService.playVoice(message);
                 JOptionPane.showMessageDialog(null, message);

@@ -118,8 +118,8 @@ public class EditProjectPanel extends JPanel implements PropertyChangeListener {
         saveButton.addActionListener(_ -> saveProject());
 
         viewApplicationButton.addActionListener(_ -> new DisplayProjectApplicationView(projectId,
-                                                                                       this.displayProjectApplicationViewModel,
-                                                                                       this.manageApplicationsController));
+                displayProjectApplicationViewModel,
+                manageApplicationsController));
 
         deleteButton.addActionListener(_ -> {
 
