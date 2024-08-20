@@ -155,4 +155,62 @@ public class SwitchViewButtonPanel extends JPanel implements ActionListener, Pro
             }
         }
     }
+
+    // Getters for testing purposes
+
+    /**
+ * Returns the button for adding a project.
+ * @return the add project button
+ */
+public JButton getAddProjectButton() {
+    return addProjectButton;
+}
+
+/**
+ * Returns the button for searching a project.
+ * @return the search project button
+ */
+public JButton getSearchProjectButton() {
+    return searchProjectButton;
+}
+
+/**
+ * Returns the button for getting the user's projects.
+ * @return the get projects button
+ */
+public JButton getGetProjectsButton() {
+    return getProjectsButton;
+}
+
+/**
+ * Returns the button for editing the user's profile.
+ * @return the edit user profile button
+ */
+public JButton getEditUserProfileButton() {
+    return editUserProfileButton;
+}
+
+/**
+ * Returns the button for creating a user.
+ * @return the create user button
+ */
+public JButton getCreateUserButton() {
+    return createUserButton;
+}
+
+/**
+ * Returns the button for logging in a user.
+ * @return the login user button
+ */
+public JButton getLoginUserButton() {
+    return loginUserButton;
+}
+
+/**
+ * Returns the button for logging out a user.
+ * @return the logout button
+ */
+public JButton getLogoutButton() {
+    return logoutButton;
+}
 }
