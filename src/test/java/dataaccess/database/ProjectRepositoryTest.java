@@ -19,9 +19,11 @@ class ProjectRepositoryTest {
     private int testProjectId;
     private int testOwnerId;
 
+    private String databaseName;
+
     @BeforeEach
     void setUp() {
-        String databaseName = "refactoredtest.db";
+        this.databaseName = "testing.db";
 
         // Initialize manager classes
         UserTagsManager userTagsManager = new UserTagsManager(databaseName);
@@ -75,6 +77,9 @@ class ProjectRepositoryTest {
         if (userRepository != null) {
             deleteUserByEmail("owner@test.com");
         }
+
+        DatabaseConnection.disconnect();
+        DatabaseHelper.deleteDatabaseFile(databaseName);
     }
 
     private void deleteUserByEmail(String email) {
