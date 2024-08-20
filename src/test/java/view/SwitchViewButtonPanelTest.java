@@ -16,6 +16,8 @@ import java.beans.PropertyChangeEvent;
 
 import static org.mockito.Mockito.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class SwitchViewButtonPanelTest {
 
     private SwitchViewButtonPanel switchViewButtonPanel;
@@ -75,6 +77,56 @@ public class SwitchViewButtonPanelTest {
         verify(mockViewManagerModel, never()).setActiveView(anyString());
         verify(mockViewManagerModel, never()).firePropertyChanged();
     }
+
+    @Test
+    public void testGetAddProjectButton() {
+        JButton addProjectButton = switchViewButtonPanel.getAddProjectButton();
+        assertNotNull(addProjectButton);
+        assertEquals("Add Project", addProjectButton.getText());
+    }
+
+    @Test
+    public void testGetSearchProjectButton() {
+        JButton searchProjectButton = switchViewButtonPanel.getSearchProjectButton();
+        assertNotNull(searchProjectButton);
+        assertEquals("Search Project", searchProjectButton.getText());
+    }
+
+    @Test
+    public void testGetGetProjectsButton() {
+        JButton getProjectsButton = switchViewButtonPanel.getGetProjectsButton();
+        assertNotNull(getProjectsButton);
+        assertEquals("My Projects", getProjectsButton.getText());
+    }
+
+    @Test
+    public void testGetEditUserProfileButton() {
+        JButton editUserProfileButton = switchViewButtonPanel.getEditUserProfileButton();
+        assertNotNull(editUserProfileButton);
+        assertEquals("Edit My Profile", editUserProfileButton.getText());
+    }
+
+    @Test
+    public void testGetCreateUserButton() {
+        JButton createUserButton = switchViewButtonPanel.getCreateUserButton();
+        assertNotNull(createUserButton);
+        assertEquals("Create User", createUserButton.getText());
+    }
+
+    @Test
+    public void testGetLoginUserButton() {
+        JButton loginUserButton = switchViewButtonPanel.getLoginUserButton();
+        assertNotNull(loginUserButton);
+        assertEquals("Login User", loginUserButton.getText());
+    }
+
+    @Test
+    public void testGetLogoutButton() {
+        JButton logoutButton = switchViewButtonPanel.getLogoutButton();
+        assertNotNull(logoutButton);
+        assertEquals("Logout", logoutButton.getText());
+    }
+
 
     @Test
     public void testPropertyChangeLogoutSuccess() {
