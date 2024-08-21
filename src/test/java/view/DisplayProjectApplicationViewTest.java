@@ -11,7 +11,6 @@ import viewmodel.DisplayProjectApplicationViewModel;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 

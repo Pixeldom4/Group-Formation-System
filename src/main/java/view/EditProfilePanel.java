@@ -57,6 +57,8 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
     private final IHoverVoiceService hoverVoiceService;
     private final IPlayVoiceService playVoiceService;
 
+    private final JOptionPane jOptionPane = new JOptionPane();
+
     /**
      * Constructs an EditProfilePanel.
      *
@@ -107,6 +109,15 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
         userDataPanel.add(projectTagsLabel);
         userDataPanel.add(projectTagsField);
         userDataPanel.add(addTagButton);
+
+        firstNameField.setName("firstNameField");
+        lastNameField.setName("lastNameField");
+        emailField.setName("emailField");
+        desiredCompensationField.setName("desiredCompensationField");
+        projectTagsField.setName("projectTagsField");
+        tagPanel.setName("tagPanel");
+        addTagButton.setName("addTagButton");
+        saveButton.setName("saveButton");
 
         userInfoPanel.add(userDataPanel);
 
@@ -168,10 +179,16 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
             if (success) {
                 getLoggedInUserController.getLoggedInUser();
                 playVoiceService.playVoice("Profile updated successfully!");
-                JOptionPane.showMessageDialog(null, "Profile updated successfully!");
+                jOptionPane.setMessage("Profile updated successfully!");
+                jOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+                final JDialog dialog = jOptionPane.createDialog(null, "Success");
+                showDialog(dialog);
             } else {
                 playVoiceService.playVoice("Failed to update profile: " + editProfileViewModel.getErrorMessage());
-                JOptionPane.showMessageDialog(null, "Failed to update profile: " + editProfileViewModel.getErrorMessage());
+                jOptionPane.setMessage("Failed to update profile: " + editProfileViewModel.getErrorMessage());
+                jOptionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+                final JDialog dialog = jOptionPane.createDialog(null, "Success");
+                showDialog(dialog);
             }
         }
     }
@@ -197,5 +214,12 @@ public class EditProfilePanel extends JPanel implements ActionListener, Property
                 }
             });
         }
+    }
+
+    protected void showDialog(JDialog dialog) {
+        dialog.setAlwaysOnTop(true);
+        dialog.setModal(true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
     }
 }

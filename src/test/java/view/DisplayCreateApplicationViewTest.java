@@ -35,7 +35,6 @@ class DisplayCreateApplicationViewTest {
     void testFileUploadAndSubmit() throws Exception {
         // Access components directly for testing
         JTextField infoField = displayCreateApplicationView.infoField;
-        JButton applicationButton = displayCreateApplicationView.applicationButton;
         JButton submitButton = displayCreateApplicationView.submitButton;
         JLabel applicationLabel = displayCreateApplicationView.applicationLabel;
 
@@ -78,7 +77,6 @@ class DisplayCreateApplicationViewTest {
     void testSubmitWithNoFile() {
         // Access the infoField directly for testing
         JTextField infoField = displayCreateApplicationView.infoField;
-        JLabel applicationLabel = displayCreateApplicationView.applicationLabel;
         JButton submitButton = displayCreateApplicationView.submitButton;
 
         // Set some info text
@@ -111,5 +109,4 @@ class DisplayCreateApplicationViewTest {
             throw new RuntimeException(e);
         }
     }
-
 }

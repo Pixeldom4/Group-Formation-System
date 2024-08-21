@@ -52,6 +52,8 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
     private final IHoverVoiceService hoverVoiceService;
     private final IPlayVoiceService playVoiceService;
 
+    private final JOptionPane jOptionPane = new JOptionPane();
+
     /**
      * Constructs a MyProjectsPanel.
      *
@@ -94,6 +96,9 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         getUsersButton.addActionListener(this);
         this.add(getUsersButton);
 
+        infoTable.setName("infoTable");
+        getUsersButton.setName("getUsersButton");
+
         // Initialize UsersPanel
         this.usersPanel = usersPanel;
 
@@ -120,22 +125,22 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
 
         int i = 0;
         for (ProjectData projectData : projectDataSet) {
-            info[i][0] = projectData.getProjectId();
-            info[i][1] = projectData.getProjectTitle();
-            info[i][2] = projectData.getProjectDescription();
+            info[i][0] = projectData.projectId();
+            info[i][1] = projectData.projectTitle();
+            info[i][2] = projectData.projectDescription();
             info[i][3] = projectData.isProjectOwner() ? "Yes" : "No";
             info[i][4] = projectData.isProjectOwner() ? "Edit": "View";
 
-            hoverSpeechMap.put(new Point(i, 1), "Project title: " + projectData.getProjectTitle());
-            hoverSpeechMap.put(new Point(i, 2), "Project description: " + projectData.getProjectDescription());
+            hoverSpeechMap.put(new Point(i, 1), "Project title: " + projectData.projectTitle());
+            hoverSpeechMap.put(new Point(i, 2), "Project description: " + projectData.projectDescription());
             hoverSpeechMap.put(new Point(i, 3), projectData.isProjectOwner() ? "Is admin" : "Not admin");
             hoverSpeechMap.put(new Point(i, 4), projectData.isProjectOwner() ? "Press to edit project" : "Press to view details");
 
-            int projectId = projectData.getProjectId();
-            String projectTitle = projectData.getProjectTitle();
-            String projectDescription = projectData.getProjectDescription();
-            double projectBudget = projectData.getProjectBudget();
-            HashSet<String> projectTags = projectData.getProjectTags();
+            int projectId = projectData.projectId();
+            String projectTitle = projectData.projectTitle();
+            String projectDescription = projectData.projectDescription();
+            double projectBudget = projectData.projectBudget();
+            HashSet<String> projectTags = projectData.projectTags();
             int editorId = myProjectsPanelViewModel.getLoggedInUser().getUserId();
 
             editButtonActions.add(() -> {
@@ -192,12 +197,18 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
         }
         if (evt.getPropertyName().equals("error")) {
             String errorMessage = (String) evt.getNewValue();
-            JOptionPane.showMessageDialog(this, errorMessage);
+            jOptionPane.setMessage(errorMessage);
+            jOptionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+            final JDialog dialog = jOptionPane.createDialog(null, "Error");
+            showDialog(dialog);
         }
         if (evt.getPropertyName().equals("deleteProject")) {
             playVoiceService.playVoice("Successfully deleted project");
             manageProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
-            JOptionPane.showMessageDialog(null, "Successfully deleted project");
+            jOptionPane.setMessage("Successfully deleted project");
+            jOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+            final JDialog dialog = jOptionPane.createDialog(null, "Success");
+            showDialog(dialog);
         }
         if (evt.getPropertyName().equals("addProject") || evt.getPropertyName().equals("editSuccess")) {
             manageProjectsController.getProjects(myProjectsPanelViewModel.getLoggedInUser().getUserId());
@@ -227,6 +238,13 @@ public class MyProjectsPanel extends JPanel implements ActionListener, PropertyC
             usersFrame.add(usersPanel);
             usersFrame.setVisible(true);
         }
+    }
+
+    protected void showDialog(JDialog dialog) {
+        dialog.setAlwaysOnTop(true);
+        dialog.setModal(true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
     }
 
 }

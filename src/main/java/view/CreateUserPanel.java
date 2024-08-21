@@ -30,15 +30,17 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
     private final JLabel emailLabel = new JLabel("Email: ");
     private final JLabel passwordLabel = new JLabel("Password: ");
     private final JLabel compensationLabel = new JLabel("Desired compensation: ");
-    public final JTextField firstNameField = new JTextField();
-    public final JTextField lastNameField = new JTextField();
-    public final JTextField emailField = new JTextField();
-    public final JPasswordField passwordField = new JPasswordField();
-    public final NumericTextField compensationField = new NumericTextField();
-    public final JButton createUserButton = new JButton("Create User");
+    private final JTextField firstNameField = new JTextField();
+    private final JTextField lastNameField = new JTextField();
+    private final JTextField emailField = new JTextField();
+    private final JPasswordField passwordField = new JPasswordField();
+    private final NumericTextField compensationField = new NumericTextField();
+    private final JButton createUserButton = new JButton("Create User");
 
-    public IHoverVoiceService hoverVoiceService;
-    public IPlayVoiceService playVoiceService;
+    protected IHoverVoiceService hoverVoiceService;
+    protected IPlayVoiceService playVoiceService;
+
+    private final JOptionPane jOptionPane = new JOptionPane();
 
     /**
      * Constructs a CreateUserPanel.
@@ -113,12 +115,25 @@ public class CreateUserPanel extends JPanel implements ActionListener, PropertyC
                 passwordField.setText("");
                 compensationField.clear();
                 playVoiceService.playVoice(message);
-                JOptionPane.showMessageDialog(null, message);
+                jOptionPane.setMessage(message);
+                jOptionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+                final JDialog dialog = jOptionPane.createDialog(null, "Success");
+                showDialog(dialog);
             } else {
                 String message = createUserPanelViewModel.getErrorMessage();
                 playVoiceService.playVoice(message);
-                JOptionPane.showMessageDialog(null, message);
+                jOptionPane.setMessage(message);
+                jOptionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+                final JDialog dialog = jOptionPane.createDialog(null, "Error");
+                showDialog(dialog);
             }
         }
+    }
+
+    protected void showDialog(JDialog dialog) {
+        dialog.setAlwaysOnTop(true);
+        dialog.setModal(true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
     }
 }
