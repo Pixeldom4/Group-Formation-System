@@ -101,10 +101,8 @@ class CreateUserPanelTest {
 
     // Method to create the panel with mocked services injected
     private CreateUserPanel createTestPanel() {
-        CreateUserPanel panel = new CreateUserPanel(mockViewModel, mockController);
-        panel.hoverVoiceService = mockHoverVoiceService;
-        panel.playVoiceService = mockPlayVoiceService;
-        return panel;
+        return new TestCreatePanel(mockViewModel, mockController,
+                                   mockHoverVoiceService, mockPlayVoiceService);
     }
 
     // Utility method to find a component by its name
@@ -128,5 +126,28 @@ class CreateUserPanelTest {
         for (JTextField field : fields) {
             assertEquals("", field.getText());
         }
+    }
+
+    private static class TestCreatePanel extends CreateUserPanel {
+        public TestCreatePanel(CreateUserPanelViewModel viewModel, ManageUsersController controller,
+                               IHoverVoiceService hoverVoiceService, IPlayVoiceService playVoiceService) {
+            super(viewModel, controller);
+            this.hoverVoiceService = hoverVoiceService;
+            this.playVoiceService = playVoiceService;
+        }
+
+        @Override
+        protected void showDialog(JDialog dialog) {
+            dialog.setAlwaysOnTop(true);
+            dialog.setModal(true);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            Timer timer = new Timer(10, _ -> dialog.dispose());
+            timer.setRepeats(false);
+            timer.start();
+
+            dialog.setVisible(true);
+        }
+
     }
 }

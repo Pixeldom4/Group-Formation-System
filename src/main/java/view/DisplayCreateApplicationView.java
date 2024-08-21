@@ -24,7 +24,7 @@ public class DisplayCreateApplicationView extends JFrame implements ActionListen
     final JTextField infoField = new JTextField();
     private final String applicationText = "Application: ";
     final JLabel applicationLabel = new JLabel(applicationText);
-    final JButton applicationButton = new JButton("Upload file");
+    private final JButton applicationButton = new JButton("Upload file");
     final JButton submitButton = new JButton("Submit");
 
     IHoverVoiceService hoverVoiceService;

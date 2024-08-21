@@ -111,14 +111,14 @@ public class LocalApplicationRepository implements IApplicationRepository {
      * Retrieves all applications for a specific project.
      *
      * @param projectId the ID of the project
-     * @return a HashSet of Application objects for the project, or null if no applications are found
+     * @return a HashSet of Application objects for the project
      */
     @Override
     public HashSet<Application> getApplicationsForProject(int projectId) {
         HashSet<Application> projectApplications = new HashSet<>();
         ArrayList<ApplicationInterface> projectApplicationsList = applications.get(projectId);
         if (projectApplicationsList == null) {
-            return null;
+            return new HashSet<>();
         }
         for (ApplicationInterface application : projectApplicationsList) {
             projectApplications.add((Application) application);

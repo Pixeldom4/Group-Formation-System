@@ -39,7 +39,7 @@ public class DeleteProjectInteractor implements DeleteProjectInputBoundary {
     @Override
     public void deleteProject(DeleteProjectInputData inputData) {
         int userId = loginUserDetails.getUserId();
-        int projectId = inputData.getProjectId();
+        int projectId = inputData.projectId();
         if (projectRepository.getOwnerId(projectId) != userId) {
             deleteProjectPresenter.prepareFailView("Only the owner of the project can delete it.");
             return;
